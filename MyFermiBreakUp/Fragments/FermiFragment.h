@@ -8,16 +8,17 @@
 #include <vector>
 
 #include "DataTypes.h"
+#include "FermiParticle.h"
 
 class FermiFragment {
  public:
-  FermiFragment(uint32_t mass_number, uint32_t proton_number, int polarization, FermiFloat excitation_energy);
+  FermiFragment(uint32_t mass_number, uint32_t charge_number, int polarization, FermiFloat excitation_energy);
 
   FermiFragment(const FermiFragment&) = delete;
 
   FermiFragment& operator=(const FermiFragment&) = delete;
 
-  virtual FragmentVector GetFragment(const LorentzVector& momentum) const = 0;
+  virtual FragmentVector GetChargeNumber(const LorentzVector& momentum) const = 0;
 
   uint32_t GetA() const;
 
@@ -25,7 +26,7 @@ class FermiFragment {
 
   uint32_t GetZ() const;
 
-  uint32_t GetProtonNumber() const;
+  uint32_t GetChargeNumber() const;
 
   int32_t GetPolarization() const;
 
@@ -39,7 +40,7 @@ class FermiFragment {
 
  protected:
   uint32_t mass_number_; /// A
-  uint32_t proton_number_; /// Z
+  uint32_t charge_number_; /// Z
   int32_t polarization;
   FermiFloat excitation_energy_;
 };

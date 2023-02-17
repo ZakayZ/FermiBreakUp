@@ -21,9 +21,9 @@ FragmentVector UnstableFermiFragment::GetFragment(const LorentzVector& momentum)
   auto beta = momentum.boostVector();
 
   for (size_t i = 0; i < decay_data_.size(); ++i) {
-    fragments_.push_back(new Particle(decay_data_[i].mass_number,
-                                      decay_data_[i].proton_number,
-                                      fragments_momentum[i].boost(beta)));
+    fragments_.emplace_back(FermiParticle(decay_data_[i].mass_number,
+                                           decay_data_[i].charge_number,
+                                           fragments_momentum[i].boost(beta)));
   }
 
   return fragments_;

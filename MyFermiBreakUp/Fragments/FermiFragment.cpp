@@ -3,13 +3,12 @@
 //
 
 #include "FermiFragment.h"
+#include "TableValues/ParticleTable.h"
 
-FermiFragment::FermiFragment(uint32_t mass_number,
-                             uint32_t proton_number,
-                             int polarization,
-                             FermiFloat excitation_energy) {
-
-}
+FermiFragment::FermiFragment(uint32_t mass_number, uint32_t charge_number,
+                             int polarization, FermiFloat excitation_energy)
+    : mass_number_(mass_number), charge_number_(charge_number),
+      polarization(polarization), excitation_energy_(excitation_energy) {}
 
 uint32_t FermiFragment::GetA() const {
   return GetMassNumber();
@@ -20,11 +19,11 @@ uint32_t FermiFragment::GetMassNumber() const {
 }
 
 uint32_t FermiFragment::GetZ() const {
-  return GetProtonNumber();
+  return GetChargeNumber();
 }
 
-uint32_t FermiFragment::GetProtonNumber() const {
-  return proton_number_;
+uint32_t FermiFragment::GetChargeNumber() const {
+  return charge_number_;
 }
 
 int32_t FermiFragment::GetPolarization() const {
@@ -36,7 +35,7 @@ FermiFloat FermiFragment::GetExcitationEnergy() const {
 }
 
 FermiFloat FermiFragment::GetFragmentMass() const {
-  return G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(mass_number_, proton_number_);  /// TODO Table
+  return ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(mass_number_, charge_number_);
 }
 
 FermiFloat FermiFragment::GetTotalEnergy() const {

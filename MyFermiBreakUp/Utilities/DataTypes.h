@@ -8,8 +8,6 @@
 #include <CLHEP/Vector/LorentzVector.h>
 
 using FermiInt = int;
-class Particle; /// TODO
-using FragmentVector = std::vector<Particle>;
 using FermiFloat = double;
 
 using LorentzVector = CLHEP::HepLorentzVector;

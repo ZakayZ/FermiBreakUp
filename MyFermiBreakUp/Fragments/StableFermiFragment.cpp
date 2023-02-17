@@ -5,5 +5,5 @@
 #include "StableFermiFragment.h"
 
 FragmentVector StableFermiFragment::GetFragment(const LorentzVector& momentum) const {
-  return {new Particle(GetMassNumber(), GetProtonNumber(), momentum)}; /// TODO avoid new, or change for value types
+  return {FermiParticle(GetMassNumber(), GetChargeNumber(), momentum)}; /// TODO avoid new, or change for value types
 }
