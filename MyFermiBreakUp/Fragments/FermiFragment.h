@@ -18,7 +18,7 @@ class FermiFragment {
 
   FermiFragment& operator=(const FermiFragment&) = delete;
 
-  virtual FragmentVector GetChargeNumber(const LorentzVector& momentum) const = 0;
+  virtual FragmentVector GetFragment(const LorentzVector& momentum) const = 0;
 
   uint32_t GetA() const;
 

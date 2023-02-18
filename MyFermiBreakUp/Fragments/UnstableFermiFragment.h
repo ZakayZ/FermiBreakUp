@@ -20,17 +20,14 @@ class UnstableFermiFragment : public FermiFragment {
 
   FragmentVector GetFragment(const LorentzVector& momentum) const override;
 
- private:
-  template <typename... Args>
-  using Container = std::vector<Args...>;
-
-  struct DecayFragments {
+ protected:
+  struct DecayFragment {
     uint32_t mass_number;
     uint32_t charge_number;
     FermiFloat mass;
   };
 
-  Container<DecayFragments> decay_data_;
+  std::vector<DecayFragment> decay_data_;
 };
 
 #endif //FERMIBREAKUP_MYFERMIBREAKUP_FRAGMENTS_UNSTABLEFERMIFRAGMENT_H_
