@@ -12,6 +12,7 @@ using FermiFloat = double;
 
 using LorentzVector = CLHEP::HepLorentzVector;
 using Vector3 = CLHEP::Hep3Vector;
+using ParticleMomentum = Vector3;
 
 class FermiPhaseSpaceDecay; /// TODO
 

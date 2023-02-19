@@ -7,7 +7,8 @@ find_package(CLHEP REQUIRED)
 
 
 set(Utilities
-        MyFermiBreakUp/Utilities/NucleiProperties.cpp)
+        MyFermiBreakUp/Utilities/NucleiProperties.cpp
+        MyFermiBreakUp/Utilities/ConfigurationProperties.cpp)
 
 set(Fragments
         MyFermiBreakUp/Fragments/FermiFragment.cpp
