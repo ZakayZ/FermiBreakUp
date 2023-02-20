@@ -25,7 +25,8 @@ set(Sources
         MyFermiBreakUp/FermiParticle.cpp
         MyFermiBreakUp/FermiSplit.cpp
         MyFermiBreakUp/FermiFragmentPool.cpp
-        MyFermiBreakUp/FermiConfigurations.cpp)
+        MyFermiBreakUp/FermiConfigurations.cpp
+        MyFermiBreakUp/FermiBreakUp.cpp)
 
 add_executable(FermiBreakUp main.cpp ${Sources} ${Fragments} ${Utilities})
 

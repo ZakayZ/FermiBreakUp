@@ -1,0 +1,58 @@
+//
+// Created by Artem Novikov on 21.02.2023.
+//
+
+#include "FermiBreakUp.h"
+#include "DataTypes.h"
+
+ParticleSplit FermiBreakUp::BreakItUp(const FermiParticle& nucleus) const {
+  /// CHECK that Excitation Energy > 0
+  if (nucleus.GetExcitationEnergy() <= 0) {
+    return {nucleus};
+  }
+
+  /// Total energy of nucleus in nucleus rest frame
+  FermiFloat total_energy = nucleus.GetMomentum().m();
+
+  /// Split the nucleus
+  FermiConfigurations configurations(nucleus.GetMassNumber(), nucleus.GetChargeNumber(), total_energy);
+  if (!configurations.IsSplitPossible()) {
+    return {nucleus};
+  }
+
+  return ConvertToParticles(configurations.ChooseSplit());
+}
+
+ParticleSplit FermiBreakUp::ConvertToParticles(const FermiParticle& source_nucleus, const FragmentSplit& split) {
+  ParticleSplit particle_split;
+  particle_split.reserve(2 * split.size());
+
+  FermiFloat total_momentum = source_nucleus.GetMomentum().m();
+
+  std::vector<FermiFloat> split_masses;
+  split_masses.reserve(split.size());
+  for (auto fragment_ptr : split) {
+    split_masses.push_back(fragment_ptr->GetTotalEnergy());
+  }
+
+  FermiPhaseSpaceDecay phase_sampler;
+  std::vector<LorentzVector> particles_momentum = phase_sampler.Decay(total_momentum, split_masses);
+
+  Vector3 boost_vector = source_nucleus.GetMomentum().boostVector();
+
+  /// Go back to the Lab Frame
+  for (size_t fragment_idx = 0; fragment_idx < split.size(); ++fragment_idx) {
+    auto& fragment_momentum4 = particles_momentum[fragment_idx];
+
+    /// Lorentz boost
+    fragment_momentum4.boost(boost_vector);
+
+    ParticleVector fragment_particles = split[fragment_idx]->GetFragment(fragment_momentum4);
+
+    /// TODO originally was reversed insertion, I have no idea why :(
+    particle_split.insert(particle_split.end(), std::make_move_iterator(fragment_particles.begin()),
+              std::make_move_iterator(fragment_particles.begin()));
+  }
+
+  return particle_split;
+}
