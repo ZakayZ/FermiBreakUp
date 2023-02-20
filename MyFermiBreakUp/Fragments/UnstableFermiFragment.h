@@ -18,7 +18,7 @@ class UnstableFermiFragment : public FermiFragment {
 
   const UnstableFermiFragment& operator=(const UnstableFermiFragment&) = delete;
 
-  FragmentVector GetFragment(const LorentzVector& momentum) const override;
+  ParticleVector GetFragment(const LorentzVector& momentum) const override;
 
  protected:
   struct DecayFragment {

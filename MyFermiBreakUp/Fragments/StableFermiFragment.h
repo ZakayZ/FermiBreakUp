@@ -17,7 +17,7 @@ class StableFermiFragment : public FermiFragment {
 
   StableFermiFragment& operator=(const StableFermiFragment&) = delete;
 
-  FragmentVector GetFragment(const LorentzVector& momentum) const override;
+  ParticleVector GetFragment(const LorentzVector& momentum) const override;
 };
 
 #endif //FERMIBREAKUP_MYFERMIBREAKUP_FRAGMENTS_STABLEFERMIFRAGMENT_H_

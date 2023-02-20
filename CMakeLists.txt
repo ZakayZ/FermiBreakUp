@@ -8,7 +8,8 @@ find_package(CLHEP REQUIRED)
 
 set(Utilities
         MyFermiBreakUp/Utilities/NucleiProperties.cpp
-        MyFermiBreakUp/Utilities/ConfigurationProperties.cpp)
+        MyFermiBreakUp/Utilities/ConfigurationProperties.cpp
+        MyFermiBreakUp/Utilities/Randomizer.cpp)
 
 set(Fragments
         MyFermiBreakUp/Fragments/FermiFragment.cpp
@@ -23,7 +24,8 @@ set(Sources
         MyFermiBreakUp/IntegerPartition.cpp
         MyFermiBreakUp/FermiParticle.cpp
         MyFermiBreakUp/FermiSplit.cpp
-        MyFermiBreakUp/FermiFragmentPool.cpp)
+        MyFermiBreakUp/FermiFragmentPool.cpp
+        MyFermiBreakUp/FermiConfigurations.cpp)
 
 add_executable(FermiBreakUp main.cpp ${Sources} ${Fragments} ${Utilities})
 

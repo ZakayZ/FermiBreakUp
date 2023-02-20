@@ -41,11 +41,35 @@ FermiSplit::FermiSplit(uint32_t mass_number, uint32_t charge_number, const uint3
   }
 }
 
-const FermiSplit::FragmentSplits& FermiSplit::GetSplits() const {
+FermiSplit::iterator FermiSplit::begin() {
+  return splits_.begin();
+}
+
+FermiSplit::const_iterator FermiSplit::begin() const {
+  return splits_.cbegin();
+}
+
+FermiSplit::const_iterator FermiSplit::cbegin() const {
+  return splits_.cbegin();
+}
+
+FermiSplit::iterator FermiSplit::end() {
+  return splits_.end();
+}
+
+FermiSplit::const_iterator FermiSplit::end() const {
+  return splits_.cend();
+}
+
+FermiSplit::const_iterator FermiSplit::cend() const {
+  return splits_.cend();
+}
+
+const std::vector<FragmentSplit>& FermiSplit::GetSplits() const {
   return splits_;
 }
 
-void FermiSplit::AddValidSplits(const FermiSplit::FragmentSplits& possible_splits) {
+void FermiSplit::AddValidSplits(const std::vector<FragmentSplit>& possible_splits) {
   /// TODO refactor creation, to eliminate duplicates from the start for speed up
   for (auto split : possible_splits) {
     std::sort(split.begin(), split.end(), std::greater<const FermiFragment*>());
@@ -79,7 +103,7 @@ std::vector<size_t> FermiSplit::FragmentVariations(const Partition& mass_partiti
   return fragment_variations;
 }
 
-FermiSplit::FragmentSplits FermiSplit::GeneratePossibleSplits(
+std::vector<FragmentSplit> FermiSplit::GeneratePossibleSplits(
     const Partition& mass_partition, const Partition& charge_partition, const std::vector<size_t>& fragment_variation) {
   FermiFragmentPool fragment_pool;
 
@@ -88,7 +112,7 @@ FermiSplit::FragmentSplits FermiSplit::GeneratePossibleSplits(
 
   auto fragment_count = mass_partition.size();
 
-  FragmentSplits splits;
+  std::vector<FragmentSplit> splits;
   splits.resize(splits_count);
   for (auto& split : splits) {
     split.reserve(fragment_count);

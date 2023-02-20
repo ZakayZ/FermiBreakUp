@@ -14,7 +14,7 @@ const FermiFloat ConfigurationProperties::Kappa = 1.0;
 const FermiFloat ConfigurationProperties::r0 = 1.3 * CLHEP::fermi;
 
 FermiFloat ConfigurationProperties::DecayProbability(
-    const Split& split, uint32_t atomic_weight, FermiFloat total_energy) {
+    const FragmentSplit& split, uint32_t atomic_weight, FermiFloat total_energy) {
 ///// TODO optimization like original maybe
 
   FermiFloat kinetic_energy = CalculateKineticEnergy(split, total_energy);  /// in MeV
@@ -42,7 +42,7 @@ FermiFloat ConfigurationProperties::DecayProbability(
   return Weight;
 }
 
-FermiFloat ConfigurationProperties::CoulombBarrier(const Split& split) {
+FermiFloat ConfigurationProperties::CoulombBarrier(const FragmentSplit& split) {
   ///  Calculates Coulomb Barrier (MeV) for given channel with K fragments.
   static const FermiFloat coefficient = (3. / 5.) * (CLHEP::elm_coupling / r0) * std::pow(1. / (1. + Kappa), 1. / 3.);
 
@@ -60,7 +60,7 @@ FermiFloat ConfigurationProperties::CoulombBarrier(const Split& split) {
   return -coefficient * CoulombEnergy;
 }
 
-FermiFloat ConfigurationProperties::CalculateSpinFactor(const Split& split) {
+FermiFloat ConfigurationProperties::CalculateSpinFactor(const FragmentSplit& split) {
   FermiFloat S_n = 1;
 
   for (auto fragment_ptr : split) {
@@ -70,7 +70,7 @@ FermiFloat ConfigurationProperties::CalculateSpinFactor(const Split& split) {
   return S_n;
 }
 
-FermiFloat ConfigurationProperties::CalculateKineticEnergy(const Split& split, FermiFloat total_energy) {
+FermiFloat ConfigurationProperties::CalculateKineticEnergy(const FragmentSplit& split, FermiFloat total_energy) {
   for (auto fragment_ptr : split) {
     auto& fragment = *fragment_ptr;
     total_energy -= fragment.GetMassNumber() + fragment.GetExcitationEnergy();
@@ -84,7 +84,7 @@ FermiFloat ConfigurationProperties::CalculateKineticEnergy(const Split& split, F
   return total_energy;
 }
 
-FermiFloat ConfigurationProperties::CalculateMassFactor(const Split& split) {
+FermiFloat ConfigurationProperties::CalculateMassFactor(const FragmentSplit& split) {
   FermiFloat mass_sum = 0;
   FermiFloat mass_product = 1;
   for (auto fragment_ptr : split) {
@@ -98,7 +98,7 @@ FermiFloat ConfigurationProperties::CalculateMassFactor(const Split& split) {
   return mass_factor;
 }
 
-FermiFloat ConfigurationProperties::CalculateConfigurationFactor(const Split& split) { /// TODO
+FermiFloat ConfigurationProperties::CalculateConfigurationFactor(const FragmentSplit& split) { /// TODO
   std::vector<size_t> nuclei_count;
   nuclei_count.reserve(split.size());
 

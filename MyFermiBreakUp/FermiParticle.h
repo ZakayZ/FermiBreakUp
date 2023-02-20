@@ -11,7 +11,7 @@
 
 class FermiParticle;
 
-using FragmentVector = std::vector<FermiParticle>;
+using ParticleVector = std::vector<FermiParticle>;
 
 class FermiParticle {
  public:

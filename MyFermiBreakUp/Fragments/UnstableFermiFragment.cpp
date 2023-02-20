@@ -4,8 +4,8 @@
 
 #include "UnstableFermiFragment.h"
 
-FragmentVector UnstableFermiFragment::GetFragment(const LorentzVector& momentum) const {
-  FragmentVector fragments_;
+ParticleVector UnstableFermiFragment::GetFragment(const LorentzVector& momentum) const {
+  ParticleVector fragments_;
 
   /// TODO better pipeline!!!!!!!!!!!! without additional vectors and loop
   std::vector<FermiFloat> masses;

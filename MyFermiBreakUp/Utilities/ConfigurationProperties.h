@@ -7,23 +7,21 @@
 
 #include <vector>
 
-#include "FermiFragment.h"
-
-using Split = std::vector<const FermiFragment*>;
+#include "FermiSplit.h"
 
 class ConfigurationProperties {
  public:
-  static FermiFloat DecayProbability(const Split& split, uint32_t atomic_weight, FermiFloat total_energy);
+  static FermiFloat DecayProbability(const FragmentSplit& split, uint32_t atomic_weight, FermiFloat total_energy);
 
-  static FermiFloat CoulombBarrier(const Split& split);
+  static FermiFloat CoulombBarrier(const FragmentSplit& split);
 
-  static FermiFloat CalculateSpinFactor(const Split& split);
+  static FermiFloat CalculateSpinFactor(const FragmentSplit& split);
 
-  static FermiFloat CalculateKineticEnergy(const Split& split, FermiFloat total_energy);
+  static FermiFloat CalculateKineticEnergy(const FragmentSplit& split, FermiFloat total_energy);
 
-  static FermiFloat CalculateMassFactor(const Split& split);
+  static FermiFloat CalculateMassFactor(const FragmentSplit& split);
 
-  static FermiFloat CalculateConfigurationFactor(const Split& split);
+  static FermiFloat CalculateConfigurationFactor(const FragmentSplit& split);
 
  private:
   static FermiFloat CalculateConstFactor(uint32_t atomic_weight, uint32_t fragments_count);
