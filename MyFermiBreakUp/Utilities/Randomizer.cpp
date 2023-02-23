@@ -30,3 +30,19 @@ ParticleMomentum Randomizer::IsotropicVector(FermiFloat Magnitude) {
                             Magnitude * cos);
   return momentum;
 }
+
+std::vector<FermiFloat> Randomizer::ProbabilityDistribution(size_t point_count) {
+  /// Sample uniform random numbers in increasing order
+  std::vector<FermiFloat> probability_distribution;
+  probability_distribution.reserve(point_count);
+
+  probability_distribution.push_back(0);
+  std::generate_n(std::back_inserter(probability_distribution),
+                  Randomizer::UniformRealDistribution(),
+                  point_count - 2);
+  probability_distribution.push_back(1);
+
+  std::sort(probability_distribution.begin(), probability_distribution.end());
+
+  return probability_distribution;
+}

@@ -5,6 +5,8 @@
 #ifndef FERMIBREAKUP_MYFERMIBREAKUP_UTILITIES_RANDOMIZER_H_
 #define FERMIBREAKUP_MYFERMIBREAKUP_UTILITIES_RANDOMIZER_H_
 
+#include <vector>
+
 #include "DataTypes.h"
 
 class Randomizer {
@@ -14,6 +16,8 @@ class Randomizer {
   static FermiFloat NormalDistribution(FermiFloat mean, FermiFloat deviation);
 
   static ParticleMomentum IsotropicVector(FermiFloat Magnitude = 1);
+
+  static std::vector<FermiFloat> ProbabilityDistribution(size_t point_count);
  private:
 };
 
