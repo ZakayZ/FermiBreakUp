@@ -4,8 +4,9 @@
 
 #include "FermiBreakUp.h"
 #include "DataTypes.h"
+#include "Utilities/PhaseDecay/FermiPhaseSpaceDecay.h"
 
-ParticleSplit FermiBreakUp::BreakItUp(const FermiParticle& nucleus) const {
+ParticleSplit FermiBreakUp::BreakItUp(const FermiParticle& nucleus) {
   /// CHECK that Excitation Energy > 0
   if (nucleus.GetExcitationEnergy() <= 0) {
     return {nucleus};
@@ -20,14 +21,12 @@ ParticleSplit FermiBreakUp::BreakItUp(const FermiParticle& nucleus) const {
     return {nucleus};
   }
 
-  return ConvertToParticles(configurations.ChooseSplit());
+  return ConvertToParticles(nucleus, configurations.ChooseSplit());
 }
 
 ParticleSplit FermiBreakUp::ConvertToParticles(const FermiParticle& source_nucleus, const FragmentSplit& split) {
   ParticleSplit particle_split;
   particle_split.reserve(2 * split.size());
-
-  FermiFloat total_momentum = source_nucleus.GetMomentum().m();
 
   std::vector<FermiFloat> split_masses;
   split_masses.reserve(split.size());
@@ -36,7 +35,7 @@ ParticleSplit FermiBreakUp::ConvertToParticles(const FermiParticle& source_nucle
   }
 
   FermiPhaseSpaceDecay phase_sampler;
-  std::vector<LorentzVector> particles_momentum = phase_sampler.Decay(total_momentum, split_masses);
+  std::vector<LorentzVector> particles_momentum = phase_sampler.CalculateDecay(source_nucleus.GetMomentum(), split_masses);
 
   Vector3 boost_vector = source_nucleus.GetMomentum().boostVector();
 

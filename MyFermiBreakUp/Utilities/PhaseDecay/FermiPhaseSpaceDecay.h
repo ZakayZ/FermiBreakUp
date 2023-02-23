@@ -5,12 +5,12 @@
 #ifndef FERMIBREAKUP_MYFERMIBREAKUP_UTILITIES_FERMIPHASESPACEDECAY_H_
 #define FERMIBREAKUP_MYFERMIBREAKUP_UTILITIES_FERMIPHASESPACEDECAY_H_
 
-#include "VDecay.h"
-#include "Decay.h"
-#include "KopylovDecay.h"
+#include "Utilities/PhaseDecay/VDecay.h"
+#include "Utilities/PhaseDecay/Decay.h"
+#include "Utilities/PhaseDecay/KopylovDecay.h"
 
 using FermiPhaseSpaceDecay = KopylovDecay; /// or just Decay
 
-static_assert(!std::is_base_of<VDecay, FermiPhaseSpaceDecay>::value, "Incorrect phase sampler.");
+static_assert(std::is_base_of<VDecay, FermiPhaseSpaceDecay>::value, "Incorrect phase sampler.");
 
 #endif //FERMIBREAKUP_MYFERMIBREAKUP_UTILITIES_FERMIPHASESPACEDECAY_H_

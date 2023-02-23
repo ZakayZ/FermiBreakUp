@@ -18,6 +18,7 @@ std::multimap<NucleiData, const FermiFragment*>* FermiFragmentPool::fragments_po
 
 FermiFragmentPool::FermiFragmentPool() {
   if (fragments_pool_ == nullptr) {
+    fragments_pool_ = new std::multimap<NucleiData, const FermiFragment*>();
     static const StableFermiFragment Fragment00(  1, 0,  2,  0.00*MeV ); AddFragment(Fragment00);
     static const StableFermiFragment Fragment01(  1, 1,  2,  0.00*MeV ); AddFragment(Fragment01);
     static const StableFermiFragment Fragment02(  2, 1,  3,  0.00*MeV ); AddFragment(Fragment02);

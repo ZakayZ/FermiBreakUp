@@ -120,14 +120,13 @@ std::vector<FragmentSplit> FermiSplit::GeneratePossibleSplits(
 
   for (size_t fragment_idx = 0; fragment_idx < fragment_count; ++fragment_idx) {
     auto fragment_range = fragment_pool.GetFragments(mass_partition[fragment_idx], charge_partition[fragment_idx]);
-    size_t step = fragment_variation[fragment_idx];
     size_t offset = 0;
+    size_t step = fragment_variation[fragment_idx];
     for (auto fragment_it = fragment_range.first; fragment_it != fragment_range.second; ++fragment_it) {
       for (size_t pos = offset++; pos < splits_count; pos += step) {
         splits[pos].push_back(fragment_it->second);
       }
     }
-    step = fragment_variation[fragment_idx];
   }
   return splits;
 }

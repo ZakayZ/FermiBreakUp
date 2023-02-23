@@ -3,6 +3,7 @@
 //
 
 #include "UnstableFermiFragment.h"
+#include "Utilities/PhaseDecay/FermiPhaseSpaceDecay.h"
 
 ParticleVector UnstableFermiFragment::GetFragment(const LorentzVector& momentum) const {
   ParticleVector fragments_;
@@ -14,9 +15,9 @@ ParticleVector UnstableFermiFragment::GetFragment(const LorentzVector& momentum)
     masses.push_back(decay_fragment_data.mass);
   }
 
-  FermiPhaseSpaceDecay thePhaseSpace;
+  FermiPhaseSpaceDecay phase_decay;
 
-  std::vector<LorentzVector> fragments_momentum = thePhaseSpace.Decay(momentum.m(), masses);
+  std::vector<LorentzVector> fragments_momentum = phase_decay.CalculateDecay(momentum, masses);
 
   auto beta = momentum.boostVector();
 

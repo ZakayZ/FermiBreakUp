@@ -12,15 +12,12 @@ using ParticleSplit = std::vector<FermiParticle>;
 
 class FermiBreakUp {
  public:
-  FermiBreakUp() = default;
+  FermiBreakUp() = delete;
 
-  FermiBreakUp(const FermiBreakUp&) = delete;
-
-  FermiBreakUp& operator=(const FermiBreakUp&) = delete;
-
-  ParticleSplit BreakItUp(const FermiParticle& nucleus) const;
+  static ParticleSplit BreakItUp(const FermiParticle& nucleus);
 
   ~FermiBreakUp() = default;
+
  private:
   static ParticleSplit ConvertToParticles(const FermiParticle& source_nucleus, const FragmentSplit& split);
 };

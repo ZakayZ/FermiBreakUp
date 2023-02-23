@@ -83,7 +83,7 @@ bool NucleiProperties::IsStable(uint32_t mass_number, uint32_t charge_number) {
 }
 
 FermiFloat NucleiProperties::AtomicMass(FermiFloat mass_number, FermiFloat charge_number) {
-  return 0;
+  return 0;  /// TODO
 }
 
 FermiFloat NucleiProperties::NuclearMass(FermiFloat mass_number, FermiFloat charge_number) {
