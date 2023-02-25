@@ -15,4 +15,6 @@ Be8FermiFragment::Be8FermiFragment(uint32_t mass_number,
 
   decay_data_ = {DecayFragment{.mass_number = 4, .charge_number = 2, .mass = alpha_mass},
                  DecayFragment{.mass_number = 4, .charge_number = 2, .mass = alpha_mass}};
+
+  FillMasses();
 }

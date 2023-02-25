@@ -15,7 +15,7 @@ const FermiFloat ConfigurationProperties::r0 = 1.3 * CLHEP::fermi;
 
 FermiFloat ConfigurationProperties::DecayProbability(
     const FragmentSplit& split, uint32_t atomic_weight, FermiFloat total_energy) {
-///// TODO optimization like original maybe
+  /// TODO optimization like original maybe
 
   FermiFloat kinetic_energy = CalculateKineticEnergy(split, total_energy);  /// in MeV
   /// Check that there is enough energy to produce K fragments
@@ -98,7 +98,7 @@ FermiFloat ConfigurationProperties::CalculateMassFactor(const FragmentSplit& spl
   return mass_factor;
 }
 
-FermiFloat ConfigurationProperties::CalculateConfigurationFactor(const FragmentSplit& split) { /// TODO
+FermiFloat ConfigurationProperties::CalculateConfigurationFactor(const FragmentSplit& split) {
   std::vector<size_t> nuclei_count;
   nuclei_count.reserve(split.size());
 

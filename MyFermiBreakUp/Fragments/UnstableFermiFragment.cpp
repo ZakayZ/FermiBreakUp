@@ -7,25 +7,23 @@
 
 ParticleVector UnstableFermiFragment::GetFragment(const LorentzVector& momentum) const {
   ParticleVector fragments_;
-
-  /// TODO better pipeline!!!!!!!!!!!! without additional vectors and loop
-  std::vector<FermiFloat> masses;
-  masses.reserve(decay_data_.size());
-  for (auto& decay_fragment_data : decay_data_) {
-    masses.push_back(decay_fragment_data.mass);
-  }
-
   FermiPhaseSpaceDecay phase_decay;
 
-  std::vector<LorentzVector> fragments_momentum = phase_decay.CalculateDecay(momentum, masses);
+  std::vector<LorentzVector> fragments_momentum = phase_decay.CalculateDecay(momentum, masses_);
 
   auto beta = momentum.boostVector();
 
   for (size_t i = 0; i < decay_data_.size(); ++i) {
-    fragments_.emplace_back(FermiParticle(decay_data_[i].mass_number,
-                                           decay_data_[i].charge_number,
-                                           fragments_momentum[i].boost(beta)));
+    fragments_.emplace_back(decay_data_[i].mass_number, decay_data_[i].charge_number,
+                            fragments_momentum[i].boost(beta));
   }
 
   return fragments_;
+}
+
+void UnstableFermiFragment::FillMasses() {
+  masses_.reserve(decay_data_.size());
+  for (auto& decay_fragment_data : decay_data_) {
+    masses_.push_back(decay_fragment_data.mass);
+  }
 }

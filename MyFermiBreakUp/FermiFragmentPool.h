@@ -6,19 +6,11 @@
 #define FERMIBREAKUP_MYFERMIBREAKUP_FERMIFRAGMENTPOOL_H_
 
 #include <map>
+
+#include "DataTypes.h"
 #include "FermiFragment.h"
 
 /// Singleton of fragments wrapper class
-
-struct NucleiData {
-  uint32_t mass_number;
-  uint32_t charge_number;
-
-  bool operator<(const NucleiData& other) const {
-    return mass_number < other.mass_number
-        || mass_number == other.mass_number && charge_number < other.charge_number;
-  }
-};
 
 class FermiFragmentPool {
  private:

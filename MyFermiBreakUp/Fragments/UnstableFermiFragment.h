@@ -27,7 +27,10 @@ class UnstableFermiFragment : public FermiFragment {
     FermiFloat mass;
   };
 
+  void FillMasses();
+
   std::vector<DecayFragment> decay_data_;
+  std::vector<FermiFloat> masses_;
 };
 
 #endif //FERMIBREAKUP_MYFERMIBREAKUP_FRAGMENTS_UNSTABLEFERMIFRAGMENT_H_

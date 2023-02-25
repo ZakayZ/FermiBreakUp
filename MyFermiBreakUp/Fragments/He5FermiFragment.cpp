@@ -16,4 +16,6 @@ He5FermiFragment::He5FermiFragment(uint32_t mass_number,
 
   decay_data_ = {DecayFragment{.mass_number = 4, .charge_number = 2, .mass = alpha_mass},
                  DecayFragment{.mass_number = 1, .charge_number = 0, .mass = neutron_mass}};
+
+  FillMasses();
 }
