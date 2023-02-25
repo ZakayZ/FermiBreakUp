@@ -22,7 +22,6 @@ class NucleiProperties {
 
   static bool IsInvalidNuclei(FermiFloat mass_number, FermiFloat charge_number);
 
-  static const std::array<FermiFloat, 120> electron_mass;
   static const FermiFloat proton_mass;
   static const FermiFloat neutron_mass;
   static const FermiFloat deuteron_mass;

@@ -12,7 +12,9 @@ set(Utilities
         MyFermiBreakUp/Utilities/Randomizer.cpp
         MyFermiBreakUp/Utilities/PhaseDecay/VDecay.cpp
         MyFermiBreakUp/Utilities/PhaseDecay/Decay.cpp
-        MyFermiBreakUp/Utilities/PhaseDecay/KopylovDecay.cpp)
+        MyFermiBreakUp/Utilities/PhaseDecay/KopylovDecay.cpp
+        MyFermiBreakUp/Utilities/TableValues/NucleiPropertiesTable.cpp
+        MyFermiBreakUp/Utilities/TableValues/NucleiPropertiesTableAME12.cpp)
 
 set(Fragments
         MyFermiBreakUp/Fragments/FermiFragment.cpp
