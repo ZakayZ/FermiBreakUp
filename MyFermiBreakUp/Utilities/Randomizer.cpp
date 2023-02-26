@@ -37,9 +37,7 @@ std::vector<FermiFloat> Randomizer::ProbabilityDistribution(size_t point_count) 
   probability_distribution.reserve(point_count);
 
   probability_distribution.push_back(0);
-  std::generate_n(std::back_inserter(probability_distribution),
-                  Randomizer::UniformRealDistribution(),
-                  point_count - 2);
+  std::generate_n(std::back_inserter(probability_distribution), point_count - 2, Randomizer::UniformRealDistribution);
   probability_distribution.push_back(1);
 
   std::sort(probability_distribution.begin(), probability_distribution.end());

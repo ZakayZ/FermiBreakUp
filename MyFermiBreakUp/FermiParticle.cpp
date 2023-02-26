@@ -79,7 +79,7 @@ void FermiParticle::ExcitationEnergyWarning() {
   if (excitation_energy_ < -10 * CLHEP::eV) {
     std::cout << "G4Fragment::CalculateExcitationEnergy(): WARNING " << std::endl << *this << std::endl;
   }
-  excitation_energy_ = 0;  /// TODO Investigate
+  excitation_energy_ = 0;
 }
 
 std::ostream& operator<<(std::ostream& out, const FermiParticle& particle) {

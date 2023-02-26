@@ -3,7 +3,6 @@
 //
 
 #include "IntegerPartition.h"
-#include "iostream"
 
 IntegerPartition::IntegerPartition(uint32_t number, uint32_t terms_count, bool allow_zero)
     : number_(number), terms_count_(terms_count), allow_zero_(allow_zero) {}
@@ -62,15 +61,16 @@ IntegerPartition::Iterator::Iterator(uint32_t number, uint32_t terms_count, bool
 }
 
 void IntegerPartition::Iterator::NextPartition() {
-  /// TODO store last update position, might improve perfomance
+  /// TODO store last update position, might improve performance
   for (auto it = partition_.rbegin(); it != partition_.rend(); ++it) {
     auto prev = it;
     ++prev;
+
     if (prev == partition_.rend()) { /// It was last partition
       partition_.clear();
       return;
     }
-//    std::cout << *prev << ' ' << *it << '\n';
+
     if (*prev >= *it + 2) {
       *prev -= 1;
       *it += 1;

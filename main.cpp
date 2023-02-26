@@ -1,7 +1,8 @@
 #include <iostream>
 #include "MyFermiBreakUp/IntegerPartition.h"
+#include "MyFermiBreakUp/FermiBreakUp.h"
 
-int main() {
+void PartitionTest() {
   std::cout << "with zero:\n";
   for(auto& partition: IntegerPartition(20, 6, true)) {
     for(auto el: partition) {
@@ -17,5 +18,9 @@ int main() {
     }
     std::cout << '\n';
   }
-  return 0;
+}
+
+
+int main() {
+  FermiBreakUp::BreakItUp(FermiParticle(3, 2, LorentzVector(1, 2, 3, 4)));
 }

@@ -21,7 +21,7 @@ const FermiFloat NucleiProperties::alpha_mass = 3.727379 * CLHEP::GeV;
 const FermiFloat NucleiProperties::He3_mass = 2.808391 * CLHEP::GeV;
 
 FermiFloat NucleiProperties::GetNuclearMass(uint32_t mass_number, uint32_t charge_number) {
-  if (IsInvalidNuclei(mass_number, charge_number)) { /// TODO Charge might be negative???
+  if (IsInvalidNuclei(mass_number, charge_number)) {
     std::cerr << "G4NucleiProperties::GetNuclearMass: Wrong values for A = " << mass_number
               << " and Z = " << charge_number << std::endl;
     return 0;
