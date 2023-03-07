@@ -49,7 +49,8 @@ IntegerPartition::Iterator::Iterator(uint32_t terms_count) {
 }
 
 IntegerPartition::Iterator::Iterator(uint32_t number, uint32_t terms_count, bool allow_zero) : Iterator(terms_count) {
-  if (number < terms_count && !allow_zero || terms_count == 0 || number == 0) { return; } /// No possible partitions
+  /// No possible partitions
+  if (number < terms_count && !allow_zero || terms_count == 0 || number == 0) { return; }
 
   if (allow_zero) {
     partition_[0] = number;
@@ -61,20 +62,20 @@ IntegerPartition::Iterator::Iterator(uint32_t number, uint32_t terms_count, bool
 }
 
 void IntegerPartition::Iterator::NextPartition() {
-  /// TODO store last update position, might improve performance
-  for (auto it = partition_.rbegin(); it != partition_.rend(); ++it) {
-    auto prev = it;
-    ++prev;
+  uint32_t accumulated = 0;
+  for (auto partition_last = std::next(partition_.begin()); partition_last != partition_.end(); ++partition_last) {
+    if (partition_.front() >= *partition_last + 2) {
+      --partition_.front();
+      ++(*partition_last);
 
-    if (prev == partition_.rend()) { /// It was last partition
-      partition_.clear();
+      auto new_value = *partition_last;
+      std::fill(std::next(partition_.begin()), partition_last, new_value);
+      partition_.front() += accumulated - new_value * (std::distance(partition_.begin(), partition_last) - 1);
       return;
     }
-
-    if (*prev >= *it + 2) {
-      *prev -= 1;
-      *it += 1;
-      return;
-    }
+    accumulated += *partition_last;
   }
+
+  /// last partition
+  partition_.clear();
 }

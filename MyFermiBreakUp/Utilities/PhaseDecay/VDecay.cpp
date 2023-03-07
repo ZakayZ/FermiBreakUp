@@ -7,7 +7,7 @@
 
 VDecay::~VDecay() = default;
 
-FermiFloat VDecay::TwoBodyProbability(FermiFloat total_energy, FermiFloat mass1, FermiFloat mass2) {
+FermiFloat VDecay::TwoBodyMomentum(FermiFloat total_energy, FermiFloat mass1, FermiFloat mass2) {
   FermiFloat sq_probability =
       (total_energy + mass1 + mass2) * (total_energy + mass1 - mass2) * (total_energy - mass1 + mass2)
           * (total_energy - mass1 - mass2) / (4.0 * std::pow(total_energy, 2));
@@ -20,7 +20,7 @@ FermiFloat VDecay::TwoBodyProbability(FermiFloat total_energy, FermiFloat mass1,
 std::pair<LorentzVector, LorentzVector> VDecay::TwoBodyDecay(FermiFloat total_energy,
                                                              FermiFloat mass1,
                                                              FermiFloat mass2) {
-  auto psqr = TwoBodyProbability(total_energy, mass1, mass2);
+  auto psqr = TwoBodyMomentum(total_energy, mass1, mass2);
   ParticleMomentum momentum = Randomizer::IsotropicVector(std::sqrt(psqr));
 
   std::pair<LorentzVector, LorentzVector> momentum4 = {LorentzVector(momentum, std::sqrt(psqr + std::pow(mass1, 2))),

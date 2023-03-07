@@ -62,8 +62,6 @@ FermiFloat NucleiProperties::GetNuclearMass(uint32_t mass_number, uint32_t charg
 
   /// Raw calculation
   return NuclearMass(FermiFloat(mass_number), FermiFloat(charge_number));
-
-  return 0;
 }
 
 bool NucleiProperties::IsStable(uint32_t mass_number, uint32_t charge_number) {

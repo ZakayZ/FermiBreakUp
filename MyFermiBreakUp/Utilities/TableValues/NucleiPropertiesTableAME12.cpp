@@ -12,7 +12,7 @@ const size_t NucleiPropertiesTableAME12::MaxChargeNumber = 120;
 
 const size_t NucleiPropertiesTableAME12::ParticleCount = 3353;
 
-const size_t NucleiPropertiesTableAME12::ShortTableCount = MaxMassNumber + 1;
+const size_t NucleiPropertiesTableAME12::ShortTableCount = MaxMassNumber;
 
 std::vector<FermiFloat>* NucleiPropertiesTableAME12::electron_mass_ = nullptr;
 
@@ -24,8 +24,6 @@ NucleiPropertiesTableAME12::NucleiPropertiesTableAME12() {
   assert(ParticleCount == MassExcess.size());
   assert(ParticleCount == BetaEnergy.size());
 
-  assert(MaxChargeNumber == electron_mass_->size());
-
   /// calculate electron mass in orbit with binding energy
   if (electron_mass_ == nullptr) {
     electron_mass_ = new std::vector<FermiFloat>(MaxChargeNumber);
@@ -36,6 +34,8 @@ NucleiPropertiesTableAME12::NucleiPropertiesTableAME12() {
           - (1.55468 * 1e-6 * std::pow(FermiFloat(iz), 5.35)) * CLHEP::eV;
     }
   }
+
+  assert(MaxChargeNumber == electron_mass_->size());
 }
 
 FermiFloat NucleiPropertiesTableAME12::GetNuclearMass(uint32_t mass_number, uint32_t charge_number) const {

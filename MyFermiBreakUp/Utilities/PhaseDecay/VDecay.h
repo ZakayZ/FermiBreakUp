@@ -18,7 +18,7 @@ class VDecay {
   virtual ~VDecay() = 0;
 
  protected:
-  static FermiFloat TwoBodyProbability(FermiFloat total_energy, FermiFloat mass1, FermiFloat mass2);
+  static FermiFloat TwoBodyMomentum(FermiFloat total_energy, FermiFloat mass1, FermiFloat mass2);
 
   static std::pair<LorentzVector, LorentzVector> TwoBodyDecay(
       FermiFloat total_energy, FermiFloat mass1, FermiFloat mass2);

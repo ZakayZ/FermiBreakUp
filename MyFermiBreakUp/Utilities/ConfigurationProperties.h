@@ -24,9 +24,9 @@ class ConfigurationProperties {
   static FermiFloat CalculateConfigurationFactor(const FragmentSplit& split);
 
  private:
-  static FermiFloat CalculateConstFactor(uint32_t atomic_weight, uint32_t fragments_count);
+  static FermiFloat CalculateConstFactor(uint32_t atomic_weight, size_t fragments_count);
 
-  static FermiFloat CalculateGammaFactor(uint32_t fragments_count);
+  static FermiFloat CalculateGammaFactor(size_t fragments_count);
 
   /// Kappa = V/V_0 it is used in calculation of Coulomb energy
   static const FermiFloat Kappa;

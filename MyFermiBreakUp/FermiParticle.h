@@ -52,7 +52,7 @@ class FermiParticle {
 
    void CalculateGroundStateMass();
 
-  void ExcitationEnergyWarning();
+  void ExcitationEnergyError();
 
   uint32_t mass_number_;
 

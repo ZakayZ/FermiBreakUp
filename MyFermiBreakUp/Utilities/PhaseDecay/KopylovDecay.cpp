@@ -26,7 +26,7 @@ std::vector<LorentzVector> KopylovDecay::CalculateDecay(const LorentzVector& mom
     kinetic_energy *= i > 1 ? BetaKopylov(i) : 0;
     auto rest_mass = mu + kinetic_energy;
 
-    auto momentum_magnitude_fragments_cm = TwoBodyProbability(mass, fragments_mass[i], rest_mass);
+    auto momentum_magnitude_fragments_cm = TwoBodyMomentum(mass, fragments_mass[i], rest_mass);
     if (momentum_magnitude_fragments_cm < 0) {
       throw std::runtime_error("FermiPhaseSpaceDecay::KopylovNBodyDecay: Error sampling fragments momenta!!");
     }

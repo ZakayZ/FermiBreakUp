@@ -3,7 +3,7 @@
 //
 
 #include "FermiFragment.h"
-#include "TableValues/ParticleTable.h"
+#include "NucleiProperties.h"
 
 FermiFragment::FermiFragment(uint32_t mass_number, uint32_t charge_number,
                              int polarization, FermiFloat excitation_energy)
@@ -35,7 +35,7 @@ FermiFloat FermiFragment::GetExcitationEnergy() const {
 }
 
 FermiFloat FermiFragment::GetFragmentMass() const {
-  return ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(mass_number_, charge_number_);
+  return NucleiProperties::GetNuclearMass(mass_number_, charge_number_);
 }
 
 FermiFloat FermiFragment::GetTotalEnergy() const {

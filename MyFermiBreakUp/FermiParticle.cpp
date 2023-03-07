@@ -68,16 +68,18 @@ void FermiParticle::SetAngularMomentum(const Vector3& angular_momentum) {
 
 void FermiParticle::CalculateExcitationEnergy() {
   excitation_energy_ = momentum_.mag() - ground_state_mass_;
-  if (excitation_energy_ < 0) { ExcitationEnergyWarning(); }
+  if (excitation_energy_ < 0) {
+    ExcitationEnergyError();
+  }
 }
 
 void FermiParticle::CalculateGroundStateMass() {
   ground_state_mass_ = NucleiProperties::GetNuclearMass(mass_number_, charge_number_);
 }
 
-void FermiParticle::ExcitationEnergyWarning() {
+void FermiParticle::ExcitationEnergyError() {
   if (excitation_energy_ < -10 * CLHEP::eV) {
-    std::cout << "G4Fragment::CalculateExcitationEnergy(): WARNING " << std::endl << *this << std::endl;
+    throw std::runtime_error("G4Fragment::CalculateExcitationEnergy(): Negative");
   }
   excitation_energy_ = 0;
 }

@@ -37,7 +37,7 @@ FermiFloat ConfigurationProperties::DecayProbability(
   auto G_n = CalculateConfigurationFactor(split);
 
   auto Weight = coefficient * mass_factor * (S_n / G_n) / gamma;
-  Weight *= std::pow(kinetic_energy, 3.0 * static_cast<FermiFloat>(split.size() - 1) / 2.0) / kinetic_energy;
+  Weight *= std::pow(kinetic_energy, 3.0 * static_cast<FermiFloat>(split.size() - 1) / 2.0 - 1.);
 
   return Weight;
 }
@@ -50,8 +50,8 @@ FermiFloat ConfigurationProperties::CoulombBarrier(const FragmentSplit& split) {
   FermiFloat charge_sum = 0;
   FermiFloat CoulombEnergy = 0;
   for (auto& fragment_ptr : split) {
-    auto mass = static_cast<FermiFloat>(fragment_ptr->GetChargeNumber());
-    auto charge = static_cast<FermiFloat>(fragment_ptr->GetMassNumber());
+    auto mass = static_cast<FermiFloat>(fragment_ptr->GetMassNumber());
+    auto charge = static_cast<FermiFloat>(fragment_ptr->GetChargeNumber());
     CoulombEnergy += std::pow(charge, 2) / std::pow(mass, 1. / 3.);
     mass_sum += mass;
     charge_sum += charge;
@@ -135,13 +135,13 @@ FermiFloat ConfigurationProperties::CalculateConfigurationFactor(const FragmentS
   return G_n;
 }
 
-FermiFloat ConfigurationProperties::CalculateConstFactor(uint32_t atomic_weight, uint32_t fragments_count) {
+FermiFloat ConfigurationProperties::CalculateConstFactor(uint32_t atomic_weight, size_t fragments_count) {
   static const FermiFloat constant_part = std::pow(r0 / CLHEP::hbarc, 3.0) * Kappa * std::sqrt(2.0 / CLHEP::pi) / 3.0;
   FermiFloat coefficient = std::pow(constant_part * atomic_weight, fragments_count - 1);
   return coefficient;
 }
 
-FermiFloat ConfigurationProperties::CalculateGammaFactor(uint32_t fragments_count) {
+FermiFloat ConfigurationProperties::CalculateGammaFactor(size_t fragments_count) {
   FermiFloat gamma = 1.0;
   FermiFloat arg = 3.0 * static_cast<FermiFloat>(fragments_count - 1) / 2.0 - 1.0;
   while (arg > 1.1) {

@@ -87,7 +87,7 @@ FermiFloat Decay::CalculateMomentumMagnitudes(std::vector<FermiFloat>& daughter_
   size_t sz = daughter_momentum.size();
   FermiFloat weight = 1;
   for (size_t i = 0; i < sz - 1; ++i) {
-    daughter_momentum[i] = TwoBodyProbability(virtual_masses[i + 1], virtual_masses[i], masses[i + 1]);
+    daughter_momentum[i] = TwoBodyMomentum(virtual_masses[i + 1], virtual_masses[i], masses[i + 1]);
     weight *= daughter_momentum[i];
 
     if (daughter_momentum[i] < 0) {
@@ -95,7 +95,7 @@ FermiFloat Decay::CalculateMomentumMagnitudes(std::vector<FermiFloat>& daughter_
       return 0;
     }
   }
-  daughter_momentum[sz - 1] = TwoBodyProbability(virtual_masses[sz - 2], masses[sz - 2], masses[sz - 1]);
+  daughter_momentum[sz - 1] = TwoBodyMomentum(virtual_masses[sz - 2], masses[sz - 2], masses[sz - 1]);
   return weight;
 }
 
@@ -105,7 +105,7 @@ FermiFloat Decay::CalculateMaxWeight(const std::vector<FermiFloat>& masses, Ferm
   for (size_t i = 0; i < masses.size(); ++i) {
     max_energy += masses[i];
     min_energy += masses[i - 1];
-    max_weight *= TwoBodyProbability(max_energy, min_energy, masses[i]);
+    max_weight *= TwoBodyMomentum(max_energy, min_energy, masses[i]);
   }
   return max_weight;
 }

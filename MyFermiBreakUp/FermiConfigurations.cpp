@@ -21,7 +21,7 @@ FermiConfigurations::FermiConfigurations(uint32_t mass_number, uint32_t charge_n
       total_weight += split_weight;
 
       weights_.push_back(split_weight);
-      configurations_.emplace_back(std::move(split));  /// split is moved!!!!!!!!
+      configurations_.emplace_back(std::move(split));  /// split is moved!
     }
   }
 
