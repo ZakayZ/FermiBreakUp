@@ -10,12 +10,8 @@
 
 FermiParticle::FermiParticle(MassNumber mass_number, ChargeNumber charge_number, const LorentzVector& momentum)
     : mass_number_(mass_number), charge_number_(charge_number), momentum_(momentum), angular_momentum_() {
-  excitation_energy_ = 0.0;
-  ground_state_mass_ = 0.0;
-  if (GetMassNumber() > 0_m) {
-    CalculateGroundStateMass();
-    CalculateExcitationEnergy();
-  }
+  CalculateGroundStateMass();
+  CalculateExcitationEnergy();
 }
 
 MassNumber FermiParticle::GetMassNumber() const {
@@ -69,19 +65,15 @@ void FermiParticle::SetAngularMomentum(const Vector3& angular_momentum) {
 void FermiParticle::CalculateExcitationEnergy() {
   excitation_energy_ = momentum_.mag() - ground_state_mass_;
   if (excitation_energy_ < 0) {
-    ExcitationEnergyError();
+    if (excitation_energy_ < -10 * CLHEP::eV) {
+      throw std::runtime_error("Excitation Energy is negative");
+    }
+    excitation_energy_ = 0;
   }
 }
 
 void FermiParticle::CalculateGroundStateMass() {
   ground_state_mass_ = NucleiProperties().GetNuclearMass(mass_number_, charge_number_);
-}
-
-void FermiParticle::ExcitationEnergyError() {
-  if (excitation_energy_ < -10 * CLHEP::eV) {
-    throw std::runtime_error("G4Fragment::CalculateExcitationEnergy(): Negative");
-  }
-  excitation_energy_ = 0;
 }
 
 std::ostream& operator<<(std::ostream& out, const FermiParticle& particle) {

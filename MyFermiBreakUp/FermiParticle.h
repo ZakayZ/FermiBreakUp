@@ -52,8 +52,6 @@ class FermiParticle {
 
    void CalculateGroundStateMass();
 
-  void ExcitationEnergyError();
-
   MassNumber mass_number_;
   ChargeNumber charge_number_;
   LorentzVector momentum_;

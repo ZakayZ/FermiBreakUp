@@ -18,8 +18,6 @@ class FermiNucleiProperties : public VNucleiProperties {
   bool IsStable(MassNumber mass_number, ChargeNumber charge_number) const override;
 
  private:
-  static bool IsInvalidNuclei(MassNumber mass_number, ChargeNumber charge_number);
-
   static std::map<NucleiData, FermiFloat>* nuclei_mass_;
 };
 

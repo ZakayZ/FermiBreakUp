@@ -20,7 +20,7 @@ FermiNucleiProperties::FermiNucleiProperties() {
     MassNumber m;
     ChargeNumber c;
     FermiFloat mass;
-    while(in >> idx) {
+    while (in >> idx) {
       char del;
       in >> del >> m >> del >> c >> del >> mass;
       nuclei_mass_->emplace(NucleiData{m, c}, mass);
@@ -29,7 +29,11 @@ FermiNucleiProperties::FermiNucleiProperties() {
 }
 
 FermiFloat FermiNucleiProperties::GetNuclearMass(MassNumber mass_number, ChargeNumber charge_number) const {
-  return nuclei_mass_->at(NucleiData{mass_number, charge_number});
+  auto it = nuclei_mass_->find(NucleiData{mass_number, charge_number});
+  if (it != nuclei_mass_->end()) {
+    return it->second;
+  }
+  return NuclearMass(mass_number, charge_number);
 }
 
 bool FermiNucleiProperties::IsStable(MassNumber mass_number, ChargeNumber charge_number) const {
@@ -41,8 +45,3 @@ bool FermiNucleiProperties::IsStable(MassNumber mass_number, ChargeNumber charge
 
   return nuclei_mass_->find(NucleiData{mass_number, charge_number}) != nuclei_mass_->end();
 }
-
-bool FermiNucleiProperties::IsInvalidNuclei(MassNumber mass_number, ChargeNumber charge_number) {
-  return mass_number < 1_m || charge_number < 0_c || FermiUInt(charge_number) > FermiUInt(mass_number);
-}
-

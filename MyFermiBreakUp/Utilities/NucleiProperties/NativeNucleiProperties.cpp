@@ -76,8 +76,8 @@ bool NativeNucleiProperties::IsStable(MassNumber mass_number, ChargeNumber charg
 
 FermiFloat NativeNucleiProperties::AtomicMass(MassNumber mass_number, ChargeNumber charge_number) {
   NucleiPropertiesTableAME12 table_AME12;
-  static const FermiFloat hydrogen_mass_excess = 7.28897; // table_AME12.GetMassExcess(1_m, 1_c);
-  static const FermiFloat neutron_mass_excess  = 8.07132; // table_AME12.GetMassExcess(1_m, 0_c);
+  const FermiFloat hydrogen_mass_excess = table_AME12.GetMassExcess(1_m, 1_c);
+  const FermiFloat neutron_mass_excess  = table_AME12.GetMassExcess(1_m, 0_c);
 
   FermiFloat mass = FermiFloat(FermiUInt(mass_number) - FermiUInt(charge_number)) * neutron_mass_excess
       + FermiFloat(charge_number) * hydrogen_mass_excess - BindingEnergy(mass_number, charge_number)
