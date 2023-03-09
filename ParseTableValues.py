@@ -2,7 +2,9 @@ import pandas as pd
 
 pd.set_option('display.max_columns', None)
 
-nuclei_data = pd.read_csv('nuclear_data.csv')
+nuclei_data = pd.read_csv('nuclear_data.csv', index_col='Unnamed: 0')
+
+print(nuclei_data)
 
 # Table for small nuclei
 small_nuclei_data = nuclei_data[['A', 'Z', 'mass']]

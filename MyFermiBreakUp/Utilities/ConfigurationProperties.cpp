@@ -72,7 +72,7 @@ FermiFloat ConfigurationProperties::CalculateSpinFactor(const FragmentSplit& spl
 FermiFloat ConfigurationProperties::CalculateKineticEnergy(const FragmentSplit& split, FermiFloat total_energy) {
   for (auto fragment_ptr : split) {
     auto& fragment = *fragment_ptr;
-    total_energy -= FermiFloat(fragment.GetMassNumber()) + fragment.GetExcitationEnergy();
+    total_energy -= fragment.GetFragmentMass() + fragment.GetExcitationEnergy();
   }
   if (total_energy > 0) {
     total_energy -= CoulombBarrier(split);
@@ -98,31 +98,29 @@ FermiFloat ConfigurationProperties::CalculateMassFactor(const FragmentSplit& spl
 }
 
 FermiFloat ConfigurationProperties::CalculateConfigurationFactor(const FragmentSplit& split) {
-  std::vector<size_t> nuclei_count;
-  nuclei_count.reserve(split.size());
+  /// get all mass numbers and count repetitions
+  std::vector<MassNumber> masses;
+  masses.reserve(split.size());
+  for(auto fragment_ptr: split){
+    masses.push_back(fragment_ptr->GetMassNumber());
+  }
+  std::sort(masses.begin(), masses.end());
 
-  /// sort split by a,z pair
-  auto sorted_split = split;
-  auto cmp = [](const FermiFragment* a, const FermiFragment* b) {
-    return a->GetMassNumber() < b->GetMassNumber()
-        || a->GetMassNumber() == b->GetMassNumber() && a->GetChargeNumber() < b->GetChargeNumber();
-  };
-  std::sort(sorted_split.begin(), sorted_split.end(), cmp);
-
-  NucleiData last_nuclei{sorted_split[0]->GetMassNumber(), sorted_split[0]->GetChargeNumber()};
-  nuclei_count.push_back(0);
-  for (auto fragment : sorted_split) {
-    if (last_nuclei.mass_number == fragment->GetMassNumber()
-        && last_nuclei.charge_number == fragment->GetChargeNumber()) {
-      ++nuclei_count.back();
+  std::vector<size_t> mass_repeats;
+  mass_repeats.reserve(split.size());
+  mass_repeats.push_back(0);
+  MassNumber last_mass(masses[0]);
+  for (auto fragment_mass : masses) {
+    if (last_mass == fragment_mass) {
+      ++mass_repeats.back();
     } else {
-      last_nuclei = {fragment->GetMassNumber(), fragment->GetChargeNumber()};
-      nuclei_count.push_back(1);
+      last_mass = fragment_mass;
+      mass_repeats.push_back(1);
     }
   }
 
   FermiFloat G_n = 1;
-  for (auto count : nuclei_count) {
+  for (auto count : mass_repeats) {
     auto factorial = [](size_t n) -> size_t {
       size_t factorial = 1;
       for (size_t i = 2; i < n; ++i) { factorial *= i; }

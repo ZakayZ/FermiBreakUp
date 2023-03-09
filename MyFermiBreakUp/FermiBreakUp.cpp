@@ -50,7 +50,7 @@ ParticleSplit FermiBreakUp::ConvertToParticles(const FermiParticle& source_nucle
 
     /// TODO originally was reversed insertion, I have no idea why :(
     particle_split.insert(particle_split.end(), std::make_move_iterator(fragment_particles.begin()),
-              std::make_move_iterator(fragment_particles.begin()));
+              std::make_move_iterator(fragment_particles.end()));
   }
 
   return particle_split;

@@ -19,10 +19,12 @@ FermiConfigurations::FermiConfigurations(MassNumber mass_number, ChargeNumber ch
     for (auto& split : FermiSplit(mass_number, charge_number, particle_count)) {
       /// Non-Normalized statistical weight for given channel with k fragments
       auto split_weight = ConfigurationProperties::DecayProbability(split, mass_number, total_energy);
-      total_weight += split_weight;
+      if (split_weight != 0) {
+        total_weight += split_weight;
 
-      weights_.push_back(split_weight);
-      configurations_.emplace_back(std::move(split));  /// split is moved!
+        weights_.push_back(split_weight);
+        configurations_.emplace_back(std::move(split));  /// split is moved!
+      }
     }
   }
 
