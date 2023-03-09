@@ -37,6 +37,8 @@ class MassNumber {
 
   operator FermiUInt() const { return mass_; }
 
+  operator FermiInt() const { return mass_; }
+
   operator FermiFloat() const { return mass_; }
 
   bool operator<(const MassNumber& other) const { return mass_ < other.mass_; }
@@ -82,6 +84,8 @@ class ChargeNumber {
   ChargeNumber& operator=(ChargeNumber&& other) = default;
 
   operator FermiUInt() const { return charge_; }
+
+  operator FermiInt() const { return charge_; }
 
   operator FermiFloat() const { return charge_; }
 

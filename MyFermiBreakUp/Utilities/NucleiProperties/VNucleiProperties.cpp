@@ -30,14 +30,14 @@ FermiFloat VNucleiProperties::NuclearMass(MassNumber mass_number, ChargeNumber c
 
 FermiFloat VNucleiProperties::BindingEnergy(MassNumber mass_number, ChargeNumber charge_number) {
   /// Weitzsaecker's Mass formula
-  FermiUInt N_pairing = (FermiUInt(mass_number) - FermiUInt(charge_number)) % 2;                      /// pairing
-  FermiUInt Z_pairing = FermiUInt(charge_number) % 2;
+  FermiInt N_pairing = (FermiInt(mass_number) - FermiInt(charge_number)) % 2;                      /// pairing
+  FermiInt Z_pairing = FermiInt(charge_number) % 2;
 
   FermiFloat binding =
           - 15.67 * FermiFloat(mass_number)                                                           /// nuclear volume
           + 17.23 * std::pow(mass_number, 2. / 3.)                                                    /// surface energy
-          + 93.15 * ((FermiFloat(mass_number) / 2. - FermiFloat(charge_number))
-          * (FermiFloat(mass_number) / 2. - FermiFloat(charge_number))) / FermiFloat(mass_number)     /// asymmetry
+          + 93.15 * std::pow(FermiFloat(mass_number) / 2. - FermiFloat(charge_number), 2)
+          / FermiFloat(mass_number)                                                                   /// asymmetry
           + 0.6984523 * std::pow(FermiUInt(charge_number), 2) * std::pow(mass_number, -1. / 3.);      /// coulomb
 
   if (N_pairing == Z_pairing) {
