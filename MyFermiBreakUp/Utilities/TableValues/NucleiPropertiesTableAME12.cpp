@@ -6,13 +6,13 @@
 
 #include "NucleiPropertiesTableAME12.h"
 
-const size_t NucleiPropertiesTableAME12::MaxMassNumber = 295;
+const MassNumber NucleiPropertiesTableAME12::MaxMassNumber = 295_m;
 
-const size_t NucleiPropertiesTableAME12::MaxChargeNumber = 120;
+const ChargeNumber NucleiPropertiesTableAME12::MaxChargeNumber = 120_c;
 
 const size_t NucleiPropertiesTableAME12::ParticleCount = 3353;
 
-const size_t NucleiPropertiesTableAME12::ShortTableCount = MaxMassNumber;
+const size_t NucleiPropertiesTableAME12::ShortTableCount = FermiUInt(MaxMassNumber);
 
 std::vector<FermiFloat>* NucleiPropertiesTableAME12::electron_mass_ = nullptr;
 
@@ -26,27 +26,27 @@ NucleiPropertiesTableAME12::NucleiPropertiesTableAME12() {
 
   /// calculate electron mass in orbit with binding energy
   if (electron_mass_ == nullptr) {
-    electron_mass_ = new std::vector<FermiFloat>(MaxChargeNumber);
+    electron_mass_ = new std::vector<FermiFloat>(FermiUInt(MaxChargeNumber));
     auto& electron_mass = *electron_mass_;
-    for (size_t iz = 1; iz < MaxChargeNumber; ++iz) {
+    for (FermiUInt iz = 1; iz < FermiUInt(MaxChargeNumber); ++iz) {
       electron_mass[iz] = static_cast<FermiFloat>(iz) * CLHEP::electron_mass_c2
           - (14.4381 * std::pow(FermiFloat(iz), 2.39)) * CLHEP::eV
           - (1.55468 * 1e-6 * std::pow(FermiFloat(iz), 5.35)) * CLHEP::eV;
     }
   }
 
-  assert(MaxChargeNumber == electron_mass_->size());
+  assert(FermiUInt(MaxChargeNumber) == electron_mass_->size());
 }
 
-FermiFloat NucleiPropertiesTableAME12::GetNuclearMass(uint32_t mass_number, uint32_t charge_number) const {
+FermiFloat NucleiPropertiesTableAME12::GetNuclearMass(MassNumber mass_number, ChargeNumber charge_number) const {
   if (VerifyNuclei(mass_number, charge_number)) {
-    return GetAtomicMass(mass_number, charge_number) - electron_mass_->operator[](charge_number);
+    return GetAtomicMass(mass_number, charge_number) - electron_mass_->operator[](FermiUInt(charge_number));
   }
 
   return 0;
 }
 
-FermiFloat NucleiPropertiesTableAME12::GetMassExcess(uint32_t mass_number, uint32_t charge_number) const {
+FermiFloat NucleiPropertiesTableAME12::GetMassExcess(MassNumber mass_number, ChargeNumber charge_number) const {
   if (VerifyNuclei(mass_number, charge_number)) {
     return MassExcess[GetIndex(mass_number, charge_number)] * CLHEP::keV;
   }
@@ -54,43 +54,71 @@ FermiFloat NucleiPropertiesTableAME12::GetMassExcess(uint32_t mass_number, uint3
   return 0;
 }
 
-FermiFloat NucleiPropertiesTableAME12::GetBindingEnergy(uint32_t mass_number, uint32_t charge_number) const {
-  return (FermiFloat(mass_number - charge_number) * MassExcess[0]
+FermiFloat NucleiPropertiesTableAME12::GetBindingEnergy(MassNumber mass_number, ChargeNumber charge_number) const {
+  return ((FermiFloat(mass_number) - FermiFloat(charge_number)) * MassExcess[0]
       + FermiFloat(charge_number) * MassExcess[1] - MassExcess[GetIndex(mass_number, charge_number)]) * CLHEP::keV;
 }
 
-FermiFloat NucleiPropertiesTableAME12::GetBetaDecayEnergy(uint32_t mass_number, uint32_t charge_number) const {
+FermiFloat NucleiPropertiesTableAME12::GetBetaDecayEnergy(MassNumber mass_number, ChargeNumber charge_number) const {
   return BetaEnergy[GetIndex(mass_number, charge_number)] * CLHEP::keV;
 }
 
-bool NucleiPropertiesTableAME12::ContainsParticle(uint32_t mass_number, uint32_t charge_number) const {
-  return VerifyNuclei(mass_number, charge_number);
+bool NucleiPropertiesTableAME12::ContainsParticle(MassNumber mass_number, ChargeNumber charge_number) const {
+  try {
+    return VerifyNuclei(mass_number, charge_number);
+  } catch (...) {
+    return false;
+  }
 }
 
-size_t NucleiPropertiesTableAME12::GetIndex(uint32_t mass_number, uint32_t charge_number) const {
-  for (size_t i = ShortTable[mass_number - 1]; i < ShortTable[mass_number]; ++i) {
-    if (IndexCharge[i] == charge_number) { return i; }
+size_t NucleiPropertiesTableAME12::GetIndex(MassNumber mass_number, ChargeNumber charge_number) const {
+  for (size_t i = ShortTable[FermiUInt(mass_number) - 1]; i < ShortTable[FermiUInt(mass_number)]; ++i) {
+    if (IndexCharge[i] == FermiUInt(charge_number)) { return i; }
   }
 
   return -1;
 }
 
-FermiFloat NucleiPropertiesTableAME12::GetAtomicMass(uint32_t mass_number, uint32_t charge_number) const {
+FermiFloat NucleiPropertiesTableAME12::GetAtomicMass(MassNumber mass_number, ChargeNumber charge_number) const {
   return MassExcess[GetIndex(mass_number, charge_number)] * CLHEP::keV + FermiFloat(mass_number) * CLHEP::amu_c2;
 }
 
-bool NucleiPropertiesTableAME12::VerifyNuclei(uint32_t mass_number, uint32_t charge_number) const {
+bool NucleiPropertiesTableAME12::VerifyNuclei(MassNumber mass_number, ChargeNumber charge_number) const {
   if (mass_number > MaxMassNumber) {
     throw std::runtime_error("Nucleon number larger than 293");
   }
-  if (mass_number < 1) {
+  if (mass_number < 1_m) {
     throw std::runtime_error("Nucleon number is negative");
   }
-  if (charge_number > mass_number) {
+  if (FermiUInt(charge_number) > FermiUInt(mass_number)) {
     throw std::runtime_error("Nucleon number smaller than Z");
   }
 
   return GetIndex(mass_number, charge_number) != -1;
+}
+
+FermiUInt NucleiPropertiesTableAME12::GetMaxMass() const {
+  return MaxMassNumber;
+}
+
+FermiUInt NucleiPropertiesTableAME12::GetMaxCharge() const {
+  return MaxChargeNumber;
+}
+
+std::ostream& operator<<(std::ostream& out, const NucleiPropertiesTableAME12& table) {
+  out << "A Z mass mass_excess binding_energy beta_decay_energy\n";
+  for (size_t i = 1; i <= table.GetMaxMass(); ++i) {
+    for (size_t j = 0; j <= table.GetMaxCharge(); ++j) {
+      if (table.ContainsParticle(MassNumber(i), ChargeNumber(j))) {
+        out << i << ' ' << j << ' '
+            << table.GetNuclearMass(MassNumber(i), ChargeNumber(j)) << ' '
+            << table.GetMassExcess(MassNumber(i), ChargeNumber(j)) << ' '
+            << table.GetBindingEnergy(MassNumber(i), ChargeNumber(j)) << ' '
+            << table.GetBetaDecayEnergy(MassNumber(i), ChargeNumber(j)) << '\n';
+      }
+    }
+  }
+  return out;
 }
 
 const std::vector<FermiFloat> NucleiPropertiesTableAME12::MassExcess = {
@@ -1509,3 +1537,4 @@ const std::vector<size_t> NucleiPropertiesTableAME12::ShortTable = {
     3315, 3319, 3322, 3325, 3327, 3330, 3332, 3335, 3337, 3340,
     3342, 3345, 3347, 3350, 3352
 };
+

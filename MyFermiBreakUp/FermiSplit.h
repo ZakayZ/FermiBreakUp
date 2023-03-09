@@ -17,7 +17,7 @@ class FermiSplit {
   using iterator = std::vector<FragmentSplit>::iterator;
   using const_iterator = std::vector<FragmentSplit>::const_iterator;
 
-  FermiSplit(uint32_t mass_number, uint32_t charge_number, uint32_t fragment_count);
+  FermiSplit(MassNumber mass_number, ChargeNumber charge_number, uint32_t fragment_count);
 
   iterator begin();
   const_iterator begin() const;

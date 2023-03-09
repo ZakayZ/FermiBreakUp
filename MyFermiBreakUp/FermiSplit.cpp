@@ -8,15 +8,15 @@
 #include "IntegerPartition.h"
 #include "FermiFragmentPool.h"
 
-FermiSplit::FermiSplit(uint32_t mass_number, uint32_t charge_number, const uint32_t fragment_count) {
+FermiSplit::FermiSplit(MassNumber mass_number, ChargeNumber charge_number, const uint32_t fragment_count) {
   /// Check argument correctness
-  if (mass_number < 0 || charge_number < 0 || fragment_count < 0) {
+  if (mass_number < 0_m || charge_number < 0_c || fragment_count < 0) {
     std::string error_message =
         "G4FermiSplitter::Initialize() Error: Non valid arguments A = " + std::to_string(mass_number) + " Z = "
             + std::to_string(charge_number) + " #fragments = " + std::to_string(fragment_count);
     throw std::runtime_error(error_message);
   }
-  if (charge_number > mass_number || fragment_count > mass_number) {
+  if (FermiUInt(charge_number) > FermiUInt(mass_number) || fragment_count > FermiUInt(mass_number)) {
     std::string error_message =
         "G4FermiSplitter::Initialize() Error: Non physical arguments = " + std::to_string(mass_number) + " Z = "
             + std::to_string(charge_number) + " #fragments = " + std::to_string(fragment_count);
@@ -94,7 +94,8 @@ std::vector<size_t> FermiSplit::FragmentVariations(const Partition& mass_partiti
   fragment_variations.reserve(fragment_count);
 
   for (size_t fragment_idx = 0; fragment_idx < fragment_count; ++fragment_idx) {
-    auto possible_fragments = fragment_pool.Count(mass_partition[fragment_idx], charge_partition[fragment_idx]);
+    auto possible_fragments = fragment_pool.Count(MassNumber(mass_partition[fragment_idx]),
+                                                  ChargeNumber(charge_partition[fragment_idx]));
     if (possible_fragments <= 0) {
       return fragment_variations;
     }
@@ -119,7 +120,8 @@ std::vector<FragmentSplit> FermiSplit::GeneratePossibleSplits(
   }
 
   for (size_t fragment_idx = 0; fragment_idx < fragment_count; ++fragment_idx) {
-    auto fragment_range = fragment_pool.GetFragments(mass_partition[fragment_idx], charge_partition[fragment_idx]);
+    auto fragment_range = fragment_pool.GetFragments(MassNumber(mass_partition[fragment_idx]),
+                                                     ChargeNumber(charge_partition[fragment_idx]));
     size_t offset = 0;
     size_t step = fragment_variation[fragment_idx];
     for (auto fragment_it = fragment_range.first; fragment_it != fragment_range.second; ++fragment_it) {

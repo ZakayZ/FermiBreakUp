@@ -5,24 +5,24 @@
 #include <iomanip>
 #include <CLHEP/Units/PhysicalConstants.h>
 
-#include "Utilities/NucleiProperties.h"
+#include "Utilities/NucleiProperties/NucleiProperties.h"
 #include "FermiParticle.h"
 
-FermiParticle::FermiParticle(uint32_t mass_number, uint32_t charge_number, const LorentzVector& momentum)
+FermiParticle::FermiParticle(MassNumber mass_number, ChargeNumber charge_number, const LorentzVector& momentum)
     : mass_number_(mass_number), charge_number_(charge_number), momentum_(momentum), angular_momentum_() {
   excitation_energy_ = 0.0;
   ground_state_mass_ = 0.0;
-  if (GetMassNumber() > 0) {
+  if (GetMassNumber() > 0_m) {
     CalculateGroundStateMass();
     CalculateExcitationEnergy();
   }
 }
 
-uint32_t FermiParticle::GetMassNumber() const {
+MassNumber FermiParticle::GetMassNumber() const {
   return mass_number_;
 }
 
-uint32_t FermiParticle::GetChargeNumber() const {
+ChargeNumber FermiParticle::GetChargeNumber() const {
   return charge_number_;
 }
 
@@ -43,15 +43,15 @@ FermiFloat FermiParticle::GetGroundStateMass() const {
 }
 
 FermiFloat FermiParticle::GetBindingEnergy() const {
-  return (mass_number_ - charge_number_) * CLHEP::neutron_mass_c2 + charge_number_ * CLHEP::proton_mass_c2
-      - ground_state_mass_;
+  return (FermiUInt(mass_number_) - FermiUInt(charge_number_)) * CLHEP::neutron_mass_c2
+      + FermiFloat(charge_number_) * CLHEP::proton_mass_c2 - ground_state_mass_;
 }
 
 bool FermiParticle::IsStable() const {
   return excitation_energy_ <= 0;
 }
 
-void FermiParticle::SetMassAndCharge(uint32_t mass_number, uint32_t charge_number) {
+void FermiParticle::SetMassAndCharge(MassNumber mass_number, ChargeNumber charge_number) {
   mass_number_ = mass_number;
   charge_number_ = charge_number;
   CalculateGroundStateMass();
@@ -74,7 +74,7 @@ void FermiParticle::CalculateExcitationEnergy() {
 }
 
 void FermiParticle::CalculateGroundStateMass() {
-  ground_state_mass_ = NucleiProperties::GetNuclearMass(mass_number_, charge_number_);
+  ground_state_mass_ = NucleiProperties().GetNuclearMass(mass_number_, charge_number_);
 }
 
 void FermiParticle::ExcitationEnergyError() {

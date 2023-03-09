@@ -13,21 +13,28 @@ class NucleiPropertiesTable {
  public:
   NucleiPropertiesTable();
 
-  FermiFloat GetNuclearMass(uint32_t mass_number, uint32_t charge_number) const;
+  FermiFloat GetNuclearMass(MassNumber mass_number, ChargeNumber charge_number) const;
 
-  bool ContainsParticle(uint32_t mass_number, uint32_t charge_number) const;
+  bool ContainsParticle(MassNumber mass_number, ChargeNumber charge_number) const;
+
+  FermiUInt GetMaxMass() const;
+
+  FermiUInt GetMaxCharge() const;
 
   ~NucleiPropertiesTable() = default;
 
  private:
-  static FermiFloat ElectronicBindingEnergy(uint32_t charge_number);
+  static FermiFloat ElectronicBindingEnergy(ChargeNumber charge_number);
 
-  size_t GetIndex(uint32_t mass_number, uint32_t charge_number) const;
+  size_t GetIndex(MassNumber mass_number, ChargeNumber charge_number) const;
 
-  FermiFloat GetAtomicMass(uint32_t mass_number, uint32_t charge_number) const;
+  FermiFloat GetAtomicMass(MassNumber mass_number, ChargeNumber charge_number) const;
 
-  bool VerifyNuclei(uint32_t mass_number, uint32_t charge_number) const;
+  bool VerifyNuclei(MassNumber mass_number, ChargeNumber charge_number) const;
 
+  static const MassNumber MaxMassNumber;
+
+  static const ChargeNumber MaxChargeNumber;
 
   static const size_t ParticleCount;
 
@@ -41,5 +48,7 @@ class NucleiPropertiesTable {
 
   static const std::vector<size_t> ShortTable;
 };
+
+std::ostream& operator<<(std::ostream& out, const NucleiPropertiesTable& table);
 
 #endif //FERMIBREAKUP_MYFERMIBREAKUP_UTILITIES_TABLEVALUES_NUCLEIPROPERTIESTABLE_H_

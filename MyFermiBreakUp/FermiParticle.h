@@ -21,11 +21,11 @@ class FermiParticle {
 
   FermiParticle& operator=(const FermiParticle&) = default;
 
-  FermiParticle(uint32_t mass_number, uint32_t charge_number, const LorentzVector& momentum);
+  FermiParticle(MassNumber mass_number, ChargeNumber charge_number, const LorentzVector& momentum);
 
-  uint32_t GetMassNumber() const;
+  MassNumber GetMassNumber() const;
 
-  uint32_t GetChargeNumber() const;
+  ChargeNumber GetChargeNumber() const;
 
   const LorentzVector& GetMomentum() const;
 
@@ -39,7 +39,7 @@ class FermiParticle {
 
   bool IsStable() const;
 
-  void SetMassAndCharge(uint32_t mass_number, uint32_t charge_number);
+  void SetMassAndCharge(MassNumber mass_number, ChargeNumber charge_number);
 
   void SetMomentum(const LorentzVector& momentum);
 
@@ -54,16 +54,12 @@ class FermiParticle {
 
   void ExcitationEnergyError();
 
-  uint32_t mass_number_;
-
-  uint32_t charge_number_;
-
+  MassNumber mass_number_;
+  ChargeNumber charge_number_;
   LorentzVector momentum_;
 
   Vector3 angular_momentum_;
-
   FermiFloat excitation_energy_ = 0;
-
   FermiFloat ground_state_mass_ = 0;
 };
 

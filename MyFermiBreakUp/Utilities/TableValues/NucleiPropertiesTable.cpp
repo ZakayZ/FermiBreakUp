@@ -7,6 +7,10 @@
 #include "NucleiPropertiesTable.h"
 #include "CLHEP/Units/PhysicalConstants.h"
 
+const MassNumber NucleiPropertiesTable::MaxMassNumber = 339_m;
+
+const ChargeNumber NucleiPropertiesTable::MaxChargeNumber = 136_c;
+
 const size_t NucleiPropertiesTable::ParticleCount = 8979;
 
 const size_t NucleiPropertiesTable::ShortTableCount = 137;
@@ -19,7 +23,7 @@ NucleiPropertiesTable::NucleiPropertiesTable() {
   assert(IndexMass.size() == ParticleCount);
 }
 
-FermiFloat NucleiPropertiesTable::GetNuclearMass(uint32_t mass_number, uint32_t charge_number) const {
+FermiFloat NucleiPropertiesTable::GetNuclearMass(MassNumber mass_number, ChargeNumber charge_number) const {
   if (VerifyNuclei(mass_number, charge_number)) {
     return GetAtomicMass(mass_number, charge_number)
         - FermiFloat(charge_number) * CLHEP::electron_mass_c2 + ElectronicBindingEnergy(charge_number);
@@ -27,45 +31,61 @@ FermiFloat NucleiPropertiesTable::GetNuclearMass(uint32_t mass_number, uint32_t 
   return 0;
 }
 
-bool NucleiPropertiesTable::ContainsParticle(uint32_t mass_number, uint32_t charge_number) const {
-  return VerifyNuclei(mass_number, charge_number);
+bool NucleiPropertiesTable::ContainsParticle(MassNumber mass_number, ChargeNumber charge_number) const {
+  try {
+    return VerifyNuclei(mass_number, charge_number);
+  } catch (...) {
+    return false;
+  }
 }
 
-size_t NucleiPropertiesTable::GetIndex(uint32_t mass_number, uint32_t charge_number) const {
-  for (size_t i = ShortTable[charge_number - 8]; i < ShortTable[charge_number - 8 + 1]; ++i) {
-    if (IndexMass[i] == mass_number) { return i; }
+size_t NucleiPropertiesTable::GetIndex(MassNumber mass_number, ChargeNumber charge_number) const {
+  for (size_t i = ShortTable[FermiUInt(charge_number) - 8]; i < ShortTable[FermiUInt(charge_number) - 8 + 1]; ++i) {
+    if (IndexMass[i] == FermiUInt(mass_number)) { return i; }
   }
 
   return -1;
 }
 
-FermiFloat NucleiPropertiesTable::GetAtomicMass(uint32_t mass_number, uint32_t charge_number) const {
+FermiFloat NucleiPropertiesTable::GetAtomicMass(MassNumber mass_number, ChargeNumber charge_number) const {
   return AtomicMassExcess[GetIndex(mass_number, charge_number)] * CLHEP::MeV + FermiFloat(mass_number) * CLHEP::amu_c2;
 }
 
-bool NucleiPropertiesTable::VerifyNuclei(uint32_t mass_number, uint32_t charge_number) const {
-  if (mass_number > 339) {
+bool NucleiPropertiesTable::VerifyNuclei(MassNumber mass_number, ChargeNumber charge_number) const {
+  if (mass_number > MaxMassNumber) {
     throw std::runtime_error("Nucleon number larger than 339");
   }
-  if (mass_number < 16) {
+  if (mass_number < 16_m) {
     throw std::runtime_error("Nucleon number smaller than 16");
   }
-  if (charge_number > 136) {
+  if (charge_number > MaxChargeNumber) {
     throw std::runtime_error("Proton number larger than 136");
   }
-  if (charge_number < 8) {
+  if (charge_number < 8_c) {
     throw std::runtime_error("Proton number smaller than 8");
   }
-  if (charge_number > mass_number) {
+  if (FermiUInt(charge_number) > FermiUInt(mass_number)) {
     throw std::runtime_error("Nucleon number smaller than Z");
   }
 
   return GetIndex(mass_number, charge_number) != -1;
 }
 
-FermiFloat NucleiPropertiesTable::ElectronicBindingEnergy(uint32_t charge_number) {
+FermiFloat NucleiPropertiesTable::ElectronicBindingEnergy(ChargeNumber charge_number) {
   const FermiFloat ael = 1.433e-5 * CLHEP::MeV;  // electronic-binding constant
   return ael * std::pow(charge_number, 2.39);
+}
+
+std::ostream& operator<<(std::ostream& out, const NucleiPropertiesTable& table) {
+  out << "A Z mass\n";
+  for (size_t i = 1; i < 400; ++i) {
+    for (size_t j = 0; j < 200; ++j) {
+      if (table.ContainsParticle(MassNumber(i), ChargeNumber(j))) {
+        out << i << ' ' << j << ' ' << table.GetNuclearMass(MassNumber(i), ChargeNumber(j)) << '\n';
+      }
+    }
+  }
+  return out;
 }
 
 const std::vector<FermiFloat> NucleiPropertiesTable::AtomicMassExcess = {
@@ -2787,3 +2807,11 @@ const std::vector<size_t> NucleiPropertiesTable::ShortTable = {
     8852, 8879, 8903, 8924, 8941, 8955, 8966, 8974, 8978, 0,
     0, 0, 0, 0, 0, 0, 8979
 };
+
+FermiUInt NucleiPropertiesTable::GetMaxMass() const {
+  return 339;
+}
+
+FermiUInt NucleiPropertiesTable::GetMaxCharge() const {
+  return 0;
+}

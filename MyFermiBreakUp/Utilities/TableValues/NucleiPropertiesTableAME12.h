@@ -13,28 +13,32 @@ class NucleiPropertiesTableAME12 {
  public:
   NucleiPropertiesTableAME12();
 
-  FermiFloat GetNuclearMass(uint32_t mass_number, uint32_t charge_number) const;
+  FermiFloat GetNuclearMass(MassNumber mass_number, ChargeNumber charge_number) const;
 
-  FermiFloat GetMassExcess(uint32_t mass_number, uint32_t charge_number) const;
+  FermiFloat GetMassExcess(MassNumber mass_number, ChargeNumber charge_number) const;
 
-  FermiFloat GetBindingEnergy(uint32_t mass_number, uint32_t charge_number) const;
+  FermiFloat GetBindingEnergy(MassNumber mass_number, ChargeNumber charge_number) const;
 
-  FermiFloat GetBetaDecayEnergy(uint32_t mass_number, uint32_t charge_number) const;
+  FermiFloat GetBetaDecayEnergy(MassNumber mass_number, ChargeNumber charge_number) const;
 
-  bool ContainsParticle(uint32_t mass_number, uint32_t charge_number) const;
+  bool ContainsParticle(MassNumber mass_number, ChargeNumber charge_number) const;
+
+  FermiUInt GetMaxMass() const;
+
+  FermiUInt GetMaxCharge() const;
 
   ~NucleiPropertiesTableAME12() = default;
 
  private:
-  size_t GetIndex(uint32_t mass_number, uint32_t charge_number) const;
+  size_t GetIndex(MassNumber mass_number, ChargeNumber charge_number) const;
 
-  FermiFloat GetAtomicMass(uint32_t mass_number, uint32_t charge_number) const;
+  FermiFloat GetAtomicMass(MassNumber mass_number, ChargeNumber charge_number) const;
 
-  bool VerifyNuclei(uint32_t mass_number, uint32_t charge_number) const;
+  bool VerifyNuclei(MassNumber mass_number, ChargeNumber charge_number) const;
 
-  static const size_t MaxMassNumber;
+  static const MassNumber MaxMassNumber;
 
-  static const size_t MaxChargeNumber;
+  static const ChargeNumber MaxChargeNumber;
 
   static const size_t ParticleCount;
 
@@ -52,5 +56,7 @@ class NucleiPropertiesTableAME12 {
 
   static std::vector<FermiFloat>* electron_mass_;
 };
+
+std::ostream& operator<<(std::ostream& out, const NucleiPropertiesTableAME12& table);
 
 #endif //FERMIBREAKUP_MYFERMIBREAKUP_UTILITIES_TABLEVALUES_NUCLEIPROPERTIESTABLEAME12_H_

@@ -12,7 +12,7 @@
 
 class FermiFragment {
  public:
-  FermiFragment(uint32_t mass_number, uint32_t charge_number, int polarization, FermiFloat excitation_energy);
+  FermiFragment(MassNumber mass_number, ChargeNumber charge_number, int polarization, FermiFloat excitation_energy);
 
   FermiFragment(const FermiFragment&) = delete;
 
@@ -20,13 +20,13 @@ class FermiFragment {
 
   virtual ParticleVector GetFragment(const LorentzVector& momentum) const = 0;
 
-  uint32_t GetA() const;
+  MassNumber GetA() const;
 
-  uint32_t GetMassNumber() const;
+  MassNumber GetMassNumber() const;
 
-  uint32_t GetZ() const;
+  ChargeNumber GetZ() const;
 
-  uint32_t GetChargeNumber() const;
+  ChargeNumber GetChargeNumber() const;
 
   int32_t GetPolarization() const;
 
@@ -39,8 +39,8 @@ class FermiFragment {
   virtual ~FermiFragment() = 0;
 
  protected:
-  uint32_t mass_number_; /// A
-  uint32_t charge_number_; /// Z
+  MassNumber mass_number_;  /// A
+  ChargeNumber charge_number_;  /// Z
   int32_t polarization;
   FermiFloat excitation_energy_;
 };

@@ -19,11 +19,11 @@ class FermiFragmentPool {
  public:
   FermiFragmentPool();
 
-  size_t Count(uint32_t mass_number, uint32_t charge_number) const;
+  size_t Count(MassNumber mass_number, ChargeNumber charge_number) const;
 
   size_t Count(const NucleiData& nuclei) const;
 
-  RangeIterators GetFragments(uint32_t mass_number, uint32_t charge_number) const;
+  RangeIterators GetFragments(MassNumber mass_number, ChargeNumber charge_number) const;
 
   RangeIterators GetFragments(const NucleiData& nuclei) const;
 

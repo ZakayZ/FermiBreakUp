@@ -3,26 +3,26 @@
 //
 
 #include "FermiFragment.h"
-#include "NucleiProperties.h"
+#include "Utilities/NucleiProperties/NucleiProperties.h"
 
-FermiFragment::FermiFragment(uint32_t mass_number, uint32_t charge_number,
+FermiFragment::FermiFragment(MassNumber mass_number, ChargeNumber charge_number,
                              int polarization, FermiFloat excitation_energy)
     : mass_number_(mass_number), charge_number_(charge_number),
       polarization(polarization), excitation_energy_(excitation_energy) {}
 
-uint32_t FermiFragment::GetA() const {
+MassNumber FermiFragment::GetA() const {
   return GetMassNumber();
 }
 
-uint32_t FermiFragment::GetMassNumber() const {
+MassNumber FermiFragment::GetMassNumber() const {
   return mass_number_;
 }
 
-uint32_t FermiFragment::GetZ() const {
+ChargeNumber FermiFragment::GetZ() const {
   return GetChargeNumber();
 }
 
-uint32_t FermiFragment::GetChargeNumber() const {
+ChargeNumber FermiFragment::GetChargeNumber() const {
   return charge_number_;
 }
 
@@ -35,7 +35,7 @@ FermiFloat FermiFragment::GetExcitationEnergy() const {
 }
 
 FermiFloat FermiFragment::GetFragmentMass() const {
-  return NucleiProperties::GetNuclearMass(mass_number_, charge_number_);
+  return NucleiProperties().GetNuclearMass(mass_number_, charge_number_);
 }
 
 FermiFloat FermiFragment::GetTotalEnergy() const {

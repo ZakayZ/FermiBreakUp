@@ -9,7 +9,7 @@
 
 class B9FermiFragment : public UnstableFermiFragment {
  public:
-  B9FermiFragment(uint32_t mass_number, uint32_t charge_number, int polarization, FermiFloat excitation_energy);
+  B9FermiFragment(MassNumber mass_number, ChargeNumber charge_number, int polarization, FermiFloat excitation_energy);
 
   B9FermiFragment() = delete;
 

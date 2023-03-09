@@ -10,10 +10,11 @@
 
 const size_t FermiConfigurations::MaxNumberOfFragments = 16;
 
-FermiConfigurations::FermiConfigurations(uint32_t mass_number, uint32_t charge_number, FermiFloat total_energy) {
+FermiConfigurations::FermiConfigurations(MassNumber mass_number, ChargeNumber charge_number, FermiFloat total_energy) {
   /// let's split nucleus into 2,...,A fragments
   FermiFloat total_weight = 0;
-  for (uint32_t particle_count = 2; particle_count <= mass_number; particle_count++) {
+  auto max_fragments_count = FermiUInt(mass_number);
+  for (uint32_t particle_count = 2; particle_count <= max_fragments_count; particle_count++) {
     /// Initialize Configuration for k fragments
     for (auto& split : FermiSplit(mass_number, charge_number, particle_count)) {
       /// Non-Normalized statistical weight for given channel with k fragments

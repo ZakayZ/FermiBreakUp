@@ -9,7 +9,7 @@
 
 class He5FermiFragment : public UnstableFermiFragment {
  public:
-  He5FermiFragment(uint32_t mass_number, uint32_t charge_number, int polarization, FermiFloat excitation_energy);
+  He5FermiFragment(MassNumber mass_number, ChargeNumber charge_number, int polarization, FermiFloat excitation_energy);
 
   He5FermiFragment() = delete;
 

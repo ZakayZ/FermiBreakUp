@@ -9,7 +9,7 @@
 
 class Li5FermiFragment : public UnstableFermiFragment {
  public:
-  Li5FermiFragment(uint32_t mass_number, uint32_t charge_number, int polarization, FermiFloat excitation_energy);
+  Li5FermiFragment(MassNumber mass_number, ChargeNumber charge_number, int polarization, FermiFloat excitation_energy);
 
   Li5FermiFragment() = delete;
 

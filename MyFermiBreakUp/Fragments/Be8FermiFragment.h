@@ -9,7 +9,7 @@
 
 class Be8FermiFragment : public UnstableFermiFragment {
  public:
-  Be8FermiFragment(uint32_t mass_number, uint32_t charge_number, int polarization, FermiFloat excitation_energy);
+  Be8FermiFragment(MassNumber mass_number, ChargeNumber charge_number, int polarization, FermiFloat excitation_energy);
 
   Be8FermiFragment() = delete;
 

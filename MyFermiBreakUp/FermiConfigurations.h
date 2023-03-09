@@ -11,7 +11,7 @@
 
 class FermiConfigurations {
  public:
-  FermiConfigurations(uint32_t mass_number, uint32_t charge_number, FermiFloat total_energy);
+  FermiConfigurations(MassNumber mass_number, ChargeNumber charge_number, FermiFloat total_energy);
 
   bool IsSplitPossible() const;
 

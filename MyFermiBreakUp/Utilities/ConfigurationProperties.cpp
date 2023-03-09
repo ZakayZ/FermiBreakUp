@@ -5,7 +5,6 @@
 
 #include "ConfigurationProperties.h"
 #include "CLHEP/Units/PhysicalConstants.h"
-#include "FermiFragmentPool.h"
 
 /// Kappa = V/V_0 it is used in calculation of Coulomb energy, Kappa is dimensionless
 const FermiFloat ConfigurationProperties::Kappa = 1.0;
@@ -73,7 +72,7 @@ FermiFloat ConfigurationProperties::CalculateSpinFactor(const FragmentSplit& spl
 FermiFloat ConfigurationProperties::CalculateKineticEnergy(const FragmentSplit& split, FermiFloat total_energy) {
   for (auto fragment_ptr : split) {
     auto& fragment = *fragment_ptr;
-    total_energy -= fragment.GetMassNumber() + fragment.GetExcitationEnergy();
+    total_energy -= FermiFloat(fragment.GetMassNumber()) + fragment.GetExcitationEnergy();
   }
   if (total_energy > 0) {
     total_energy -= CoulombBarrier(split);

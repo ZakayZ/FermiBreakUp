@@ -22,8 +22,8 @@ class UnstableFermiFragment : public FermiFragment {
 
  protected:
   struct DecayFragment {
-    uint32_t mass_number;
-    uint32_t charge_number;
+    MassNumber mass_number;
+    ChargeNumber charge_number;
     FermiFloat mass;
   };
 

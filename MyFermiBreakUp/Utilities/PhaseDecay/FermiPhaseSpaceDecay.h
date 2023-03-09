@@ -11,6 +11,6 @@
 
 using FermiPhaseSpaceDecay = KopylovDecay; /// or just Decay
 
-static_assert(std::is_base_of<VDecay, FermiPhaseSpaceDecay>::value, "Incorrect phase sampler.");
+static_assert(std::is_base_of<VDecay, FermiPhaseSpaceDecay>::value, "Incorrect phase sampler");
 
 #endif //FERMIBREAKUP_MYFERMIBREAKUP_UTILITIES_FERMIPHASESPACEDECAY_H_

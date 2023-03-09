@@ -7,7 +7,10 @@ find_package(CLHEP REQUIRED)
 
 
 set(Utilities
-        MyFermiBreakUp/Utilities/NucleiProperties.cpp
+        MyFermiBreakUp/Utilities/DataTypes.cpp
+        MyFermiBreakUp/Utilities/NucleiProperties/VNucleiProperties.cpp
+        MyFermiBreakUp/Utilities/NucleiProperties/FermiNucleiProperties.cpp
+        MyFermiBreakUp/Utilities/NucleiProperties/NativeNucleiProperties.cpp
         MyFermiBreakUp/Utilities/ConfigurationProperties.cpp
         MyFermiBreakUp/Utilities/Randomizer.cpp
         MyFermiBreakUp/Utilities/PhaseDecay/VDecay.cpp
@@ -33,7 +36,9 @@ set(Sources
         MyFermiBreakUp/FermiConfigurations.cpp
         MyFermiBreakUp/FermiBreakUp.cpp)
 
-add_executable(FermiBreakUp main.cpp ${Sources} ${Fragments} ${Utilities})
+set(Includes ${Sources} ${Fragments} ${Utilities})
+
+add_executable(FermiBreakUp main.cpp ${Includes})
 
 target_link_libraries(FermiBreakUp CLHEP::CLHEP)
 
@@ -42,3 +47,24 @@ target_include_directories(FermiBreakUp PUBLIC MyFermiBreakUp)
 target_include_directories(FermiBreakUp PUBLIC MyFermiBreakUp/Utilities)
 
 target_include_directories(FermiBreakUp PUBLIC MyFermiBreakUp/Fragments)
+
+############################################ Testing
+
+enable_testing()
+find_package(GTest REQUIRED)
+include(GoogleTest)
+
+set(Tests
+        MyFermiBreakUp/Test/PartitionTest.cpp
+        MyFermiBreakUp/Test/TableTests.cpp)
+
+add_executable(CTest ${Tests} ${Includes})
+
+target_link_libraries(CTest CLHEP::CLHEP)
+target_link_libraries(CTest GTest::GTest GTest::Main)
+
+target_include_directories(CTest PUBLIC MyFermiBreakUp)
+target_include_directories(CTest PUBLIC MyFermiBreakUp/Utilities)
+target_include_directories(CTest PUBLIC MyFermiBreakUp/Fragments)
+
+gtest_discover_tests(CTest)
