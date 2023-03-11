@@ -13,9 +13,9 @@ class Randomizer {
  public:
   static FermiFloat UniformRealDistribution();
 
-  static FermiFloat NormalDistribution(FermiFloat mean, FermiFloat deviation);
+  static FermiFloat NormalDistribution(FermiFloat mean = 0, FermiFloat deviation = 1);
 
-  static ParticleMomentum IsotropicVector(FermiFloat Magnitude = 1);
+  static ParticleMomentum IsotropicVector(FermiFloat magnitude = 1);
 
   static std::vector<FermiFloat> ProbabilityDistribution(size_t point_count);
  private:

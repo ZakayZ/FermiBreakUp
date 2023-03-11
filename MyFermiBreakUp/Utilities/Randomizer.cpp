@@ -21,13 +21,15 @@ FermiFloat Randomizer::NormalDistribution(FermiFloat mean, FermiFloat deviation)
   return mean + distribution(generator) * deviation;
 }
 
-ParticleMomentum Randomizer::IsotropicVector(FermiFloat Magnitude) {
+ParticleMomentum Randomizer::IsotropicVector(FermiFloat magnitude) {
   auto cos = 1.0 - 2.0 * UniformRealDistribution();
   auto sin = std::sqrt(1.0 - std::pow(cos, 2));
   auto phi = CLHEP::twopi * UniformRealDistribution();
-  ParticleMomentum momentum(Magnitude * std::cos(phi) * sin,
-                            Magnitude * std::sin(phi) * sin,
-                            Magnitude * cos);
+  ParticleMomentum momentum(magnitude * std::cos(phi) * sin,
+                            magnitude * std::sin(phi) * sin,
+                            magnitude * cos);
+//  ParticleMomentum momentum(NormalDistribution(), NormalDistribution(), NormalDistribution());
+//  momentum = momentum * (magnitude) / momentum.mag();
   return momentum;
 }
 

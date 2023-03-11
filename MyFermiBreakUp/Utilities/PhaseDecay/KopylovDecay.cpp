@@ -14,13 +14,13 @@ std::vector<LorentzVector> KopylovDecay::CalculateDecay(const LorentzVector& mom
                                                         const std::vector<FermiFloat>& fragments_mass) const {
   std::vector<LorentzVector> result(fragments_mass.size());
 
-  FermiFloat total_energy = momentum.m();
-  FermiFloat total_mass = std::accumulate(fragments_mass.begin(), fragments_mass.end(), FermiFloat(0));
-  FermiFloat mu = total_mass;
-  FermiFloat mass = total_energy;
-  FermiFloat kinetic_energy = total_energy - total_mass;
+  FermiFloat parent_mass = momentum.m();
+  FermiFloat total_fragments_mass = std::accumulate(fragments_mass.begin(), fragments_mass.end(), FermiFloat(0));
+  FermiFloat mu = total_fragments_mass;
+  FermiFloat mass = parent_mass;
+  FermiFloat kinetic_energy = parent_mass - total_fragments_mass;
 
-  LorentzVector momentum_rest_lab(0, 0, 0, mass);
+  auto momentum_rest_lab = LorentzVector(0, 0, 0, parent_mass);
   for (size_t i = fragments_mass.size() - 1; i > 0; --i) {
     mu -= fragments_mass[i];
     kinetic_energy *= i > 1 ? BetaKopylov(i) : 0;
@@ -32,19 +32,15 @@ std::vector<LorentzVector> KopylovDecay::CalculateDecay(const LorentzVector& mom
     }
 
     ParticleMomentum random_momentum = Randomizer::IsotropicVector(momentum_magnitude_fragments_cm);
-
     auto momentum_fragments_cm = LorentzVector(random_momentum,
                                           std::sqrt(random_momentum.mag2() + std::pow(fragments_mass[i], 2)));
-
     auto momentum_rest_cm = LorentzVector(-random_momentum, std::sqrt(random_momentum.mag2() + std::pow(rest_mass, 2)));
 
-    Vector3 boost_vector = momentum_rest_cm.boostVector();
+    /// change framework
+    Vector3 boost_vector = momentum_rest_lab.boostVector();
 
-    auto momentum_fragments_lab = momentum_fragments_cm;
-    momentum_fragments_lab.boost(boost_vector);
-
-    momentum_rest_lab = momentum_rest_cm;
-    momentum_rest_lab.boost(boost_vector);
+    momentum_rest_lab = LorentzVector(momentum_rest_cm).boost(boost_vector);
+    auto momentum_fragments_lab = LorentzVector(momentum_fragments_cm).boost(boost_vector);
 
     result[i] = momentum_fragments_lab;
 
