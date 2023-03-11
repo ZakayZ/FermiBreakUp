@@ -5,26 +5,15 @@
 #include <fstream>
 
 #include "FermiNucleiProperties.h"
+#include "FermiPropertiesBuilder.h"
 
-std::map<NucleiData, FermiFloat>* FermiNucleiProperties::nuclei_mass_ = nullptr;
+FermiNucleiProperties::MassMap* FermiNucleiProperties::nuclei_mass_ = nullptr;
 
 FermiNucleiProperties::FermiNucleiProperties() {
   if (nuclei_mass_ == nullptr) {
-    nuclei_mass_ = new std::map<NucleiData, FermiFloat>();
-    /// TODO do it with python modifying this file
-    std::ifstream in("../small_nuclei_data.csv");
-    std::string names;
-    in >> names;
-
-    size_t idx;
-    MassNumber m;
-    ChargeNumber c;
-    FermiFloat mass;
-    while (in >> idx) {
-      char del;
-      in >> del >> m >> del >> c >> del >> mass;
-      nuclei_mass_->emplace(NucleiData{m, c}, mass);
-    }
+    nuclei_mass_ = new MassMap();
+    PropertiesBuilder builder;
+    builder.BuildTable(*nuclei_mass_);
   }
 }
 
@@ -44,4 +33,9 @@ bool FermiNucleiProperties::IsStable(MassNumber mass_number, ChargeNumber charge
   }
 
   return nuclei_mass_->find(NucleiData{mass_number, charge_number}) != nuclei_mass_->end();
+}
+
+
+FermiNucleiProperties::MassMap& VNucleiPropertiesBuilder::GetMap() const {
+  return <#initializer#>;
 }
