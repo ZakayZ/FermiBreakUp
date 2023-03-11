@@ -9,8 +9,12 @@
 
 #include "VNucleiProperties.h"
 
+class VNucleiPropertiesBuilder;
+
 class FermiNucleiProperties : public VNucleiProperties {
  public:
+  using MassMap = std::map<NucleiData, FermiFloat>;
+
   FermiNucleiProperties();
 
   FermiFloat GetNuclearMass(MassNumber mass_number, ChargeNumber charge_number) const override;
@@ -18,7 +22,8 @@ class FermiNucleiProperties : public VNucleiProperties {
   bool IsStable(MassNumber mass_number, ChargeNumber charge_number) const override;
 
  private:
-  static std::map<NucleiData, FermiFloat>* nuclei_mass_;
+  static MassMap* nuclei_mass_;
 };
+
 
 #endif //FERMIBREAKUP_MYFERMIBREAKUP_UTILITIES_FERMINUCLEIPROPERTIES_H_
