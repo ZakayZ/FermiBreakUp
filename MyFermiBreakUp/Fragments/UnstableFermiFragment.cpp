@@ -11,11 +11,11 @@ ParticleVector UnstableFermiFragment::GetFragment(const LorentzVector& momentum)
 
   std::vector<LorentzVector> fragments_momentum = phase_decay.CalculateDecay(momentum, masses_);
 
-  auto beta = momentum.boostVector();
+  auto boost_vector = momentum.boostVector();
 
   for (size_t i = 0; i < decay_data_.size(); ++i) {
     fragments_.emplace_back(decay_data_[i].mass_number, decay_data_[i].charge_number,
-                            fragments_momentum[i].boost(beta));
+                            fragments_momentum[i].boost(boost_vector));
   }
 
   return fragments_;

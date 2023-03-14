@@ -50,10 +50,10 @@ std::vector<LorentzVector> Decay::CalculateDecay(const LorentzVector& momentum,
   for (size_t i = 2; i < fragments_mass.size(); ++i) {
     pivot_momentum = Randomizer::IsotropicVector(momentum_magnitudes[i - 1]);
     result.emplace_back(pivot_momentum, std::sqrt(pivot_momentum.mag2() + std::pow(fragments_mass[i], 2)));
-    Vector3 beta = (-1.0) * result.back().boostVector();
+    Vector3 boost_vector = (-1.0) * result.back().boostVector();
     /// boost already created particles
     for (auto& fragment_momentum: result) {
-      fragment_momentum.boost(beta);
+      fragment_momentum.boost(boost_vector);
     }
   }
 

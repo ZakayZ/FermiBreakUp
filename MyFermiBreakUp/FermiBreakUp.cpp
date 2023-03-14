@@ -41,12 +41,8 @@ ParticleSplit FermiBreakUp::ConvertToParticles(const FermiParticle& source_nucle
 
   /// Go back to the Lab Frame
   for (size_t fragment_idx = 0; fragment_idx < split.size(); ++fragment_idx) {
-    auto& fragment_momentum4 = particles_momentum[fragment_idx];
-
-    /// Lorentz boost
-    fragment_momentum4.boost(boost_vector);
-
-    ParticleVector fragment_particles = split[fragment_idx]->GetFragment(fragment_momentum4);
+    ParticleVector fragment_particles = split[fragment_idx]->GetFragment(
+        particles_momentum[fragment_idx].boost(boost_vector));
 
     particle_split.insert(particle_split.end(), std::make_move_iterator(fragment_particles.begin()),
               std::make_move_iterator(fragment_particles.end()));
