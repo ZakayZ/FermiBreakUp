@@ -33,7 +33,7 @@ std::vector<LorentzVector> KopylovDecay::CalculateDecay(const LorentzVector& mom
 
     ParticleMomentum random_momentum = Randomizer::IsotropicVector(momentum_magnitude_fragments_cm);
     auto momentum_fragments_cm = LorentzVector(random_momentum,
-                                          std::sqrt(random_momentum.mag2() + std::pow(fragments_mass[i], 2)));
+                                               std::sqrt(random_momentum.mag2() + std::pow(fragments_mass[i], 2)));
     auto momentum_rest_cm = LorentzVector(-random_momentum, std::sqrt(random_momentum.mag2() + std::pow(rest_mass, 2)));
 
     /// change framework
@@ -48,6 +48,16 @@ std::vector<LorentzVector> KopylovDecay::CalculateDecay(const LorentzVector& mom
   }
 
   result[0] = momentum_rest_lab;
+
+#ifdef DEBUG
+  auto sum = LorentzVector();
+  for (auto& m : result) {
+    sum += m;
+  }
+
+  assert(sum.vect().mag() < 1e-5);
+  assert(std::abs(sum.m() - momentum.m()) < 1e-5);
+#endif
 
   return result;
 }

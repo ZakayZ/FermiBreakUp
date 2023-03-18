@@ -5,9 +5,9 @@
 #ifndef FERMIBREAKUP_MYFERMIBREAKUP_UTILITIES_FERMIPHASESPACEDECAY_H_
 #define FERMIBREAKUP_MYFERMIBREAKUP_UTILITIES_FERMIPHASESPACEDECAY_H_
 
-#include "Utilities/PhaseDecay/VDecay.h"
-#include "Utilities/PhaseDecay/Decay.h"
-#include "Utilities/PhaseDecay/KopylovDecay.h"
+#include "VDecay.h"
+#include "Decay.h"
+#include "KopylovDecay.h"
 
 using FermiPhaseSpaceDecay = KopylovDecay; /// or just Decay
 
