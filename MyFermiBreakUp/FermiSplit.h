@@ -9,6 +9,7 @@
 
 #include "FermiFragment.h"
 #include "IntegerPartition.h"
+#include "LRUCache.h"
 
 using FragmentSplit = std::vector<const FermiFragment*>;
 
@@ -17,7 +18,7 @@ class FermiSplit {
   using iterator = std::vector<FragmentSplit>::iterator;
   using const_iterator = std::vector<FragmentSplit>::const_iterator;
 
-  FermiSplit(MassNumber mass_number, ChargeNumber charge_number, uint32_t fragment_count);
+  FermiSplit(MassNumber mass_number, ChargeNumber charge_number, uint32_t fragment_count, bool cache = false);
 
   iterator begin();
   const_iterator begin() const;
@@ -30,13 +31,21 @@ class FermiSplit {
   const std::vector<FragmentSplit>& GetSplits() const;
 
  private:
-  void AddValidSplits(const std::vector<FragmentSplit>& possible_splits);
+  static std::string ValidateInputs(MassNumber mass_number, ChargeNumber charge_number, uint32_t fragment_count);
 
   static std::vector<size_t> FragmentVariations(const Partition& mass_partition, const Partition& charge_partition);
 
   static std::vector<FragmentSplit> GeneratePossibleSplits(const Partition& mass_partition,
                                                            const Partition& charge_partition,
                                                            const std::vector<size_t>& fragment_variation);
+
+  void AddValidSplits(const std::vector<FragmentSplit>& possible_splits);
+
+  static const size_t MemoryLimit;
+
+  using SplitsCache = LRUCache<NucleiData, std::vector<FragmentSplit>>;
+
+  static SplitsCache Cache;
 
   std::vector<FragmentSplit> splits_;
 };

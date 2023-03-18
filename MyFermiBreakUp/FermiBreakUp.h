@@ -14,7 +14,7 @@ class FermiBreakUp {
  public:
   FermiBreakUp() = delete;
 
-  static ParticleSplit BreakItUp(const FermiParticle& nucleus);
+  static ParticleSplit BreakItUp(const FermiParticle& nucleus, bool cache = false);
 
   ~FermiBreakUp() = default;
 

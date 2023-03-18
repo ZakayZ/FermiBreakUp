@@ -11,7 +11,7 @@
 
 class FermiConfigurations {
  public:
-  FermiConfigurations(MassNumber mass_number, ChargeNumber charge_number, FermiFloat total_energy);
+  FermiConfigurations(MassNumber mass_number, ChargeNumber charge_number, FermiFloat total_energy, bool cache = false);
 
   bool IsSplitPossible() const;
 
