@@ -47,17 +47,18 @@ void CalculateMomentum(MassNumber mass, ChargeNumber charge, const std::string& 
                        const Vector3& momentum, size_t tests = 1e3) {
   std::ofstream out(dump_name);
   auto vec = LorentzVector(momentum.x(), momentum.y(), momentum.z(),
-                           NucleiProperties().GetNuclearMass(mass, charge) + energy + momentum.mag());
+                           std::sqrt(std::pow(NucleiProperties().GetNuclearMass(mass, charge) + energy, 2)
+                                         + momentum.mag2()));
   out << vec / mass << '\n';
   std::vector<FermiFloat> x_component, y_component, z_component, magnitude;
   for (size_t i = 0; i < tests; ++i) {
-    auto particles = FermiBreakUp::BreakItUp(FermiParticle(mass, charge, vec));
+    auto particles = FermiBreakUp::BreakItUp(FermiParticle(mass, charge, vec), true);
     auto sum = LorentzVector();
     for (const auto& particle : particles) {
       sum += particle.GetMomentum();
       out << particle.GetMomentum() / particle.GetMassNumber() << ' ';
     }
-    if((sum.vect() - vec.vect()).mag() > 1e-5 || (sum - vec).m() > 1e-5) {
+    if ((sum.vect() - vec.vect()).mag() > 1e-5 || (sum - vec).m() > 1e-5) {
       std::cout << "cringe!\n";
     }
     out << '\n';
@@ -67,10 +68,10 @@ void CalculateMomentum(MassNumber mass, ChargeNumber charge, const std::string& 
 }
 
 int main() {
-//  CalculateMomentum(12_m, 6_c, "../Data/stat.data", 12 * 10 * CLHEP::GeV, {0, 0, 0});
-  CalculateMomentum(12_m, 6_c, "../Data/mov_x.data", 0, {12 * 10 * CLHEP::GeV, 0, 0});
-  CalculateMomentum(12_m, 6_c, "../Data/mov_y.data", 0, {0, 12 * 10 * CLHEP::GeV, 0});
-  CalculateMomentum(12_m, 6_c, "../Data/mov_z.data", 0, {0, 0, 12 * 10 * CLHEP::GeV});
+  CalculateMomentum(12_m, 6_c, "../Data/stat.data", 12 * 10 * CLHEP::GeV, {0, 0, 0});
+  CalculateMomentum(12_m, 6_c, "../Data/mov_x.data", 12 * 2 * CLHEP::MeV, {12 * 10 * CLHEP::GeV, 0, 0});
+  CalculateMomentum(12_m, 6_c, "../Data/mov_y.data", 12 * 2 * CLHEP::MeV, {0, 12 * 100 * CLHEP::GeV, 0});
+  CalculateMomentum(12_m, 6_c, "../Data/mov_z.data", 12 * 2 * CLHEP::MeV, {0, 0, 12 * 100 * CLHEP::GeV});
 //  Calculate(12_m, 6_c, "../C12.csv");
 //
 //  Calculate(13_m, 6_c, "../C13.csv");
