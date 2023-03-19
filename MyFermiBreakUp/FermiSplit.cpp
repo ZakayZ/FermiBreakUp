@@ -20,8 +20,8 @@ FermiSplit::FermiSplit(MassNumber mass_number, ChargeNumber charge_number, const
   }
 
   auto nuclei_data = NucleiData{mass_number, charge_number};
-  if (cache && Cache.Contains(nuclei_data)) {
-    splits_= Cache.Get(nuclei_data);
+  if (cache && Cache.Contains({nuclei_data, fragment_count})) {
+    splits_= Cache.Get({nuclei_data, fragment_count});
     return;
   }
 
@@ -43,7 +43,7 @@ FermiSplit::FermiSplit(MassNumber mass_number, ChargeNumber charge_number, const
   }
 
   if (cache) {
-    Cache.Insert(nuclei_data, splits_);
+    Cache.Insert({nuclei_data, fragment_count}, splits_);
   }
 }
 

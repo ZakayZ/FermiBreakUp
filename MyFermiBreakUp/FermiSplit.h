@@ -43,7 +43,7 @@ class FermiSplit {
 
   static const size_t MemoryLimit;
 
-  using SplitsCache = LRUCache<NucleiData, std::vector<FragmentSplit>>;
+  using SplitsCache = LRUCache<std::pair<NucleiData, uint32_t>, std::vector<FragmentSplit>>;
 
   static SplitsCache Cache;
 

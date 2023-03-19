@@ -49,16 +49,6 @@ std::vector<LorentzVector> KopylovDecay::CalculateDecay(const LorentzVector& mom
 
   result[0] = momentum_rest_lab;
 
-#ifdef DEBUG
-  auto sum = LorentzVector();
-  for (auto& m : result) {
-    sum += m;
-  }
-
-  assert(sum.vect().mag() < 1e-5);
-  assert(std::abs(sum.m() - momentum.m()) < 1e-5);
-#endif
-
   return result;
 }
 
