@@ -58,7 +58,8 @@ include(GoogleTest)
 set(Tests
         MyFermiBreakUp/Test/PartitionTest.cpp
         MyFermiBreakUp/Test/TableTests.cpp
-        MyFermiBreakUp/Test/BreakUpTest.cpp)
+        MyFermiBreakUp/Test/BreakUpTest.cpp
+        MyFermiBreakUp/Test/LRUTest.cpp)
 
 add_executable(CTest ${Tests} ${Includes})
 

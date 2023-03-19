@@ -35,7 +35,7 @@ class LRUCache {
     auto pos = key_map_.find(key);
     if (pos != key_map_.end()) {
       if (pos->second != values_.begin()) {
-        values_.push_front(key, std::move(pos->second->second));
+        values_.push_front({key, std::move(value)});
         values_.erase(pos->second);
         pos->second = values_.begin();
       }
@@ -43,7 +43,7 @@ class LRUCache {
     }
 
     if (values_.size() == memory_limit_) {
-      key_map_.erase(values_.back().second);
+      key_map_.erase(values_.back().first);
       values_.pop_back();
     }
 
