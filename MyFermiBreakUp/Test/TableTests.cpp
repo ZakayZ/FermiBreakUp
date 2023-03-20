@@ -3,14 +3,26 @@
 //
 
 #include <gtest/gtest.h>
+#include <fstream>
 
-#include "TableValues/NucleiPropertiesTable.h"
-#include "TableValues/NucleiPropertiesTableAME12.h"
+#include "NucleiProperties/NucleiProperties.h"
 
-TEST(TableTest, TheoreticalTableTest) {
+TEST(TableTest, PropertiesTest) {
+  std::ifstream table_data("../small_nuclei_data.csv");
 
-}
+  std::string headers;
+  table_data >> headers;
 
-TEST(TableTest, AME12TableTest) {
+  int idx;
+  NucleiProperties properties;
+  while(table_data >> idx) {
+    char s;
+    MassNumber m;
+    ChargeNumber c;
+    FermiFloat mass;
+    table_data >> s >> m >> s >> c >> s >> mass;
 
+    ASSERT_TRUE(properties.IsStable(m, c));
+    ASSERT_EQ(mass, properties.GetNuclearMass(m, c));
+  }
 }
