@@ -4,6 +4,7 @@
 
 #include "UnstableFermiFragment.h"
 #include "PhaseDecay/FermiPhaseSpaceDecay.h"
+#include "NucleiProperties/NucleiProperties.h"
 
 ParticleVector UnstableFermiFragment::GetFragment(const LorentzVector& momentum) const {
   ParticleVector fragments_;
@@ -21,9 +22,22 @@ ParticleVector UnstableFermiFragment::GetFragment(const LorentzVector& momentum)
   return fragments_;
 }
 
+void UnstableFermiFragment::Build(const std::vector<NucleiData>& decay_data) {
+  decay_data_ = decay_data;
+
+  FillMasses();
+}
+
+void UnstableFermiFragment::Build(std::vector<NucleiData>&& decay_data) {
+  decay_data_ = std::move(decay_data);
+
+  FillMasses();
+}
+
 void UnstableFermiFragment::FillMasses() {
+  NucleiProperties properties;
   masses_.reserve(decay_data_.size());
-  for (auto& decay_fragment_data : decay_data_) {
-    masses_.push_back(decay_fragment_data.mass);
+  for (const auto& decay_fragment : decay_data_) {
+    masses_.push_back(properties.GetNuclearMass(decay_fragment.mass_number, decay_fragment.charge_number));
   }
 }

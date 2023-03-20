@@ -11,11 +11,7 @@ Be8FermiFragment::Be8FermiFragment(MassNumber mass_number,
                                    FermiFloat excitation_energy)
     : UnstableFermiFragment(mass_number, charge_number, polarization, excitation_energy) {
   // Be8 ----> alpha + alpha
-  NucleiProperties properties;
-  FermiFloat alpha_mass = properties.GetNuclearMass(4_m, 2_c);
 
-  decay_data_ = {DecayFragment{.mass_number = 4_m, .charge_number = 2_c, .mass = alpha_mass},
-                 DecayFragment{.mass_number = 4_m, .charge_number = 2_c, .mass = alpha_mass}};
-
-  FillMasses();
+  Build({NucleiData{.mass_number = 4_m, .charge_number = 2_c},
+         NucleiData{.mass_number = 4_m, .charge_number = 2_c}});
 }

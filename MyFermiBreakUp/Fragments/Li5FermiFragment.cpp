@@ -11,12 +11,7 @@ Li5FermiFragment::Li5FermiFragment(MassNumber mass_number,
                                    FermiFloat excitation_energy)
     : UnstableFermiFragment(mass_number, charge_number, polarization, excitation_energy) {
   // Li5 ----> alpha + proton
-  NucleiProperties properties;
-  FermiFloat alpha_mass = properties.GetNuclearMass(4_m, 2_c);
-  FermiFloat proton_mass = properties.GetNuclearMass(1_m, 1_c);
 
-  decay_data_ = {DecayFragment{.mass_number = 4_m, .charge_number = 2_c, .mass = alpha_mass},
-                 DecayFragment{.mass_number = 1_m, .charge_number = 1_c, .mass = proton_mass}};
-
-  FillMasses();  /// TODO have to be called from every derived class, should be automatic :(
+  Build({NucleiData{.mass_number = 4_m, .charge_number = 2_c},
+         NucleiData{.mass_number = 1_m, .charge_number = 1_c}});
 }

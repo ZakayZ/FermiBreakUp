@@ -21,15 +21,14 @@ class UnstableFermiFragment : public FermiFragment {
   ParticleVector GetFragment(const LorentzVector& momentum) const override;
 
  protected:
-  struct DecayFragment {
-    MassNumber mass_number;
-    ChargeNumber charge_number;
-    FermiFloat mass;
-  };
+  void Build(const std::vector<NucleiData>& decay_data);
+
+  void Build(std::vector<NucleiData>&& decay_data);
 
   void FillMasses();
 
-  std::vector<DecayFragment> decay_data_;
+ private:
+  std::vector<NucleiData> decay_data_;
   std::vector<FermiFloat> masses_;
 };
 
