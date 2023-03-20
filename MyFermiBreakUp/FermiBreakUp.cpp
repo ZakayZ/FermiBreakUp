@@ -8,7 +8,7 @@
 
 ParticleSplit FermiBreakUp::BreakItUp(const FermiParticle& nucleus, bool cache) {
   /// CHECK that Excitation Energy > 0
-  if (nucleus.GetExcitationEnergy() <= 0) {
+  if (nucleus.GetExcitationEnergy() < 0) {
     return {nucleus};
   }
 

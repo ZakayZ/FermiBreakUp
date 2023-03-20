@@ -123,5 +123,3 @@ FermiFloat NativeNucleiProperties::BindingEnergy(MassNumber mass_number, ChargeN
 bool NativeNucleiProperties::IsInvalidNuclei(MassNumber mass_number, ChargeNumber charge_number) {
   return mass_number < 1_m || charge_number < 0_c || FermiUInt(charge_number) > FermiUInt(mass_number);
 }
-
-

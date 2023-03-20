@@ -9,8 +9,6 @@
 
 #include "VNucleiProperties.h"
 
-class VNucleiPropertiesBuilder;
-
 class FermiNucleiProperties : public VNucleiProperties {
  public:
   using MassMap = std::map<NucleiData, FermiFloat>;
