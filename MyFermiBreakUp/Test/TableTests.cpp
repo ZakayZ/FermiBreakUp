@@ -8,7 +8,8 @@
 #include "NucleiProperties/NucleiProperties.h"
 
 TEST(TableTest, PropertiesTest) {
-  std::ifstream table_data("../small_nuclei_data.csv");
+  std::ifstream table_data("../Data/small_nuclei_data.csv");
+  ASSERT_TRUE(table_data.is_open());
 
   std::string headers;
   table_data >> headers;

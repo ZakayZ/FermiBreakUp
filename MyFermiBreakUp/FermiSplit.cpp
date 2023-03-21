@@ -9,7 +9,7 @@
 #include "FermiFragmentPool.h"
 #include "LRUCache.h"
 
-const size_t FermiSplit::MemoryLimit = 16;
+const size_t FermiSplit::MemoryLimit = 20;
 
 FermiSplit::SplitsCache FermiSplit::Cache(MemoryLimit);
 

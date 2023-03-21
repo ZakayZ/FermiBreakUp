@@ -9,7 +9,11 @@
 
 class FermiPropertiesFileBuilder : public VFermiPropertiesBuilder{
  public:
+  FermiPropertiesFileBuilder(const std::string& source);
+
   void BuildTable(FermiNucleiProperties::MassMap& data) const override;
+ private:
+  std::string source_;
 };
 
 #endif //FERMIBREAKUP_MYFERMIBREAKUP_UTILITIES_NUCLEIPROPERTIES_FERMIPROPERTIESFILEBUILDER_H_

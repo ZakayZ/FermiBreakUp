@@ -12,7 +12,7 @@ FermiNucleiProperties::MassMap* FermiNucleiProperties::nuclei_mass_ = nullptr;
 FermiNucleiProperties::FermiNucleiProperties() {
   if (nuclei_mass_ == nullptr) {
     nuclei_mass_ = new MassMap();
-    PropertiesBuilder builder;
+    PropertiesBuilder builder("../Data/small_nuclei_data.csv");
     builder.BuildTable(*nuclei_mass_);
   }
 }

@@ -6,9 +6,13 @@
 
 #include "FermiPropertiesFileBuilder.h"
 
+FermiPropertiesFileBuilder::FermiPropertiesFileBuilder(const std::string& source) : source_(source) {}
 
 void FermiPropertiesFileBuilder::BuildTable(FermiNucleiProperties::MassMap& data) const {
-  std::ifstream in("../small_nuclei_data.csv");
+  std::ifstream in(source_);
+  if(!in.is_open()) {
+    throw std::runtime_error("invalid file path");
+  }
   std::string names;
   in >> names;
 
