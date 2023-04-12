@@ -9,20 +9,10 @@
 #include "FermiFragmentPool.h"
 #include "LRUCache.h"
 
-const size_t FermiSplit::MemoryLimit = 20;
-
-FermiSplit::SplitsCache FermiSplit::Cache(MemoryLimit);
-
-FermiSplit::FermiSplit(MassNumber mass_number, ChargeNumber charge_number, const uint32_t fragment_count, bool cache) {
+FermiSplit::FermiSplit(MassNumber mass_number, ChargeNumber charge_number, const uint32_t fragment_count) {
   auto error = ValidateInputs(mass_number, charge_number, fragment_count);
   if (!error.empty()) {
     throw std::runtime_error(error);
-  }
-
-  auto nuclei_data = NucleiData{mass_number, charge_number};
-  if (cache && Cache.Contains({nuclei_data, fragment_count})) {
-    splits_= Cache.Get({nuclei_data, fragment_count});
-    return;
   }
 
   /// Form all possible partition by combination of A partitions and Z partitions (Z partitions include null parts)
@@ -40,10 +30,6 @@ FermiSplit::FermiSplit(MassNumber mass_number, ChargeNumber charge_number, const
         AddValidSplits(additional_splits);
       }
     }
-  }
-
-  if (cache) {
-    Cache.Insert({nuclei_data, fragment_count}, splits_);
   }
 }
 

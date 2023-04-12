@@ -11,14 +11,13 @@
 
 class FermiConfigurations {
  public:
-  FermiConfigurations(MassNumber mass_number, ChargeNumber charge_number, FermiFloat total_energy, bool cache = false);
+  FermiConfigurations(MassNumber mass_number, ChargeNumber charge_number, FermiFloat total_energy);
 
   bool IsSplitPossible() const;
 
   const FragmentSplit& ChooseSplit() const;
 
  private:
-  static const size_t MaxNumberOfFragments;
 
   std::vector<FragmentSplit> configurations_;
   std::vector<FermiFloat> weights_;

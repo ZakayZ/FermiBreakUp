@@ -6,7 +6,7 @@
 #include "DataTypes.h"
 #include "PhaseDecay/FermiPhaseSpaceDecay.h"
 
-ParticleSplit FermiBreakUp::BreakItUp(const FermiParticle& nucleus, bool cache) {
+ParticleSplit FermiBreakUp::BreakItUp(const FermiParticle& nucleus) {
   /// CHECK that Excitation Energy > 0
   if (nucleus.GetExcitationEnergy() < 0) {
     return {nucleus};
@@ -16,7 +16,7 @@ ParticleSplit FermiBreakUp::BreakItUp(const FermiParticle& nucleus, bool cache) 
   FermiFloat total_energy = nucleus.GetMomentum().m();
 
   /// Split the nucleus
-  FermiConfigurations configurations(nucleus.GetMassNumber(), nucleus.GetChargeNumber(), total_energy, cache);
+  FermiConfigurations configurations(nucleus.GetMassNumber(), nucleus.GetChargeNumber(), total_energy);
   if (!configurations.IsSplitPossible()) {
     return {nucleus};
   }

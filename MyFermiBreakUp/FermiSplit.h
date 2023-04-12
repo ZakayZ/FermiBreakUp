@@ -18,7 +18,7 @@ class FermiSplit {
   using iterator = std::vector<FragmentSplit>::iterator;
   using const_iterator = std::vector<FragmentSplit>::const_iterator;
 
-  FermiSplit(MassNumber mass_number, ChargeNumber charge_number, uint32_t fragment_count, bool cache = false);
+  FermiSplit(MassNumber mass_number, ChargeNumber charge_number, uint32_t fragment_count);
 
   iterator begin();
   const_iterator begin() const;
@@ -40,12 +40,6 @@ class FermiSplit {
                                                            const std::vector<size_t>& fragment_variation);
 
   void AddValidSplits(const std::vector<FragmentSplit>& possible_splits);
-
-  static const size_t MemoryLimit;
-
-  using SplitsCache = LRUCache<std::pair<NucleiData, uint32_t>, std::vector<FragmentSplit>>;
-
-  static SplitsCache Cache;
 
   std::vector<FragmentSplit> splits_;
 };

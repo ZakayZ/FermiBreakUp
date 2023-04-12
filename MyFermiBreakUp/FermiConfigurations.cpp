@@ -8,17 +8,16 @@
 #include "ConfigurationProperties.h"
 #include "Randomizer.h"
 
-const size_t FermiConfigurations::MaxNumberOfFragments = 16;
-
-FermiConfigurations::FermiConfigurations(MassNumber mass_number, ChargeNumber charge_number,
-                                         FermiFloat total_energy, bool cache) {
+FermiConfigurations::FermiConfigurations(MassNumber mass_number, ChargeNumber charge_number, FermiFloat total_energy) {
   /// let's split nucleus into 2,...,A fragments
   FermiFloat total_weight = 0;
   auto max_fragments_count = FermiUInt(mass_number);
+
   for (uint32_t particle_count = 2; particle_count <= max_fragments_count; particle_count++) {
-    /// Initialize Configuration for k fragments
-    for (auto& split : FermiSplit(mass_number, charge_number, particle_count, cache)) {
-      /// Non-Normalized statistical weight for given channel with k fragments
+    /// initialize configuration for k fragments
+    /// TODO cache splits
+    for (auto& split : FermiSplit(mass_number, charge_number, particle_count)) {
+      /// non-normalized statistical weight for given channel with k fragments
       auto split_weight = ConfigurationProperties::DecayProbability(split, mass_number, total_energy);
       if (split_weight != 0) {
         total_weight += split_weight;
@@ -29,7 +28,7 @@ FermiConfigurations::FermiConfigurations(MassNumber mass_number, ChargeNumber ch
     }
   }
 
-  /// Let's normalize statistical weights of channels
+  /// let's normalize statistical weights of channels
   std::transform(weights_.begin(), weights_.end(),
                  weights_.begin(), std::bind(std::divides<FermiFloat>(), std::placeholders::_1, total_weight));
 }
