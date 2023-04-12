@@ -29,8 +29,6 @@ class FermiParticle {
 
   const LorentzVector& GetMomentum() const;
 
-  const Vector3& GetAngularMomentum() const;
-
   FermiFloat GetExcitationEnergy() const;
 
   FermiFloat GetGroundStateMass() const;
@@ -43,8 +41,6 @@ class FermiParticle {
 
   void SetMomentum(const LorentzVector& momentum);
 
-  void SetAngularMomentum(const Vector3& angular_momentum);
-
   ~FermiParticle() = default;
 
  private:
@@ -56,7 +52,6 @@ class FermiParticle {
   ChargeNumber charge_number_;
   LorentzVector momentum_;
 
-  Vector3 angular_momentum_;
   FermiFloat excitation_energy_ = 0;
   FermiFloat ground_state_mass_ = 0;
 };

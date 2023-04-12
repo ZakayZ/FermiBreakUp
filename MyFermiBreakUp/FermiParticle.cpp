@@ -9,7 +9,7 @@
 #include "FermiParticle.h"
 
 FermiParticle::FermiParticle(MassNumber mass_number, ChargeNumber charge_number, const LorentzVector& momentum)
-    : mass_number_(mass_number), charge_number_(charge_number), momentum_(momentum), angular_momentum_() {
+    : mass_number_(mass_number), charge_number_(charge_number), momentum_(momentum) {
   CalculateGroundStateMass();
   CalculateExcitationEnergy();
 }
@@ -24,10 +24,6 @@ ChargeNumber FermiParticle::GetChargeNumber() const {
 
 const LorentzVector& FermiParticle::GetMomentum() const {
   return momentum_;
-}
-
-const Vector3& FermiParticle::GetAngularMomentum() const {
-  return angular_momentum_;
 }
 
 FermiFloat FermiParticle::GetExcitationEnergy() const {
@@ -56,10 +52,6 @@ void FermiParticle::SetMassAndCharge(MassNumber mass_number, ChargeNumber charge
 void FermiParticle::SetMomentum(const LorentzVector& momentum) {
   momentum_ = momentum;
   CalculateExcitationEnergy();
-}
-
-void FermiParticle::SetAngularMomentum(const Vector3& angular_momentum) {
-  angular_momentum_ = angular_momentum;
 }
 
 void FermiParticle::CalculateExcitationEnergy() {
