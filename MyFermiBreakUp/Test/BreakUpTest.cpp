@@ -10,14 +10,14 @@
 #include "Randomizer.h"
 
 float CalculateFragmentCount(MassNumber mass, ChargeNumber charge, const Vector3& vec,
-                             FermiFloat energy, size_t tests, bool cache = true) {
+                             FermiFloat energy, size_t tests) {
   size_t parts_counter = 0;
   auto additional_energy = energy * FermiFloat(mass);
   auto mom = LorentzVector(vec, std::sqrt(vec.mag2() +
       std::pow(NucleiProperties().GetNuclearMass(mass, charge) + additional_energy, 2)));
   auto particle = FermiParticle(mass, charge, mom);
   for (size_t i = 0; i < tests; ++i) {
-    auto particles = FermiBreakUp::BreakItUp(particle, cache);
+    auto particles = FermiBreakUp::BreakItUp(particle);
     parts_counter += particles.size();
   }
   return float(parts_counter) / tests;
@@ -79,7 +79,7 @@ TEST(FermiBreakUpTests, MomentumConservation) {
     auto particle = FermiParticle(mass, charge, mom);
     for (size_t i = 0; i < runs; ++i) {
       LorentzVector sum(0, 0, 0, 0);
-      auto particles = FermiBreakUp::BreakItUp(particle, true);
+      auto particles = FermiBreakUp::BreakItUp(particle);
       for (auto& fragment : particles) {
         sum += fragment.GetMomentum();
       }
@@ -128,7 +128,7 @@ TEST(FermiBreakUpTests, CahcedTest) {
     ChargeNumber charge(rand() % (int(mass) + 1));
     FermiFloat energy = (rand() % 1000) * CLHEP::MeV * FermiFloat(mass);
     auto vec = Randomizer::IsotropicVector() * (rand() % 1000) * CLHEP::MeV;
-    ASSERT_NEAR(CalculateFragmentCount(mass, charge, vec, energy, runs, true),
-                CalculateFragmentCount(mass, charge, vec, energy, runs, false), 0.05);
+    ASSERT_NEAR(CalculateFragmentCount(mass, charge, vec, energy, runs),
+                CalculateFragmentCount(mass, charge, vec, energy, runs), 0.05);
   }
 }
