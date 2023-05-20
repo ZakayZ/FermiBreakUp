@@ -11,7 +11,8 @@ set(Utilities
         MyFermiBreakUp/Utilities/NucleiProperties/VNucleiProperties.cpp
         MyFermiBreakUp/Utilities/NucleiProperties/FermiNucleiProperties.cpp
         MyFermiBreakUp/Utilities/NucleiProperties/NativeNucleiProperties.cpp
-        MyFermiBreakUp/Utilities/NucleiProperties/FermiPropertiesFileBuilder.cpp
+        MyFermiBreakUp/Utilities/NucleiProperties/CSVBuilder.cpp
+        MyFermiBreakUp/Utilities/NucleiProperties/DefaultBuilder.cpp
         MyFermiBreakUp/Utilities/ConfigurationProperties.cpp
         MyFermiBreakUp/Utilities/Randomizer.cpp
         MyFermiBreakUp/PhaseDecay/VDecay.cpp

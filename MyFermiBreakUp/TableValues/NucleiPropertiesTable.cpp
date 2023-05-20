@@ -2,7 +2,7 @@
 // Created by Artem Novikov on 18.02.2023.
 //
 
-#include <assert.h>
+#include <cassert>
 
 #include "NucleiPropertiesTable.h"
 #include "CLHEP/Units/PhysicalConstants.h"

@@ -2,19 +2,20 @@
 // Created by Artem Novikov on 09.03.2023.
 //
 
-#include <fstream>
-
 #include "FermiNucleiProperties.h"
-#include "FermiPropertiesBuilder.h"
+#include "VFermiPropertiesBuilder.h"
+#include "DefaultBuilder.h"
 
 FermiNucleiProperties::MassMap* FermiNucleiProperties::nuclei_mass_ = nullptr;
 
 FermiNucleiProperties::FermiNucleiProperties() {
   if (nuclei_mass_ == nullptr) {
-    nuclei_mass_ = new MassMap();
-    PropertiesBuilder builder("../Data/small_nuclei_data.csv");
-    builder.BuildTable(*nuclei_mass_);
+    Build(DefaultBuilder());
   }
+}
+
+FermiNucleiProperties::FermiNucleiProperties(const VFermiPropertiesBuilder& builder) {
+  Build(builder);
 }
 
 FermiFloat FermiNucleiProperties::GetNuclearMass(MassNumber mass_number, ChargeNumber charge_number) const {
@@ -27,10 +28,15 @@ FermiFloat FermiNucleiProperties::GetNuclearMass(MassNumber mass_number, ChargeN
 
 bool FermiNucleiProperties::IsStable(MassNumber mass_number, ChargeNumber charge_number) const {
   if (IsInvalidNuclei(mass_number, charge_number)) {
-    std::cerr << "NucleiProperties::IsInStableTable: Wrong values for A = "
-              << mass_number << " and Z = " << charge_number << std::endl;
+    std::cerr << "Unsupported values for A = " << mass_number << " and Z = " << charge_number << std::endl;
     return false;
   }
 
   return nuclei_mass_->find(NucleiData{mass_number, charge_number}) != nuclei_mass_->end();
+}
+
+void FermiNucleiProperties::Build(const VFermiPropertiesBuilder& builder) {
+  delete nuclei_mass_;  /// deleting nullptr is safe
+  nuclei_mass_ = new MassMap();
+  builder.BuildTable(*nuclei_mass_);
 }

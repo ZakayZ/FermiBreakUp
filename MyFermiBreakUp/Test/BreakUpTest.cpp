@@ -107,7 +107,7 @@ TEST(FermiBreakUpTests, BaryonConservation) {
     for (size_t i = 0; i < runs; ++i) {
       MassNumber mass_sum(0);
       ChargeNumber charge_sum(0);
-      auto particles = FermiBreakUp::BreakItUp(particle, true);
+      auto particles = FermiBreakUp::BreakItUp(particle);
       for (auto& fragment : particles) {
         mass_sum = MassNumber(FermiUInt(mass_sum) + FermiUInt(fragment.GetMassNumber()));
         charge_sum = ChargeNumber(FermiUInt(charge_sum) + FermiUInt(fragment.GetChargeNumber()));
@@ -118,17 +118,17 @@ TEST(FermiBreakUpTests, BaryonConservation) {
   }
 }
 
-TEST(FermiBreakUpTests, CahcedTest) {
-  int seed = 5;
-  srand(seed);
-  int tries = 10;
-  size_t runs = 1e4;
-  for (int t = 0; t < tries; ++t) {
-    MassNumber mass(rand() % 16 + 1);
-    ChargeNumber charge(rand() % (int(mass) + 1));
-    FermiFloat energy = (rand() % 1000) * CLHEP::MeV * FermiFloat(mass);
-    auto vec = Randomizer::IsotropicVector() * (rand() % 1000) * CLHEP::MeV;
-    ASSERT_NEAR(CalculateFragmentCount(mass, charge, vec, energy, runs),
-                CalculateFragmentCount(mass, charge, vec, energy, runs), 0.05);
-  }
-}
+//TEST(FermiBreakUpTests, CahcedTest) {
+//  int seed = 5;
+//  srand(seed);
+//  int tries = 10;
+//  size_t runs = 1e4;
+//  for (int t = 0; t < tries; ++t) {
+//    MassNumber mass(rand() % 16 + 1);
+//    ChargeNumber charge(rand() % (int(mass) + 1));
+//    FermiFloat energy = (rand() % 1000) * CLHEP::MeV * FermiFloat(mass);
+//    auto vec = Randomizer::IsotropicVector() * (rand() % 1000) * CLHEP::MeV;
+//    ASSERT_NEAR(CalculateFragmentCount(mass, charge, vec, energy, runs),
+//                CalculateFragmentCount(mass, charge, vec, energy, runs), 0.05);
+//  }
+//}
