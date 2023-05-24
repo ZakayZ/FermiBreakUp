@@ -8,7 +8,7 @@
 #include "Utilities/DataTypes.h"
 #include "VNucleiProperties.h"
 #include "FermiNucleiProperties.h"
-#include "NativeNucleiProperties.h"
+//#include "NativeNucleiProperties.h"
 
 using NucleiProperties = FermiNucleiProperties;
 

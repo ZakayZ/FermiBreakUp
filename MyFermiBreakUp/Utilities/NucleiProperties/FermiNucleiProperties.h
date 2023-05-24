@@ -26,7 +26,7 @@ class FermiNucleiProperties : public VNucleiProperties {
  private:
   static void Build(const VFermiPropertiesBuilder& builder);
 
-  static MassMap* nuclei_mass_;
+  static std::unique_ptr<MassMap> nuclei_mass_;
 };
 
 

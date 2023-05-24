@@ -2,17 +2,19 @@
 #include <fstream>
 
 #include "MyFermiBreakUp/FermiBreakUp.h"
-#include "TableValues/NucleiPropertiesTable.h"
-#include "TableValues/NucleiPropertiesTableAME12.h"
-#include "Utilities/NucleiProperties/CSVBuilder.h"
+#include "Utilities/NucleiProperties/Builder/CSVBuilder.h"
 #include "Utilities/NucleiProperties/NucleiProperties.h"
 
-void DumpTables() {
-  std::ofstream th_out("../TheoreticalTable.data");
-  std::ofstream pr_out("../PracticalTable.data");
-  th_out << NucleiPropertiesTable();
-  pr_out << NucleiPropertiesTableAME12();
-}
+
+//#include "TableValues/NucleiPropertiesTable.h"
+//#include "TableValues/NucleiPropertiesTableAME12.h"
+//
+//void DumpTables() {
+//  std::ofstream th_out("../TheoreticalTable.data");
+//  std::ofstream pr_out("../PracticalTable.data");
+//  th_out << NucleiPropertiesTable();
+//  pr_out << NucleiPropertiesTableAME12();
+//}
 
 void CalculateFragments(MassNumber mass,
                         ChargeNumber charge,

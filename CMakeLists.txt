@@ -5,63 +5,57 @@ set(CMAKE_CXX_STANDARD 17)
 
 find_package(CLHEP REQUIRED)
 
-
 set(Utilities
         MyFermiBreakUp/Utilities/DataTypes.cpp
         MyFermiBreakUp/Utilities/IntegerPartition.cpp
         MyFermiBreakUp/Utilities/NucleiProperties/VNucleiProperties.cpp
         MyFermiBreakUp/Utilities/NucleiProperties/FermiNucleiProperties.cpp
-        MyFermiBreakUp/Utilities/NucleiProperties/NativeNucleiProperties.cpp
-        MyFermiBreakUp/Utilities/NucleiProperties/CSVBuilder.cpp
-        MyFermiBreakUp/Utilities/NucleiProperties/DefaultBuilder.cpp
+#        MyFermiBreakUp/Utilities/NucleiProperties/NativeNucleiProperties.cpp
+        MyFermiBreakUp/Utilities/NucleiProperties/Builder/CSVBuilder.cpp
+        MyFermiBreakUp/Utilities/NucleiProperties/Builder/DefaultBuilder.cpp
         MyFermiBreakUp/Utilities/ConfigurationProperties.cpp
-        MyFermiBreakUp/Utilities/Randomizer.cpp
-        )
+        MyFermiBreakUp/Utilities/Randomizer.cpp)
 
 set(PhaseSpace
         MyFermiBreakUp/PhaseDecay/VDecay.cpp
         MyFermiBreakUp/PhaseDecay/Decay.cpp
-        MyFermiBreakUp/PhaseDecay/KopylovDecay.cpp
-        )
+        MyFermiBreakUp/PhaseDecay/KopylovDecay.cpp)
 
 set(TableValues
-        MyFermiBreakUp/TableValues/NucleiPropertiesTable.cpp
-        MyFermiBreakUp/TableValues/NucleiPropertiesTableAME12.cpp
+#        MyFermiBreakUp/TableValues/NucleiPropertiesTable.cpp
+#        MyFermiBreakUp/TableValues/NucleiPropertiesTableAME12.cpp
         )
 
-set(Fragments
-        MyFermiBreakUp/Fragments/FermiFragment.cpp
-        MyFermiBreakUp/Fragments/StableFermiFragment.cpp
-        MyFermiBreakUp/Fragments/UnstableFermiFragment.cpp
-        MyFermiBreakUp/Fragments/B9FermiFragment.cpp
-        MyFermiBreakUp/Fragments/Be8FermiFragment.cpp
-        MyFermiBreakUp/Fragments/Li5FermiFragment.cpp
-        MyFermiBreakUp/Fragments/He5FermiFragment.cpp)
+set(FragmentPool
+        MyFermiBreakUp/FragmentPool/FermiFragmentPool.cpp
+        MyFermiBreakUp/FragmentPool/Builder/DefaultPoolBuilder.cpp
+        MyFermiBreakUp/FragmentPool/Fragments/FermiFragment.cpp
+        MyFermiBreakUp/FragmentPool/Fragments/StableFermiFragment.cpp
+        MyFermiBreakUp/FragmentPool/Fragments/UnstableFermiFragment.cpp
+        MyFermiBreakUp/FragmentPool/Fragments/B9FermiFragment.cpp
+        MyFermiBreakUp/FragmentPool/Fragments/Be8FermiFragment.cpp
+        MyFermiBreakUp/FragmentPool/Fragments/Li5FermiFragment.cpp
+        MyFermiBreakUp/FragmentPool/Fragments/He5FermiFragment.cpp)
 
 set(FermiBreakUp
         MyFermiBreakUp/VFermiBreakUp.cpp
         MyFermiBreakUp/FermiParticle.cpp
         MyFermiBreakUp/FermiSplit.cpp
-        MyFermiBreakUp/FermiFragmentPool.cpp
         MyFermiBreakUp/FermiConfigurations.cpp
         MyFermiBreakUp/CachedFermiConfigurations.cpp
         MyFermiBreakUp/FermiBreakUp.cpp)
 
 set(Handler
-        MyFermiBreakUp/VFermiBreakUp.cpp
-        MyFermiBreakUp/VFermiConfigurations.cpp
-        MyFermiBreakUp/FermiParticle.cpp
-        MyFermiBreakUp/FermiSplit.cpp
-        MyFermiBreakUp/FermiFragmentPool.cpp
-        MyFermiBreakUp/FermiConfigurations.cpp
-        MyFermiBreakUp/CachedFermiConfigurations.cpp
-        MyFermiBreakUp/FermiBreakUp.cpp)
+        Handler/ExcitationHandler.cpp
+        Handler/AAMCCFermiBreakUp.cpp)
 
-set(Sources ${FermiBreakUp} ${Fragments} ${Utilities} ${TableValues} ${PhaseSpace})
+set(Sources ${FermiBreakUp} ${FragmentPool} ${Utilities} ${TableValues} ${PhaseSpace})
 
 add_executable(FermiBreakUp main.cpp ${Sources})
 
 target_link_libraries(FermiBreakUp CLHEP::CLHEP)
+
+target_link_libraries(FermiBreakUp ${Geant4_LIBRARIES})
 
 target_include_directories(FermiBreakUp PUBLIC MyFermiBreakUp)
 

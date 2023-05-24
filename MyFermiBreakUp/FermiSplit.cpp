@@ -5,7 +5,7 @@
 #include <numeric>
 
 #include "FermiSplit.h"
-#include "FermiFragmentPool.h"
+#include "FragmentPool/FermiFragmentPool.h"
 #include "Utilities/IntegerPartition.h"
 #include "Utilities/LRUCache.h"
 

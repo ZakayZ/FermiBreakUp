@@ -3,10 +3,9 @@
 //
 
 #include "FermiNucleiProperties.h"
-#include "VFermiPropertiesBuilder.h"
-#include "DefaultBuilder.h"
+#include "Builder/DefaultBuilder.h"
 
-FermiNucleiProperties::MassMap* FermiNucleiProperties::nuclei_mass_ = nullptr;
+std::unique_ptr<FermiNucleiProperties::MassMap> FermiNucleiProperties::nuclei_mass_ = nullptr;
 
 FermiNucleiProperties::FermiNucleiProperties() {
   if (nuclei_mass_ == nullptr) {
@@ -36,7 +35,6 @@ bool FermiNucleiProperties::IsStable(MassNumber mass_number, ChargeNumber charge
 }
 
 void FermiNucleiProperties::Build(const VFermiPropertiesBuilder& builder) {
-  delete nuclei_mass_;  /// deleting nullptr is safe
-  nuclei_mass_ = new MassMap();
+  nuclei_mass_ = std::make_unique<MassMap>();
   builder.BuildTable(*nuclei_mass_);
 }

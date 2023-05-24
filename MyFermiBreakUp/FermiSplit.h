@@ -7,7 +7,7 @@
 
 #include <vector>
 
-#include "Fragments/FermiFragment.h"
+#include "FragmentPool/Fragments/FermiFragment.h"
 #include "Utilities/IntegerPartition.h"
 
 using FragmentVector = std::vector<const FermiFragment*>;

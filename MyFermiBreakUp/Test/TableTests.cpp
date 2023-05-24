@@ -6,7 +6,7 @@
 #include <fstream>
 
 #include "Utilities/NucleiProperties/NucleiProperties.h"
-#include "Utilities/NucleiProperties/CSVBuilder.h"
+#include "Utilities/NucleiProperties/Builder/CSVBuilder.h"
 
 TEST(TableTest, DefaultPropertiesTest) {
   std::ifstream table_data("../Data/small_nuclei_data.csv");
