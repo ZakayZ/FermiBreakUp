@@ -4,7 +4,7 @@
 #include "MyFermiBreakUp/FermiBreakUp.h"
 #include "Utilities/NucleiProperties/Builder/CSVBuilder.h"
 #include "Utilities/NucleiProperties/NucleiProperties.h"
-
+#include "Handler/ExcitationHandler.h"
 
 //#include "TableValues/NucleiPropertiesTable.h"
 //#include "TableValues/NucleiPropertiesTableAME12.h"
@@ -77,11 +77,17 @@ int main() {
 //  CalculateMomentum(12_m, 6_c, "../Data/mov_x.data", 12 * 2 * CLHEP::MeV, {12 * 10 * CLHEP::GeV, 0, 0});
 //  CalculateMomentum(12_m, 6_c, "../Data/mov_y.data", 12 * 2 * CLHEP::MeV, {0, 12 * 100 * CLHEP::GeV, 0});
 //  CalculateMomentum(12_m, 6_c, "../Data/mov_z.data", 12 * 2 * CLHEP::MeV, {0, 0, 12 * 100 * CLHEP::GeV});
-  CalculateFragments(12_m, 6_c, "Data/C12.csv");
+//  CalculateFragments(12_m, 6_c, "Data/C12.csv");
+//
+//  CalculateFragments(13_m, 6_c, "Data/C13.csv");
+//
+//  CalculateFragments(12_m, 7_c, "Data/N12.csv");
+//
+//  CalculateFragments(13_m, 7_c, "Data/N13.csv");
 
-  CalculateFragments(13_m, 6_c, "Data/C13.csv");
+  auto handler = ExcitationHandler();
 
-  CalculateFragments(12_m, 7_c, "Data/N12.csv");
+  auto results = handler.BreakItUp(G4Fragment(2, 1, G4LorentzVector(5 * CLHEP::GeV)));
 
-  CalculateFragments(13_m, 7_c, "Data/N13.csv");
+  std::cout << results.size();
 }

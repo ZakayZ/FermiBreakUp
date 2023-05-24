@@ -10,19 +10,16 @@
 #include <vector>
 #include <queue>
 
+#include "globals.hh"
+#include "G4Fragment.hh"
+#include "G4ReactionProductVector.hh"
+#include "G4IonTable.hh"
+#include "G4DeexPrecoParameters.hh"
 #include "G4Fragment.hh"
 
-class G4ParticleDefinition;
-class G4VMultiFragmentation;
-class G4VFermiBreakUp;
-class G4VEvaporation;
-class G4VEvaporationChannel;
-class G4Fragment;
-class G4ReactionProduct;
-using G4FragmentVector = std::vector<G4Fragment*>;
-
-using G4int = int;
-using G4double = double;
+#include "G4VFermiBreakUp.hh"
+#include "G4VMultiFragmentation.hh"
+#include "G4VEvaporation.hh"
 
 class ExcitationHandler {
  public:
@@ -41,32 +38,13 @@ class ExcitationHandler {
   std::vector<G4ReactionProduct> BreakItUp(const G4Fragment& fragment);
 
   /// parameters setters
-  ExcitationHandler& SetMultiFragmentation(std::unique_ptr<G4VMultiFragmentation>&& model) {
-    multi_fragmentation_model_ = std::move(model);
-    return *this;
-  }
+  ExcitationHandler& SetMultiFragmentation(std::unique_ptr<G4VMultiFragmentation>&& model = DefaultMultiFragmentation());
 
-  ExcitationHandler& SetMultiFragmentation() {
-    return SetMultiFragmentation(DefaultMultiFragmentation());
-  }
+  ExcitationHandler& SetFermiBreakUp(std::unique_ptr<G4VFermiBreakUp>&& model = DefaultFermiBreakUp());
 
-  ExcitationHandler& SetFermiBreakUp(std::unique_ptr<G4VFermiBreakUp>&& model) {
-    fermi_break_up_model_ = std::move(model);
-    return *this;
-  }
+  ExcitationHandler& SetEvaporation(std::unique_ptr<G4VEvaporation>&& model = DefaultEvaporation());
 
-  ExcitationHandler& SetFermiBreakUp() {
-    return SetFermiBreakUp(DefaultFermiBreakUp());
-  }
-
-  ExcitationHandler& SetEvaporation(std::unique_ptr<G4VEvaporation>&& model) {
-    evaporation_model_ = std::move(model);
-    return *this;
-  }
-
-  ExcitationHandler& SetEvaporation() {
-    return SetEvaporation(DefaultEvaporation());
-  }
+  ExcitationHandler& SetPhotonEvaporation(std::unique_ptr<G4VEvaporationChannel>&& model = DefaultPhotonEvaporation());
 
   template <class F>
   ExcitationHandler& SetMultiFragmentationCondition(F&& f) {
@@ -150,6 +128,8 @@ class ExcitationHandler {
   static std::unique_ptr<G4VFermiBreakUp> DefaultFermiBreakUp();
 
   static std::unique_ptr<G4VEvaporation> DefaultEvaporation();
+
+  static std::unique_ptr<G4VEvaporationChannel> DefaultPhotonEvaporation();
 
   static Condition DefaultMultiFragmentationCondition();
 

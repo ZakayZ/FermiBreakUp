@@ -7,8 +7,8 @@
 
 #include <memory>
 
-#include <G4VFermiBreakUp.hh>
-#include "MyFermiBreakUp/VFermiBreakUp.h"
+#include "G4VFermiBreakUp.hh"
+#include "VFermiBreakUp.h"
 
 class AAMCCFermiBreakUp : public G4VFermiBreakUp {
  public:
@@ -16,7 +16,11 @@ class AAMCCFermiBreakUp : public G4VFermiBreakUp {
 
   AAMCCFermiBreakUp(std::unique_ptr<VFermiBreakUp>&& model);
 
-  G4FragmentVector* BreakItUp (const G4Fragment& fragment) override;
+  void Initialise() override;
+
+  void BreakFragment(G4FragmentVector* fragments_ptr, G4Fragment* fragment) override;
+
+  G4bool IsApplicable(G4int Z, G4int A, G4double mass) const override;
 
  private:
   std::unique_ptr<VFermiBreakUp> fermi_model_;

@@ -5,6 +5,8 @@ set(CMAKE_CXX_STANDARD 17)
 
 find_package(CLHEP REQUIRED)
 
+find_package(Geant4 REQUIRED)
+
 set(Utilities
         MyFermiBreakUp/Utilities/DataTypes.cpp
         MyFermiBreakUp/Utilities/IntegerPartition.cpp
@@ -47,11 +49,13 @@ set(FermiBreakUp
 
 set(Handler
         Handler/ExcitationHandler.cpp
-        Handler/AAMCCFermiBreakUp.cpp)
+        Handler/AAMCCFermiBreakUp.cpp
+#        Handler/AamccFermiBreakUpFunc.cpp
+        )
 
 set(Sources ${FermiBreakUp} ${FragmentPool} ${Utilities} ${TableValues} ${PhaseSpace})
 
-add_executable(FermiBreakUp main.cpp ${Sources})
+add_executable(FermiBreakUp main.cpp ${Sources} ${Handler})
 
 target_link_libraries(FermiBreakUp CLHEP::CLHEP)
 
