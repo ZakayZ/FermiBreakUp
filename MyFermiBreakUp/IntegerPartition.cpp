@@ -4,15 +4,15 @@
 
 #include "IntegerPartition.h"
 
-IntegerPartition::IntegerPartition(uint32_t number, uint32_t terms_count, bool allow_zero)
-    : number_(number), terms_count_(terms_count), allow_zero_(allow_zero) {}
+IntegerPartition::IntegerPartition(uint32_t number, uint32_t terms_count, uint32_t base)
+    : number_(number), terms_count_(terms_count), base_(base) {}
 
 IntegerPartition::Iterator IntegerPartition::begin() const {
-  return IntegerPartition::Iterator(number_, terms_count_, allow_zero_);
+  return {number_, terms_count_, base_};
 }
 
 IntegerPartition::Iterator IntegerPartition::end() const {
-  return IntegerPartition::Iterator(0);
+  return {0};
 }
 
 //////////////////////////////////////////////////////ITERATOR////////////////////////////////////////////
@@ -48,17 +48,12 @@ IntegerPartition::Iterator::Iterator(uint32_t terms_count) {
   partition_.resize(terms_count, 0); /// end partition
 }
 
-IntegerPartition::Iterator::Iterator(uint32_t number, uint32_t terms_count, bool allow_zero) : Iterator(terms_count) {
+IntegerPartition::Iterator::Iterator(uint32_t number, uint32_t terms_count, uint32_t base) : Iterator(terms_count) {
   /// No possible partitions
-  if (number < terms_count && !allow_zero || terms_count == 0 || number == 0) { return; }
+  if (number < base * terms_count || terms_count == 0 || number == 0) { return; }
 
-  if (allow_zero) {
-    partition_[0] = number;
-    return;
-  }
-
-  std::fill(partition_.begin(), partition_.end(), 1);
-  partition_[0] = number - terms_count + 1;
+  std::fill(partition_.begin(), partition_.end(), base);
+  partition_[0] = number - base * (terms_count - 1);
 }
 
 void IntegerPartition::Iterator::NextPartition() {

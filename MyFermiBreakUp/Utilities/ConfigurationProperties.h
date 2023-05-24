@@ -11,17 +11,17 @@
 
 class ConfigurationProperties {
  public:
-  static FermiFloat DecayProbability(const FragmentSplit& split, uint32_t atomic_weight, FermiFloat total_energy);
+  static FermiFloat DecayProbability(const FragmentVector& split, uint32_t atomic_weight, FermiFloat total_energy);
 
-  static FermiFloat CoulombBarrier(const FragmentSplit& split);
+  static FermiFloat CoulombBarrier(const FragmentVector& split);
 
-  static FermiFloat CalculateSpinFactor(const FragmentSplit& split);
+  static FermiFloat CalculateSpinFactor(const FragmentVector& split);
 
-  static FermiFloat CalculateKineticEnergy(const FragmentSplit& split, FermiFloat total_energy);
+  static FermiFloat CalculateKineticEnergy(const FragmentVector& split, FermiFloat total_energy);
 
-  static FermiFloat CalculateMassFactor(const FragmentSplit& split);
+  static FermiFloat CalculateMassFactor(const FragmentVector& split);
 
-  static FermiFloat CalculateConfigurationFactor(const FragmentSplit& split);
+  static FermiFloat CalculateConfigurationFactor(const FragmentVector& split);
 
  private:
   static FermiFloat CalculateConstFactor(uint32_t atomic_weight, size_t fragments_count);

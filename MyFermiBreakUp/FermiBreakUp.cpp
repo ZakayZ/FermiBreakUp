@@ -4,9 +4,13 @@
 
 #include "FermiBreakUp.h"
 #include "DataTypes.h"
-#include "PhaseDecay/FermiPhaseSpaceDecay.h"
 
-ParticleSplit FermiBreakUp::BreakItUp(const FermiParticle& nucleus) {
+FermiBreakUp::FermiBreakUp() : fermi_configurations_(DefaultConfigurations()) {}
+
+FermiBreakUp::FermiBreakUp(std::unique_ptr<VFermiConfigurations>&& configurations)
+    : fermi_configurations_(std::move(configurations)) {}
+
+ParticleVector FermiBreakUp::BreakItUp(const FermiParticle& nucleus) {
   /// CHECK that Excitation Energy > 0
   if (nucleus.GetExcitationEnergy() < 0) {
     return {nucleus};
@@ -16,37 +20,14 @@ ParticleSplit FermiBreakUp::BreakItUp(const FermiParticle& nucleus) {
   FermiFloat total_energy = nucleus.GetMomentum().m();
 
   /// Split the nucleus
-  FermiConfigurations configurations(nucleus.GetMassNumber(), nucleus.GetChargeNumber(), total_energy);
-  if (!configurations.IsSplitPossible()) {
+  auto fragment_split = fermi_configurations_->GenerateSplits(nucleus.GetNucleiData(), total_energy).ChooseSplit();
+  if (!fragment_split.has_value()) {
     return {nucleus};
   }
 
-  return ConvertToParticles(nucleus, configurations.ChooseSplit());
+  return ConvertToParticles(nucleus, fragment_split.value());
 }
 
-ParticleSplit FermiBreakUp::ConvertToParticles(const FermiParticle& source_nucleus, const FragmentSplit& split) {
-  ParticleSplit particle_split;
-  particle_split.reserve(2 * split.size());
-
-  std::vector<FermiFloat> split_masses;
-  split_masses.reserve(split.size());
-  for (auto fragment_ptr : split) {
-    split_masses.push_back(fragment_ptr->GetTotalEnergy());
-  }
-
-  FermiPhaseSpaceDecay phase_sampler;
-  std::vector<LorentzVector> particles_momentum = phase_sampler.CalculateDecay(source_nucleus.GetMomentum(), split_masses);
-
-  Vector3 boost_vector = source_nucleus.GetMomentum().boostVector();
-
-  /// Go back to the Lab Frame
-  for (size_t fragment_idx = 0; fragment_idx < split.size(); ++fragment_idx) {
-    ParticleVector fragment_particles = split[fragment_idx]->GetFragment(
-        particles_momentum[fragment_idx].boost(boost_vector));
-
-    particle_split.insert(particle_split.end(), std::make_move_iterator(fragment_particles.begin()),
-              std::make_move_iterator(fragment_particles.end()));
-  }
-
-  return particle_split;
+std::unique_ptr<VFermiConfigurations> FermiBreakUp::DefaultConfigurations() {
+  return std::make_unique<FermiConfigurations>();
 }

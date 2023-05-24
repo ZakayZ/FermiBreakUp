@@ -24,7 +24,7 @@ TEST(PartitionTests, SmallOnePaddingTest) {
   const size_t partition_parts = 3;
 
   size_t partition_counter = 0;
-  for (auto& partition : IntegerPartition(partition_number, partition_parts, false)) {
+  for (const auto& partition : IntegerPartition(partition_number, partition_parts, 1)) {
     auto copy = partition;
     size_t weight = 1;
     while (std::prev_permutation(copy.begin(), copy.end())) {
@@ -43,7 +43,7 @@ TEST(PartitionTests, BigOnePaddingTest) {
   const size_t partition_parts = 7;
 
   size_t partition_counter = 0;
-  for (auto& partition : IntegerPartition(partition_number, partition_parts, false)) {
+  for (const auto& partition : IntegerPartition(partition_number, partition_parts, 1)) {
     auto copy = partition;
     size_t weight = 1;
     while (std::prev_permutation(copy.begin(), copy.end())) {
@@ -62,7 +62,7 @@ TEST(PartitionTests, SmallZeroPaddingTest) {
   const size_t partition_parts = 3;
 
   size_t partition_counter = 0;
-  for (auto& partition : IntegerPartition(partition_number, partition_parts, true)) {
+  for (const auto& partition : IntegerPartition(partition_number, partition_parts, 0)) {
     auto copy = partition;
     size_t weight = 1;
     while (std::prev_permutation(copy.begin(), copy.end())) {
@@ -81,7 +81,7 @@ TEST(PartitionTests, BigZeroPaddingTest) {
   const size_t partition_parts = 4;
 
   size_t partition_counter = 0;
-  for (auto& partition : IntegerPartition(partition_number, partition_parts, true)) {
+  for (const auto& partition : IntegerPartition(partition_number, partition_parts, 0)) {
     auto copy = partition;
     size_t weight = 1;
     while (std::prev_permutation(copy.begin(), copy.end())) {

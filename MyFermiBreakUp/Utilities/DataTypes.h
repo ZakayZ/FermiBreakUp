@@ -123,6 +123,14 @@ struct NucleiData {
     return mass_number < other.mass_number
         || mass_number == other.mass_number && charge_number < other.charge_number;
   }
+
+  bool operator==(const NucleiData& other) const {
+    return mass_number == other.mass_number && charge_number == other.charge_number;
+  }
+
+  bool operator!=(const NucleiData& other) const {
+    return mass_number != other.mass_number || charge_number != other.charge_number;
+  }
 };
 
 #endif //FERMIBREAKUP_MYFERMIBREAKUP_DATATYPES_H_

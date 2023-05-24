@@ -14,6 +14,11 @@ FermiParticle::FermiParticle(MassNumber mass_number, ChargeNumber charge_number,
   CalculateExcitationEnergy();
 }
 
+NucleiData FermiParticle::GetNucleiData() const {
+  return {mass_number_, charge_number_};
+}
+
+
 MassNumber FermiParticle::GetMassNumber() const {
   return mass_number_;
 }

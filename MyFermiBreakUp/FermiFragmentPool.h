@@ -21,11 +21,11 @@ class FermiFragmentPool {
 
   size_t Count(MassNumber mass_number, ChargeNumber charge_number) const;
 
-  size_t Count(const NucleiData& nuclei) const;
+  size_t Count(NucleiData nuclei) const;
 
   RangeIterators GetFragments(MassNumber mass_number, ChargeNumber charge_number) const;
 
-  RangeIterators GetFragments(const NucleiData& nuclei) const;
+  RangeIterators GetFragments(NucleiData nuclei) const;
 
  private:
   void AddFragment(const FermiFragment& fragment) const;

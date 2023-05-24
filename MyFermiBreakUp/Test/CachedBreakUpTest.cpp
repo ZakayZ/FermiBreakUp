@@ -1,5 +1,5 @@
 //
-// Created by Artem Novikov on 19.03.2023.
+// Created by Artem Novikov on 24.05.2023.
 //
 
 #include <gtest/gtest.h>
@@ -10,9 +10,9 @@
 #include "Randomizer.h"
 #include "CachedFermiConfigurations.h"
 
-float CalculateFragmentCount(MassNumber mass, ChargeNumber charge, const Vector3& vec,
-                             FermiFloat energy, size_t tests) {
-  auto model = FermiBreakUp();
+float CachedCalculateFragmentCount(MassNumber mass, ChargeNumber charge, const Vector3& vec,
+                                   FermiFloat energy, size_t tests) {
+  auto model = FermiBreakUp(std::make_unique<CachedFermiConfigurations>());
   size_t parts_counter = 0;
   auto additional_energy = energy * FermiFloat(mass);
   auto mom = LorentzVector(vec, std::sqrt(vec.mag2() +
@@ -25,48 +25,48 @@ float CalculateFragmentCount(MassNumber mass, ChargeNumber charge, const Vector3
   return float(parts_counter) / tests;
 }
 
-TEST(FermiBreakUpTests, CarbonTest) {
+TEST(FermiBreakUpTests, CachedCarbonTest) {
   size_t runs = 1e3;
   /// Carbons shouldn't break up [0, 0.7]
-  ASSERT_NEAR(1, CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 0 * CLHEP::MeV, runs), 0.01);
-  ASSERT_NEAR(1, CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 0.25 * CLHEP::MeV, runs), 0.01);
-  ASSERT_NEAR(1, CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 0.5 * CLHEP::MeV, runs), 0.01);
-  ASSERT_NEAR(1, CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 0.7 * CLHEP::MeV, runs), 0.01);
+  ASSERT_NEAR(1, CachedCalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 0 * CLHEP::MeV, runs), 0.01);
+  ASSERT_NEAR(1, CachedCalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 0.25 * CLHEP::MeV, runs), 0.01);
+  ASSERT_NEAR(1, CachedCalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 0.5 * CLHEP::MeV, runs), 0.01);
+  ASSERT_NEAR(1, CachedCalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 0.7 * CLHEP::MeV, runs), 0.01);
 
   /// Carbons should break into 3 parts [1, 1.4]
-  ASSERT_NEAR(3, CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 1 * CLHEP::MeV, runs), 0.01);
-  ASSERT_NEAR(3, CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 1.25 * CLHEP::MeV, runs), 0.01);
-  ASSERT_NEAR(3, CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 1.4 * CLHEP::MeV, runs), 0.01);
+  ASSERT_NEAR(3, CachedCalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 1 * CLHEP::MeV, runs), 0.01);
+  ASSERT_NEAR(3, CachedCalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 1.25 * CLHEP::MeV, runs), 0.01);
+  ASSERT_NEAR(3, CachedCalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 1.4 * CLHEP::MeV, runs), 0.01);
 
 
   /// Carbons should break into less than 3 parts [1.5, 3.5]
-  ASSERT_LE(CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 1.5 * CLHEP::MeV, runs), 3);
-  ASSERT_LE(CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 2 * CLHEP::MeV, runs), 3);
-  ASSERT_LE(CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 3 * CLHEP::MeV, runs), 3);
-  ASSERT_LE(CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 3.5 * CLHEP::MeV, runs), 3);
+  ASSERT_LE(CachedCalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 1.5 * CLHEP::MeV, runs), 3);
+  ASSERT_LE(CachedCalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 2 * CLHEP::MeV, runs), 3);
+  ASSERT_LE(CachedCalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 3 * CLHEP::MeV, runs), 3);
+  ASSERT_LE(CachedCalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 3.5 * CLHEP::MeV, runs), 3);
 
   /// Carbons should break into more than 3 parts [5, ...]
-  ASSERT_GE(CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 5 * CLHEP::MeV, runs), 3);
-  ASSERT_GE(CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 7 * CLHEP::MeV, runs), 3);
-  ASSERT_GE(CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 9 * CLHEP::MeV, runs), 3);
-  ASSERT_GE(CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 20 * CLHEP::MeV, runs), 3);
+  ASSERT_GE(CachedCalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 5 * CLHEP::MeV, runs), 3);
+  ASSERT_GE(CachedCalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 7 * CLHEP::MeV, runs), 3);
+  ASSERT_GE(CachedCalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 9 * CLHEP::MeV, runs), 3);
+  ASSERT_GE(CachedCalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 20 * CLHEP::MeV, runs), 3);
 }
 
-TEST(FermiBreakUpTests, UnstableNucleiTest) {
+TEST(FermiBreakUpTests, CachedUnstableNucleiTest) {
   size_t runs = 1e3;
 
   /// protons should break up
   for (int i = 2; i <= 16; ++i) {
-    ASSERT_NEAR(i, CalculateFragmentCount(MassNumber(i), ChargeNumber(i), {0, 0, 0}, 0, runs), 0.01);
+    ASSERT_NEAR(i, CachedCalculateFragmentCount(MassNumber(i), ChargeNumber(i), {0, 0, 0}, 0, runs), 0.01);
   }
 
   /// neutron should break up
   for (int i = 2; i <= 16; ++i) {
-    ASSERT_NEAR(i, CalculateFragmentCount(MassNumber(i), 0_c, {0, 0, 0}, 0, runs), 0.01);
+    ASSERT_NEAR(i, CachedCalculateFragmentCount(MassNumber(i), 0_c, {0, 0, 0}, 0, runs), 0.01);
   }
 }
 
-TEST(FermiBreakUpTests, MomentumConservation) {
+TEST(FermiBreakUpTests, CachedMomentumConservation) {
   auto model = FermiBreakUp();
   int seed = 5;
   srand(seed);
@@ -94,7 +94,7 @@ TEST(FermiBreakUpTests, MomentumConservation) {
   }
 }
 
-TEST(FermiBreakUpTests, BaryonConservation) {
+TEST(FermiBreakUpTests, CachedBaryonConservation) {
   auto model = FermiBreakUp();
   int seed = 5;
   srand(seed);

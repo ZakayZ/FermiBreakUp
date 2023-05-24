@@ -8,18 +8,20 @@
 #include <vector>
 
 #include "FermiSplit.h"
+#include "VFermiConfigurations.h"
 
-class FermiConfigurations {
+class FermiConfigurations : public VFermiConfigurations {
  public:
-  FermiConfigurations(MassNumber mass_number, ChargeNumber charge_number, FermiFloat total_energy);
+  FermiConfigurations() = default;
 
-  bool IsSplitPossible() const;
+  FermiConfigurations(NucleiData nuclei_data, FermiFloat total_energy);
 
-  const FragmentSplit& ChooseSplit() const;
+  VFermiConfigurations& GenerateSplits(NucleiData nuclei_data, FermiFloat total_energy) override;
+
+  std::optional<FragmentVector> ChooseSplit() override;
 
  private:
-
-  std::vector<FragmentSplit> configurations_;
+  std::vector<FragmentVector> configurations_;
   std::vector<FermiFloat> weights_;
 };
 

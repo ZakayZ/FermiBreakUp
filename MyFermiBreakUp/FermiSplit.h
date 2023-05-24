@@ -11,14 +11,14 @@
 #include "IntegerPartition.h"
 #include "LRUCache.h"
 
-using FragmentSplit = std::vector<const FermiFragment*>;
+using FragmentVector = std::vector<const FermiFragment*>;
 
 class FermiSplit {
  public:
-  using iterator = std::vector<FragmentSplit>::iterator;
-  using const_iterator = std::vector<FragmentSplit>::const_iterator;
+  using iterator = std::vector<FragmentVector>::iterator;
+  using const_iterator = std::vector<FragmentVector>::const_iterator;
 
-  FermiSplit(MassNumber mass_number, ChargeNumber charge_number, uint32_t fragment_count);
+  FermiSplit(NucleiData nuclei_data, uint32_t fragment_count);
 
   iterator begin();
   const_iterator begin() const;
@@ -28,20 +28,20 @@ class FermiSplit {
   const_iterator end() const;
   const_iterator cend() const;
 
-  const std::vector<FragmentSplit>& GetSplits() const;
+  const std::vector<FragmentVector>& GetSplits() const;
 
  private:
-  static std::string ValidateInputs(MassNumber mass_number, ChargeNumber charge_number, uint32_t fragment_count);
+  static std::string ValidateInputs(NucleiData nuclei_data, uint32_t fragment_count);
 
   static std::vector<size_t> FragmentVariations(const Partition& mass_partition, const Partition& charge_partition);
 
-  static std::vector<FragmentSplit> GeneratePossibleSplits(const Partition& mass_partition,
-                                                           const Partition& charge_partition,
-                                                           const std::vector<size_t>& fragment_variation);
+  static std::vector<FragmentVector> GeneratePossibleSplits(const Partition& mass_partition,
+                                                            const Partition& charge_partition,
+                                                            const std::vector<size_t>& fragment_variation);
 
-  void AddValidSplits(const std::vector<FragmentSplit>& possible_splits);
+  void AddValidSplits(const std::vector<FragmentVector>& possible_splits);
 
-  std::vector<FragmentSplit> splits_;
+  std::vector<FragmentVector> splits_;
 };
 
 #endif //FERMIBREAKUP_MYFERMIBREAKUP_FERMIPARTICLESPLIT_ICC_

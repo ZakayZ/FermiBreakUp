@@ -135,7 +135,7 @@ size_t FermiFragmentPool::Count(MassNumber mass_number, ChargeNumber charge_numb
   return Count({mass_number, charge_number});
 }
 
-size_t FermiFragmentPool::Count(const NucleiData& nuclei) const {
+size_t FermiFragmentPool::Count(NucleiData nuclei) const {
   return fragments_pool_->count(nuclei);
 }
 
@@ -148,6 +148,6 @@ FermiFragmentPool::RangeIterators FermiFragmentPool::GetFragments(MassNumber mas
   return GetFragments({mass_number, charge_number});
 }
 
-FermiFragmentPool::RangeIterators FermiFragmentPool::GetFragments(const NucleiData& nuclei) const {
+FermiFragmentPool::RangeIterators FermiFragmentPool::GetFragments(NucleiData nuclei) const {
   return fragments_pool_->equal_range(nuclei);
 }

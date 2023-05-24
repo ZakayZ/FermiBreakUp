@@ -7,19 +7,23 @@
 
 #include "FermiParticle.h"
 #include "FermiConfigurations.h"
+#include "VFermiBreakUp.h"
+#include "VFermiConfigurations.h"
 
-using ParticleSplit = std::vector<FermiParticle>;
-
-class FermiBreakUp {
+class FermiBreakUp : public VFermiBreakUp {
  public:
-  FermiBreakUp() = delete;
+  FermiBreakUp();
 
-  static ParticleSplit BreakItUp(const FermiParticle& nucleus);
+  FermiBreakUp(std::unique_ptr<VFermiConfigurations>&& configurations);
+
+  ParticleVector BreakItUp(const FermiParticle& nucleus) override;
 
   ~FermiBreakUp() = default;
 
  private:
-  static ParticleSplit ConvertToParticles(const FermiParticle& source_nucleus, const FragmentSplit& split);
+  static std::unique_ptr<VFermiConfigurations> DefaultConfigurations();
+
+  std::unique_ptr<VFermiConfigurations> fermi_configurations_;
 };
 
 #endif //FERMIBREAKUP_MYFERMIBREAKUP_FERMIBREAKUP_H_

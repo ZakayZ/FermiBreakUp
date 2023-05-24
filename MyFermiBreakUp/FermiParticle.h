@@ -23,6 +23,8 @@ class FermiParticle {
 
   FermiParticle(MassNumber mass_number, ChargeNumber charge_number, const LorentzVector& momentum);
 
+  NucleiData GetNucleiData() const;
+
   MassNumber GetMassNumber() const;
 
   ChargeNumber GetChargeNumber() const;

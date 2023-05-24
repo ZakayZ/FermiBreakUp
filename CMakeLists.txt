@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.21)
 project(FermiBreakUp)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 
 find_package(CLHEP REQUIRED)
 
@@ -31,11 +31,13 @@ set(Fragments
         MyFermiBreakUp/Fragments/He5FermiFragment.cpp)
 
 set(Sources
+        MyFermiBreakUp/VFermiBreakUp.cpp
         MyFermiBreakUp/IntegerPartition.cpp
         MyFermiBreakUp/FermiParticle.cpp
         MyFermiBreakUp/FermiSplit.cpp
         MyFermiBreakUp/FermiFragmentPool.cpp
         MyFermiBreakUp/FermiConfigurations.cpp
+        MyFermiBreakUp/CachedFermiConfigurations.cpp
         MyFermiBreakUp/FermiBreakUp.cpp)
 
 set(Includes ${Sources} ${Fragments} ${Utilities})
@@ -60,7 +62,8 @@ set(Tests
         MyFermiBreakUp/Test/PartitionTest.cpp
         MyFermiBreakUp/Test/TableTests.cpp
         MyFermiBreakUp/Test/BreakUpTest.cpp
-        MyFermiBreakUp/Test/LRUTest.cpp)
+        MyFermiBreakUp/Test/LRUTest.cpp
+        MyFermiBreakUp/Test/CachedBreakUpTest.cpp)
 
 add_executable(CTest ${Tests} ${Includes})
 

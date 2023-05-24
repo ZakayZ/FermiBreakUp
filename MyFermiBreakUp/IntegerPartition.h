@@ -17,15 +17,13 @@ class IntegerPartition {
 
   Iterator end() const;
 
-  IntegerPartition(uint32_t number, uint32_t terms_count, bool allow_zero = true);
+  IntegerPartition(uint32_t number, uint32_t terms_count, uint32_t base = 1);
 
  private:
   uint32_t number_;
   uint32_t terms_count_;
-  bool allow_zero_;
+  uint32_t base_;
 };
-
-/// TOOD iterator class to iterate over Partitions
 
 class IntegerPartition::Iterator {
  public:
@@ -62,7 +60,7 @@ class IntegerPartition::Iterator {
  private:
   Iterator(uint32_t terms_count);
 
-  Iterator(uint32_t number, uint32_t terms_count, bool allow_zero);
+  Iterator(uint32_t number, uint32_t terms_count, uint32_t base);
 
   void NextPartition();
 
