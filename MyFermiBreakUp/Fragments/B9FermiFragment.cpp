@@ -3,7 +3,6 @@
 //
 
 #include "B9FermiFragment.h"
-#include "Utilities/NucleiProperties/NucleiProperties.h"
 
 B9FermiFragment::B9FermiFragment(MassNumber mass_number,
                                  ChargeNumber charge_number,

@@ -4,7 +4,7 @@
 
 #include "UnstableFermiFragment.h"
 #include "PhaseDecay/FermiPhaseSpaceDecay.h"
-#include "NucleiProperties/NucleiProperties.h"
+#include "Utilities/NucleiProperties/NucleiProperties.h"
 
 ParticleVector UnstableFermiFragment::GetFragment(const LorentzVector& momentum) const {
   ParticleVector fragments_;

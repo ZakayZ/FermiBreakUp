@@ -6,7 +6,7 @@
 #define FERMIBREAKUP_MYFERMIBREAKUP_UTILITIES_VDECAY_H_
 
 #include <vector>
-#include "DataTypes.h"
+#include "Utilities/DataTypes.h"
 
 class VDecay {
  public:

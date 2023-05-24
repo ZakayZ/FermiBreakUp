@@ -5,8 +5,8 @@
 #include <functional>
 
 #include "FermiConfigurations.h"
-#include "ConfigurationProperties.h"
-#include "Randomizer.h"
+#include "Utilities/ConfigurationProperties.h"
+#include "Utilities/Randomizer.h"
 
 FermiConfigurations::FermiConfigurations(NucleiData nuclei_data, FermiFloat total_energy) {
   FermiConfigurations::GenerateSplits(nuclei_data, total_energy);

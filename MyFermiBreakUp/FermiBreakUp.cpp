@@ -3,7 +3,7 @@
 //
 
 #include "FermiBreakUp.h"
-#include "DataTypes.h"
+#include "Utilities/DataTypes.h"
 
 FermiBreakUp::FermiBreakUp() : fermi_configurations_(DefaultConfigurations()) {}
 

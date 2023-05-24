@@ -3,8 +3,8 @@
 //
 
 #include "CachedFermiConfigurations.h"
-#include "ConfigurationProperties.h"
-#include "Randomizer.h"
+#include "Utilities/ConfigurationProperties.h"
+#include "Utilities/Randomizer.h"
 
 CachedFermiConfigurations::CachedFermiConfigurations(NucleiData nuclei_data, FermiFloat total_energy) {
   CachedFermiConfigurations::GenerateSplits(nuclei_data, total_energy);

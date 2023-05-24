@@ -7,8 +7,8 @@
 
 #include <map>
 
-#include "DataTypes.h"
-#include "FermiFragment.h"
+#include "Utilities/DataTypes.h"
+#include "Fragments/FermiFragment.h"
 
 /// Singleton of fragments wrapper class
 

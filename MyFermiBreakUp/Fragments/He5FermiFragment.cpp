@@ -3,7 +3,6 @@
 //
 
 #include "He5FermiFragment.h"
-#include "Utilities/NucleiProperties/NucleiProperties.h"
 
 He5FermiFragment::He5FermiFragment(MassNumber mass_number,
                                    ChargeNumber charge_number,

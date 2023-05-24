@@ -6,8 +6,8 @@
 #include <CLHEP/Units/PhysicalConstants.h>
 
 #include "FermiBreakUp.h"
-#include "NucleiProperties/NucleiProperties.h"
-#include "Randomizer.h"
+#include "Utilities/NucleiProperties/NucleiProperties.h"
+#include "Utilities/Randomizer.h"
 #include "CachedFermiConfigurations.h"
 
 float CachedCalculateFragmentCount(MassNumber mass, ChargeNumber charge, const Vector3& vec,

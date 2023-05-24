@@ -3,7 +3,6 @@
 //
 
 #include "Li5FermiFragment.h"
-#include "Utilities/NucleiProperties/NucleiProperties.h"
 
 Li5FermiFragment::Li5FermiFragment(MassNumber mass_number,
                                    ChargeNumber charge_number,

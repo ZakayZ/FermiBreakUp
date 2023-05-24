@@ -3,12 +3,11 @@
 //
 
 #include <numeric>
-#include <algorithm>
 #include <functional>
 #include <CLHEP/Random/RandGamma.h>
 
 #include "KopylovDecay.h"
-#include "Randomizer.h"
+#include "Utilities/Randomizer.h"
 
 std::vector<LorentzVector> KopylovDecay::CalculateDecay(const LorentzVector& momentum,
                                                         const std::vector<FermiFloat>& fragments_mass) const {

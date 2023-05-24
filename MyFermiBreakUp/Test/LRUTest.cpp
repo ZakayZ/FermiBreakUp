@@ -4,7 +4,7 @@
 
 #include <gtest/gtest.h>
 
-#include "LRUCache.h"
+#include "Utilities/LRUCache.h"
 
 TEST(LRUCacheTests, StoreTest) {
   LRUCache<int, int> int_cache(2);

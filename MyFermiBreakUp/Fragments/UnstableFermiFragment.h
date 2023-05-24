@@ -6,6 +6,7 @@
 #define FERMIBREAKUP_MYFERMIBREAKUP_FRAGMENTS_UNSTABLEFERMIFRAGMENT_H_
 
 #include <vector>
+
 #include "FermiFragment.h"
 
 class UnstableFermiFragment : public FermiFragment {

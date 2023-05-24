@@ -5,7 +5,7 @@
 #ifndef FERMIBREAKUP_MYFERMIBREAKUP_UTILITIES_NUCLEIPROPERTIES_H_
 #define FERMIBREAKUP_MYFERMIBREAKUP_UTILITIES_NUCLEIPROPERTIES_H_
 
-#include "DataTypes.h"
+#include "Utilities/DataTypes.h"
 #include "VNucleiProperties.h"
 #include "FermiNucleiProperties.h"
 #include "NativeNucleiProperties.h"

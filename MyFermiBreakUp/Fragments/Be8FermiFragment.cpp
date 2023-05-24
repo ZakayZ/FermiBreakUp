@@ -3,7 +3,6 @@
 //
 
 #include "Be8FermiFragment.h"
-#include "Utilities/NucleiProperties/NucleiProperties.h"
 
 Be8FermiFragment::Be8FermiFragment(MassNumber mass_number,
                                    ChargeNumber charge_number,

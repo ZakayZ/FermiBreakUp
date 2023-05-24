@@ -5,7 +5,7 @@
 #include <gtest/gtest.h>
 
 #include <numeric>
-#include "IntegerPartition.h"
+#include "Utilities/IntegerPartition.h"
 
 size_t factorial(size_t num) {
   size_t fact = 1;

@@ -1,12 +1,11 @@
 #include <iostream>
 #include <fstream>
 
-#include "MyFermiBreakUp/IntegerPartition.h"
-#include "NucleiProperties/NucleiProperties.h"
 #include "MyFermiBreakUp/FermiBreakUp.h"
 #include "TableValues/NucleiPropertiesTable.h"
 #include "TableValues/NucleiPropertiesTableAME12.h"
 #include "Utilities/NucleiProperties/CSVBuilder.h"
+#include "Utilities/NucleiProperties/NucleiProperties.h"
 
 void DumpTables() {
   std::ofstream th_out("../TheoreticalTable.data");

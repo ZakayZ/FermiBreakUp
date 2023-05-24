@@ -5,7 +5,7 @@
 #ifndef FERMIBREAKUP_MYFERMIBREAKUP_UTILITIES_VNUCLEIPROPERTIES_H_
 #define FERMIBREAKUP_MYFERMIBREAKUP_UTILITIES_VNUCLEIPROPERTIES_H_
 
-#include "DataTypes.h"
+#include "Utilities/DataTypes.h"
 
 class VNucleiProperties {
  public:

@@ -7,7 +7,7 @@
 #include <functional>
 
 #include "Decay.h"
-#include "Randomizer.h"
+#include "Utilities/Randomizer.h"
 
 static const size_t MaxTryCount = 1e6;
 

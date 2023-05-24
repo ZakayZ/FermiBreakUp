@@ -7,7 +7,7 @@
 
 #include <vector>
 
-#include "DataTypes.h"
+#include "Utilities/DataTypes.h"
 
 class NucleiPropertiesTableAME12 {
  public:

@@ -3,7 +3,7 @@
 //
 
 #include "VDecay.h"
-#include "Randomizer.h"
+#include "Utilities/Randomizer.h"
 
 VDecay::~VDecay() = default;
 

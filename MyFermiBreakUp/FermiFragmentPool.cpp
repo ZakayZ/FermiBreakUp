@@ -5,12 +5,11 @@
 
 #include "FermiFragmentPool.h"
 
-#include "StableFermiFragment.h"
-#include "UnstableFermiFragment.h"
-#include "B9FermiFragment.h"
-#include "Be8FermiFragment.h"
-#include "He5FermiFragment.h"
-#include "Li5FermiFragment.h"
+#include "Fragments/StableFermiFragment.h"
+#include "Fragments/B9FermiFragment.h"
+#include "Fragments/Be8FermiFragment.h"
+#include "Fragments/He5FermiFragment.h"
+#include "Fragments/Li5FermiFragment.h"
 
 using namespace CLHEP;
 

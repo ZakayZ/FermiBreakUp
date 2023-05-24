@@ -7,7 +7,7 @@
 
 #include <optional>
 
-#include "DataTypes.h"
+#include "Utilities/DataTypes.h"
 
 class VFermiConfigurations {
  public:
