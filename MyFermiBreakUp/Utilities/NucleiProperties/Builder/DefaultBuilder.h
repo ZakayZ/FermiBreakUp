@@ -7,9 +7,13 @@
 
 #include "VFermiPropertiesBuilder.h"
 
+namespace properties {
+
 class DefaultBuilder : public VFermiPropertiesBuilder {
  public:
   void BuildTable(FermiNucleiProperties::MassMap& data) const override;
 };
+
+} // namespace properties
 
 #endif //FERMIBREAKUP_MYFERMIBREAKUP_UTILITIES_NUCLEIPROPERTIES_DEFAULTBUILDER_H_

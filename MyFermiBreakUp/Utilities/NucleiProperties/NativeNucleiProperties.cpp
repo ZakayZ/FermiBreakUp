@@ -8,6 +8,8 @@
 #include "TableValues/NucleiPropertiesTable.h"
 #include "TableValues/NucleiPropertiesTableAME12.h"
 
+namespace properties {
+
 const FermiFloat NativeNucleiProperties::proton_mass = CLHEP::proton_mass_c2;
 
 const FermiFloat NativeNucleiProperties::neutron_mass = CLHEP::neutron_mass_c2;
@@ -123,3 +125,5 @@ FermiFloat NativeNucleiProperties::BindingEnergy(MassNumber mass_number, ChargeN
 bool NativeNucleiProperties::IsInvalidNuclei(MassNumber mass_number, ChargeNumber charge_number) {
   return mass_number < 1_m || charge_number < 0_c || FermiUInt(charge_number) > FermiUInt(mass_number);
 }
+
+} // namespace properties

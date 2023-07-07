@@ -10,8 +10,12 @@
 #include "FermiNucleiProperties.h"
 //#include "NativeNucleiProperties.h"
 
+namespace properties {
+
 using NucleiProperties = FermiNucleiProperties;
 
 static_assert(std::is_base_of<VNucleiProperties, NucleiProperties>::value, "Incorrect Nuclei properties class");
+
+} // namespace properties
 
 #endif //FERMIBREAKUP_MYFERMIBREAKUP_UTILITIES_NUCLEIPROPERTIES_H_

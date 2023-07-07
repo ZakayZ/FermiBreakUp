@@ -7,11 +7,15 @@
 
 #include "../FermiFragmentPool.h"
 
+namespace pool {
+
 class VPoolBuilder {
  public:
   virtual void Build(FermiFragmentPool::Map& map) const = 0;
 
   virtual ~VPoolBuilder() = default;
 };
+
+} // namespace pool
 
 #endif //FERMIBREAKUP_MYFERMIBREAKUP_FRAGMENTPOOL_VPOOLBUILDER_H_

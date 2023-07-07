@@ -5,6 +5,8 @@
 #include "FermiNucleiProperties.h"
 #include "Builder/DefaultBuilder.h"
 
+namespace properties {
+
 std::unique_ptr<FermiNucleiProperties::MassMap> FermiNucleiProperties::nuclei_mass_ = nullptr;
 
 FermiNucleiProperties::FermiNucleiProperties() {
@@ -38,3 +40,5 @@ void FermiNucleiProperties::Build(const VFermiPropertiesBuilder& builder) {
   nuclei_mass_ = std::make_unique<MassMap>();
   builder.BuildTable(*nuclei_mass_);
 }
+
+} // namespace properties

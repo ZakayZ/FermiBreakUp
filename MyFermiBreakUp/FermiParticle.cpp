@@ -70,11 +70,11 @@ void FermiParticle::CalculateExcitationEnergy() {
 }
 
 void FermiParticle::CalculateGroundStateMass() {
-  ground_state_mass_ = NucleiProperties().GetNuclearMass(mass_number_, charge_number_);
+  ground_state_mass_ = properties::NucleiProperties().GetNuclearMass(mass_number_, charge_number_);
 }
 
 std::ostream& operator<<(std::ostream& out, const FermiParticle& particle) {
-  auto old_floatfield = out.flags();
+  auto old_float_field = out.flags();
   out.setf(std::ios::floatfield);
 
   out << "Fragment: A = " << std::setw(3) << particle.GetMassNumber()
@@ -97,7 +97,7 @@ std::ostream& operator<<(std::ostream& out, const FermiParticle& particle) {
 
   /// What about Angular momentum???
 
-  out.setf(old_floatfield, std::ios::floatfield);
+  out.setf(old_float_field, std::ios::floatfield);
   out.precision(old_user_precision);
 
   return out;

@@ -5,8 +5,6 @@ set(CMAKE_CXX_STANDARD 17)
 
 find_package(CLHEP REQUIRED)
 
-find_package(Geant4 REQUIRED PATHS /Users/artemnovikov/CLionProjects/G4/geant4-v11.1.0-install/lib/cmake/Geant4)
-
 set(Utilities
         MyFermiBreakUp/Utilities/DataTypes.cpp
         MyFermiBreakUp/Utilities/IntegerPartition.cpp
@@ -30,7 +28,7 @@ set(TableValues
 
 set(FragmentPool
         MyFermiBreakUp/FragmentPool/FermiFragmentPool.cpp
-        MyFermiBreakUp/FragmentPool/Builder/DefaultPoolBuilder.cpp
+        MyFermiBreakUp/FragmentPool/Builder/DefaultBuilder.cpp
         MyFermiBreakUp/FragmentPool/Fragments/FermiFragment.cpp
         MyFermiBreakUp/FragmentPool/Fragments/StableFermiFragment.cpp
         MyFermiBreakUp/FragmentPool/Fragments/UnstableFermiFragment.cpp
@@ -47,15 +45,9 @@ set(FermiBreakUp
         MyFermiBreakUp/CachedFermiConfigurations.cpp
         MyFermiBreakUp/FermiBreakUp.cpp)
 
-set(Handler
-        Handler/ExcitationHandler.cpp
-        Handler/AAMCCFermiBreakUp.cpp
-#        Handler/AamccFermiBreakUpFunc.cpp
-        )
-
 set(Sources ${FermiBreakUp} ${FragmentPool} ${Utilities} ${TableValues} ${PhaseSpace})
 
-add_executable(FermiBreakUp main.cpp ${Sources} ${Handler})
+add_executable(FermiBreakUp main.cpp ${Sources})
 
 target_link_libraries(FermiBreakUp CLHEP::CLHEP)
 

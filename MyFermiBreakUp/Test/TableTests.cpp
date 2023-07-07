@@ -8,6 +8,8 @@
 #include "Utilities/NucleiProperties/NucleiProperties.h"
 #include "Utilities/NucleiProperties/Builder/CSVBuilder.h"
 
+using namespace properties;
+
 TEST(TableTest, DefaultPropertiesTest) {
   std::ifstream table_data("../Data/small_nuclei_data.csv");
   ASSERT_TRUE(table_data.is_open());

@@ -7,6 +7,8 @@
 
 #include "Utilities/DataTypes.h"
 
+namespace properties {
+
 class VNucleiProperties {
  public:
   virtual FermiFloat GetNuclearMass(MassNumber mass_number, ChargeNumber charge_number) const = 0;
@@ -24,5 +26,7 @@ class VNucleiProperties {
 
   static bool IsInvalidNuclei(MassNumber mass_number, ChargeNumber charge_number);
 };
+
+} // namespace properties
 
 #endif //FERMIBREAKUP_MYFERMIBREAKUP_UTILITIES_VNUCLEIPROPERTIES_H_

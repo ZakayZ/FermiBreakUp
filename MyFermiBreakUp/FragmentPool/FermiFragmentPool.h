@@ -11,6 +11,8 @@
 #include "Utilities/DataTypes.h"
 #include "Fragments/FermiFragment.h"
 
+namespace pool {
+
 class VPoolBuilder;
 
 class FermiFragmentPool {
@@ -37,5 +39,7 @@ class FermiFragmentPool {
 
   static std::unique_ptr<Map> fragments_pool_;
 };
+
+} // namespace pool
 
 #endif //FERMIBREAKUP_MYFERMIBREAKUP_FERMIFRAGMENTPOOL_H_

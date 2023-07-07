@@ -6,6 +6,8 @@
 
 #include "CSVBuilder.h"
 
+namespace properties {
+
 CSVBuilder::CSVBuilder(const std::string& csv_filename, const std::string& mass_number_name,
                        const std::string& charge_number_name, const std::string& mass_name)
     : csv_filename_(csv_filename),
@@ -93,4 +95,4 @@ void CSVBuilder::BuildTable(FermiNucleiProperties::MassMap& data) const {
   }
 }
 
-
+} // namespace properties

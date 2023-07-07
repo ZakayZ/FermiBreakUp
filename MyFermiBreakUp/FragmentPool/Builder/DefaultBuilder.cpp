@@ -4,9 +4,7 @@
 
 #include <CLHEP/Units/PhysicalConstants.h>
 
-using CLHEP::MeV;
-
-#include "DefaultPoolBuilder.h"
+#include "DefaultBuilder.h"
 
 #include "../Fragments/StableFermiFragment.h"
 #include "../Fragments/B9FermiFragment.h"
@@ -14,7 +12,11 @@ using CLHEP::MeV;
 #include "../Fragments/He5FermiFragment.h"
 #include "../Fragments/Li5FermiFragment.h"
 
-void DefaultPoolBuilder::Build(FermiFragmentPool::Map& map) const {
+using CLHEP::MeV;
+
+namespace pool {
+
+void DefaultBuilder::Build(FermiFragmentPool::Map& map) const {
   static const StableFermiFragment Fragment00(  1_m, 0_c,  2,  0.00*MeV ); AddFragment(map, Fragment00);
   static const StableFermiFragment Fragment01(  1_m, 1_c,  2,  0.00*MeV ); AddFragment(map, Fragment01);
   static const StableFermiFragment Fragment02(  2_m, 1_c,  3,  0.00*MeV ); AddFragment(map, Fragment02);
@@ -126,6 +128,8 @@ void DefaultPoolBuilder::Build(FermiFragmentPool::Map& map) const {
   static const StableFermiFragment Fragment99( 16_m, 8_c,  3,  7.12*MeV ); AddFragment(map, Fragment99);
 }
 
-void DefaultPoolBuilder::AddFragment(FermiFragmentPool::Map& map, const FermiFragment& fragment) const {
+void DefaultBuilder::AddFragment(FermiFragmentPool::Map& map, const FermiFragment& fragment) const {
   map.emplace(NucleiData{fragment.GetMassNumber(), fragment.GetChargeNumber()}, &fragment);
 }
+
+} // namespace pool

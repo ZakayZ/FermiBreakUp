@@ -10,6 +10,8 @@
 #include "Utilities/Randomizer.h"
 #include "CachedFermiConfigurations.h"
 
+using namespace properties;
+
 float CalculateFragmentCount(MassNumber mass, ChargeNumber charge, const Vector3& vec,
                              FermiFloat energy, size_t tests) {
   auto model = FermiBreakUp();

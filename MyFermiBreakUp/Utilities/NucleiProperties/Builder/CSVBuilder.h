@@ -7,6 +7,8 @@
 
 #include "VFermiPropertiesBuilder.h"
 
+namespace properties {
+
 class CSVBuilder : public VFermiPropertiesBuilder {
  public:
   CSVBuilder(const std::string& csv_filename, const std::string& mass_number_name = "A",
@@ -20,5 +22,7 @@ class CSVBuilder : public VFermiPropertiesBuilder {
   std::string charge_number_name_;
   std::string mass_name_;
 };
+
+} // namespace properties
 
 #endif //FERMIBREAKUP_MYFERMIBREAKUP_UTILITIES_NUCLEIPROPERTIES_CSVBUILDER_H_

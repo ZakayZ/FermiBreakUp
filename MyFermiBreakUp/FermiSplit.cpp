@@ -76,7 +76,7 @@ std::string FermiSplit::ValidateInputs(NucleiData nuclei_data, uint32_t fragment
 }
 
 std::vector<size_t> FermiSplit::FragmentVariations(const Partition& mass_partition, const Partition& charge_partition) {
-  FermiFragmentPool fragment_pool;
+  pool::FermiFragmentPool fragment_pool;
 
   auto fragment_count = mass_partition.size();
 
@@ -96,7 +96,7 @@ std::vector<size_t> FermiSplit::FragmentVariations(const Partition& mass_partiti
 
 std::vector<FragmentVector> FermiSplit::GeneratePossibleSplits(
     const Partition& mass_partition, const Partition& charge_partition, const std::vector<size_t>& fragment_variation) {
-  FermiFragmentPool fragment_pool;
+  pool::FermiFragmentPool fragment_pool;
 
   auto splits_count =
       std::accumulate(fragment_variation.begin(), fragment_variation.end(), 1, std::multiplies<size_t>());

@@ -9,6 +9,8 @@
 
 #include "VNucleiProperties.h"
 
+namespace properties {
+
 class VFermiPropertiesBuilder;
 
 class FermiNucleiProperties : public VNucleiProperties {
@@ -29,5 +31,6 @@ class FermiNucleiProperties : public VNucleiProperties {
   static std::unique_ptr<MassMap> nuclei_mass_;
 };
 
+} // namespace properties
 
 #endif //FERMIBREAKUP_MYFERMIBREAKUP_UTILITIES_FERMINUCLEIPROPERTIES_H_

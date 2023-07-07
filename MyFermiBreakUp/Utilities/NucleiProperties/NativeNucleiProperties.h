@@ -7,6 +7,8 @@
 
 #include "VNucleiProperties.h"
 
+namespace properties {
+
 class NativeNucleiProperties : public VNucleiProperties {
  public:
   FermiFloat GetNuclearMass(MassNumber mass_number, ChargeNumber charge_number) const override;
@@ -29,5 +31,7 @@ class NativeNucleiProperties : public VNucleiProperties {
   static const FermiFloat alpha_mass;
   static const FermiFloat He3_mass;
 };
+
+} // namespace properties
 
 #endif //FERMIBREAKUP_MYFERMIBREAKUP_UTILITIES_NATIVENUCLEIPROPERTIES_H_

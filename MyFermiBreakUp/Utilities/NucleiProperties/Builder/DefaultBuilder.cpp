@@ -4,6 +4,8 @@
 
 #include "DefaultBuilder.h"
 
+namespace properties {
+
 void DefaultBuilder::BuildTable(FermiNucleiProperties::MassMap& data) const {
   data.emplace(NucleiData{1_m, 0_c}, 939.565);
   data.emplace(NucleiData{1_m, 1_c}, 938.272);
@@ -110,3 +112,5 @@ void DefaultBuilder::BuildTable(FermiNucleiProperties::MassMap& data) const {
   data.emplace(NucleiData{20_m, 11_c}, 18631.1);
   data.emplace(NucleiData{20_m, 12_c}, 18641.3);
 }
+
+} // namespace properties

@@ -10,15 +10,17 @@
 #include "Fragments/He5FermiFragment.h"
 #include "Fragments/Li5FermiFragment.h"
 
-#include "Builder/DefaultPoolBuilder.h"
+#include "Builder/DefaultBuilder.h"
 
 using namespace CLHEP;
+
+namespace pool {
 
 std::unique_ptr<FermiFragmentPool::Map> FermiFragmentPool::fragments_pool_ = nullptr;
 
 FermiFragmentPool::FermiFragmentPool() {
   if (fragments_pool_ == nullptr) {
-    Build(DefaultPoolBuilder());
+    Build(DefaultBuilder());
   }
 }
 
@@ -34,7 +36,8 @@ size_t FermiFragmentPool::Count(NucleiData nuclei) const {
   return fragments_pool_->count(nuclei);
 }
 
-FermiFragmentPool::RangeIterators FermiFragmentPool::GetFragments(MassNumber mass_number, ChargeNumber charge_number) const {
+FermiFragmentPool::RangeIterators FermiFragmentPool::GetFragments(MassNumber mass_number,
+                                                                  ChargeNumber charge_number) const {
   return GetFragments({mass_number, charge_number});
 }
 
@@ -46,3 +49,5 @@ void FermiFragmentPool::Build(const VPoolBuilder& builder) {
   fragments_pool_ = std::make_unique<Map>();
   builder.Build(*fragments_pool_);
 }
+
+} // namespace pool
