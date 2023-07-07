@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 find_package(CLHEP REQUIRED)
 
-find_package(Geant4 REQUIRED)
+find_package(Geant4 REQUIRED PATHS /Users/artemnovikov/CLionProjects/G4/geant4-v11.1.0-install/lib/cmake/Geant4)
 
 set(Utilities
         MyFermiBreakUp/Utilities/DataTypes.cpp
