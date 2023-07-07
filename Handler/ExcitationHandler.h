@@ -116,9 +116,10 @@ class ExcitationHandler {
   const Condition& GetPhotonEvaporationCondition() const { return photon_evaporation_condition_; }
 
  private:
-  static G4ParticleDefinition* SpecialParticleDefinition(const G4Fragment& fragment);
+  using G4SmartFragment = std::unique_ptr<G4Fragment>;
+  using G4SmartFragmentVector = std::vector<G4SmartFragment>;
 
-  static void FreeResults(G4FragmentVector& results);
+  static G4ParticleDefinition* SpecialParticleDefinition(const G4Fragment& fragment);
 
   static void EvaporationError(const G4Fragment& fragment, const G4Fragment& current_fragment, size_t iter);
 
@@ -141,21 +142,21 @@ class ExcitationHandler {
 
   bool IsStable(const G4Fragment& fragment) const;
 
-  void ApplyMultiFragmentation(G4Fragment& fragment, G4FragmentVector& results,
-                               std::queue<G4Fragment*>& next_stage);
+  void ApplyMultiFragmentation(G4SmartFragment fragment, G4SmartFragmentVector& results,
+                               std::queue<G4SmartFragment>& next_stage);
 
-  void ApplyFermiBreakUp(G4Fragment& fragment, G4FragmentVector& results,
-                         std::queue<G4Fragment*>& next_stage);
+  void ApplyFermiBreakUp(G4SmartFragment fragment, G4SmartFragmentVector& results,
+                         std::queue<G4SmartFragment>& next_stage);
 
-  void ApplyEvaporation(G4Fragment& fragment, G4FragmentVector& results,
-                        std::queue<G4Fragment*>& next_stage);
+  void ApplyEvaporation(G4SmartFragment fragment, G4SmartFragmentVector& results,
+                        std::queue<G4SmartFragment>& next_stage);
 
-  void ApplyPhotonEvaporation(G4Fragment& fragment, G4FragmentVector& results);
+  void ApplyPhotonEvaporation(G4SmartFragment fragment, G4SmartFragmentVector& results);
 
-  void SortFragments(const G4FragmentVector& fragments, G4FragmentVector& results,
-                     std::queue<G4Fragment*>& next_stage);
+  void SortFragments(const G4FragmentVector& fragments, G4SmartFragmentVector& results,
+                     std::queue<G4SmartFragment>& next_stage);
 
-  std::vector<G4ReactionProduct> ConvertResults(const G4FragmentVector& results);
+  std::vector<G4ReactionProduct> ConvertResults(const G4SmartFragmentVector& results);
 
   std::unique_ptr<G4VMultiFragmentation> multi_fragmentation_model_;
   std::unique_ptr<G4VFermiBreakUp> fermi_break_up_model_;
