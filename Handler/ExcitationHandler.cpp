@@ -21,7 +21,7 @@
 
 #include "ExcitationHandler.h"
 
-static const size_t evaporation_threshold = 1e3 * CLHEP::keV;
+static const size_t evaporation_iteration_threshold = 1e3;
 
 ExcitationHandler::ExcitationHandler()
     : multi_fragmentation_model_(DefaultMultiFragmentation()),
@@ -60,7 +60,7 @@ std::vector<G4ReactionProduct> ExcitationHandler::BreakItUp(const G4Fragment& fr
       evaporation_queue.pop();
 
       /// infinite loop
-      if (iteration_count < evaporation_threshold) {
+      if (iteration_count < evaporation_iteration_threshold) {
         EvaporationError(fragment, *fragment_ptr, iteration_count);
         /// process is dead
       }
