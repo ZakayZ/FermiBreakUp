@@ -87,7 +87,7 @@ int main() {
 
   auto handler = ExcitationHandler();
 
-  auto results = handler.BreakItUp(G4Fragment(2, 1, G4LorentzVector(5 * CLHEP::GeV)));
+  auto results = handler.BreakItUp(G4Fragment(12, 6, G4LorentzVector(NucleiProperties().GetNuclearMass(12_m, 6_c) + 12 * 5 * CLHEP::MeV)));
 
   std::cout << results.size();
 }
