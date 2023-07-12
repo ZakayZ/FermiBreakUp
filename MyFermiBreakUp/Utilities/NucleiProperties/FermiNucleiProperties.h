@@ -6,6 +6,7 @@
 #define FERMIBREAKUP_MYFERMIBREAKUP_UTILITIES_FERMINUCLEIPROPERTIES_H_
 
 #include <map>
+#include <memory>
 
 #include "VNucleiProperties.h"
 
@@ -19,9 +20,9 @@ class FermiNucleiProperties : public VNucleiProperties {
 
   FermiNucleiProperties(const VFermiPropertiesBuilder& builder);
 
-  FermiFloat GetNuclearMass(MassNumber mass_number, ChargeNumber charge_number) const override;
+  [[nodiscard]] FermiFloat GetNuclearMass(MassNumber mass_number, ChargeNumber charge_number) const override;
 
-  bool IsStable(MassNumber mass_number, ChargeNumber charge_number) const override;
+  [[nodiscard]] bool IsStable(MassNumber mass_number, ChargeNumber charge_number) const override;
 
  private:
   static void Build(const VFermiPropertiesBuilder& builder);

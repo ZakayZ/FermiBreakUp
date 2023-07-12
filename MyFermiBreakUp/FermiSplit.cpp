@@ -98,7 +98,7 @@ std::vector<FragmentVector> FermiSplit::GeneratePossibleSplits(
     const Partition& mass_partition, const Partition& charge_partition, const std::vector<size_t>& fragment_variation) {
   FermiFragmentPool fragment_pool;
 
-  auto splits_count =
+  size_t splits_count =
       std::accumulate(fragment_variation.begin(), fragment_variation.end(), 1, std::multiplies<size_t>());
 
   auto fragment_count = mass_partition.size();

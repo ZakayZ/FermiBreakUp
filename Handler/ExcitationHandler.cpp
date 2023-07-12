@@ -70,8 +70,8 @@ std::vector<G4ReactionProduct> ExcitationHandler::BreakItUp(const G4Fragment& fr
 
   /// In case A <= 1 the fragment will not perform any nucleon emission
   auto initial_fragment_ptr = std::make_unique<G4Fragment>(fragment);
-  if (fragment.GetA_asInt() <= 1 || IsStable(fragment)
-      && nist->GetIsotopeAbundance(fragment.GetZ_asInt(), fragment.GetA_asInt()) > 0) {
+  if (fragment.GetA_asInt() <= 1 || (IsStable(fragment)
+      && nist->GetIsotopeAbundance(fragment.GetZ_asInt(), fragment.GetA_asInt()) > 0)) {
     results.emplace_back(std::move(initial_fragment_ptr));
   } else {
     if (multi_fragmentation_condition_(fragment)) {
@@ -245,8 +245,8 @@ void ExcitationHandler::SortFragments(const G4FragmentVector& fragments,
 
   for (auto fragment_ptr : fragments) { /// fragment pointers is moved to unique and will be deleted later
     /// gamma, p, n or stable nuclei
-    if (fragment_ptr->GetA_asInt() <= 1 || IsStable(*fragment_ptr)
-        && nist->GetIsotopeAbundance(fragment_ptr->GetZ_asInt(), fragment_ptr->GetA_asInt()) > 0.0) {
+    if (fragment_ptr->GetA_asInt() <= 1 || (IsStable(*fragment_ptr)
+        && nist->GetIsotopeAbundance(fragment_ptr->GetZ_asInt(), fragment_ptr->GetA_asInt()) > 0.0)) {
       results.emplace_back(fragment_ptr);
     } else {
       next_stage.emplace(fragment_ptr);

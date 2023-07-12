@@ -71,6 +71,38 @@ void CalculateMomentum(MassNumber mass, ChargeNumber charge, const std::string& 
   std::cout << dump_name << ": done\n";
 }
 
+void CalculateFragmentsHandler(MassNumber mass, ChargeNumber charge, const std::string& dump_name,
+                               FermiFloat excess_energy, size_t tests = 1e3) {
+  auto handler = ExcitationHandler();
+  std::ofstream out(dump_name);
+
+  out << "[\n";
+  for (size_t i = 0; i < tests; ++i) {
+    auto vec =
+        LorentzVector(0, 0, 0, NucleiProperties().GetNuclearMass(mass, charge) + excess_energy * FermiFloat(mass));
+    auto particles = handler.BreakItUp(G4Fragment(mass, charge, vec));
+    out << " [";
+    size_t id = 0;
+    for (auto& particle : particles) {
+      out << "{ \"A\":" << particle.GetDefinition()->GetAtomicMass() << ", \"Z\": "
+          << particle.GetDefinition()->GetPDGCharge() << " }";
+      ++id;
+      if (id != particles.size()) {
+        out << ", ";
+      }
+    }
+    out << ']';
+    if (i != tests - 1) {
+      out << ',';
+    }
+    out << '\n';
+  }
+
+  out << "]\n";
+
+  std::cout << dump_name << ": done\n";
+}
+
 int main() {
 //  std::cout << CLHEP::electron_mass_c2 << '\n';
 //  CalculateMomentum(12_m, 6_c, "../Data/stat.data", 12 * 10 * CLHEP::GeV, {0, 0, 0});
@@ -85,9 +117,29 @@ int main() {
 //
 //  CalculateFragments(13_m, 7_c, "Data/N13.csv");
 
-  auto handler = ExcitationHandler();
+//  auto handler = ExcitationHandler();
+//
+//  auto results = handler.BreakItUp(G4Fragment(12, 6, G4LorentzVector(NucleiProperties().GetNuclearMass(12_m, 6_c)
+//                                                                         + 12 * 5 * CLHEP::MeV)));
+//
+//  std::cout << results.size();
+//  CalculateFragmentsHandler(12_m, 6_c, "../Data/C12_05_distr.dat", 0.5 * CLHEP::MeV);
+//
+//  CalculateFragmentsHandler(12_m, 6_c, "../Data/C12_4_distr.dat", 4 * CLHEP::MeV);
+//
+//  CalculateFragmentsHandler(13_m, 6_c, "../Data/C13_05_distr.dat", 0.5 * CLHEP::MeV);
+//
+//  CalculateFragmentsHandler(13_m, 6_c, "../Data/C13_4_distr.dat", 4 * CLHEP::MeV);
+//
+//  CalculateFragmentsHandler(12_m, 7_c, "../Data/N12_05_distr.dat", 0.5 * CLHEP::MeV);
+//
+//  CalculateFragmentsHandler(12_m, 7_c, "../Data/N12_4_distr.dat", 4 * CLHEP::MeV);
+//
+//  CalculateFragmentsHandler(13_m, 7_c, "../Data/N13_05_distr.dat", 0.5 * CLHEP::MeV);
+//
+//  CalculateFragmentsHandler(13_m, 7_c, "../Data/N13_4_distr.dat", 4 * CLHEP::MeV);
 
-  auto results = handler.BreakItUp(G4Fragment(12, 6, G4LorentzVector(NucleiProperties().GetNuclearMass(12_m, 6_c) + 12 * 5 * CLHEP::MeV)));
+  CalculateFragmentsHandler(197_m, 79_c, "../Data/Ag197_05_distr.dat", 0.5 * CLHEP::MeV, 1000);
 
-  std::cout << results.size();
+  CalculateFragmentsHandler(197_m, 79_c, "../Data/Ag197_4_distr.dat", 4 * CLHEP::MeV, 1000);
 }

@@ -26,6 +26,6 @@ void AAMCCFermiBreakUp::BreakFragment(G4FragmentVector* fragments_ptr, G4Fragmen
 
 void AAMCCFermiBreakUp::Initialise() {}
 
-G4bool AAMCCFermiBreakUp::IsApplicable(G4int Z, G4int A, G4double mass) const {
+G4bool AAMCCFermiBreakUp::IsApplicable(G4int Z, G4int A, [[maybe_unused]] G4double mass) const {
   return Z <= 10 && A <= 20;
 }
