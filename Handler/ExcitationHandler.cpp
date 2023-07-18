@@ -11,6 +11,7 @@
 #include <G4IonConstructor.hh>
 #include <G4ProcessManager.hh>
 #include <G4StateManager.hh>
+#include <G4RunManager.hh>
 
 #include "G4LorentzVector.hh"
 #include "G4NistManager.hh"
@@ -23,6 +24,7 @@
 #include "G4PhotonEvaporation.hh"
 #include "G4StatMF.hh"
 #include "AAMCCFermiBreakUp.h"
+//#include "G4FermiBreakUpVI.hh"
 
 #include "ExcitationHandler.h"
 
@@ -130,8 +132,8 @@ std::unique_ptr<G4VFermiBreakUp> ExcitationHandler::DefaultFermiBreakUp() {
 }
 
 std::unique_ptr<G4VEvaporation> ExcitationHandler::DefaultEvaporation() {
-  auto evaporation = std::make_unique<G4Evaporation>();
-  evaporation->SetPhotonEvaporation(DefaultPhotonEvaporation().release());
+  auto evaporation = std::make_unique<G4Evaporation>(DefaultPhotonEvaporation().release());
+  evaporation->SetFermiBreakUp(DefaultFermiBreakUp().release());
   return evaporation;
 }
 
@@ -168,7 +170,11 @@ ExcitationHandler::Condition ExcitationHandler::DefaultMultiFragmentationConditi
 }
 
 ExcitationHandler::Condition ExcitationHandler::DefaultFermiBreakUpCondition() {
-  return [](const G4Fragment&) { return true; };
+  return [](const G4Fragment& fragment) {
+    return AAMCCFermiBreakUp::IsFermiPossible(fragment.GetZ_asInt(),
+                                              fragment.GetA_asInt(),
+                                              fragment.GetExcitationEnergy());
+  };
 }
 
 ExcitationHandler::Condition ExcitationHandler::DefaultEvaporationCondition() {
@@ -217,10 +223,13 @@ void ExcitationHandler::ApplyEvaporation(G4SmartFragment fragment,
   evaporation_model_->BreakFragment(&fragments, fragment.get());
   // auto fragments = std::unique_ptr<G4FragmentVector>(evaporation_model_->BreakItUp(fragment.get()))
 
-  if (fragments.size() <= 1) {
+  if (fragments.empty()) {
     results.emplace_back(std::move(fragment));
     return;
   }
+
+  /// because evaporation adjusts it
+  fragments.emplace_back(fragment.release());
 
   SortFragments(fragments, results, next_stage);
 }

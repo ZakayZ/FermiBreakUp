@@ -26,6 +26,10 @@ void AAMCCFermiBreakUp::BreakFragment(G4FragmentVector* fragments_ptr, G4Fragmen
 
 void AAMCCFermiBreakUp::Initialise() {}
 
-G4bool AAMCCFermiBreakUp::IsApplicable(G4int Z, G4int A, [[maybe_unused]] G4double mass) const {
-  return Z <= 10 && A <= 20;
+G4bool AAMCCFermiBreakUp::IsFermiPossible(G4int Z, G4int A, [[maybe_unused]] G4double excitation_energy) {
+  return Z < 9 && A < 19;  // && excitation_energy > -10 * CLHEP::keV;
+}
+
+G4bool AAMCCFermiBreakUp::IsApplicable(G4int Z, G4int A, G4double excitation_energy) const {
+  return IsFermiPossible(Z, A, excitation_energy);
 }
