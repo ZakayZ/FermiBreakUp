@@ -110,11 +110,8 @@ std::vector<G4ReactionProduct> ExcitationHandler::BreakItUp(const G4Fragment& fr
       photon_evaporation_queue.pop();
 
       if (photon_evaporation_condition_(*fragment_ptr)) {
-        ApplyPhotonEvaporation(fragment_ptr, results);
+        ApplyPhotonEvaporation(std::move(fragment_ptr), results);
       }
-
-      /// primary fragment is kept
-      results.emplace_back(std::move(fragment_ptr));
     }
   }
 
@@ -234,7 +231,7 @@ void ExcitationHandler::ApplyEvaporation(G4SmartFragment fragment,
   SortFragments(fragments, results, next_stage);
 }
 
-void ExcitationHandler::ApplyPhotonEvaporation(const G4SmartFragment& fragment, G4SmartFragmentVector& results) {
+void ExcitationHandler::ApplyPhotonEvaporation(G4SmartFragment fragment, G4SmartFragmentVector& results) {
   /// photon de-excitation only for hot fragments
   if (!IsStable(*fragment)) {
     G4FragmentVector fragments;
@@ -244,6 +241,9 @@ void ExcitationHandler::ApplyPhotonEvaporation(const G4SmartFragment& fragment, 
     for (auto fragment_ptr : fragments) {
       results.emplace_back(std::unique_ptr<G4Fragment>(fragment_ptr));
     }
+
+    /// primary fragment is kept
+    results.emplace_back(std::move(fragment));
   }
 }
 

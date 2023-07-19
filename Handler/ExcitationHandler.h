@@ -151,7 +151,7 @@ class ExcitationHandler {
   void ApplyEvaporation(G4SmartFragment fragment, G4SmartFragmentVector& results,
                         std::queue<G4SmartFragment>& next_stage);
 
-  void ApplyPhotonEvaporation(const G4SmartFragment& fragment, G4SmartFragmentVector& results);
+  void ApplyPhotonEvaporation(G4SmartFragment fragment, G4SmartFragmentVector& results);
 
   void SortFragments(const G4FragmentVector& fragments, G4SmartFragmentVector& results,
                      std::queue<G4SmartFragment>& next_stage);

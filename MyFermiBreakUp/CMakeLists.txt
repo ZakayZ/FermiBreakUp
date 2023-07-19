@@ -68,11 +68,11 @@ set(Tests
         Test/LRUTest.cpp
         Test/CachedBreakUpTest.cpp)
 
-add_executable(CTest ${Tests} ${Sources})
+add_executable(FermiTest ${Tests} ${Sources})
 
-target_link_libraries(CTest CLHEP::CLHEP)
-target_link_libraries(CTest GTest::GTest GTest::Main)
+target_link_libraries(FermiTest CLHEP::CLHEP)
+target_link_libraries(FermiTest GTest::GTest GTest::Main)
 
-target_include_directories(CTest PUBLIC ${PROJECT_SOURCE_DIR})
+target_include_directories(FermiTest PUBLIC ${PROJECT_SOURCE_DIR})
 
-gtest_discover_tests(CTest)
+gtest_discover_tests(FermiTest)
