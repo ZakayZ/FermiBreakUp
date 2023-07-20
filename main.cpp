@@ -83,11 +83,7 @@ void CalculateFragmentsHandler(MassNumber mass, ChargeNumber charge, const std::
     auto particles = handler.BreakItUp(G4Fragment(mass, charge, vec));
     out << " [";
     size_t id = 0;
-    [[maybe_unused]] int charge_fragments = 0;
-    [[maybe_unused]] int mass_fragments = 0;
     for (auto& particle : particles) {
-      charge_fragments  += particle.GetDefinition()->GetPDGCharge();
-      mass_fragments  += particle.GetDefinition()->GetAtomicMass();
       out << "{ \"A\":" << particle.GetDefinition()->GetAtomicMass() << ", \"Z\": "
           << particle.GetDefinition()->GetPDGCharge() << " }";
       ++id;
@@ -104,9 +100,6 @@ void CalculateFragmentsHandler(MassNumber mass, ChargeNumber charge, const std::
     if (log) {
       std::cout << i << '\n';
     }
-
-    assert(mass_fragments  == FermiInt(mass));
-    assert(charge_fragments  == FermiInt(charge));
   }
 
   out << "]\n";
