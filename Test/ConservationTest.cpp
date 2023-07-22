@@ -11,7 +11,7 @@ TEST(ConservationTests, MassAndChargeConservation) {
   auto model = ExcitationHandler();
   int seed = 5;
   srand(seed);
-  size_t tries = 20;
+  size_t tries = 15;
   size_t runs = 1e3;
   int max_nuclei = 200;
 

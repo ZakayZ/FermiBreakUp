@@ -3,6 +3,7 @@
 //
 
 #include <numeric>
+#include <algorithm>
 
 #include "FermiSplit.h"
 #include "FragmentPool/FermiFragmentPool.h"
@@ -62,7 +63,7 @@ const std::vector<FragmentVector>& FermiSplit::GetSplits() const {
 
 std::string FermiSplit::ValidateInputs(NucleiData nuclei_data, uint32_t fragment_count) {
   std::string error_message = "";
-  if (nuclei_data.mass_number < 0_m || nuclei_data.charge_number < 0_c || fragment_count < 0) {
+  if (nuclei_data.mass_number < 0_m || nuclei_data.charge_number < 0_c) {
     error_message = "Non valid arguments A = " + std::to_string(nuclei_data.mass_number) + " Z = "
         + std::to_string(nuclei_data.charge_number) + " #fragments = " + std::to_string(fragment_count);
   }

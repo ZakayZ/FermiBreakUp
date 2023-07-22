@@ -1,17 +1,17 @@
-cmake_minimum_required(VERSION 3.21)
+cmake_minimum_required(VERSION 3.16)
 project(Handler)
 
 set(CMAKE_CXX_STANDARD 17)
 
 set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wpedantic -Werror")
 
-find_package(Geant4 REQUIRED PATHS /Users/artemnovikov/CLionProjects/G4/geant4-v11.1.0-install/lib/cmake/Geant4)
+find_package(Geant4 REQUIRED)
+
+include(${Geant4_USE_FILE})
 
 set(Handler
         Handler/ExcitationHandler.cpp
-        Handler/AAMCCFermiBreakUp.cpp
-#        Handler/AamccFermiBreakUpFunc.cpp
-        )
+        Handler/AAMCCFermiBreakUp.cpp)
 
 add_executable(Handler main.cpp ${Handler})
 

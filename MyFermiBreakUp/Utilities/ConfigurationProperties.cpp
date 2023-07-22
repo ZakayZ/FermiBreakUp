@@ -1,7 +1,6 @@
 //
 // Created by Artem Novikov on 19.02.2023.
 //
-#include <numbers>
 
 #include "ConfigurationProperties.h"
 #include "CLHEP/Units/PhysicalConstants.h"

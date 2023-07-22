@@ -6,6 +6,8 @@
 #define FERMIBREAKUP_MYFERMIBREAKUP_INTEGERPARTITION_H_
 
 #include <vector>
+#include <cstddef>
+#include <cstdint>
 
 using Partition = std::vector<uint32_t>;
 
