@@ -205,7 +205,7 @@ void ExcitationHandler::ApplyFermiBreakUp(G4SmartFragment fragment,
   fermi_break_up_model_->BreakFragment(&fragments, fragment.get());
   // auto fragments = std::unique_ptr<G4FragmentVector>(fermi_break_up_model_->BreakItUp(fragment.get()))
 
-  if (fragments.size() <= 1) {
+  if (fragments.size() == 1) {
     next_stage.emplace(std::move(fragment));
     return;
   }
@@ -220,13 +220,16 @@ void ExcitationHandler::ApplyEvaporation(G4SmartFragment fragment,
   evaporation_model_->BreakFragment(&fragments, fragment.get());
   // auto fragments = std::unique_ptr<G4FragmentVector>(evaporation_model_->BreakItUp(fragment.get()))
 
-  if (fragments.empty()) {
-    results.emplace_back(std::move(fragment));
-    return;
+  /// because evaporation adjusts it
+  auto fragment_ptr = fragment.release();
+  if (fragments.empty() || fragments.back() != fragment_ptr) {
+    fragments.emplace_back(fragment_ptr);
   }
 
-  /// because evaporation adjusts it
-  fragments.emplace_back(fragment.release());
+  if (fragments.size() == 1) {
+    results.emplace_back(fragment_ptr);
+    return;
+  }
 
   SortFragments(fragments, results, next_stage);
 }
@@ -239,7 +242,7 @@ void ExcitationHandler::ApplyPhotonEvaporation(G4SmartFragment fragment, G4Smart
     evaporation_model_->GetPhotonEvaporation()->BreakUpChain(&fragments, fragment.get());
 
     for (auto fragment_ptr : fragments) {
-      results.emplace_back(std::unique_ptr<G4Fragment>(fragment_ptr));
+      results.emplace_back(fragment_ptr);
     }
 
     /// primary fragment is kept
@@ -367,7 +370,7 @@ void ExcitationHandler::EvaporationError(const G4Fragment& fragment, const G4Fra
      << " iterations \n"
      << "      Initial fragment: \n" << fragment
      << "\n      Current fragment: \n" << current_fragment;
-  G4Exception("G4ExcitationHandler::BreakItUp", "had0333", FatalException,
+  G4Exception("ExcitationHandler::BreakItUp", "", FatalException,
               ed, "Stop execution");
 }
 

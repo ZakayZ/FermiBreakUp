@@ -20,7 +20,7 @@ void CalculateFragments(MassNumber mass,
                         ChargeNumber charge,
                         const std::string& dump_name,
                         FermiFloat step = 0.2,
-                        size_t tests = 1e3) {
+                        size_t tests = 1e4) {
   auto model = FermiBreakUp();
   std::vector<FermiFloat> energy_nucleon_values;
   std::vector<float> avg_parts;
@@ -47,7 +47,7 @@ void CalculateFragments(MassNumber mass,
 }
 
 void CalculateMomentum(MassNumber mass, ChargeNumber charge, const std::string& dump_name, FermiFloat energy,
-                       const Vector3& momentum, size_t tests = 1e3) {
+                       const Vector3& momentum, size_t tests = 1e4) {
   auto model = FermiBreakUp();
   std::ofstream out(dump_name);
   auto vec = LorentzVector(momentum.x(), momentum.y(), momentum.z(),
@@ -61,9 +61,6 @@ void CalculateMomentum(MassNumber mass, ChargeNumber charge, const std::string& 
     for (const auto& particle : particles) {
       sum += particle.GetMomentum();
       out << particle.GetMomentum() / particle.GetMassNumber() << ' ';
-    }
-    if ((sum.vect() - vec.vect()).mag() > 1e-5 || (sum - vec).m() > 1e-5) {
-      std::cout << "cringe!\n";
     }
     out << '\n';
   }
@@ -107,37 +104,65 @@ void CalculateFragmentsHandler(MassNumber mass, ChargeNumber charge, const std::
   std::cout << dump_name << ": done\n";
 }
 
+void CalculateMomentumHandler(G4int mass, G4int charge, const std::string& dump_name, FermiFloat energy,
+                       const Vector3& momentum, size_t tests = 1e4) {
+  auto model = ExcitationHandler();
+  std::ofstream out(dump_name);
+  auto vec = LorentzVector(momentum.x(), momentum.y(), momentum.z(),
+                           std::sqrt(std::pow(G4NucleiProperties::GetNuclearMass(mass, charge) + energy, 2)
+                                         + momentum.mag2()));
+  out << vec / mass << '\n';
+  std::vector<FermiFloat> x_component, y_component, z_component, magnitude;
+  for (size_t i = 0; i < tests; ++i) {
+    auto particles = model.BreakItUp(G4Fragment(mass, charge, vec));
+    for (const auto& particle : particles) {
+      if (particle.GetDefinition()->GetAtomicMass() > 0) {
+        out << LorentzVector(particle.GetMomentum(), particle.GetTotalEnergy()) / particle.GetDefinition()->GetAtomicMass() << ' ';
+      }
+    }
+    out << '\n';
+  }
+
+  std::cout << dump_name << ": done\n";
+}
+
 int main() {
-//  std::cout << CLHEP::electron_mass_c2 << '\n';
 //  CalculateMomentum(12_m, 6_c, "../Data/stat.data", 12 * 10 * CLHEP::GeV, {0, 0, 0});
-//  CalculateMomentum(12_m, 6_c, "../Data/mov_x.data", 12 * 2 * CLHEP::MeV, {12 * 10 * CLHEP::GeV, 0, 0});
-//  CalculateMomentum(12_m, 6_c, "../Data/mov_y.data", 12 * 2 * CLHEP::MeV, {0, 12 * 100 * CLHEP::GeV, 0});
-//  CalculateMomentum(12_m, 6_c, "../Data/mov_z.data", 12 * 2 * CLHEP::MeV, {0, 0, 12 * 100 * CLHEP::GeV});
-//  CalculateFragments(12_m, 6_c, "Data/C12.csv");
+//  CalculateMomentum(12_m, 6_c, "../Data/mov_x.data", 12 * 5 * CLHEP::MeV, {12 * 10 * CLHEP::GeV, 0, 0});
+//  CalculateMomentum(12_m, 6_c, "../Data/mov_y.data", 12 * 5 * CLHEP::MeV, {0, 12 * 10 * CLHEP::GeV, 0});
+//  CalculateMomentum(12_m, 6_c, "../Data/mov_z.data", 12 * 5 * CLHEP::MeV, {0, 0, 12 * 10 * CLHEP::GeV});
 //
-//  CalculateFragments(13_m, 6_c, "Data/C13.csv");
+//  CalculateFragments(12_m, 6_c, "../Data/C12.csv");
 //
-//  CalculateFragments(12_m, 7_c, "Data/N12.csv");
+//  CalculateFragments(13_m, 6_c, "../Data/C13.csv");
 //
-//  CalculateFragments(13_m, 7_c, "Data/N13.csv");
+//  CalculateFragments(12_m, 7_c, "../Data/N12.csv");
+//
+//  CalculateFragments(13_m, 7_c, "../Data/N13.csv");
 
-  CalculateFragmentsHandler(12_m, 6_c, "../Data/C12_05_distr.dat", 0.5 * CLHEP::MeV);
+//  CalculateFragmentsHandler(12_m, 6_c, "../Data/C12_05_distr.dat", 0.5 * CLHEP::MeV);
+//
+//  CalculateFragmentsHandler(12_m, 6_c, "../Data/C12_4_distr.dat", 4 * CLHEP::MeV);
+//
+//  CalculateFragmentsHandler(13_m, 6_c, "../Data/C13_05_distr.dat", 0.5 * CLHEP::MeV);
+//
+//  CalculateFragmentsHandler(13_m, 6_c, "../Data/C13_4_distr.dat", 4 * CLHEP::MeV);
+//
+//  CalculateFragmentsHandler(12_m, 7_c, "../Data/N12_05_distr.dat", 0.5 * CLHEP::MeV);
+//
+//  CalculateFragmentsHandler(12_m, 7_c, "../Data/N12_4_distr.dat", 4 * CLHEP::MeV);
+//
+//  CalculateFragmentsHandler(13_m, 7_c, "../Data/N13_05_distr.dat", 0.5 * CLHEP::MeV);
+//
+//  CalculateFragmentsHandler(13_m, 7_c, "../Data/N13_4_distr.dat", 4 * CLHEP::MeV);
 
-  CalculateFragmentsHandler(12_m, 6_c, "../Data/C12_4_distr.dat", 4 * CLHEP::MeV);
+//  CalculateFragmentsHandler(197_m, 79_c, "../Data/Ag197_05_distr.dat", 0.5 * CLHEP::MeV, 1000);
+//
+//  CalculateFragmentsHandler(197_m, 79_c, "../Data/Ag197_4_distr.dat", 4 * CLHEP::MeV, 1000);
 
-  CalculateFragmentsHandler(13_m, 6_c, "../Data/C13_05_distr.dat", 0.5 * CLHEP::MeV);
-
-  CalculateFragmentsHandler(13_m, 6_c, "../Data/C13_4_distr.dat", 4 * CLHEP::MeV);
-
-  CalculateFragmentsHandler(12_m, 7_c, "../Data/N12_05_distr.dat", 0.5 * CLHEP::MeV);
-
-  CalculateFragmentsHandler(12_m, 7_c, "../Data/N12_4_distr.dat", 4 * CLHEP::MeV);
-
-  CalculateFragmentsHandler(13_m, 7_c, "../Data/N13_05_distr.dat", 0.5 * CLHEP::MeV);
-
-  CalculateFragmentsHandler(13_m, 7_c, "../Data/N13_4_distr.dat", 4 * CLHEP::MeV);
-
-  CalculateFragmentsHandler(197_m, 79_c, "../Data/Ag197_05_distr.dat", 0.5 * CLHEP::MeV, 1000);
-
-  CalculateFragmentsHandler(197_m, 79_c, "../Data/Ag197_4_distr.dat", 4 * CLHEP::MeV, 1000);
+//  G4double energy = 4;
+//  CalculateMomentumHandler(197, 79, "../Data/arg_stat.data", 197 * energy * CLHEP::MeV, {0, 0, 0}, 1000);
+//  CalculateMomentumHandler(197, 79, "../Data/arg_mov_x.data", 197 * energy * CLHEP::MeV, {197 * energy * CLHEP::GeV, 0, 0}, 1000);
+//  CalculateMomentumHandler(197, 79, "../Data/arg_mov_y.data", 197 * energy * CLHEP::MeV, {0, 197 * energy * CLHEP::GeV, 0}, 1000);
+//  CalculateMomentumHandler(197, 79, "../Data/arg_mov_z.data", 197 * energy * CLHEP::MeV, {0, 0, 197 * energy * CLHEP::GeV}, 1000);
 }
