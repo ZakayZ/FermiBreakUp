@@ -8,7 +8,6 @@
 #include "FermiSplit.h"
 #include "FragmentPool/FermiFragmentPool.h"
 #include "Utilities/IntegerPartition.h"
-#include "Utilities/LRUCache.h"
 
 FermiSplit::FermiSplit(NucleiData nuclei_data, const uint32_t fragment_count) {
   auto error = ValidateInputs(nuclei_data, fragment_count);

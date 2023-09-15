@@ -23,11 +23,6 @@ set(PhaseSpace
         PhaseDecay/Decay.cpp
         PhaseDecay/KopylovDecay.cpp)
 
-set(TableValues
-        #        TableValues/NucleiPropertiesTable.cpp
-        #        TableValues/NucleiPropertiesTableAME12.cpp
-        )
-
 set(FragmentPool
         FragmentPool/FermiFragmentPool.cpp
         FragmentPool/Builder/DefaultPoolBuilder.cpp
@@ -47,7 +42,7 @@ set(FermiBreakUpModel
         CachedFermiConfigurations.cpp
         FermiBreakUp.cpp)
 
-set(Sources ${FermiBreakUpModel} ${FragmentPool} ${Utilities} ${TableValues} ${PhaseSpace})
+set(Sources ${FermiBreakUpModel} ${FragmentPool} ${Utilities} ${PhaseSpace})
 
 add_library(FermiBreakUp STATIC ${Sources})
 
@@ -65,7 +60,6 @@ set(Tests
         Test/PartitionTest.cpp
         Test/TableTests.cpp
         Test/BreakUpTest.cpp
-        Test/LRUTest.cpp
         Test/CachedBreakUpTest.cpp)
 
 add_executable(FermiTest ${Tests} ${Sources})

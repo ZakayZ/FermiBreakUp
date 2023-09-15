@@ -2,7 +2,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import json
-import seaborn as sns
 
 
 def draw_particle_count():
@@ -27,32 +26,33 @@ def draw_particle_count():
 
         return df
 
-    # C12_corr = load_correct_data('Data/tabl_C12.dat')
-    # C13_corr = load_correct_data('Data/tabl_C13.dat')
-    # N12_corr = load_correct_data('Data/tabl_N12.dat')
-    # N13_corr = load_correct_data('Data/tabl_N13.dat')
+    C12_corr = load_correct_data('Data/tabl_C12.dat')
+    C13_corr = load_correct_data('Data/tabl_C13.dat')
+    N12_corr = load_correct_data('Data/tabl_N12.dat')
+    N13_corr = load_correct_data('Data/tabl_N13.dat')
 
-    plt.subplots(2, 2, sharex='col', sharey='row', figsize=(16, 9))
+    plt.subplots(2, 2, sharex='col', sharey='row', figsize=(14, 10))
 
     names = [r'$^{12}_6C$', r'$^{13}_6C$', r'$^{12}_7N$', r'$^{13}_7N$']
     data = [C12, C13, N12, N13]
-    # data_corr = [C12_corr, C13_corr, N12_corr, N13_corr]
+    data_corr = [C12_corr, C13_corr, N12_corr, N13_corr]
     for idx in range(len(data)):
         plt.subplot(2, 2, idx + 1)
-        plt.scatter(data[idx]['energy'], data[idx]['avg_count'], s=5, label=names[idx])
+        plt.scatter(data[idx]['energy'], data[idx]['avg_count'], s=5, label='Our implementation')
         plt.errorbar(data[idx]['energy'], data[idx]['avg_count'],
                      xerr=None, yerr=data[idx]['avg_count'] / np.sqrt(1e4))
 
-        # plt.scatter(data_corr[idx]['energy'], data_corr[idx]['avg_count'], s=20, label='correct ' + names[idx])
+        plt.scatter(data_corr[idx]['energy'], data_corr[idx]['avg_count'], s=20, label='Fermi break-up (F77)')
 
         plt.minorticks_on()
         plt.grid(True)
         plt.grid(True, which='minor', linestyle='--', alpha=0.4)
         plt.xlabel('Excitation energy MeV/nucleon')
-        plt.ylabel('average fragment count')
+        plt.ylabel('Average fragment multiplicity')
+        plt.title('Fermi break-up of ' + names[idx])
         plt.legend()
 
-    plt.suptitle("Average fragment count with Fermi Break Up")
+    # plt.suptitle("Average fragment count with Fermi Break Up")
     plt.tight_layout()
     plt.savefig("Data/img/FragmentCount.png", bbox_inches='tight')
     plt.show()
@@ -132,7 +132,7 @@ def draw_momentum():
         plt.title('y vs zOx')
         plt.legend()
 
-    plt.suptitle(r"Fermi Break Up of moving $^{12}_6$N")
+    plt.suptitle(r"Fermi break-up of $^{12}_6$N")
     plt.tight_layout()
     plt.savefig('Data/img/FragmentDistribution2D.png', bbox_inches='tight')
     plt.show()
@@ -192,13 +192,13 @@ def draw_momentum_distr():
         plt.title(f'e-distribution with {names[i]}')
         plt.legend()
 
-    plt.suptitle(r"Fermi Break Up of moving $^{12}_6$N")
+    plt.suptitle(r"Fermi break-up of $^{12}_6$N")
     plt.tight_layout()
     plt.savefig('Data/img/FragmentDistribution.png', bbox_inches='tight')
     plt.show()
 
 
-# draw_momentum_distr()
+draw_momentum_distr()
 
 
 def get_az_df(data):
@@ -235,4 +235,4 @@ def draw_distribution():
     plt.show()
 
 
-draw_distribution()
+# draw_distribution()
