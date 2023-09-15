@@ -10,7 +10,6 @@
 #include <vector>
 #include <queue>
 
-#include "globals.hh"
 #include "G4Fragment.hh"
 #include "G4ReactionProductVector.hh"
 #include "G4IonTable.hh"

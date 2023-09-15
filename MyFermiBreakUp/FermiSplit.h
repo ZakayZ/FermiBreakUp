@@ -6,6 +6,7 @@
 #define FERMIBREAKUP_MYFERMIBREAKUP_FERMIPARTICLESPLIT_ICC_
 
 #include <vector>
+#include <algorithm>
 
 #include "FragmentPool/Fragments/FermiFragment.h"
 #include "Utilities/IntegerPartition.h"

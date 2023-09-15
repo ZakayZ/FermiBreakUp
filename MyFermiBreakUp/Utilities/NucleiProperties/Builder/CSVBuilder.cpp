@@ -61,8 +61,8 @@ void CSVBuilder::BuildTable(FermiNucleiProperties::MassMap& data) const {
     throw std::runtime_error("no nuclei mass found");
   }
 
-  MassNumber m;
-  ChargeNumber c;
+  MassNumber m = 0_m;
+  ChargeNumber c = 0_c;
   FermiFloat mass;
   while (in >> line) {
     line += ',';

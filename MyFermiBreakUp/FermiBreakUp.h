@@ -5,6 +5,8 @@
 #ifndef FERMIBREAKUP_MYFERMIBREAKUP_FERMIBREAKUP_H_
 #define FERMIBREAKUP_MYFERMIBREAKUP_FERMIBREAKUP_H_
 
+#include <memory>
+
 #include "FermiParticle.h"
 #include "FermiConfigurations.h"
 #include "VFermiBreakUp.h"

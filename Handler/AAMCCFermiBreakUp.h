@@ -20,7 +20,9 @@ class AAMCCFermiBreakUp : public G4VFermiBreakUp {
 
   void BreakFragment(G4FragmentVector* fragments_ptr, G4Fragment* fragment) override;
 
-  G4bool IsApplicable(G4int Z, G4int A, G4double mass) const override;
+  static G4bool IsFermiPossible(G4int Z, G4int A, G4double excitation_energy);
+
+  G4bool IsApplicable(G4int Z, G4int A, G4double excitation_energy) const override;
 
  private:
   std::unique_ptr<VFermiBreakUp> fermi_model_;

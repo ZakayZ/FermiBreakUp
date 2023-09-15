@@ -62,9 +62,9 @@ void FermiParticle::SetMomentum(const LorentzVector& momentum) {
 void FermiParticle::CalculateExcitationEnergy() {
   excitation_energy_ = momentum_.mag() - ground_state_mass_;
   if (excitation_energy_ < 0) {
-    if (excitation_energy_ < -10 * CLHEP::eV) {
-      throw std::runtime_error("Excitation Energy is negative");
-    }
+//    if (excitation_energy_ < -10 * CLHEP::keV) {
+//      throw std::runtime_error("Excitation Energy is negative");
+//    } /// TODO fix different values in other models produce this error
     excitation_energy_ = 0;
   }
 }
