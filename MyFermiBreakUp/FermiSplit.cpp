@@ -3,11 +3,11 @@
 //
 
 #include <numeric>
+#include <algorithm>
 
 #include "FermiSplit.h"
 #include "FragmentPool/FermiFragmentPool.h"
 #include "Utilities/IntegerPartition.h"
-#include "Utilities/LRUCache.h"
 
 FermiSplit::FermiSplit(NucleiData nuclei_data, const uint32_t fragment_count) {
   auto error = ValidateInputs(nuclei_data, fragment_count);
@@ -62,7 +62,7 @@ const std::vector<FragmentVector>& FermiSplit::GetSplits() const {
 
 std::string FermiSplit::ValidateInputs(NucleiData nuclei_data, uint32_t fragment_count) {
   std::string error_message = "";
-  if (nuclei_data.mass_number < 0_m || nuclei_data.charge_number < 0_c || fragment_count < 0) {
+  if (nuclei_data.mass_number < 0_m || nuclei_data.charge_number < 0_c) {
     error_message = "Non valid arguments A = " + std::to_string(nuclei_data.mass_number) + " Z = "
         + std::to_string(nuclei_data.charge_number) + " #fragments = " + std::to_string(fragment_count);
   }
@@ -98,7 +98,7 @@ std::vector<FragmentVector> FermiSplit::GeneratePossibleSplits(
     const Partition& mass_partition, const Partition& charge_partition, const std::vector<size_t>& fragment_variation) {
   pool::FermiFragmentPool fragment_pool;
 
-  auto splits_count =
+  size_t splits_count =
       std::accumulate(fragment_variation.begin(), fragment_variation.end(), 1, std::multiplies<size_t>());
 
   auto fragment_count = mass_partition.size();

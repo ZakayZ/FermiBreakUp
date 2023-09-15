@@ -8,17 +8,17 @@
 #include "Utilities/NucleiProperties/NucleiProperties.h"
 #include "Utilities/NucleiProperties/Builder/CSVBuilder.h"
 
-using namespace properties;
+static const std::string kBasePath = "../../Data";
 
 TEST(TableTest, DefaultPropertiesTest) {
-  std::ifstream table_data("../Data/small_nuclei_data.csv");
+  std::ifstream table_data(kBasePath + "/small_nuclei_data.csv");
   ASSERT_TRUE(table_data.is_open());
 
   std::string headers;
   table_data >> headers;
 
   int idx;
-  NucleiProperties properties;
+  properties::NucleiProperties properties;
   while(table_data >> idx) {
     char s;
     MassNumber m;
@@ -32,14 +32,14 @@ TEST(TableTest, DefaultPropertiesTest) {
 }
 
 TEST(TableTest, FilePropertiesTest) {
-  std::ifstream table_data("../Data/small_nuclei_data.csv");
+  std::ifstream table_data(kBasePath + "/small_nuclei_data.csv");
   ASSERT_TRUE(table_data.is_open());
 
   std::string headers;
   table_data >> headers;
 
   int idx;
-  NucleiProperties properties(CSVBuilder("../Data/small_nuclei_data.csv"));
+  properties::NucleiProperties properties(properties::CSVBuilder(kBasePath + "/small_nuclei_data.csv"));
   while(table_data >> idx) {
     char s;
     MassNumber m;
