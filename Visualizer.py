@@ -94,23 +94,25 @@ def draw_momentum():
     y_data = parse_momentum('Data/mov_y.data')
     z_data = parse_momentum('Data/mov_z.data')
 
-    plt.subplots(3, 4, figsize=(18, 10))
+    rows = 4
+    columns = 3
+    plt.subplots(rows, columns, figsize=(18, 10))
     data = [stat_data, x_data, y_data, z_data]
     names = ['stationary', 'x', 'y', 'z']
-    for i in range(4):
+    for i in range(rows):
         local_data = data[i]
-        plt.subplot(4, 3, 3 * i + 1)
+        plt.subplot(rows, columns, columns * i + 1)
         plt.grid(True)
         plt.scatter(local_data['z'][1:], np.sqrt(local_data['x'] ** 2 + local_data['y'] ** 2)[1:],
                     s=5, label='fragments', alpha=0.2)
-        plt.scatter(local_data['z'][0], np.sqrt(local_data['x'] ** 2 + local_data['y'] ** 2)[0], label='initial',
+        plt.scatter(local_data['z'][0], np.sqrt(local_data['x'] ** 2 + local_data['y'] ** 2)[0], label='initial fragment ',
                     color='red')
         plt.xlabel('z, GeV/nucleon')
         plt.ylabel(r'$\sqrt{x^2 + y^2}$, GeV/nucleon')
         plt.title('z vs xOy')
         plt.legend()
 
-        plt.subplot(4, 3, 3 * i + 2)
+        plt.subplot(rows, columns, columns * i + 2)
         plt.grid(True)
         plt.scatter(local_data['x'][1:], np.sqrt(local_data['z'] ** 2 + local_data['y'] ** 2)[1:],
                     s=5, label='fragments', alpha=0.2)
@@ -121,7 +123,7 @@ def draw_momentum():
         plt.title('x vs yOz')
         plt.legend()
 
-        plt.subplot(4, 3, 3 * i + 3)
+        plt.subplot(rows, columns, columns * i + 3)
         plt.grid(True)
         plt.scatter(local_data['y'][1:], np.sqrt(local_data['x'] ** 2 + local_data['z'] ** 2)[1:],
                     s=5, label='fragments', alpha=0.2)
@@ -132,13 +134,13 @@ def draw_momentum():
         plt.title('y vs zOx')
         plt.legend()
 
-    plt.suptitle(r"Fermi break-up of $^{12}_6$N")
+    plt.suptitle(r"Fermi break-up of $^{12}_6$N with excitation energy 5 MeV/nucleon")
     plt.tight_layout()
     plt.savefig('Data/img/FragmentDistribution2D.png', bbox_inches='tight')
     plt.show()
 
 
-# draw_momentum()
+draw_momentum()
 
 
 def draw_momentum_distr():
@@ -147,16 +149,17 @@ def draw_momentum_distr():
     y_data = parse_momentum('Data/mov_y.data')
     z_data = parse_momentum('Data/mov_z.data')
 
-    plt.subplots(4, 4, figsize=(18, 10), sharey="row")
+    rows = 3
+    columns = 4
+    plt.subplots(rows, columns, figsize=(18, 10), sharey="row")
     data = [x_data, y_data, z_data, stat_data]
     names = ['x = 10 GeV/nucleon', 'y = 10 GeV/nucleon', 'z = 10 GeV/nucleon', 'e = 10 GeV/nucleon', ]
-    val = []
     bins = 50
-    for i in range(4):
+    for i in range(rows):
         local_data = data[i]
         weights = 100 * np.ones_like(local_data['x'][1:])/float(len(local_data['x'][1:]))
 
-        plt.subplot(4, 4, 4 * i + 1)
+        plt.subplot(rows, 4, columns * i + 1)
         plt.grid(True)
         plt.hist(local_data['x'][1:], bins=bins, weights=weights)
         plt.xlabel('x component, GeV/nucleon')
@@ -165,7 +168,7 @@ def draw_momentum_distr():
         plt.title(f'x-distribution with {names[i]}')
         plt.legend()
 
-        plt.subplot(4, 4, 4 * i + 2)
+        plt.subplot(rows, columns, columns * i + 2)
         plt.grid(True)
         plt.hist(local_data['y'][1:], bins=bins, weights=weights)
         plt.axvline(x=(10 if i == 1 else 0), color='red', label="initial")
@@ -174,7 +177,7 @@ def draw_momentum_distr():
         plt.title(f'y-distribution with {names[i]}')
         plt.legend()
 
-        plt.subplot(4, 4, 4 * i + 3)
+        plt.subplot(rows, columns, columns * i + 3)
         plt.grid(True)
         plt.hist(local_data['z'][1:], bins=bins, weights=weights)
         plt.axvline(x=(10 if i == 2 else 0), color='red', label="initial")
@@ -183,7 +186,7 @@ def draw_momentum_distr():
         plt.title(f'z-distribution with {names[i]}')
         plt.legend()
 
-        plt.subplot(4, 4, 4 * i + 4)
+        plt.subplot(rows, columns, columns * i + 4)
         plt.grid(True)
         plt.hist(local_data['e'][1:], bins=bins, weights=weights)
         plt.axvline(x=10, color='red', label="initial")
@@ -192,13 +195,13 @@ def draw_momentum_distr():
         plt.title(f'e-distribution with {names[i]}')
         plt.legend()
 
-    plt.suptitle(r"Fermi break-up of $^{12}_6$N")
+    plt.suptitle(r"Fermi break-up of $^{12}_6$N with excitation energy 5 MeV/nucleon")
     plt.tight_layout()
     plt.savefig('Data/img/FragmentDistribution.png', bbox_inches='tight')
     plt.show()
 
 
-draw_momentum_distr()
+# draw_momentum_distr()
 
 
 def get_az_df(data):
@@ -213,8 +216,8 @@ def get_az_df(data):
 
 
 def draw_distribution():
-    elements = ["C12_05", "C12_4", "C13_05", "C13_4", "N12_05", "N12_4", "N13_05", "N13_4", "Ag197_05", "Ag197_4"]
-    names = [r"$^{12}_6C$", r"$^{13}_6C$", r"$^{12}_7N$", r"$^{13}_7N$", r"$^{197}_{79}Ag$"]
+    elements = ["C12_05", "C12_4", "C13_05", "C13_4", "N12_05", "N12_4", "N13_05", "N13_4", "Au197_05", "Au197_4"]
+    names = [r"$^{12}_6C$", r"$^{13}_6C$", r"$^{12}_7N$", r"$^{13}_7N$", r"$^{197}_{79}Au$"]
     plt.subplots(2, 5, figsize=(18, 10))
     for id, element in enumerate(elements):
         with open(f"Data/{element}_distr.dat", "r") as f:

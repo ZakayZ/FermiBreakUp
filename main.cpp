@@ -139,7 +139,7 @@ int main() {
 //
 //  CalculateFragments(13_m, 7_c, "../Data/N13.csv");
 
-//  CalculateFragmentsHandler(12_m, 6_c, "../Data/C12_05_distr.dat", 0.5 * CLHEP::MeV);
+  CalculateFragmentsHandler(12_m, 6_c, "../Data/C12_05_distr.dat", 0.5 * CLHEP::MeV);
 //
 //  CalculateFragmentsHandler(12_m, 6_c, "../Data/C12_4_distr.dat", 4 * CLHEP::MeV);
 //
@@ -155,13 +155,13 @@ int main() {
 //
 //  CalculateFragmentsHandler(13_m, 7_c, "../Data/N13_4_distr.dat", 4 * CLHEP::MeV);
 
-//  CalculateFragmentsHandler(197_m, 79_c, "../Data/Ag197_05_distr.dat", 0.5 * CLHEP::MeV, 1000);
+//  CalculateFragmentsHandler(197_m, 79_c, "../Data/Au197_05_distr.dat", 0.5 * CLHEP::MeV, 1000);
 //
-//  CalculateFragmentsHandler(197_m, 79_c, "../Data/Ag197_4_distr.dat", 4 * CLHEP::MeV, 1000);
+//  CalculateFragmentsHandler(197_m, 79_c, "../Data/Au197_4_distr.dat", 4 * CLHEP::MeV, 1000);
 
 //  G4double energy = 4;
-//  CalculateMomentumHandler(197, 79, "../Data/arg_stat.data", 197 * energy * CLHEP::MeV, {0, 0, 0}, 1000);
-//  CalculateMomentumHandler(197, 79, "../Data/arg_mov_x.data", 197 * energy * CLHEP::MeV, {197 * energy * CLHEP::GeV, 0, 0}, 1000);
-//  CalculateMomentumHandler(197, 79, "../Data/arg_mov_y.data", 197 * energy * CLHEP::MeV, {0, 197 * energy * CLHEP::GeV, 0}, 1000);
-//  CalculateMomentumHandler(197, 79, "../Data/arg_mov_z.data", 197 * energy * CLHEP::MeV, {0, 0, 197 * energy * CLHEP::GeV}, 1000);
+//  CalculateMomentumHandler(197, 79, "../Data/au_stat.data", 197 * energy * CLHEP::MeV, {0, 0, 0}, 1000);
+//  CalculateMomentumHandler(197, 79, "../Data/au_mov_x.data", 197 * energy * CLHEP::MeV, {197 * energy * CLHEP::GeV, 0, 0}, 1000);
+//  CalculateMomentumHandler(197, 79, "../Data/au_mov_y.data", 197 * energy * CLHEP::MeV, {0, 197 * energy * CLHEP::GeV, 0}, 1000);
+//  CalculateMomentumHandler(197, 79, "../Data/au_mov_z.data", 197 * energy * CLHEP::MeV, {0, 0, 197 * energy * CLHEP::GeV}, 1000);
 }

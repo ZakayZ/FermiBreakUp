@@ -183,7 +183,7 @@ ExcitationHandler::Condition ExcitationHandler::DefaultPhotonEvaporationConditio
 }
 
 bool ExcitationHandler::IsStable(const G4Fragment& fragment) const {
-  return fragment.GetExcitationEnergy() < 0; /// TODO other rhs
+  return fragment.GetExcitationEnergy() < 0; /// TODO variable threshold
 }
 
 void ExcitationHandler::ApplyMultiFragmentation(G4SmartFragment fragment,
@@ -310,20 +310,6 @@ std::vector<G4ReactionProduct> ExcitationHandler::ConvertResults(const G4SmartFr
   std::vector<G4ReactionProduct> reaction_products;
   reaction_products.reserve(results.size());
   auto ion_table = G4ParticleTable::GetParticleTable()->GetIonTable();
-
-  /// TODO why?????????????
-  // in the case of dummy de-excitation, excitation energy is transfered into kinetic energy
-//  if (!isActive && 0 == kk) {
-//    G4double mass = frag->GetGroundStateMass();
-//    G4double ptot = (frag->GetMomentum()).vect().mag();
-//    G4double etot = (frag->GetMomentum()).e();
-//    G4double fac = (etot <= mass || 0.0 == ptot) ? 0.0
-//                                                 : std::sqrt((etot - mass) * (etot + mass)) / ptot;
-//    G4LorentzVector lv((frag->GetMomentum()).px() * fac,
-//                       (frag->GetMomentum()).py() * fac,
-//                       (frag->GetMomentum()).pz() * fac, etot);
-//    frag->SetMomentum(lv);
-//  }
 
   for (auto& fragment_ptr : results) {
     auto fragment_definition = SpecialParticleDefinition(*fragment_ptr);
