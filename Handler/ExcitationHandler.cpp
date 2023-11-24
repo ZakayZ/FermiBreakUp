@@ -183,7 +183,7 @@ ExcitationHandler::Condition ExcitationHandler::DefaultPhotonEvaporationConditio
 }
 
 bool ExcitationHandler::IsStable(const G4Fragment& fragment) const {
-  return fragment.GetExcitationEnergy() < 0; /// TODO variable threshold
+  return fragment.GetExcitationEnergy() < stable_threshold_;
 }
 
 void ExcitationHandler::ApplyMultiFragmentation(G4SmartFragment fragment,

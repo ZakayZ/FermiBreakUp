@@ -85,6 +85,11 @@ class ExcitationHandler {
     return SetPhotonEvaporationCondition(DefaultPhotonEvaporationCondition());
   }
 
+  ExcitationHandler& SetStableThreshold(Float threshold) {
+    stable_threshold_ = threshold;
+    return *this;
+  }
+
   /// parameters getters
   std::unique_ptr<G4VMultiFragmentation>& GetMultiFragmentation() { return multi_fragmentation_model_; }
 
@@ -113,6 +118,8 @@ class ExcitationHandler {
   Condition& GetPhotonEvaporationCondition() { return photon_evaporation_condition_; }
 
   const Condition& GetPhotonEvaporationCondition() const { return photon_evaporation_condition_; }
+
+  Float GetStableThreshold() const { return stable_threshold_; }
 
  private:
   using G4SmartFragment = std::unique_ptr<G4Fragment>;
@@ -165,6 +172,8 @@ class ExcitationHandler {
   Condition fermi_condition_;
   Condition evaporation_condition_;
   Condition photon_evaporation_condition_;
+
+  Float stable_threshold_ = 0;
 };
 
 #endif //FERMIBREAKUP_HANDLER_EXCITATIONHANDLER_H_
