@@ -102,7 +102,6 @@ std::vector<G4ReactionProduct> ExcitationHandler::BreakItUp(const G4Fragment& fr
 
       /// infinite loop
       if (iteration_count == EvaporationIterationThreshold) {
-        /// exception safety
         CleanUp(results, evaporation_queue, photon_evaporation_queue);
 
         EvaporationError(fragment, *fragment_ptr, iteration_count);
@@ -121,7 +120,6 @@ std::vector<G4ReactionProduct> ExcitationHandler::BreakItUp(const G4Fragment& fr
         continue;
       }
 
-      /// exception safety
       CleanUp(results, evaporation_queue, photon_evaporation_queue);
       throw std::runtime_error(ErrorNoModel);
     }
@@ -136,7 +134,6 @@ std::vector<G4ReactionProduct> ExcitationHandler::BreakItUp(const G4Fragment& fr
         continue;
       }
 
-      /// exception safety
       CleanUp(results, evaporation_queue, photon_evaporation_queue);
       throw std::runtime_error(ErrorNoModel);
     }
@@ -144,9 +141,7 @@ std::vector<G4ReactionProduct> ExcitationHandler::BreakItUp(const G4Fragment& fr
 
   auto reaction_products = ConvertResults(results);
 
-  for (auto ptr : results) {
-    delete ptr;
-  }
+  CleanUp(results, evaporation_queue, photon_evaporation_queue);
 
   return reaction_products;
 }

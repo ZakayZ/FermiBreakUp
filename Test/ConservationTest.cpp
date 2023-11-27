@@ -18,7 +18,8 @@ TEST(ConservationTests, MassAndChargeConservation) {
   for (size_t t = 0; t < tries; ++t) {
     G4int mass = rand() % max_nuclei + 1;
     G4int charge = rand() % (mass + 1);
-    G4double energy = (rand() % 10 + 1) * CLHEP::MeV * FermiFloat(mass);
+    G4double energy_per_nuclei = (rand() % 10 + 1);
+    G4double energy = energy_per_nuclei * CLHEP::MeV * FermiFloat(mass);
     auto particle =
         G4Fragment(mass, charge, G4LorentzVector(0, 0, 0, G4NucleiProperties::GetNuclearMass(mass, charge) + energy));
     G4int charge_total = 0;
@@ -27,14 +28,14 @@ TEST(ConservationTests, MassAndChargeConservation) {
       auto fragments = model.BreakItUp(particle);
       for (auto& fragment : fragments) {
         mass_total += fragment.GetDefinition()->GetAtomicMass();
-        charge_total += fragment.GetDefinition()->GetPDGCharge();
+        charge_total += fragment.GetDefinition()->GetAtomicNumber();
       }
 
-      ASSERT_EQ(mass_total, mass);
+      ASSERT_EQ(mass_total, mass) << "violates mass conservation: " << mass << ' ' << charge << ' ' << energy_per_nuclei;
     }
 
     /// test mean, because of multifragmentation model
-    ASSERT_NEAR(G4double(charge_total) / runs, charge, charge / std::sqrt(runs));
+    ASSERT_NEAR(G4double(charge_total) / runs, charge, charge / std::sqrt(runs)) << "violates charge conservation: " << mass << ' ' << charge << ' ' << energy_per_nuclei;
   }
 }
 
