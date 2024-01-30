@@ -26,7 +26,9 @@ FermiFloat FermiNucleiProperties::GetNuclearMass(MassNumber mass_number, ChargeN
   }
 
 //  throw std::runtime_error("Unknown particle");
+  #ifdef _DEBUG
   std::cerr << "Unknown particle A = " + std::to_string(mass_number) + ", Z = " + std::to_string(charge_number) << '\n';
+  #endif
   return NuclearMass(mass_number, charge_number);
 }
 

@@ -26,7 +26,7 @@ FermiSplit::FermiSplit(NucleiData nuclei_data, const uint32_t fragment_count) {
       if (fragment_variations.size() == fragment_count) {
         auto additional_splits = GeneratePossibleSplits(mass_partition, charge_partition, fragment_variations);
 
-        AddValidSplits(additional_splits);
+        AddValidSplits(std::move(additional_splits));
       }
     }
   }
@@ -61,7 +61,7 @@ const std::vector<FragmentVector>& FermiSplit::GetSplits() const {
 }
 
 std::string FermiSplit::ValidateInputs(NucleiData nuclei_data, uint32_t fragment_count) {
-  std::string error_message = "";
+  std::string error_message;
   if (nuclei_data.mass_number < 0_m || nuclei_data.charge_number < 0_c) {
     error_message = "Non valid arguments A = " + std::to_string(nuclei_data.mass_number) + " Z = "
         + std::to_string(nuclei_data.charge_number) + " #fragments = " + std::to_string(fragment_count);
@@ -99,7 +99,7 @@ std::vector<FragmentVector> FermiSplit::GeneratePossibleSplits(
   pool::FermiFragmentPool fragment_pool;
 
   size_t splits_count =
-      std::accumulate(fragment_variation.begin(), fragment_variation.end(), 1, std::multiplies<size_t>());
+      std::accumulate(fragment_variation.begin(), fragment_variation.end(), 1, std::multiplies<>());
 
   auto fragment_count = mass_partition.size();
 
@@ -115,25 +115,30 @@ std::vector<FragmentVector> FermiSplit::GeneratePossibleSplits(
     size_t offset = 0;
     size_t step = fragment_variation[fragment_idx];
     for (auto fragment_it = fragment_range.first; fragment_it != fragment_range.second; ++fragment_it) {
-      for (size_t pos = offset++; pos < splits_count; pos += step) {
-        splits[pos].push_back(fragment_it->second);
+      for (size_t pos = offset; pos < splits_count; pos += step) {
+        splits[pos].push_back(*fragment_it);
       }
+      ++offset;
     }
   }
   return splits;
 }
 
-void FermiSplit::AddValidSplits(const std::vector<FragmentVector>& possible_splits) {
+void FermiSplit::AddValidSplits(std::vector<FragmentVector>&& possible_splits) {
+  if (possible_splits.empty()) [[unlikely]] {
+    return;
+  }
+
   for (auto split : possible_splits) {
-    std::sort(split.begin(), split.end(), std::greater<const FermiFragment*>());
+    std::sort(split.begin(), split.end(), std::greater<>());
     /// greater, because they already partially sorted by greater
   }
   /// move splits into main vector (eliminating a few of them that are repeated)
-  splits_.emplace_back(possible_splits[0]);
-  for (auto& split : possible_splits) {
-    if (splits_.back() == split) {
+  splits_.emplace_back(std::move(possible_splits[0]));
+  for (auto it = possible_splits.begin() + 1; it != possible_splits.end(); ++it) {
+    if (splits_.back() == *it) {
       continue;
     }
-    splits_.emplace_back(split);
+    splits_.emplace_back(std::move(*it));
   }
 }

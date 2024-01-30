@@ -16,10 +16,10 @@ using namespace CLHEP;
 
 namespace pool {
 
-std::unique_ptr<FermiFragmentPool::Map> FermiFragmentPool::fragments_pool_ = nullptr;
+std::unique_ptr<FermiFragmentPool::Storage> FermiFragmentPool::fragments_pool_ = nullptr;
 
 FermiFragmentPool::FermiFragmentPool() {
-  if (fragments_pool_ == nullptr) {
+  if (fragments_pool_ == nullptr) [[unlikely]] {
     Build(DefaultBuilder());
   }
 }
@@ -29,24 +29,24 @@ FermiFragmentPool::FermiFragmentPool(const VPoolBuilder& builder) {
 }
 
 size_t FermiFragmentPool::Count(MassNumber mass_number, ChargeNumber charge_number) const {
-  return Count({mass_number, charge_number});
+  return fragments_pool_->Count(mass_number, charge_number);
 }
 
 size_t FermiFragmentPool::Count(NucleiData nuclei) const {
-  return fragments_pool_->count(nuclei);
+  return fragments_pool_->Count(nuclei);
 }
 
 FermiFragmentPool::RangeIterators FermiFragmentPool::GetFragments(MassNumber mass_number,
                                                                   ChargeNumber charge_number) const {
-  return GetFragments({mass_number, charge_number});
+  return fragments_pool_->GetFragments(mass_number, charge_number);
 }
 
 FermiFragmentPool::RangeIterators FermiFragmentPool::GetFragments(NucleiData nuclei) const {
-  return fragments_pool_->equal_range(nuclei);
+  return fragments_pool_->GetFragments(nuclei);
 }
 
 void FermiFragmentPool::Build(const VPoolBuilder& builder) {
-  fragments_pool_ = std::make_unique<Map>();
+  fragments_pool_ = std::make_unique<Storage>();
   builder.Build(*fragments_pool_);
 }
 

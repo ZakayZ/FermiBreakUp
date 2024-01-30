@@ -11,8 +11,8 @@ RUN apt-get update && \
 # load clhep
 WORKDIR /root
 
-RUN wget http://proj-clhep.web.cern.ch/proj-clhep/DISTRIBUTION/tarFiles/clhep-2.3.4.6.tgz && tar -xvf clhep-2.3.4.6.tgz
-RUN cd 2.3.4.6 && mkdir build && cd build && cmake ../CLHEP && make -j10 && make install
+RUN wget https://proj-clhep.web.cern.ch/proj-clhep/dist1/clhep-2.4.7.1.tgz && tar -xvf clhep-2.4.7.1.tgz
+RUN cd 2.4.7.1 && mkdir build && cd build && cmake ../CLHEP && make -j10 && make install
 
 # load geant4
 WORKDIR /root

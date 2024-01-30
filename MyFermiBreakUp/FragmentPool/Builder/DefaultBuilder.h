@@ -12,10 +12,7 @@ namespace pool {
 
 class DefaultBuilder : public VPoolBuilder {
  public:
-  void Build(FermiFragmentPool::Map& map) const override;
-
- private:
-  void AddFragment(FermiFragmentPool::Map& map, const FermiFragment& fragment) const;
+  void Build(FermiFragmentPool::Storage& map) const override;
 };
 
 } // namespace pool

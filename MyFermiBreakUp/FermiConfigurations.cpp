@@ -23,6 +23,14 @@ VFermiConfigurations& FermiConfigurations::GenerateSplits(NucleiData nuclei_data
   for (uint32_t particle_count = 2; particle_count <= max_fragments_count; particle_count++) {
     /// initialize configuration for k fragments
     for (auto& split : FermiSplit(nuclei_data, particle_count)) {
+      FermiInt mass = 0;
+      for (auto& el : split) {
+        mass += FermiInt(el->GetMassNumber());
+      }
+      if (FermiInt(nuclei_data.mass_number) != mass) {
+        std::cout << "amogus\n";
+      }
+
       /// non-normalized statistical weight for given channel with k fragments
       auto split_weight = ConfigurationProperties::DecayProbability(split, nuclei_data.mass_number, total_energy);
       if (split_weight != 0) {

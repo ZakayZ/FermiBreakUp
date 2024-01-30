@@ -11,7 +11,7 @@ namespace pool {
 
 class VPoolBuilder {
  public:
-  virtual void Build(FermiFragmentPool::Map& map) const = 0;
+  virtual void Build(FermiFragmentPool::Storage& map) const = 0;
 
   virtual ~VPoolBuilder() = default;
 };

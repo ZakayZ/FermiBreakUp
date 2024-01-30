@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 project(FermiBreakUp)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 
 set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wpedantic -Werror")
 
@@ -12,7 +12,6 @@ set(Utilities
         Utilities/IntegerPartition.cpp
         Utilities/NucleiProperties/VNucleiProperties.cpp
         Utilities/NucleiProperties/FermiNucleiProperties.cpp
-        #        Utilities/NucleiProperties/NativeNucleiProperties.cpp
         Utilities/NucleiProperties/Builder/CSVBuilder.cpp
         Utilities/NucleiProperties/Builder/DefaultBuilder.cpp
         Utilities/ConfigurationProperties.cpp
@@ -25,6 +24,7 @@ set(PhaseSpace
 
 set(FragmentPool
         FragmentPool/FermiFragmentPool.cpp
+        FragmentPool/FragmentsStorage.cpp
         FragmentPool/Builder/DefaultBuilder.cpp
         FragmentPool/Fragments/FermiFragment.cpp
         FragmentPool/Fragments/StableFermiFragment.cpp

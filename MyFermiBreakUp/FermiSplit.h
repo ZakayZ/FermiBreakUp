@@ -39,7 +39,7 @@ class FermiSplit {
                                                             const Partition& charge_partition,
                                                             const std::vector<size_t>& fragment_variation);
 
-  void AddValidSplits(const std::vector<FragmentVector>& possible_splits);
+  void AddValidSplits(std::vector<FragmentVector>&& possible_splits);
 
   std::vector<FragmentVector> splits_;
 };
