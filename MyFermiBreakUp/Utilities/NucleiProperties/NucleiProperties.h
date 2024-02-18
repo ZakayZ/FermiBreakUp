@@ -15,6 +15,7 @@
 
 namespace properties {
 
+/// it is possible to use polymorphism here, but this way no inline table access is possible and it is a bottleneck
 using NucleiProperties = Singleton<FastNucleiProperties>;
 
 static_assert(std::is_base_of_v<VNucleiProperties, std::remove_reference_t<decltype(NucleiProperties::Instance())>>,

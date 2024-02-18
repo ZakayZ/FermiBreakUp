@@ -49,6 +49,7 @@ set(FermiBreakUpModel
         FermiSplit.cpp
         FermiConfigurations.cpp
         CachedFermiConfigurations.cpp
+        FastFermiConfiguration.cpp
         FermiBreakUp.cpp
 )
 

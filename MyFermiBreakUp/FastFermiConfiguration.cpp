@@ -1,25 +1,25 @@
 //
-// Created by Artem Novikov on 24.05.2023.
+// Created by Artem Novikov on 18.02.2024.
 //
 
 #include "Utilities/ConfigurationProperties.h"
 #include "Utilities/Randomizer.h"
 
-#include "CachedFermiConfigurations.h"
+#include "FastFermiConfiguration.h"
 
-CachedFermiConfigurations::CachedFermiConfigurations(NucleiData nuclei_data, FermiFloat total_energy) {
-  CachedFermiConfigurations::GenerateSplits(nuclei_data, total_energy);
+FastFermiConfiguration::FastFermiConfiguration(NucleiData nuclei_data, FermiFloat total_energy) {
+  FastFermiConfiguration::GenerateSplits(nuclei_data, total_energy);
 }
 
-VFermiConfigurations& CachedFermiConfigurations::GenerateSplits(NucleiData nuclei_data, FermiFloat total_energy) {
+VFermiConfigurations& FastFermiConfiguration::GenerateSplits(NucleiData nuclei_data, FermiFloat total_energy) {
   auto max_fragments_count = FermiUInt(nuclei_data.mass_number);
-  if (nuclei_data != last_nuclei_) {
-    last_nuclei_ = nuclei_data;
-    cached_configurations_.clear();
+  auto& cache = cached_configurations_[nuclei_data];
+  if (cache.empty()) {
+    cache.reserve(100);
 
     for (uint32_t particle_count = 2; particle_count <= max_fragments_count; ++particle_count) {
       for (auto& split : FermiSplit(nuclei_data, particle_count)) {
-        cached_configurations_.emplace_back(std::move(split));  /// split is moved!
+        cache.emplace_back(std::move(split));  /// split is moved!
       }
     }
   }
@@ -28,8 +28,9 @@ VFermiConfigurations& CachedFermiConfigurations::GenerateSplits(NucleiData nucle
   weights_.clear();
 
   FermiFloat total_weight = 0;
-  for(size_t i = 0; i < cached_configurations_.size(); ++i) {
-    auto split_weight = ConfigurationProperties::DecayProbability(cached_configurations_[i], nuclei_data.mass_number, total_energy);
+  for (size_t i = 0; i < cache.size(); ++i) {
+    auto split_weight =
+        ConfigurationProperties::DecayProbability(cache[i], nuclei_data.mass_number, total_energy);
 
     if (split_weight != 0) {
       total_weight += split_weight;
@@ -45,7 +46,7 @@ VFermiConfigurations& CachedFermiConfigurations::GenerateSplits(NucleiData nucle
   return *this;
 }
 
-std::optional<FragmentVector> CachedFermiConfigurations::ChooseSplit() {
+std::optional<FragmentVector> FastFermiConfiguration::ChooseSplit() {
   if (configurations_.empty()) {
     return {};
   }
@@ -57,7 +58,7 @@ std::optional<FragmentVector> CachedFermiConfigurations::ChooseSplit() {
     accumulated_weight += weights_[i];
 
     if (accumulated_weight >= wheel_result) {
-      return cached_configurations_[configurations_[i]];
+      return cached_configurations_[last_nuclei_][configurations_[i]];
     }
   }
 

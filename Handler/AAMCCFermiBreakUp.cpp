@@ -7,6 +7,7 @@
 #include "G4Fragment.hh"
 #include "AAMCCFermiBreakUp.h"
 #include "FermiBreakUp.h"
+#include "CachedFermiConfigurations.h"
 
 AAMCCFermiBreakUp::AAMCCFermiBreakUp() : fermi_model_(std::make_unique<FermiBreakUp>()) {}
 
@@ -14,8 +15,8 @@ AAMCCFermiBreakUp::AAMCCFermiBreakUp(std::unique_ptr<VFermiBreakUp>&& model) : f
 
 void AAMCCFermiBreakUp::BreakFragment(G4FragmentVector* fragments_ptr, G4Fragment* fragment) {
   auto results = fermi_model_->BreakItUp(FermiParticle(MassNumber(fragment->GetA_asInt()),
-                                                      ChargeNumber(fragment->GetZ_asInt()),
-                                                      fragment->GetMomentum()));
+                                                       ChargeNumber(fragment->GetZ_asInt()),
+                                                       fragment->GetMomentum()));
 
   for (auto& particle : results) {
     fragments_ptr->push_back(new G4Fragment(G4int(particle.GetMassNumber()),

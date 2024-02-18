@@ -34,11 +34,15 @@ const char* ExcitationHandler::ErrorNoModel = "no model was applied, check condi
 ExcitationHandler::ExcitationHandler()
     : multi_fragmentation_model_(DefaultMultiFragmentation()),
       fermi_break_up_model_(DefaultFermiBreakUp()),
+      photon_evaporation_model_(DefaultPhotonEvaporation()),
       evaporation_model_(DefaultEvaporation()),
       multi_fragmentation_condition_(DefaultMultiFragmentationCondition()),
       fermi_condition_(DefaultFermiBreakUpCondition()),
-      evaporation_condition_(DefaultEvaporationCondition()),
-      photon_evaporation_condition_(DefaultPhotonEvaporationCondition()) {
+      photon_evaporation_condition_(DefaultPhotonEvaporationCondition()),
+      evaporation_condition_(DefaultEvaporationCondition()) {
+  evaporation_model_->SetFermiBreakUp(fermi_break_up_model_.get());
+  evaporation_model_->SetPhotonEvaporation(photon_evaporation_model_.get());
+
   G4BosonConstructor pCBos;
   pCBos.ConstructParticle();
 
@@ -63,6 +67,10 @@ ExcitationHandler::ExcitationHandler()
   partTable->SetReadiness();
   ion_table->CreateAllIon();
   ion_table->CreateAllIsomer();
+}
+
+ExcitationHandler::~ExcitationHandler() {
+  auto _ = photon_evaporation_model_.release();  /// otherwise, SegFault in evaporation destructor
 }
 
 void ExcitationHandler::CleanUp(G4FragmentVector& v, std::queue<G4Fragment*>& q1, std::queue<G4Fragment*>& q2) {
@@ -155,8 +163,7 @@ std::unique_ptr<G4VFermiBreakUp> ExcitationHandler::DefaultFermiBreakUp() {
 }
 
 std::unique_ptr<G4VEvaporation> ExcitationHandler::DefaultEvaporation() {
-  auto evaporation = std::make_unique<G4Evaporation>(DefaultPhotonEvaporation().release());
-  evaporation->SetFermiBreakUp(DefaultFermiBreakUp().release());
+  auto evaporation = std::make_unique<G4Evaporation>();
   return evaporation;
 }
 
@@ -270,7 +277,7 @@ void ExcitationHandler::ApplyPhotonEvaporation(std::unique_ptr<G4Fragment> fragm
   if (!IsGroundState(*fragment)) {
     G4FragmentVector fragments;
 
-    evaporation_model_->GetPhotonEvaporation()->BreakUpChain(&fragments, fragment.get());
+    photon_evaporation_model_->BreakUpChain(&fragments, fragment.get());
 
     for (auto fragment_ptr : fragments) {
       results.emplace_back(fragment_ptr);

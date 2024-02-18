@@ -22,9 +22,9 @@ class FermiBreakUp : public VFermiBreakUp {
 
   ~FermiBreakUp() = default;
 
- private:
   static std::unique_ptr<VFermiConfigurations> DefaultConfigurations();
 
+ private:
   std::unique_ptr<VFermiConfigurations> fermi_configurations_;
 };
 
