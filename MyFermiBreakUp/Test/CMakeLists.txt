@@ -45,16 +45,21 @@ set(FragmentPool
         ${LibPath}/FragmentPool/Fragments/He5FermiFragment.cpp
 )
 
+set(Configurations
+        ${LibPath}/Configurations/FermiConfigurations.cpp
+        ${LibPath}/Configurations/CachedFermiConfigurations.cpp
+        ${LibPath}/Configurations/FastFermiConfigurations.cpp
+)
+
 set(FermiBreakUpModel
         ${LibPath}/VFermiBreakUp.cpp
         ${LibPath}/FermiParticle.cpp
         ${LibPath}/FermiSplit.cpp
-        ${LibPath}/FermiConfigurations.cpp
-        ${LibPath}/CachedFermiConfigurations.cpp
         ${LibPath}/FermiBreakUp.cpp
+        ${LibPath}/VFermiConfigurations.cpp
 )
 
-set(Sources ${FermiBreakUpModel} ${FragmentPool} ${Utilities} ${PhaseSpace} ${Tables})
+set(Sources ${FermiBreakUpModel} ${FragmentPool} ${Utilities} ${PhaseSpace} ${Tables} ${Configurations})
 
 enable_testing()
 find_package(GTest REQUIRED)
@@ -64,7 +69,7 @@ set(Tests
         PartitionTest.cpp
         TableTests.cpp
         BreakUpTest.cpp
-        CachedBreakUpTest.cpp)
+)
 
 add_executable(FermiTest ${Tests} ${Sources})
 

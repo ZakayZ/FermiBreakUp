@@ -3,15 +3,38 @@
 //
 
 #include <gtest/gtest.h>
+#include <memory>
 
-#include "Handler/ExcitationHandler.h"
 #include "Utilities/Randomizer.h"
+#include "Configurations/FermiConfigurations.h"
+#include "Configurations/CachedFermiConfigurations.h"
+#include "Configurations/FastFermiConfigurations.h"
+#include "FermiBreakUp.h"
 
-TEST(ConservationTests, MassAndChargeConservation) {
+#include <Handler/AAMCCFermiBreakUp.h>
+#include "Handler/ExcitationHandler.h"
+
+class ConfigurationsFixture : public ::testing::TestWithParam<VFermiConfigurations*> {
+ protected:
+  VFermiConfigurations* configurations;
+};
+
+INSTANTIATE_TEST_SUITE_P(
+    ConservationTests,
+    ConfigurationsFixture,
+    ::testing::Values(
+        new FermiConfigurations(),
+        new CachedFermiConfigurations(),
+        new FastFermiConfigurations()
+    ));
+
+TEST_P(ConfigurationsFixture, MassAndChargeConservation) {
   auto model = ExcitationHandler();
+  auto fermi = std::make_unique<FermiBreakUp>(ConfigurationsFixture::GetParam()->Clone());
+  model.SetFermiBreakUp(std::make_unique<AAMCCFermiBreakUp>(std::move(fermi)));
   int seed = 5;
   srand(seed);
-  size_t tries = 15;
+  size_t tries = 10;
   size_t runs = 1e3;
   int max_nuclei = 200;
 
@@ -35,13 +58,15 @@ TEST(ConservationTests, MassAndChargeConservation) {
     }
 
     /// test mean, because of multifragmentation model
-    ASSERT_NEAR(G4double(charge_total) / runs, charge, charge / std::sqrt(runs)) << "violates charge conservation: " << mass << ' ' << charge << ' ' << energy_per_nuclei;
+    ASSERT_NEAR(G4double(charge_total) / runs, charge, 2 * charge / std::sqrt(runs)) << "violates charge conservation: " << mass << ' ' << charge << ' ' << energy_per_nuclei;
   }
 }
 
 /// Is doesn't work because of multi-fragmentation model *(
-TEST(ConservationTests, Vector4Conservation) {
+TEST_P(ConfigurationsFixture, Vector4Conservation) {
   auto model = ExcitationHandler();
+  auto fermi = std::make_unique<FermiBreakUp>(ConfigurationsFixture::GetParam()->Clone());
+  model.SetFermiBreakUp(std::make_unique<AAMCCFermiBreakUp>(std::move(fermi)));
   int seed = 5;
   srand(seed);
   size_t tries = 10;

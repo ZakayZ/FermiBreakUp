@@ -10,15 +10,17 @@
 #include "FermiSplit.h"
 #include "VFermiConfigurations.h"
 
-class FastFermiConfiguration : public VFermiConfigurations {
+class FastFermiConfigurations : public VFermiConfigurations {
  public:
-  FastFermiConfiguration() = default;
+  FastFermiConfigurations() = default;
 
-  FastFermiConfiguration(NucleiData nuclei_data, FermiFloat total_energy);
+  FastFermiConfigurations(NucleiData nuclei_data, FermiFloat total_energy);
 
   VFermiConfigurations& GenerateSplits(NucleiData nuclei_data, FermiFloat total_energy) override;
 
   std::optional<FragmentVector> ChooseSplit() override;
+
+  [[nodiscard]] std::unique_ptr<VFermiConfigurations> Clone() const override;
 
  private:
   std::vector<size_t> configurations_;

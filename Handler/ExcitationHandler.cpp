@@ -59,7 +59,9 @@ ExcitationHandler::ExcitationHandler()
   pCIon.ConstructParticle();
 
   G4GenericIon* gion = G4GenericIon::GenericIon();
-  gion->SetProcessManager(new G4ProcessManager(gion));
+  auto manager = new G4ProcessManager(gion);
+  manager->SetVerboseLevel(0);
+  gion->SetProcessManager(manager);
 
   G4StateManager::GetStateManager()->SetNewState(G4State_Init); // To let create ions
   G4ParticleTable* partTable = G4ParticleTable::GetParticleTable();
@@ -70,7 +72,7 @@ ExcitationHandler::ExcitationHandler()
 }
 
 ExcitationHandler::~ExcitationHandler() {
-  auto _ = photon_evaporation_model_.release();  /// otherwise, SegFault in evaporation destructor
+  photon_evaporation_model_.release();  /// otherwise, SegFault in evaporation destructor
 }
 
 void ExcitationHandler::CleanUp(G4FragmentVector& v, std::queue<G4Fragment*>& q1, std::queue<G4Fragment*>& q2) {

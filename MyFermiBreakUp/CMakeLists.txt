@@ -43,17 +43,21 @@ set(FragmentPool
         FragmentPool/Fragments/He5FermiFragment.cpp
 )
 
+set(Configurations
+        Configurations/FermiConfigurations.cpp
+        Configurations/CachedFermiConfigurations.cpp
+        Configurations/FastFermiConfigurations.cpp
+)
+
 set(FermiBreakUpModel
         VFermiBreakUp.cpp
         FermiParticle.cpp
         FermiSplit.cpp
-        FermiConfigurations.cpp
-        CachedFermiConfigurations.cpp
-        FastFermiConfiguration.cpp
         FermiBreakUp.cpp
+        VFermiConfigurations.cpp
 )
 
-set(Sources ${FermiBreakUpModel} ${FragmentPool} ${Utilities} ${PhaseSpace} ${Tables})
+set(Sources ${FermiBreakUpModel} ${FragmentPool} ${Utilities} ${PhaseSpace} ${Tables} ${Configurations})
 
 add_library(FermiBreakUp STATIC ${Sources})
 

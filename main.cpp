@@ -1,9 +1,13 @@
 #include <iostream>
 
+#include "Handler/AAMCCFermiBreakUp.h"
 #include "MyFermiBreakUp/FermiBreakUp.h"
 #include "Utilities/NucleiProperties/DataStorage/CSVNuclearMass.h"
 #include "Utilities/NucleiProperties/NucleiProperties.h"
 #include "Handler/ExcitationHandler.h"
+#include "Configurations/FastFermiConfigurations.h"
+#include "Configurations/CachedFermiConfigurations.h"
+#include "Configurations/FermiConfigurations.h"
 
 //#include "TableValues/NucleiPropertiesTable.h"
 //#include "TableValues/NucleiPropertiesTableAME12.h"
@@ -106,6 +110,8 @@ void CalculateFragmentsHandler(MassNumber mass, ChargeNumber charge, const std::
 void CalculateMomentumHandler(G4int mass, G4int charge, const std::string& dump_name, FermiFloat energy,
                        const Vector3& momentum, size_t tests = 1e4) {
   auto model = ExcitationHandler();
+  auto fermi = std::make_unique<FermiBreakUp>(std::make_unique<FastFermiConfigurations>());
+  model.SetFermiBreakUp(std::make_unique<AAMCCFermiBreakUp>(std::move(fermi)));
   std::ofstream out(dump_name);
   auto vec = LorentzVector(momentum.x(), momentum.y(), momentum.z(),
                            std::sqrt(std::pow(G4NucleiProperties::GetNuclearMass(mass, charge) + energy, 2)
@@ -140,9 +146,9 @@ int main() {
 //  CalculateFragments(13_m, 7_c, "../Data/N13.csv");
 
   CalculateFragmentsHandler(12_m, 6_c, "../Data/C12_05_distr.dat", 0.5 * CLHEP::MeV);
-//
-//  CalculateFragmentsHandler(12_m, 6_c, "../Data/C12_4_distr.dat", 4 * CLHEP::MeV);
-//
+
+  CalculateFragmentsHandler(12_m, 6_c, "../Data/C12_4_distr.dat", 4 * CLHEP::MeV);
+
 //  CalculateFragmentsHandler(13_m, 6_c, "../Data/C13_05_distr.dat", 0.5 * CLHEP::MeV);
 //
 //  CalculateFragmentsHandler(13_m, 6_c, "../Data/C13_4_distr.dat", 4 * CLHEP::MeV);

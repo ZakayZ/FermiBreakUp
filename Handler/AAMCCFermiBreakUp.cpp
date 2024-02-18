@@ -7,7 +7,6 @@
 #include "G4Fragment.hh"
 #include "AAMCCFermiBreakUp.h"
 #include "FermiBreakUp.h"
-#include "CachedFermiConfigurations.h"
 
 AAMCCFermiBreakUp::AAMCCFermiBreakUp() : fermi_model_(std::make_unique<FermiBreakUp>()) {}
 

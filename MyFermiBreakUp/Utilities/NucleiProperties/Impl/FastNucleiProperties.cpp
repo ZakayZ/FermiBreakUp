@@ -11,7 +11,11 @@ namespace properties {
 FastNucleiProperties::FastNucleiProperties() : FastNucleiProperties(DefaultNuclearMass()) {}
 
 FermiFloat FastNucleiProperties::GetNuclearMass(MassNumber mass_number, ChargeNumber charge_number) const {
+#if __cplusplus >= 202002L
   if (FermiInt(mass_number) < FermiInt(charge_number)) [[unlikely]] {
+#else
+  if (FermiInt(mass_number) < FermiInt(charge_number)) {
+#endif
     throw std::runtime_error(
         "invalid nuclei A = " + std::to_string(mass_number) + ", Z = " + std::to_string(charge_number));
   }
@@ -28,7 +32,11 @@ FermiFloat FastNucleiProperties::GetNuclearMass(MassNumber mass_number, ChargeNu
 }
 
 FermiFloat FastNucleiProperties::GetNuclearMass(MassNumber mass_number, ChargeNumber charge_number) {
+#if __cplusplus >= 202002L
   if (FermiInt(mass_number) < FermiInt(charge_number)) [[unlikely]] {
+#else
+  if (FermiInt(mass_number) < FermiInt(charge_number)) {
+#endif
     throw std::runtime_error(
         "invalid nuclei A = " + std::to_string(mass_number) + ", Z = " + std::to_string(charge_number));
   }

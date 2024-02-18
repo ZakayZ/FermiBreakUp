@@ -28,7 +28,11 @@ size_t FragmentsStorage::Count(MassNumber mass_number, ChargeNumber charge_numbe
   }
 
   auto slot = GetSlot(mass_number, charge_number);
-  if (slot >= fragments_.size()) [[unlikely]] {
+#if __cplusplus >= 202002L
+  if (slot >= fragments_.size())[[unlikely]] {
+#else
+  if (slot >= fragments_.size()) {
+#endif
     return 0;
   }
 
@@ -46,7 +50,11 @@ FragmentsStorage::RangeIterators FragmentsStorage::GetFragments(MassNumber mass_
   }
 
   auto slot = GetSlot(mass_number, charge_number);
-  if (slot >= fragments_.size()) [[unlikely]] {
+#if __cplusplus >= 202002L
+  if (slot >= fragments_.size())[[unlikely]] {
+#else
+  if (slot >= fragments_.size()) {
+#endif
     return {fragments_[0].end(), fragments_[0].end()};
   }
 

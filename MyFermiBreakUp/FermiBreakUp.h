@@ -8,9 +8,11 @@
 #include <memory>
 
 #include "FermiParticle.h"
-#include "FermiConfigurations.h"
-#include "VFermiBreakUp.h"
+
 #include "VFermiConfigurations.h"
+#include "Configurations/FermiConfigurations.h"
+
+#include "VFermiBreakUp.h"
 
 class FermiBreakUp : public VFermiBreakUp {
  public:

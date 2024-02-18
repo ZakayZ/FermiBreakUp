@@ -5,13 +5,14 @@
 #include "Utilities/ConfigurationProperties.h"
 #include "Utilities/Randomizer.h"
 
-#include "FastFermiConfiguration.h"
+#include "FastFermiConfigurations.h"
 
-FastFermiConfiguration::FastFermiConfiguration(NucleiData nuclei_data, FermiFloat total_energy) {
-  FastFermiConfiguration::GenerateSplits(nuclei_data, total_energy);
+FastFermiConfigurations::FastFermiConfigurations(NucleiData nuclei_data, FermiFloat total_energy) {
+  FastFermiConfigurations::GenerateSplits(nuclei_data, total_energy);
 }
 
-VFermiConfigurations& FastFermiConfiguration::GenerateSplits(NucleiData nuclei_data, FermiFloat total_energy) {
+VFermiConfigurations& FastFermiConfigurations::GenerateSplits(NucleiData nuclei_data, FermiFloat total_energy) {
+  last_nuclei_= nuclei_data;
   auto max_fragments_count = FermiUInt(nuclei_data.mass_number);
   auto& cache = cached_configurations_[nuclei_data];
   if (cache.empty()) {
@@ -46,7 +47,7 @@ VFermiConfigurations& FastFermiConfiguration::GenerateSplits(NucleiData nuclei_d
   return *this;
 }
 
-std::optional<FragmentVector> FastFermiConfiguration::ChooseSplit() {
+std::optional<FragmentVector> FastFermiConfigurations::ChooseSplit() {
   if (configurations_.empty()) {
     return {};
   }
@@ -63,4 +64,8 @@ std::optional<FragmentVector> FastFermiConfiguration::ChooseSplit() {
   }
 
   throw std::runtime_error("No split chosen, something went wrong!");
+}
+
+std::unique_ptr<VFermiConfigurations> FastFermiConfigurations::Clone() const {
+  return std::make_unique<FastFermiConfigurations>(*this);
 }
