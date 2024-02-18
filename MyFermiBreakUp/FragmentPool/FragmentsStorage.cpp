@@ -2,7 +2,25 @@
 // Created by Artem Novikov on 30.01.2024.
 //
 
+#include "DataSource/DefaultPoolSource.h"
+
 #include "FragmentsStorage.h"
+
+namespace pool {
+
+FragmentsStorage::FragmentsStorage() : FragmentsStorage(DefaultPoolSource()) {}
+
+template <typename DataSource>
+FragmentsStorage::FragmentsStorage(const DataSource& data_source)
+    : FragmentsStorage(data_source.begin(), data_source.end()) {}
+
+template <typename Iter>
+FragmentsStorage::FragmentsStorage(Iter begin, Iter end) {
+  static_assert(std::is_same_v<typename Iter::value_type, const FermiFragment*>, "invalid iterator");
+  for (auto it = begin; it != end; ++it) {
+    AddFragment(**it);
+  }
+}
 
 size_t FragmentsStorage::Count(MassNumber mass_number, ChargeNumber charge_number) const {
   if (FermiInt(mass_number) < FermiInt(charge_number)) {
@@ -52,3 +70,5 @@ size_t FragmentsStorage::GetSlot(MassNumber mass_number, ChargeNumber charge_num
   auto charge = FermiInt(charge_number);
   return (mass * (mass + 1)) / 2 + charge;
 }
+
+} // namespace pool

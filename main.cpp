@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "MyFermiBreakUp/FermiBreakUp.h"
-#include "Utilities/NucleiProperties/Builder/CSVBuilder.h"
+#include "Utilities/NucleiProperties/DataStorage/CSVNuclearMass.h"
 #include "Utilities/NucleiProperties/NucleiProperties.h"
 #include "Handler/ExcitationHandler.h"
 
@@ -27,7 +27,7 @@ void CalculateFragments(MassNumber mass,
     size_t parts_counter = 0;
     auto additional_energy = energy_nucleon * FermiFloat(mass);
     for (size_t i = 0; i < tests; ++i) {
-      auto vec = LorentzVector(0, 0, 0, properties::NucleiProperties().GetNuclearMass(mass, charge) + additional_energy);
+      auto vec = LorentzVector(0, 0, 0, properties::NucleiProperties()->GetNuclearMass(mass, charge) + additional_energy);
       auto particles = model.BreakItUp(FermiParticle(mass, charge, vec));
       parts_counter += particles.size();
     }
@@ -50,7 +50,7 @@ void CalculateMomentum(MassNumber mass, ChargeNumber charge, const std::string& 
   auto model = FermiBreakUp();
   std::ofstream out(dump_name);
   auto vec = LorentzVector(momentum.x(), momentum.y(), momentum.z(),
-                           std::sqrt(std::pow(properties::NucleiProperties().GetNuclearMass(mass, charge) + energy, 2)
+                           std::sqrt(std::pow(properties::NucleiProperties()->GetNuclearMass(mass, charge) + energy, 2)
                                          + momentum.mag2()));
   out << vec / mass << '\n';
   std::vector<FermiFloat> x_component, y_component, z_component, magnitude;

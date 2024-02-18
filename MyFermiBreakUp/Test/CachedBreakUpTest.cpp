@@ -18,7 +18,7 @@ float CachedCalculateFragmentCount(MassNumber mass, ChargeNumber charge, const V
   size_t parts_counter = 0;
   auto additional_energy = energy * FermiFloat(mass);
   auto mom = LorentzVector(vec, std::sqrt(vec.mag2() +
-      std::pow(NucleiProperties().GetNuclearMass(mass, charge) + additional_energy, 2)));
+      std::pow(NucleiProperties()->GetNuclearMass(mass, charge) + additional_energy, 2)));
   auto particle = FermiParticle(mass, charge, mom);
   for (size_t i = 0; i < tests; ++i) {
     auto particles = model.BreakItUp(particle);
@@ -79,7 +79,7 @@ TEST(FermiBreakUpTests, CachedMomentumConservation) {
     ChargeNumber charge(rand() % (int(mass) + 1));
     FermiFloat energy = (rand() % 1000) * CLHEP::MeV * FermiFloat(mass);
     auto vec = Randomizer::IsotropicVector() * (rand() % 1000) * CLHEP::MeV;
-    auto mom = LorentzVector(vec, std::sqrt(std::pow(NucleiProperties().GetNuclearMass(mass, charge) + energy, 2) +
+    auto mom = LorentzVector(vec, std::sqrt(std::pow(NucleiProperties()->GetNuclearMass(mass, charge) + energy, 2) +
         vec.mag2()));
     auto particle = FermiParticle(mass, charge, mom);
     for (size_t i = 0; i < runs; ++i) {
@@ -107,7 +107,7 @@ TEST(FermiBreakUpTests, CachedBaryonConservation) {
     ChargeNumber charge(rand() % (int(mass) + 1));
     FermiFloat energy = (rand() % 1000) * CLHEP::MeV * FermiFloat(mass);
     auto vec = Randomizer::IsotropicVector() * (rand() % 1000) * CLHEP::MeV;
-    auto mom = LorentzVector(vec, std::sqrt(std::pow(NucleiProperties().GetNuclearMass(mass, charge) + energy, 2) +
+    auto mom = LorentzVector(vec, std::sqrt(std::pow(NucleiProperties()->GetNuclearMass(mass, charge) + energy, 2) +
         vec.mag2()));
     auto particle = FermiParticle(mass, charge, mom);
     for (size_t i = 0; i < runs; ++i) {

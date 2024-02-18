@@ -7,32 +7,41 @@ set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wpedantic -Werror")
 
 find_package(CLHEP REQUIRED)
 
+set(Tables
+        TableValues/NucleiPropertiesTable.cpp
+        TableValues/NucleiPropertiesTableAME12.cpp
+)
+
 set(Utilities
         Utilities/DataTypes.cpp
         Utilities/IntegerPartition.cpp
         Utilities/NucleiProperties/VNucleiProperties.cpp
-        Utilities/NucleiProperties/FermiNucleiProperties.cpp
-        Utilities/NucleiProperties/Builder/CSVBuilder.cpp
-        Utilities/NucleiProperties/Builder/DefaultBuilder.cpp
+        Utilities/NucleiProperties/Impl/FermiNucleiProperties.cpp
+        Utilities/NucleiProperties/Impl/FastNucleiProperties.cpp
+        Utilities/NucleiProperties/Impl/NativeNucleiProperties.cpp
+        Utilities/NucleiProperties/DataStorage/CSVNuclearMass.cpp
+        Utilities/NucleiProperties/DataStorage/DefaultNuclearMass.cpp
         Utilities/ConfigurationProperties.cpp
-        Utilities/Randomizer.cpp)
+        Utilities/Randomizer.cpp
+)
 
 set(PhaseSpace
         PhaseDecay/VDecay.cpp
         PhaseDecay/Decay.cpp
-        PhaseDecay/KopylovDecay.cpp)
+        PhaseDecay/KopylovDecay.cpp
+)
 
 set(FragmentPool
-        FragmentPool/FermiFragmentPool.cpp
         FragmentPool/FragmentsStorage.cpp
-        FragmentPool/Builder/DefaultBuilder.cpp
+        FragmentPool/DataSource/DefaultPoolSource.cpp
         FragmentPool/Fragments/FermiFragment.cpp
         FragmentPool/Fragments/StableFermiFragment.cpp
         FragmentPool/Fragments/UnstableFermiFragment.cpp
         FragmentPool/Fragments/B9FermiFragment.cpp
         FragmentPool/Fragments/Be8FermiFragment.cpp
         FragmentPool/Fragments/Li5FermiFragment.cpp
-        FragmentPool/Fragments/He5FermiFragment.cpp)
+        FragmentPool/Fragments/He5FermiFragment.cpp
+)
 
 set(FermiBreakUpModel
         VFermiBreakUp.cpp
@@ -40,33 +49,13 @@ set(FermiBreakUpModel
         FermiSplit.cpp
         FermiConfigurations.cpp
         CachedFermiConfigurations.cpp
-        FermiBreakUp.cpp)
+        FermiBreakUp.cpp
+)
 
-set(Sources ${FermiBreakUpModel} ${FragmentPool} ${Utilities} ${PhaseSpace})
+set(Sources ${FermiBreakUpModel} ${FragmentPool} ${Utilities} ${PhaseSpace} ${Tables})
 
 add_library(FermiBreakUp STATIC ${Sources})
 
 target_link_libraries(FermiBreakUp CLHEP::CLHEP)
 
 target_include_directories(FermiBreakUp PUBLIC ${PROJECT_SOURCE_DIR})
-
-############################################ Testing
-
-enable_testing()
-find_package(GTest REQUIRED)
-include(GoogleTest)
-
-set(Tests
-        Test/PartitionTest.cpp
-        Test/TableTests.cpp
-        Test/BreakUpTest.cpp
-        Test/CachedBreakUpTest.cpp)
-
-add_executable(FermiTest ${Tests} ${Sources})
-
-target_link_libraries(FermiTest CLHEP::CLHEP)
-target_link_libraries(FermiTest GTest::GTest GTest::Main)
-
-target_include_directories(FermiTest PUBLIC ${PROJECT_SOURCE_DIR})
-
-gtest_discover_tests(FermiTest)
