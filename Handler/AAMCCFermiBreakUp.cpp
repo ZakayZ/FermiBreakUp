@@ -8,6 +8,8 @@
 #include "AAMCCFermiBreakUp.h"
 #include "FermiBreakUp.h"
 
+using namespace fermi;
+
 AAMCCFermiBreakUp::AAMCCFermiBreakUp() : fermi_model_(std::make_unique<FermiBreakUp>()) {}
 
 AAMCCFermiBreakUp::AAMCCFermiBreakUp(std::unique_ptr<VFermiBreakUp>&& model) : fermi_model_(std::move(model)) {}

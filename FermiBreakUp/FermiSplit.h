@@ -11,6 +11,8 @@
 #include "FragmentPool/Fragments/FermiFragment.h"
 #include "Utilities/IntegerPartition.h"
 
+namespace fermi {
+
 using FragmentVector = std::vector<const FermiFragment*>;
 
 class FermiSplit {
@@ -34,7 +36,7 @@ class FermiSplit {
   static std::string ValidateInputs(NucleiData nuclei_data, uint32_t fragment_count);
 
   static std::vector<size_t> FragmentVariations(const Partition& mass_partition,
-                                                                           const Partition& charge_partition);
+                                                const Partition& charge_partition);
 
   static bool IsSplitPossible(const Partition& mass_partition, const Partition& charge_partition);
 
@@ -45,5 +47,7 @@ class FermiSplit {
 
   std::vector<FragmentVector> splits_;
 };
+
+}  // namespace fermi
 
 #endif //FERMIBREAKUP_MYFERMIBREAKUP_FERMIPARTICLESPLIT_ICC_

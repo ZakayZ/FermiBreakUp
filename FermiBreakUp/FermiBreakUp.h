@@ -14,6 +14,8 @@
 
 #include "VFermiBreakUp.h"
 
+namespace fermi {
+
 class FermiBreakUp : public VFermiBreakUp {
  public:
   FermiBreakUp();
@@ -29,5 +31,7 @@ class FermiBreakUp : public VFermiBreakUp {
  private:
   std::unique_ptr<VFermiConfigurations> fermi_configurations_;
 };
+
+}  // namespace fermi
 
 #endif //FERMIBREAKUP_MYFERMIBREAKUP_FERMIBREAKUP_H_

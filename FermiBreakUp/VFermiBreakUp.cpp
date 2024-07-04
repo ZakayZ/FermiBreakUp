@@ -5,6 +5,8 @@
 #include "VFermiBreakUp.h"
 #include "PhaseDecay/FermiPhaseSpaceDecay.h"
 
+using namespace fermi;
+
 ParticleVector VFermiBreakUp::ConvertToParticles(const FermiParticle& source_nucleus, const FragmentVector& split) {
   ParticleVector particle_split;
   particle_split.reserve(2 * split.size());

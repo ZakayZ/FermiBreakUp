@@ -59,6 +59,9 @@ set(FermiBreakUpModel
 
 set(Sources ${FermiBreakUpModel} ${FragmentPool} ${Utilities} ${PhaseSpace} ${Tables} ${Configurations})
 
+# default config
+FILE(COPY data/small_nuclei_data.csv DESTINATION "${CMAKE_BINARY_DIR}")
+
 add_library(FermiBreakUp STATIC ${Sources})
 
 target_link_libraries(FermiBreakUp CLHEP::CLHEP)

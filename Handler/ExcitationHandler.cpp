@@ -27,6 +27,8 @@
 
 #include "ExcitationHandler.h"
 
+using namespace fermi;
+
 const size_t ExcitationHandler::EvaporationIterationThreshold = 1e3;
 
 const char* ExcitationHandler::ErrorNoModel = "no model was applied, check conditions";

@@ -5,6 +5,8 @@
 #include "FermiBreakUp.h"
 #include "Utilities/DataTypes.h"
 
+using namespace fermi;
+
 FermiBreakUp::FermiBreakUp() : fermi_configurations_(DefaultConfigurations()) {}
 
 FermiBreakUp::FermiBreakUp(std::unique_ptr<VFermiConfigurations>&& configurations)

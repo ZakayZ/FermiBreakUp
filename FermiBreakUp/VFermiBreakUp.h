@@ -8,6 +8,8 @@
 #include "FermiParticle.h"
 #include "FermiSplit.h"
 
+namespace fermi {
+
 class VFermiBreakUp {
  public:
   virtual ParticleVector BreakItUp(const FermiParticle& nucleus) = 0;
@@ -17,5 +19,7 @@ class VFermiBreakUp {
  protected:
   static ParticleVector ConvertToParticles(const FermiParticle& source_nucleus, const FragmentVector& split);
 };
+
+}  // namespace fermi
 
 #endif //FERMIBREAKUP_MYFERMIBREAKUP_VFERMIBREAKUP_H_

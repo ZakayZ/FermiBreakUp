@@ -10,6 +10,8 @@
 #include "FragmentPool/FermiFragmentPool.h"
 #include "Utilities/IntegerPartition.h"
 
+using namespace fermi;
+
 FermiSplit::FermiSplit(NucleiData nuclei_data, const uint32_t fragment_count) {
   auto error = ValidateInputs(nuclei_data, fragment_count);
   if (!error.empty()) {

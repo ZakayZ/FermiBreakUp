@@ -11,6 +11,8 @@
 #include "Utilities/DataTypes.h"
 #include "FermiSplit.h"
 
+namespace fermi {
+
 class VFermiConfigurations {
  public:
   virtual VFermiConfigurations& GenerateSplits(NucleiData nuclei_data, FermiFloat total_energy) = 0;
@@ -21,5 +23,7 @@ class VFermiConfigurations {
 
   virtual ~VFermiConfigurations() = default;
 };
+
+}  // namespace fermi
 
 #endif //FERMIBREAKUP_MYFERMIBREAKUP_VFERMICONFIGURATIONS_H_

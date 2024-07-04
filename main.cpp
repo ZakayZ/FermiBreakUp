@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "Handler/AAMCCFermiBreakUp.h"
-#include "MyFermiBreakUp/FermiBreakUp.h"
+#include "FermiBreakUp/FermiBreakUp.h"
 #include "Utilities/NucleiProperties/DataStorage/CSVNuclearMass.h"
 #include "Utilities/NucleiProperties/NucleiProperties.h"
 #include "Handler/ExcitationHandler.h"
@@ -18,6 +18,8 @@
 //  th_out << NucleiPropertiesTable();
 //  pr_out << NucleiPropertiesTableAME12();
 //}
+
+using namespace fermi;
 
 void CalculateFragments(MassNumber mass,
                         ChargeNumber charge,
@@ -132,42 +134,42 @@ void CalculateMomentumHandler(G4int mass, G4int charge, const std::string& dump_
 }
 
 int main() {
-//  CalculateMomentum(12_m, 6_c, "../Data/stat.data", 12 * 10 * CLHEP::GeV, {0, 0, 0});
-//  CalculateMomentum(12_m, 6_c, "../Data/mov_x.data", 12 * 5 * CLHEP::MeV, {12 * 10 * CLHEP::GeV, 0, 0});
-//  CalculateMomentum(12_m, 6_c, "../Data/mov_y.data", 12 * 5 * CLHEP::MeV, {0, 12 * 10 * CLHEP::GeV, 0});
-//  CalculateMomentum(12_m, 6_c, "../Data/mov_z.data", 12 * 5 * CLHEP::MeV, {0, 0, 12 * 10 * CLHEP::GeV});
+//  CalculateMomentum(12_m, 6_c, "../Results/stat.data", 12 * 10 * CLHEP::GeV, {0, 0, 0});
+//  CalculateMomentum(12_m, 6_c, "../Results/mov_x.data", 12 * 5 * CLHEP::MeV, {12 * 10 * CLHEP::GeV, 0, 0});
+//  CalculateMomentum(12_m, 6_c, "../Results/mov_y.data", 12 * 5 * CLHEP::MeV, {0, 12 * 10 * CLHEP::GeV, 0});
+//  CalculateMomentum(12_m, 6_c, "../Results/mov_z.data", 12 * 5 * CLHEP::MeV, {0, 0, 12 * 10 * CLHEP::GeV});
 //
-//  CalculateFragments(12_m, 6_c, "../Data/C12.csv");
+//  CalculateFragments(12_m, 6_c, "../Results/C12.csv");
 //
-//  CalculateFragments(13_m, 6_c, "../Data/C13.csv");
+//  CalculateFragments(13_m, 6_c, "../Results/C13.csv");
 //
-//  CalculateFragments(12_m, 7_c, "../Data/N12.csv");
+//  CalculateFragments(12_m, 7_c, "../Results/N12.csv");
 //
-//  CalculateFragments(13_m, 7_c, "../Data/N13.csv");
+//  CalculateFragments(13_m, 7_c, "../Results/N13.csv");
 
-  CalculateFragmentsHandler(12_m, 6_c, "../Data/C12_05_distr.dat", 0.5 * CLHEP::MeV);
+  CalculateFragmentsHandler(12_m, 6_c, "../Results/C12_05_distr.dat", 0.5 * CLHEP::MeV);
 
-  CalculateFragmentsHandler(12_m, 6_c, "../Data/C12_4_distr.dat", 4 * CLHEP::MeV);
+  CalculateFragmentsHandler(12_m, 6_c, "../Results/C12_4_distr.dat", 4 * CLHEP::MeV);
 
-//  CalculateFragmentsHandler(13_m, 6_c, "../Data/C13_05_distr.dat", 0.5 * CLHEP::MeV);
+//  CalculateFragmentsHandler(13_m, 6_c, "../Results/C13_05_distr.dat", 0.5 * CLHEP::MeV);
 //
-//  CalculateFragmentsHandler(13_m, 6_c, "../Data/C13_4_distr.dat", 4 * CLHEP::MeV);
+//  CalculateFragmentsHandler(13_m, 6_c, "../Results/C13_4_distr.dat", 4 * CLHEP::MeV);
 //
-//  CalculateFragmentsHandler(12_m, 7_c, "../Data/N12_05_distr.dat", 0.5 * CLHEP::MeV);
+//  CalculateFragmentsHandler(12_m, 7_c, "../Results/N12_05_distr.dat", 0.5 * CLHEP::MeV);
 //
-//  CalculateFragmentsHandler(12_m, 7_c, "../Data/N12_4_distr.dat", 4 * CLHEP::MeV);
+//  CalculateFragmentsHandler(12_m, 7_c, "../Results/N12_4_distr.dat", 4 * CLHEP::MeV);
 //
-//  CalculateFragmentsHandler(13_m, 7_c, "../Data/N13_05_distr.dat", 0.5 * CLHEP::MeV);
+//  CalculateFragmentsHandler(13_m, 7_c, "../Results/N13_05_distr.dat", 0.5 * CLHEP::MeV);
 //
-//  CalculateFragmentsHandler(13_m, 7_c, "../Data/N13_4_distr.dat", 4 * CLHEP::MeV);
+//  CalculateFragmentsHandler(13_m, 7_c, "../Results/N13_4_distr.dat", 4 * CLHEP::MeV);
 
-//  CalculateFragmentsHandler(197_m, 79_c, "../Data/Au197_05_distr.dat", 0.5 * CLHEP::MeV, 1000);
+//  CalculateFragmentsHandler(197_m, 79_c, "../Results/Au197_05_distr.dat", 0.5 * CLHEP::MeV, 1000);
 //
-//  CalculateFragmentsHandler(197_m, 79_c, "../Data/Au197_4_distr.dat", 4 * CLHEP::MeV, 1000);
+//  CalculateFragmentsHandler(197_m, 79_c, "../Results/Au197_4_distr.dat", 4 * CLHEP::MeV, 1000);
 
 //  G4double energy = 4;
-//  CalculateMomentumHandler(197, 79, "../Data/au_stat.data", 197 * energy * CLHEP::MeV, {0, 0, 0}, 1000);
-//  CalculateMomentumHandler(197, 79, "../Data/au_mov_x.data", 197 * energy * CLHEP::MeV, {197 * energy * CLHEP::GeV, 0, 0}, 1000);
-//  CalculateMomentumHandler(197, 79, "../Data/au_mov_y.data", 197 * energy * CLHEP::MeV, {0, 197 * energy * CLHEP::GeV, 0}, 1000);
-//  CalculateMomentumHandler(197, 79, "../Data/au_mov_z.data", 197 * energy * CLHEP::MeV, {0, 0, 197 * energy * CLHEP::GeV}, 1000);
+//  CalculateMomentumHandler(197, 79, "../Results/au_stat.data", 197 * energy * CLHEP::MeV, {0, 0, 0}, 1000);
+//  CalculateMomentumHandler(197, 79, "../Results/au_mov_x.data", 197 * energy * CLHEP::MeV, {197 * energy * CLHEP::GeV, 0, 0}, 1000);
+//  CalculateMomentumHandler(197, 79, "../Results/au_mov_y.data", 197 * energy * CLHEP::MeV, {0, 197 * energy * CLHEP::GeV, 0}, 1000);
+//  CalculateMomentumHandler(197, 79, "../Results/au_mov_z.data", 197 * energy * CLHEP::MeV, {0, 0, 197 * energy * CLHEP::GeV}, 1000);
 }

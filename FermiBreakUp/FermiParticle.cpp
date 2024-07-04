@@ -8,6 +8,8 @@
 #include "Utilities/NucleiProperties/NucleiProperties.h"
 #include "FermiParticle.h"
 
+using namespace fermi;
+
 FermiParticle::FermiParticle(MassNumber mass_number, ChargeNumber charge_number, const LorentzVector& momentum)
     : mass_number_(mass_number), charge_number_(charge_number), momentum_(momentum) {
   CalculateGroundStateMass();

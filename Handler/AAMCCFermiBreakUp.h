@@ -14,7 +14,7 @@ class AAMCCFermiBreakUp : public G4VFermiBreakUp {
  public:
   AAMCCFermiBreakUp();
 
-  AAMCCFermiBreakUp(std::unique_ptr<VFermiBreakUp>&& model);
+  AAMCCFermiBreakUp(std::unique_ptr<fermi::VFermiBreakUp>&& model);
 
   void Initialise() override;
 
@@ -25,7 +25,7 @@ class AAMCCFermiBreakUp : public G4VFermiBreakUp {
   G4bool IsApplicable(G4int Z, G4int A, G4double excitation_energy) const override;
 
  private:
-  std::unique_ptr<VFermiBreakUp> fermi_model_;
+  std::unique_ptr<fermi::VFermiBreakUp> fermi_model_;
 };
 
 #endif //FERMIBREAKUP_MYFERMIBREAKUP_AAMCCFERMIBREAKUP_H_

@@ -11,8 +11,8 @@
 #include "Configurations/FastFermiConfigurations.h"
 #include "FermiBreakUp.h"
 
-#include <Handler/AAMCCFermiBreakUp.h>
-#include "Handler/ExcitationHandler.h"
+#include "AAMCCFermiBreakUp.h"
+#include "ExcitationHandler.h"
 
 class ConfigurationsFixture : public ::testing::TestWithParam<VFermiConfigurations*> {
  protected:

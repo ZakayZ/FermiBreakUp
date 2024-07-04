@@ -5,10 +5,10 @@ import json
 
 
 def draw_particle_count():
-    C12 = pd.read_csv('Data/C12.csv')
-    C13 = pd.read_csv('Data/C13.csv')
-    N12 = pd.read_csv('Data/N12.csv')
-    N13 = pd.read_csv('Data/N13.csv')
+    C12 = pd.read_csv('Results/C12.csv')
+    C13 = pd.read_csv('Results/C13.csv')
+    N12 = pd.read_csv('Results/N12.csv')
+    N13 = pd.read_csv('Results/N13.csv')
 
     def load_correct_data(filename: str):
         df = pd.DataFrame()
@@ -26,10 +26,10 @@ def draw_particle_count():
 
         return df
 
-    C12_corr = load_correct_data('Data/tabl_C12.dat')
-    C13_corr = load_correct_data('Data/tabl_C13.dat')
-    N12_corr = load_correct_data('Data/tabl_N12.dat')
-    N13_corr = load_correct_data('Data/tabl_N13.dat')
+    C12_corr = load_correct_data('Results/tabl_C12.dat')
+    C13_corr = load_correct_data('Results/tabl_C13.dat')
+    N12_corr = load_correct_data('Results/tabl_N12.dat')
+    N13_corr = load_correct_data('Results/tabl_N13.dat')
 
     plt.subplots(2, 2, sharex='col', sharey='row', figsize=(14, 10))
 
@@ -89,10 +89,10 @@ def parse_momentum(filename: str):
 
 
 def draw_momentum():
-    stat_data = parse_momentum('Data/stat.data')
-    x_data = parse_momentum('Data/mov_x.data')
-    y_data = parse_momentum('Data/mov_y.data')
-    z_data = parse_momentum('Data/mov_z.data')
+    stat_data = parse_momentum('Results/stat.data')
+    x_data = parse_momentum('Results/mov_x.data')
+    y_data = parse_momentum('Results/mov_y.data')
+    z_data = parse_momentum('Results/mov_z.data')
 
     rows = 4
     columns = 3
@@ -144,10 +144,10 @@ draw_momentum()
 
 
 def draw_momentum_distr():
-    stat_data = parse_momentum('Data/stat.data')
-    x_data = parse_momentum('Data/mov_x.data')
-    y_data = parse_momentum('Data/mov_y.data')
-    z_data = parse_momentum('Data/mov_z.data')
+    stat_data = parse_momentum('Results/stat.data')
+    x_data = parse_momentum('Results/mov_x.data')
+    y_data = parse_momentum('Results/mov_y.data')
+    z_data = parse_momentum('Results/mov_z.data')
 
     rows = 3
     columns = 4
@@ -220,7 +220,7 @@ def draw_distribution():
     names = [r"$^{12}_6C$", r"$^{13}_6C$", r"$^{12}_7N$", r"$^{13}_7N$", r"$^{197}_{79}Au$"]
     plt.subplots(2, 5, figsize=(18, 10))
     for id, element in enumerate(elements):
-        with open(f"Data/{element}_distr.dat", "r") as f:
+        with open(f"Results/{element}_distr.dat", "r") as f:
             res = get_az_df(json.load(f))
             plt.subplot(5, 2, id + 1)
             plt.scatter(x=res["A"], y=res["Z"], alpha=0.2)

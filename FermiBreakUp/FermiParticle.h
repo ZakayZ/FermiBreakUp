@@ -9,6 +9,8 @@
 
 #include "Utilities/DataTypes.h"
 
+namespace fermi {
+
 class FermiParticle;
 
 using ParticleVector = std::vector<FermiParticle>;
@@ -59,5 +61,7 @@ class FermiParticle {
 };
 
 std::ostream& operator<<(std::ostream&, const FermiParticle&);
+
+}  // namespace fermi
 
 #endif //FERMIBREAKUP_MYFERMIBREAKUP_PARTICLE_H_
