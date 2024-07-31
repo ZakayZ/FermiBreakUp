@@ -7,32 +7,36 @@
 
 #include <vector>
 
-#include "FermiSplit.h"
+#include "Split.h"
 
-class ConfigurationProperties {
- public:
-  static FermiFloat DecayProbability(const FragmentVector& split, uint32_t atomic_weight, FermiFloat total_energy);
+namespace fermi {
 
-  static FermiFloat CoulombBarrier(const FragmentVector& split);
+  class ConfigurationProperties {
+  public:
+    static FermiFloat DecayProbability(const FragmentVector& split, uint32_t atomic_weight, FermiFloat total_energy);
 
-  static FermiFloat CalculateSpinFactor(const FragmentVector& split);
+    static FermiFloat CoulombBarrier(const FragmentVector& split);
 
-  static FermiFloat CalculateKineticEnergy(const FragmentVector& split, FermiFloat total_energy);
+    static FermiFloat CalculateSpinFactor(const FragmentVector& split);
 
-  static FermiFloat CalculateMassFactor(const FragmentVector& split);
+    static FermiFloat CalculateKineticEnergy(const FragmentVector& split, FermiFloat total_energy);
 
-  static FermiFloat CalculateConfigurationFactor(const FragmentVector& split);
+    static FermiFloat CalculateMassFactor(const FragmentVector& split);
 
- private:
-  static FermiFloat CalculateConstFactor(uint32_t atomic_weight, size_t fragments_count);
+    static FermiFloat CalculateConfigurationFactor(const FragmentVector& split);
 
-  static FermiFloat CalculateGammaFactor(size_t fragments_count);
+  private:
+    static FermiFloat CalculateConstFactor(uint32_t atomic_weight, size_t fragments_count);
 
-  /// Kappa = V/V_0 it is used in calculation of Coulomb energy
-  static const FermiFloat Kappa;
+    static FermiFloat CalculateGammaFactor(size_t fragments_count);
 
-  /// Nuclear radius r0 (is a model parameter)
-  static const FermiFloat r0;
-};
+    /// Kappa = V/V_0 it is used in calculation of Coulomb energy
+    static const FermiFloat Kappa;
+
+    /// Nuclear radius r0 (is a model parameter)
+    static const FermiFloat r0;
+  };
+
+}  // namespace fermi
 
 #endif //FERMIBREAKUP_MYFERMIBREAKUP_UTILITIES_CONFIGURATIONPROPERTIES_H_

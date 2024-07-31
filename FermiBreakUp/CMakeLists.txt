@@ -34,36 +34,38 @@ set(PhaseSpace
 set(FragmentPool
         FragmentPool/FragmentsStorage.cpp
         FragmentPool/DataSource/DefaultPoolSource.cpp
-        FragmentPool/Fragments/FermiFragment.cpp
-        FragmentPool/Fragments/StableFermiFragment.cpp
-        FragmentPool/Fragments/UnstableFermiFragment.cpp
-        FragmentPool/Fragments/B9FermiFragment.cpp
-        FragmentPool/Fragments/Be8FermiFragment.cpp
-        FragmentPool/Fragments/Li5FermiFragment.cpp
-        FragmentPool/Fragments/He5FermiFragment.cpp
+        FragmentPool/Fragments/Fragment.cpp
+        FragmentPool/Fragments/StableFragment.cpp
+        FragmentPool/Fragments/UnstableFragment.cpp
+        FragmentPool/Fragments/B9Fragment.cpp
+        FragmentPool/Fragments/Be8Fragment.cpp
+        FragmentPool/Fragments/Li5Fragment.cpp
+        FragmentPool/Fragments/He5Fragment.cpp
 )
 
 set(Configurations
-        Configurations/FermiConfigurations.cpp
-        Configurations/CachedFermiConfigurations.cpp
-        Configurations/FastFermiConfigurations.cpp
+        Configurations/Configurations.cpp
+        Configurations/CachedConfigurations.cpp
+        Configurations/FastConfigurations.cpp
 )
 
 set(FermiBreakUpModel
         VFermiBreakUp.cpp
-        FermiParticle.cpp
-        FermiSplit.cpp
+        Particle.cpp
+        Split.cpp
         FermiBreakUp.cpp
-        VFermiConfigurations.cpp
+        VConfigurations.cpp
 )
 
 set(Sources ${FermiBreakUpModel} ${FragmentPool} ${Utilities} ${PhaseSpace} ${Tables} ${Configurations})
 
 # default config
-FILE(COPY data/small_nuclei_data.csv DESTINATION "${CMAKE_BINARY_DIR}")
+FILE(CREATE_LINK ${PROJECT_SOURCE_DIR}/Data/small_nuclei_data.csv small_nuclei_data.csv)
 
 add_library(FermiBreakUp STATIC ${Sources})
 
 target_link_libraries(FermiBreakUp CLHEP::CLHEP)
 
 target_include_directories(FermiBreakUp PUBLIC ${PROJECT_SOURCE_DIR})
+
+set_target_properties(FermiBreakUp PROPERTIES POSITION_INDEPENDENT_CODE True)

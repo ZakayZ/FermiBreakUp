@@ -8,20 +8,24 @@
 #include <vector>
 #include "Utilities/DataTypes.h"
 
-class VDecay {
- public:
-  VDecay() = default;
+namespace fermi {
 
-  virtual std::vector<LorentzVector> CalculateDecay(const LorentzVector& momentum,
-                                            const std::vector<FermiFloat>& fragments_mass) const = 0;
+    class VDecay {
+    public:
+    VDecay() = default;
 
-  virtual ~VDecay() = 0;
+    virtual std::vector<LorentzVector> CalculateDecay(const LorentzVector& momentum,
+                                                const std::vector<FermiFloat>& fragments_mass) const = 0;
 
- protected:
-  static FermiFloat TwoBodyMomentum(FermiFloat total_energy, FermiFloat mass1, FermiFloat mass2);
+    virtual ~VDecay() = 0;
 
-  static std::pair<LorentzVector, LorentzVector> TwoBodyDecay(
-      FermiFloat total_energy, FermiFloat mass1, FermiFloat mass2);
-};
+    protected:
+    static FermiFloat TwoBodyMomentum(FermiFloat total_energy, FermiFloat mass1, FermiFloat mass2);
+
+    static std::pair<LorentzVector, LorentzVector> TwoBodyDecay(
+        FermiFloat total_energy, FermiFloat mass1, FermiFloat mass2);
+    };
+
+}  // namespace fermi
 
 #endif //FERMIBREAKUP_MYFERMIBREAKUP_UTILITIES_VDECAY_H_

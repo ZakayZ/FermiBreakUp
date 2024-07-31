@@ -7,6 +7,8 @@
 #include "NucleiPropertiesTable.h"
 #include "CLHEP/Units/PhysicalConstants.h"
 
+using namespace properties;
+
 const MassNumber NucleiPropertiesTable::MaxMassNumber = 339_m;
 
 const ChargeNumber NucleiPropertiesTable::MaxChargeNumber = 136_c;

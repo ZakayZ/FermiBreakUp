@@ -9,6 +9,8 @@
 #include "Decay.h"
 #include "Utilities/Randomizer.h"
 
+using namespace fermi;
+
 static const size_t MaxTryCount = 1e6;
 
 std::vector<LorentzVector> Decay::CalculateDecay(const LorentzVector& momentum,

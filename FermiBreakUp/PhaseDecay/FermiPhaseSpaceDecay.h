@@ -9,8 +9,12 @@
 #include "Decay.h"
 #include "KopylovDecay.h"
 
-using FermiPhaseSpaceDecay = KopylovDecay; /// or just Decay
+namespace fermi {
 
-static_assert(std::is_base_of<VDecay, FermiPhaseSpaceDecay>::value, "Incorrect phase sampler");
+    using FermiPhaseSpaceDecay = KopylovDecay; /// or just Decay
+
+    static_assert(std::is_base_of<VDecay, FermiPhaseSpaceDecay>::value, "Incorrect phase sampler");
+
+}  // namespace fermi
 
 #endif //FERMIBREAKUP_MYFERMIBREAKUP_UTILITIES_FERMIPHASESPACEDECAY_H_

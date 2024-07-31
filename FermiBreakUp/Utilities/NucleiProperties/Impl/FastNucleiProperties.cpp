@@ -2,7 +2,7 @@
 // Created by Artem Novikov on 18.02.2024.
 //
 
-#include "../DataStorage/DefaultNuclearMass.h"
+#include "Utilities/NucleiProperties/DataStorage/DefaultNuclearMass.h"
 
 #include "FastNucleiProperties.h"
 

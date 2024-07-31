@@ -5,25 +5,25 @@
 #include <gtest/gtest.h>
 #include <CLHEP/Units/PhysicalConstants.h>
 
+#include "Configurations/CachedConfigurations.h"
+#include "Configurations/FastConfigurations.h"
+#include "Configurations/Configurations.h"
+#include "FermiBreakUp.h"
 #include "Utilities/NucleiProperties/NucleiProperties.h"
 #include "Utilities/Randomizer.h"
 
-#include "FermiBreakUp.h"
-#include "Configurations/CachedFermiConfigurations.h"
-#include "Configurations/FastFermiConfigurations.h"
-#include "Configurations/FermiConfigurations.h"
-
 using namespace properties;
+using namespace fermi;
 
 float CalculateFragmentCount(MassNumber mass, ChargeNumber charge, const Vector3& vec,
                              FermiFloat energy_per_nucleon, size_t tests,
-                             std::unique_ptr<VFermiConfigurations>&& configurations = FermiBreakUp::DefaultConfigurations()) {
+                             std::unique_ptr<VConfigurations>&& configurations = FermiBreakUp::DefaultConfigurations()) {
   auto model = FermiBreakUp(std::move(configurations));
   size_t parts_counter = 0;
   auto energy = energy_per_nucleon * FermiFloat(mass);
   auto total_energy = std::sqrt(std::pow(NucleiProperties()->GetNuclearMass(mass, charge) + energy, 2) + vec.mag2());
   auto mom = LorentzVector(vec, total_energy);
-  auto particle = FermiParticle(mass, charge, mom);
+  auto particle = Particle(mass, charge, mom);
   for (size_t i = 0; i < tests; ++i) {
     auto particles = model.BreakItUp(particle);
     parts_counter += particles.size();
@@ -31,18 +31,18 @@ float CalculateFragmentCount(MassNumber mass, ChargeNumber charge, const Vector3
   return float(parts_counter) / float(tests);
 }
 
-class ConfigurationsFixture : public ::testing::TestWithParam<VFermiConfigurations*> {
+class ConfigurationsFixture : public ::testing::TestWithParam<VConfigurations*> {
  protected:
-  VFermiConfigurations* configurations;
+  VConfigurations* configurations;
 };
 
 INSTANTIATE_TEST_SUITE_P(
     FermiBreakUpTests,
     ConfigurationsFixture,
     ::testing::Values(
-        new FermiConfigurations(),
-        new CachedFermiConfigurations(),
-        new FastFermiConfigurations()
+        new Configurations(),
+        new CachedConfigurations(),
+        new FastConfigurations()
     ));
 
 TEST_P(ConfigurationsFixture, CarbonTest) {
@@ -102,7 +102,7 @@ TEST_P(ConfigurationsFixture, MomentumConservation) {
     auto
         total_energy = std::sqrt(std::pow(NucleiProperties()->GetNuclearMass(mass, charge) + energy, 2) + vec.mag2());
     auto mom = LorentzVector(vec, total_energy);
-    auto particle = FermiParticle(mass, charge, mom);
+    auto particle = Particle(mass, charge, mom);
     for (size_t i = 0; i < runs; ++i) {
       LorentzVector sum(0, 0, 0, 0);
       auto particles = model.BreakItUp(particle);
@@ -131,7 +131,7 @@ TEST_P(ConfigurationsFixture, BaryonAndChargeConservation) {
     auto
         total_energy = std::sqrt(std::pow(NucleiProperties()->GetNuclearMass(mass, charge) + energy, 2) + vec.mag2());
     auto mom = LorentzVector(vec, total_energy);
-    auto particle = FermiParticle(mass, charge, mom);
+    auto particle = Particle(mass, charge, mom);
     for (size_t i = 0; i < runs; ++i) {
       MassNumber fragments_mass_sum(0);
       ChargeNumber fragments_charge_sum(0);

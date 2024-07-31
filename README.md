@@ -19,4 +19,4 @@ Fermi Break Up
 properties::NucleiProperties props(*Your builder here*);
 ```
 
-Аналогично можно реализовать заполнение таблицы с возможными фрагментами распада `pool::FermiFragmentPool`.
+Аналогично можно реализовать заполнение таблицы с возможными фрагментами распада `fermi::FragmentPool`.

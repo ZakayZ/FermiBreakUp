@@ -11,30 +11,30 @@
 
 namespace properties {
 
-class DefaultNuclearMass {
- private:
-  using Container = std::vector<std::pair<const NucleiData, FermiFloat>>;
+  class DefaultNuclearMass {
+  private:
+    using Container = std::vector<std::pair<const NucleiData, FermiFloat>>;
 
- public:
-  DefaultNuclearMass();
+  public:
+    DefaultNuclearMass();
 
-  ~DefaultNuclearMass() = default;
+    ~DefaultNuclearMass() = default;
 
-  Container::iterator begin() { return masses_.begin(); }
+    Container::iterator begin() { return masses_.begin(); }
 
-  [[nodiscard]] Container::const_iterator begin() const { return masses_.begin(); }
+    [[nodiscard]] Container::const_iterator begin() const { return masses_.begin(); }
 
-  [[nodiscard]] Container::const_iterator cbegin() const { return masses_.cbegin(); }
+    [[nodiscard]] Container::const_iterator cbegin() const { return masses_.cbegin(); }
 
-  Container::iterator end() { return masses_.end(); }
+    Container::iterator end() { return masses_.end(); }
 
-  [[nodiscard]] Container::const_iterator end() const { return masses_.end(); }
+    [[nodiscard]] Container::const_iterator end() const { return masses_.end(); }
 
-  Container::const_iterator cend() const { return masses_.cend(); }
+    Container::const_iterator cend() const { return masses_.cend(); }
 
- private:
-  Container masses_;
-};
+  private:
+    Container masses_;
+  };
 
 } // properties
 

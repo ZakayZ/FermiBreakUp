@@ -6,26 +6,28 @@
 #include <memory>
 
 #include "Utilities/Randomizer.h"
-#include "Configurations/FermiConfigurations.h"
-#include "Configurations/CachedFermiConfigurations.h"
-#include "Configurations/FastFermiConfigurations.h"
+#include "Configurations/Configurations.h"
+#include "Configurations/CachedConfigurations.h"
+#include "Configurations/FastConfigurations.h"
 #include "FermiBreakUp.h"
 
 #include "AAMCCFermiBreakUp.h"
 #include "ExcitationHandler.h"
 
-class ConfigurationsFixture : public ::testing::TestWithParam<VFermiConfigurations*> {
+using namespace fermi;
+
+class ConfigurationsFixture : public ::testing::TestWithParam<VConfigurations*> {
  protected:
-  VFermiConfigurations* configurations;
+  VConfigurations* configurations;
 };
 
 INSTANTIATE_TEST_SUITE_P(
     ConservationTests,
     ConfigurationsFixture,
     ::testing::Values(
-        new FermiConfigurations(),
-        new CachedFermiConfigurations(),
-        new FastFermiConfigurations()
+        new Configurations(),
+        new CachedConfigurations(),
+        new FastConfigurations()
     ));
 
 TEST_P(ConfigurationsFixture, MassAndChargeConservation) {

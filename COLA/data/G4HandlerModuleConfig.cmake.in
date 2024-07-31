@@ -1,0 +1,7 @@
+@PACKAGE_INIT@
+
+find_package(COLAlib REQUIRED) # COLA requirement
+#find_package(ROOT) (additional requirements)
+
+include(@CMAKE_INSTALL_PREFIX@/cmake/G4HandlerModuleExport.cmake)
+#set_and_check(...), etc.

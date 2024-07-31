@@ -11,33 +11,35 @@
 
 namespace properties {
 
-class CSVNuclearMass {
- private:
-  using Container = std::map<NucleiData, FermiFloat>;
+  class CSVNuclearMass {
+  private:
+    using Container = std::map<NucleiData, FermiFloat>;
 
- public:
-  CSVNuclearMass(const std::string& csv_filename,
-                 const std::string& mass_number_name = "A",
-                 const std::string& charge_number_name = "Z",
-                 const std::string& mass_name = "mass");
+  public:
+    CSVNuclearMass(
+      const std::string& csv_filename,
+      const std::string& mass_number_name = "A",
+      const std::string& charge_number_name = "Z",
+      const std::string& mass_name = "mass"
+    );
 
-  ~CSVNuclearMass() = default;
+    ~CSVNuclearMass() = default;
 
-  Container::iterator begin() { return masses_.begin(); }
+    Container::iterator begin() { return masses_.begin(); }
 
-  [[nodiscard]] Container::const_iterator begin() const { return masses_.begin(); }
+    [[nodiscard]] Container::const_iterator begin() const { return masses_.begin(); }
 
-  [[nodiscard]] Container::const_iterator cbegin() const { return masses_.cbegin(); }
+    [[nodiscard]] Container::const_iterator cbegin() const { return masses_.cbegin(); }
 
-  Container::iterator end() { return masses_.end(); }
+    Container::iterator end() { return masses_.end(); }
 
-  [[nodiscard]] Container::const_iterator end() const { return masses_.end(); }
+    [[nodiscard]] Container::const_iterator end() const { return masses_.end(); }
 
-  [[nodiscard]] Container::const_iterator cend() const { return masses_.cend(); }
+    [[nodiscard]] Container::const_iterator cend() const { return masses_.cend(); }
 
- private:
-  Container masses_;
-};
+  private:
+    Container masses_;
+  };
 
 } // namespace properties
 

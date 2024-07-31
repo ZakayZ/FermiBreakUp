@@ -8,6 +8,8 @@
 
 #include "NucleiPropertiesTableAME12.h"
 
+using namespace properties;
+
 const MassNumber NucleiPropertiesTableAME12::MaxMassNumber = 295_m;
 
 const ChargeNumber NucleiPropertiesTableAME12::MaxChargeNumber = 120_c;

@@ -7,30 +7,30 @@
 
 #include <memory>
 
-#include "FermiParticle.h"
+#include "Particle.h"
 
-#include "VFermiConfigurations.h"
-#include "Configurations/FermiConfigurations.h"
+#include "VConfigurations.h"
+#include "Configurations/Configurations.h"
 
 #include "VFermiBreakUp.h"
 
 namespace fermi {
 
-class FermiBreakUp : public VFermiBreakUp {
- public:
-  FermiBreakUp();
+  class FermiBreakUp : public VFermiBreakUp {
+  public:
+    FermiBreakUp();
 
-  FermiBreakUp(std::unique_ptr<VFermiConfigurations>&& configurations);
+    FermiBreakUp(std::unique_ptr<VConfigurations>&& configurations);
 
-  ParticleVector BreakItUp(const FermiParticle& nucleus) override;
+    ParticleVector BreakItUp(const Particle& nucleus) override final;
 
-  ~FermiBreakUp() = default;
+    ~FermiBreakUp() = default;
 
-  static std::unique_ptr<VFermiConfigurations> DefaultConfigurations();
+    static std::unique_ptr<VConfigurations> DefaultConfigurations();
 
- private:
-  std::unique_ptr<VFermiConfigurations> fermi_configurations_;
-};
+  private:
+    std::unique_ptr<VConfigurations> fermi_configurations_;
+  };
 
 }  // namespace fermi
 

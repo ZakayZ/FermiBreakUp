@@ -9,10 +9,10 @@ using namespace fermi;
 
 FermiBreakUp::FermiBreakUp() : fermi_configurations_(DefaultConfigurations()) {}
 
-FermiBreakUp::FermiBreakUp(std::unique_ptr<VFermiConfigurations>&& configurations)
+FermiBreakUp::FermiBreakUp(std::unique_ptr<VConfigurations>&& configurations)
     : fermi_configurations_(std::move(configurations)) {}
 
-ParticleVector FermiBreakUp::BreakItUp(const FermiParticle& nucleus) {
+ParticleVector FermiBreakUp::BreakItUp(const Particle& nucleus) {
   /// CHECK that Excitation Energy > 0
   if (nucleus.GetExcitationEnergy() < 0) {
     return {nucleus};
@@ -30,6 +30,6 @@ ParticleVector FermiBreakUp::BreakItUp(const FermiParticle& nucleus) {
   return ConvertToParticles(nucleus, fragment_split.value());
 }
 
-std::unique_ptr<VFermiConfigurations> FermiBreakUp::DefaultConfigurations() {
-  return std::make_unique<FermiConfigurations>();
+std::unique_ptr<VConfigurations> FermiBreakUp::DefaultConfigurations() {
+  return std::make_unique<Configurations>();
 }

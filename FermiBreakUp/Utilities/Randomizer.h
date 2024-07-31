@@ -11,7 +11,7 @@
 #include "DataTypes.h"
 
 class Randomizer {
- public:
+public:
   static FermiFloat UniformRealDistribution();
 
   static FermiFloat NormalDistribution(FermiFloat mean = 0, FermiFloat deviation = 1);

@@ -5,6 +5,8 @@
 #include "VDecay.h"
 #include "Utilities/Randomizer.h"
 
+using namespace fermi;
+
 VDecay::~VDecay() = default;
 
 FermiFloat VDecay::TwoBodyMomentum(FermiFloat total_energy, FermiFloat mass1, FermiFloat mass2) {

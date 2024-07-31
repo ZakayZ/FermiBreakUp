@@ -9,64 +9,68 @@
 #include <cstddef>
 #include <cstdint>
 
-using Partition = std::vector<uint32_t>;
+namespace fermi {
 
-class IntegerPartition {
- public:
-  class Iterator;
+  using Partition = std::vector<uint32_t>;
 
-  Iterator begin() const;
+  class IntegerPartition {
+  public:
+    class Iterator;
 
-  Iterator end() const;
+    Iterator begin() const;
 
-  IntegerPartition(uint32_t number, uint32_t terms_count, uint32_t base = 1);
+    Iterator end() const;
 
- private:
-  uint32_t number_;
-  uint32_t terms_count_;
-  uint32_t base_;
-};
+    IntegerPartition(uint32_t number, uint32_t terms_count, uint32_t base = 1);
 
-class IntegerPartition::Iterator {
- public:
-  friend class IntegerPartition;
+  private:
+    uint32_t number_;
+    uint32_t terms_count_;
+    uint32_t base_;
+  };
 
-  using difference_type = size_t;
+  class IntegerPartition::Iterator {
+  public:
+    friend class IntegerPartition;
 
-  using value_type = Partition;
+    using difference_type = size_t;
 
-  using reference = const Partition&;
+    using value_type = Partition;
 
-  using pointer = const Partition*;
+    using reference = const Partition&;
 
-  using iterator_category = std::forward_iterator_tag;
+    using pointer = const Partition*;
 
-  Iterator() = delete;
+    using iterator_category = std::forward_iterator_tag;
 
-  Iterator(const Iterator&) = default;
+    Iterator() = delete;
 
-  Iterator& operator=(const Iterator&) = default;
+    Iterator(const Iterator&) = default;
 
-  pointer operator->() const;
+    Iterator& operator=(const Iterator&) = default;
 
-  reference operator*() const;
+    pointer operator->() const;
 
-  Iterator& operator++();
+    reference operator*() const;
 
-  Iterator operator++(int);
+    Iterator& operator++();
 
-  bool operator==(const Iterator& other) const;
+    Iterator operator++(int);
 
-  bool operator!=(const Iterator& other) const;
+    bool operator==(const Iterator& other) const;
 
- private:
-  Iterator(uint32_t terms_count);
+    bool operator!=(const Iterator& other) const;
 
-  Iterator(uint32_t number, uint32_t terms_count, uint32_t base);
+  private:
+    Iterator(uint32_t terms_count);
 
-  void NextPartition();
+    Iterator(uint32_t number, uint32_t terms_count, uint32_t base);
 
-  Partition partition_;
-};
+    void NextPartition();
+
+    Partition partition_;
+  };
+
+}  // namespace fermi
 
 #endif //FERMIBREAKUP_MYFERMIBREAKUP_INTEGERPARTITION_H_

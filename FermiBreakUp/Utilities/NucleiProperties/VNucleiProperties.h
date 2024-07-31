@@ -9,25 +9,25 @@
 
 namespace properties {
 
-class VNucleiProperties {
- public:
-  virtual FermiFloat GetNuclearMass(MassNumber mass_number, ChargeNumber charge_number) const = 0;
+  class VNucleiProperties {
+  public:
+    virtual FermiFloat GetNuclearMass(MassNumber mass_number, ChargeNumber charge_number) const = 0;
 
-  virtual bool IsStable(MassNumber mass_number, ChargeNumber charge_number) const = 0;
+    virtual bool IsStable(MassNumber mass_number, ChargeNumber charge_number) const = 0;
 
-  virtual ~VNucleiProperties() = 0;
+    virtual ~VNucleiProperties() = 0;
 
- protected:
-  static FermiFloat AtomicMass(MassNumber mass_number, ChargeNumber charge_number);
+  protected:
+    static FermiFloat AtomicMass(MassNumber mass_number, ChargeNumber charge_number);
 
-  static FermiFloat NuclearMass(MassNumber mass_number, ChargeNumber charge_number);
+    static FermiFloat NuclearMass(MassNumber mass_number, ChargeNumber charge_number);
 
-  static FermiFloat BindingEnergy(MassNumber mass_number, ChargeNumber charge_number);
+    static FermiFloat BindingEnergy(MassNumber mass_number, ChargeNumber charge_number);
 
-  static void PrintInvalidNuclei(MassNumber mass_number, ChargeNumber charge_number);
+    static void PrintInvalidNuclei(MassNumber mass_number, ChargeNumber charge_number);
 
-  static bool IsInvalidNuclei(MassNumber mass_number, ChargeNumber charge_number);
-};
+    static bool IsInvalidNuclei(MassNumber mass_number, ChargeNumber charge_number);
+  };
 
 } // namespace properties
 

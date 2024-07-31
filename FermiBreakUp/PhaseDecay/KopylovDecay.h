@@ -7,13 +7,17 @@
 
 #include "VDecay.h"
 
-class KopylovDecay : public VDecay{
- public:
-  std::vector<LorentzVector> CalculateDecay(const LorentzVector& momentum,
-                                            const std::vector<FermiFloat>& fragments_mass) const override;
+namespace fermi {
 
- private:
-  static FermiFloat BetaKopylov(size_t k);
-};
+  class KopylovDecay : public VDecay{
+  public:
+    std::vector<LorentzVector> CalculateDecay(const LorentzVector& momentum,
+                                              const std::vector<FermiFloat>& fragments_mass) const override;
+
+  private:
+    static FermiFloat BetaKopylov(size_t k);
+  };
+
+}  // namespace fermi
 
 #endif //FERMIBREAKUP_MYFERMIBREAKUP_UTILITIES_KOPYLOVDECAY_H_

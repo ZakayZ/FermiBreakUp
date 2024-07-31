@@ -9,54 +9,58 @@
 
 #include "Utilities/DataTypes.h"
 
-class NucleiPropertiesTableAME12 {
- public:
-  NucleiPropertiesTableAME12();
+namespace properties {
 
-  FermiFloat GetNuclearMass(MassNumber mass_number, ChargeNumber charge_number) const;
+  class NucleiPropertiesTableAME12 {
+  public:
+    NucleiPropertiesTableAME12();
 
-  FermiFloat GetMassExcess(MassNumber mass_number, ChargeNumber charge_number) const;
+    FermiFloat GetNuclearMass(MassNumber mass_number, ChargeNumber charge_number) const;
 
-  FermiFloat GetBindingEnergy(MassNumber mass_number, ChargeNumber charge_number) const;
+    FermiFloat GetMassExcess(MassNumber mass_number, ChargeNumber charge_number) const;
 
-  FermiFloat GetBetaDecayEnergy(MassNumber mass_number, ChargeNumber charge_number) const;
+    FermiFloat GetBindingEnergy(MassNumber mass_number, ChargeNumber charge_number) const;
 
-  bool ContainsParticle(MassNumber mass_number, ChargeNumber charge_number) const;
+    FermiFloat GetBetaDecayEnergy(MassNumber mass_number, ChargeNumber charge_number) const;
 
-  FermiUInt GetMaxMass() const;
+    bool ContainsParticle(MassNumber mass_number, ChargeNumber charge_number) const;
 
-  FermiUInt GetMaxCharge() const;
+    FermiUInt GetMaxMass() const;
 
-  ~NucleiPropertiesTableAME12() = default;
+    FermiUInt GetMaxCharge() const;
 
- private:
-  size_t GetIndex(MassNumber mass_number, ChargeNumber charge_number) const;
+    ~NucleiPropertiesTableAME12() = default;
 
-  FermiFloat GetAtomicMass(MassNumber mass_number, ChargeNumber charge_number) const;
+  private:
+    size_t GetIndex(MassNumber mass_number, ChargeNumber charge_number) const;
 
-  bool VerifyNuclei(MassNumber mass_number, ChargeNumber charge_number) const;
+    FermiFloat GetAtomicMass(MassNumber mass_number, ChargeNumber charge_number) const;
 
-  static const MassNumber MaxMassNumber;
+    bool VerifyNuclei(MassNumber mass_number, ChargeNumber charge_number) const;
 
-  static const ChargeNumber MaxChargeNumber;
+    static const MassNumber MaxMassNumber;
 
-  static const size_t ParticleCount;
+    static const ChargeNumber MaxChargeNumber;
 
-  static const std::vector<FermiFloat> MassExcess;
+    static const size_t ParticleCount;
 
-  static const std::vector<FermiFloat> BetaEnergy;
+    static const std::vector<FermiFloat> MassExcess;
 
-  static const std::vector<size_t> IndexCharge;
+    static const std::vector<FermiFloat> BetaEnergy;
 
-  static const std::vector<size_t> IndexMass;
+    static const std::vector<size_t> IndexCharge;
 
-  static const size_t ShortTableCount;
+    static const std::vector<size_t> IndexMass;
 
-  static const std::vector<size_t> ShortTable;
+    static const size_t ShortTableCount;
 
-  static std::vector<FermiFloat>* electron_mass_;
-};
+    static const std::vector<size_t> ShortTable;
 
-std::ostream& operator<<(std::ostream& out, const NucleiPropertiesTableAME12& table);
+    static std::vector<FermiFloat>* electron_mass_;
+  };
+
+  std::ostream& operator<<(std::ostream& out, const NucleiPropertiesTableAME12& table);
+
+} // namespace properties
 
 #endif //FERMIBREAKUP_MYFERMIBREAKUP_UTILITIES_TABLEVALUES_NUCLEIPROPERTIESTABLEAME12_H_

@@ -6,7 +6,7 @@
 
 #include "FragmentsStorage.h"
 
-namespace pool {
+namespace fermi {
 
 FragmentsStorage::FragmentsStorage() : FragmentsStorage(DefaultPoolSource()) {}
 
@@ -16,7 +16,7 @@ FragmentsStorage::FragmentsStorage(const DataSource& data_source)
 
 template <typename Iter>
 FragmentsStorage::FragmentsStorage(Iter begin, Iter end) {
-  static_assert(std::is_same_v<typename Iter::value_type, const FermiFragment*>, "invalid iterator");
+  static_assert(std::is_same_v<typename Iter::value_type, const Fragment*>, "invalid iterator");
   for (auto it = begin; it != end; ++it) {
     AddFragment(**it);
   }
@@ -65,7 +65,7 @@ FragmentsStorage::RangeIterators FragmentsStorage::GetFragments(NucleiData nucle
   return GetFragments(nuclei.mass_number, nuclei.charge_number);
 }
 
-void FragmentsStorage::AddFragment(const FermiFragment& fragment) {
+void FragmentsStorage::AddFragment(const Fragment& fragment) {
   auto slot = GetSlot(fragment.GetMassNumber(), fragment.GetChargeNumber());
   if (slot >= fragments_.size()) {
     fragments_.resize(slot + 1);
@@ -79,4 +79,4 @@ size_t FragmentsStorage::GetSlot(MassNumber mass_number, ChargeNumber charge_num
   return (mass * (mass + 1)) / 2 + charge;
 }
 
-} // namespace pool
+} // namespace fermi

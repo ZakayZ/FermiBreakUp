@@ -3,7 +3,7 @@
 //
 
 #include "FermiNucleiProperties.h"
-#include "../DataStorage/DefaultNuclearMass.h"
+#include "Utilities/NucleiProperties/DataStorage/DefaultNuclearMass.h"
 
 namespace properties {
 

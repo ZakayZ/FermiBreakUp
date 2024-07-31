@@ -7,20 +7,24 @@
 
 #include "VDecay.h"
 
-class Decay : public VDecay {
- public:
-  std::vector<LorentzVector> CalculateDecay(const LorentzVector& momentum,
-                                            const std::vector<FermiFloat>& fragments_mass) const override;
+namespace fermi {
 
- private:
-  static std::vector<FermiFloat> CalculateVirtualMasses(const std::vector<FermiFloat>& masses, FermiFloat energy);
+  class Decay : public VDecay {
+  public:
+    std::vector<LorentzVector> CalculateDecay(const LorentzVector& momentum,
+                                              const std::vector<FermiFloat>& fragments_mass) const override;
 
-  /// modifies vector for a optimization purposes
-  static FermiFloat CalculateMomentumMagnitudes(std::vector<FermiFloat>& daughter_momentum,
-                                        const std::vector<FermiFloat>& masses,
-                                        const std::vector<FermiFloat>& virtual_masses);
+  private:
+    static std::vector<FermiFloat> CalculateVirtualMasses(const std::vector<FermiFloat>& masses, FermiFloat energy);
 
-  static FermiFloat CalculateMaxWeight(const std::vector<FermiFloat>& masses, FermiFloat max_energy);
-};
+    /// modifies vector for a optimization purposes
+    static FermiFloat CalculateMomentumMagnitudes(std::vector<FermiFloat>& daughter_momentum,
+                                          const std::vector<FermiFloat>& masses,
+                                          const std::vector<FermiFloat>& virtual_masses);
+
+    static FermiFloat CalculateMaxWeight(const std::vector<FermiFloat>& masses, FermiFloat max_energy);
+  };
+
+}  // namespace fermi
 
 #endif //FERMIBREAKUP_MYFERMIBREAKUP_UTILITIES_DECAY_H_

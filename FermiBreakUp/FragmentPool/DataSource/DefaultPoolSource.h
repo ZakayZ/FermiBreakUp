@@ -7,35 +7,35 @@
 
 #include <vector>
 
-#include "../Fragments/FermiFragment.h"
+#include "FragmentPool/Fragments/Fragment.h"
 
-namespace pool {
+namespace fermi {
 
-class DefaultPoolSource {
- private:
-  using Container = std::vector<const FermiFragment*>;
+  class DefaultPoolSource {
+  private:
+    using Container = std::vector<const Fragment*>;
 
- public:
-  DefaultPoolSource();
+  public:
+    DefaultPoolSource();
 
-  ~DefaultPoolSource() = default;
+    ~DefaultPoolSource() = default;
 
-  Container::iterator begin() { return fragments_.begin(); }
+    Container::iterator begin() { return fragments_.begin(); }
 
-  Container::const_iterator begin() const { return fragments_.begin(); }
+    Container::const_iterator begin() const { return fragments_.begin(); }
 
-  Container::const_iterator cbegin() const { return fragments_.cbegin(); }
+    Container::const_iterator cbegin() const { return fragments_.cbegin(); }
 
-  Container::iterator end() { return fragments_.end(); }
+    Container::iterator end() { return fragments_.end(); }
 
-  Container::const_iterator end() const { return fragments_.end(); }
+    Container::const_iterator end() const { return fragments_.end(); }
 
-  Container::const_iterator cend() const { return fragments_.cend(); }
+    Container::const_iterator cend() const { return fragments_.cend(); }
 
- private:
-  Container fragments_;
-};
+  private:
+    Container fragments_;
+  };
 
-} // namespace pool
+} // namespace fermi
 
 #endif //HANDLER_MYFERMIBREAKUP_FRAGMENTPOOL_DATASOURCE_DEFAULTPOOLSOURCE_H_

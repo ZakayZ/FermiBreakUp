@@ -9,13 +9,9 @@
 
 template <typename T>
 class Singleton {
- public:
+public:
   Singleton() {
-#if __cplusplus >= 202002L
-    if (instance_ == nullptr) [[unlikely]] {
-#else
     if (instance_ == nullptr) {
-#endif
       instance_ = std::make_unique<T>();
     }
   }
@@ -41,11 +37,7 @@ class Singleton {
   }
 
   static const T& Instance() {
-#if __cplusplus >= 202002L
-    if (instance_ == nullptr) [[unlikely]] {
-#else
     if (instance_ == nullptr) {
-#endif
       instance_ = std::make_unique<T>();
     }
     return *instance_;
@@ -67,7 +59,7 @@ class Singleton {
     return *instance_;
   }
 
- private:
+private:
   static inline std::unique_ptr<T> instance_;
 };
 

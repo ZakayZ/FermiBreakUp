@@ -5,9 +5,9 @@
 #include "Utilities/NucleiProperties/DataStorage/CSVNuclearMass.h"
 #include "Utilities/NucleiProperties/NucleiProperties.h"
 #include "Handler/ExcitationHandler.h"
-#include "Configurations/FastFermiConfigurations.h"
-#include "Configurations/CachedFermiConfigurations.h"
-#include "Configurations/FermiConfigurations.h"
+#include "Configurations/FastConfigurations.h"
+#include "Configurations/CachedConfigurations.h"
+#include "Configurations/Configurations.h"
 
 //#include "TableValues/NucleiPropertiesTable.h"
 //#include "TableValues/NucleiPropertiesTableAME12.h"
@@ -34,7 +34,7 @@ void CalculateFragments(MassNumber mass,
     auto additional_energy = energy_nucleon * FermiFloat(mass);
     for (size_t i = 0; i < tests; ++i) {
       auto vec = LorentzVector(0, 0, 0, properties::NucleiProperties()->GetNuclearMass(mass, charge) + additional_energy);
-      auto particles = model.BreakItUp(FermiParticle(mass, charge, vec));
+      auto particles = model.BreakItUp(Particle(mass, charge, vec));
       parts_counter += particles.size();
     }
     avg_parts.push_back(float(parts_counter) / float(tests));
@@ -61,7 +61,7 @@ void CalculateMomentum(MassNumber mass, ChargeNumber charge, const std::string& 
   out << vec / mass << '\n';
   std::vector<FermiFloat> x_component, y_component, z_component, magnitude;
   for (size_t i = 0; i < tests; ++i) {
-    auto particles = model.BreakItUp(FermiParticle(mass, charge, vec));
+    auto particles = model.BreakItUp(Particle(mass, charge, vec));
     auto sum = LorentzVector();
     for (const auto& particle : particles) {
       sum += particle.GetMomentum();
@@ -112,7 +112,7 @@ void CalculateFragmentsHandler(MassNumber mass, ChargeNumber charge, const std::
 void CalculateMomentumHandler(G4int mass, G4int charge, const std::string& dump_name, FermiFloat energy,
                        const Vector3& momentum, size_t tests = 1e4) {
   auto model = ExcitationHandler();
-  auto fermi = std::make_unique<FermiBreakUp>(std::make_unique<FastFermiConfigurations>());
+  auto fermi = std::make_unique<FermiBreakUp>(std::make_unique<FastConfigurations>());
   model.SetFermiBreakUp(std::make_unique<AAMCCFermiBreakUp>(std::move(fermi)));
   std::ofstream out(dump_name);
   auto vec = LorentzVector(momentum.x(), momentum.y(), momentum.z(),

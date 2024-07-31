@@ -4,6 +4,8 @@
 
 #include "IntegerPartition.h"
 
+using namespace fermi;
+
 IntegerPartition::IntegerPartition(uint32_t number, uint32_t terms_count, uint32_t base)
     : number_(number), terms_count_(terms_count), base_(base) {}
 

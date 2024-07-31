@@ -3,9 +3,11 @@
 //
 
 #include <gtest/gtest.h>
-
 #include <numeric>
+
 #include "Utilities/IntegerPartition.h"
+
+using namespace fermi;
 
 size_t factorial(size_t num) {
   size_t fact = 1;

@@ -9,6 +9,8 @@
 #include "KopylovDecay.h"
 #include "Utilities/Randomizer.h"
 
+using namespace fermi;
+
 std::vector<LorentzVector> KopylovDecay::CalculateDecay(const LorentzVector& momentum,
                                                         const std::vector<FermiFloat>& fragments_mass) const {
   std::vector<LorentzVector> result(fragments_mass.size());

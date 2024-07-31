@@ -5,6 +5,8 @@
 #include "ConfigurationProperties.h"
 #include "CLHEP/Units/PhysicalConstants.h"
 
+using namespace fermi;
+
 /// Kappa = V/V_0 it is used in calculation of Coulomb energy, Kappa is dimensionless
 const FermiFloat ConfigurationProperties::Kappa = 1.0;
 

@@ -18,3 +18,4 @@ add_library(Handler STATIC ${Sources})
 
 target_link_libraries(Handler PUBLIC FermiBreakUp ${Geant4_LIBRARIES})
 target_include_directories(Handler PUBLIC ${PROJECT_SOURCE_DIR})
+set_target_properties(Handler PROPERTIES POSITION_INDEPENDENT_CODE True)

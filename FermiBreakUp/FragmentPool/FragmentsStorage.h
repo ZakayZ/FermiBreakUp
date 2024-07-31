@@ -8,41 +8,41 @@
 #include <vector>
 
 #include "Utilities/DataTypes.h"
-#include "Fragments/FermiFragment.h"
+#include "Fragments/Fragment.h"
 
-namespace pool {
+namespace fermi {
 
-class FragmentsStorage {
- private:
-  using Container = std::vector<const FermiFragment*>;
+  class FragmentsStorage {
+  private:
+    using Container = std::vector<const Fragment*>;
 
- public:
-  using RangeIterators = std::pair<Container::const_iterator, Container::const_iterator>;
+  public:
+    using RangeIterators = std::pair<Container::const_iterator, Container::const_iterator>;
 
-  FragmentsStorage();
+    FragmentsStorage();
 
-  template <typename DataSource>
-  FragmentsStorage(const DataSource& data_source);
+    template <typename DataSource>
+    FragmentsStorage(const DataSource& data_source);
 
-  template <typename Iter>
-  FragmentsStorage(Iter begin, Iter end);
+    template <typename Iter>
+    FragmentsStorage(Iter begin, Iter end);
 
-  [[nodiscard]] size_t Count(MassNumber mass_number, ChargeNumber charge_number) const;
+    [[nodiscard]] size_t Count(MassNumber mass_number, ChargeNumber charge_number) const;
 
-  [[nodiscard]] size_t Count(NucleiData nuclei) const;
+    [[nodiscard]] size_t Count(NucleiData nuclei) const;
 
-  [[nodiscard]] RangeIterators GetFragments(MassNumber mass_number, ChargeNumber charge_number) const;
+    [[nodiscard]] RangeIterators GetFragments(MassNumber mass_number, ChargeNumber charge_number) const;
 
-  [[nodiscard]] RangeIterators GetFragments(NucleiData nuclei) const;
+    [[nodiscard]] RangeIterators GetFragments(NucleiData nuclei) const;
 
-  void AddFragment(const FermiFragment& fragment);
+    void AddFragment(const Fragment& fragment);
 
- private:
-  [[nodiscard]] static size_t GetSlot(MassNumber mass_number, ChargeNumber charge_number);
+  private:
+    [[nodiscard]] static size_t GetSlot(MassNumber mass_number, ChargeNumber charge_number);
 
-  std::vector<Container> fragments_;
-};
+    std::vector<Container> fragments_;
+  };
 
-} // namespace pool
+} // namespace fermi
 
 #endif //HANDLER_MYFERMIBREAKUP_FRAGMENTPOOL_STORAGE_FRAGMENTSSTORAGE_H_
