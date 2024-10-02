@@ -7,32 +7,41 @@
 
 #include "FermiConverter.h"
 
-using namespace cola;
+using cola::FermiConverter;
 
 namespace {
   fermi::Particle ColaToFermi(const cola::Particle& particle) {
-    auto [A, Z] = cola::pdgToAZ(particle.pdgCode);
+    auto [A, Z] = particle.getAZ();
     auto mass_number = MassNumber(A);
     auto charge_number = ChargeNumber(Z);
-    auto momentum = Vector3(particle.pX, particle.pY, particle.pZ);
-    auto mass = properties::NucleiProperties()->GetNuclearMass(mass_number, charge_number);
 
     return fermi::Particle(
       mass_number,
       charge_number,
-      LorentzVector(momentum, std::sqrt(std::pow(mass, 2) + momentum.mag2()))
+      LorentzVector(
+        particle.momentum.x,
+        particle.momentum.y,
+        particle.momentum.z,
+        particle.momentum.e
+      )
     );
   }
 
   cola::Particle FermiToCola(const fermi::Particle& particle) {
     return cola::Particle{
-      .x=0,
-      .y=0,
-      .z=0,
-      .pX=particle.GetMomentum().x(),
-      .pY=particle.GetMomentum().y(),
-      .pZ=particle.GetMomentum().z(),
-      .pdgCode=cola::AZToPdg({
+      .position=cola::LorentzVector{
+        .t=0,
+        .x=0,
+        .y=0,
+        .z=0,
+      },
+      .momentum=cola::LorentzVector{
+        .e=particle.GetMomentum().e(),
+        .x=particle.GetMomentum().x(),
+        .y=particle.GetMomentum().y(),
+        .z=particle.GetMomentum().z(),
+      },
+      .pdgCode=cola::AZToPdg(cola::AZ{
         static_cast<int>(particle.GetMassNumber()),
         static_cast<int>(particle.GetChargeNumber())
       }),

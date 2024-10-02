@@ -69,12 +69,8 @@ namespace {
   };
 
   bool operator==(const cola::Particle& a, const cola::Particle& b) {
-    return a.x == b.x
-          && a.y == b.y
-          && a.z == b.z
-          && a.pX == b.pX
-          && a.pY == b.pY
-          && a.pZ == b.pZ
+    return a.position == b.position
+          && a.momentum == b.momentum
           && a.pdgCode == b.pdgCode
           && a.pClass == b.pClass;
   }
@@ -86,12 +82,13 @@ TEST(TestModule, TestFermi) {
 
   {
     auto particle = cola::Particle{
-      .x=0,
-      .y=0,
-      .z=0,
-      .pX=100 * CLHEP::MeV,
-      .pY=100 * CLHEP::MeV,
-      .pZ=100 * CLHEP::MeV,
+      .position=cola::LorentzVector{},
+      .momentum=cola::LorentzVector{
+        .e=std::sqrt(3 * std::pow(100 * CLHEP::MeV, 2) + std::pow(4 * 936 * CLHEP::MeV, 2)),
+        .x=100 * CLHEP::MeV,
+        .y=100 * CLHEP::MeV,
+        .z=100 * CLHEP::MeV,
+      },
       .pdgCode=cola::AZToPdg({4, 2}),
       .pClass=cola::ParticleClass::produced,
     };
@@ -108,12 +105,13 @@ TEST(TestModule, TestFermi) {
 
   {
     auto particle = cola::Particle{
-      .x=0,
-      .y=0,
-      .z=0,
-      .pX=100 * CLHEP::MeV,
-      .pY=100 * CLHEP::MeV,
-      .pZ=100 * CLHEP::MeV,
+      .position=cola::LorentzVector{},
+      .momentum=cola::LorentzVector{
+        .e=std::sqrt(3 * std::pow(100 * CLHEP::MeV, 2) + std::pow(5 * 938 * CLHEP::MeV, 2)),
+        .x=100 * CLHEP::MeV,
+        .y=100 * CLHEP::MeV,
+        .z=100 * CLHEP::MeV,
+      },
       .pdgCode=cola::AZToPdg({5, 3}),
       .pClass=cola::ParticleClass::produced,
     };
@@ -133,12 +131,13 @@ TEST(TestModule, TestG4Handler) {
 
   {
     auto particle = cola::Particle{
-      .x=0,
-      .y=0,
-      .z=0,
-      .pX=100 * CLHEP::MeV,
-      .pY=100 * CLHEP::MeV,
-      .pZ=100 * CLHEP::MeV,
+      .position=cola::LorentzVector{},
+      .momentum=cola::LorentzVector{
+        .e=std::sqrt(3 * std::pow(100 * CLHEP::MeV, 2) + std::pow(4 * 938 * CLHEP::MeV, 2)),
+        .x=100 * CLHEP::MeV,
+        .y=100 * CLHEP::MeV,
+        .z=100 * CLHEP::MeV,
+      },
       .pdgCode=cola::AZToPdg({4, 2}),
       .pClass=cola::ParticleClass::produced,
     };
@@ -149,17 +148,18 @@ TEST(TestModule, TestG4Handler) {
     ASSERT_NO_THROW(wrapper.Run());
 
     ASSERT_EQ(events.size(), 1);
-    ASSERT_EQ(events[0]->particles.size(), 1);
+    ASSERT_EQ(events[0]->particles.size(), 2);
   }
 
   {
     auto particle = cola::Particle{
-      .x=0,
-      .y=0,
-      .z=0,
-      .pX=100 * CLHEP::MeV,
-      .pY=100 * CLHEP::MeV,
-      .pZ=100 * CLHEP::MeV,
+      .position=cola::LorentzVector{},
+      .momentum=cola::LorentzVector{
+        .e=std::sqrt(3 * std::pow(100 * CLHEP::MeV, 2) + std::pow(5 * 938 * CLHEP::MeV, 2)),
+        .x=100 * CLHEP::MeV,
+        .y=100 * CLHEP::MeV,
+        .z=100 * CLHEP::MeV,
+      },
       .pdgCode=cola::AZToPdg({5, 3}),
       .pClass=cola::ParticleClass::produced,
     };
@@ -173,17 +173,3 @@ TEST(TestModule, TestG4Handler) {
     EXPECT_EQ(events[0]->particles.size(), 3);
   }
 }
-
-
-// int main() {
-//   cola::MetaProcessor meta_processor;
-//   auto writer_factory = new TestWriterFactory();
-//   auto generator_factory = new TestGeneratorFactory();
-//   meta_processor.reg(std::unique_ptr<cola::VFactory>(generator_factory), "generator", cola::FilterType::generator);
-//   meta_processor.reg(std::unique_ptr<cola::VFactory>(new ExCFactory), "converter", cola::FilterType::converter);
-//   meta_processor.reg(std::unique_ptr<cola::VFactory>(writer_factory), "writer", cola::FilterType::writer);
-
-//   // Assemble manager and run
-//   cola::ColaRunManager manager(meta_processor.parse("config.xml"));
-//   manager.run();
-// }
