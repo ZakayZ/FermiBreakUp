@@ -57,7 +57,11 @@ FermiFloat FastNucleiProperties::GetNuclearMass(MassNumber mass_number, ChargeNu
 }
 
 bool FastNucleiProperties::IsStable(MassNumber mass_number, ChargeNumber charge_number) const {
+#if __cplusplus >= 202002L
   if (IsInvalidNuclei(mass_number, charge_number)) [[unlikely]] {
+#else
+  if (IsInvalidNuclei(mass_number, charge_number)) {
+#endif
     PrintInvalidNuclei(mass_number, charge_number);
     return false;
   }
