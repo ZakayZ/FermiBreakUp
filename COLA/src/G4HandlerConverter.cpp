@@ -37,8 +37,8 @@ namespace {
         .z=fragment.GetMomentum().z(),
       },
       .pdgCode=cola::AZToPdg({
-        static_cast<int>(fragment.GetDefinition()->GetAtomicNumber()),
-        static_cast<int>(fragment.GetDefinition()->GetPDGCharge())
+        static_cast<int>(fragment.GetDefinition()->GetAtomicMass()),
+        static_cast<int>(fragment.GetDefinition()->GetAtomicNumber())
       }),
       .pClass=cola::ParticleClass::produced,
     };
