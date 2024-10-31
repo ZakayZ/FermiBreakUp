@@ -31,7 +31,7 @@ target_include_directories(G4HandlerModule PUBLIC
 )
 
 # Set public header
-set_target_properties(G4HandlerModule PROPERTIES PUBLIC_HEADER include/G4HandlerModule.hh)
+set_target_properties(G4HandlerModule PROPERTIES PUBLIC_HEADER include/G4HandlerModule.h)
 
 # Link against COLA
 target_link_libraries(G4HandlerModule PUBLIC COLA)
@@ -65,8 +65,8 @@ install(DIRECTORY include/
 
 # Install export file and config files
 install(EXPORT G4HandlerModuleExport
-        DESTINATION cmake)
+        DESTINATION lib/cmake/${COLA_MODULE_NAME})
 
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/G4HandlerModuleConfigVersion.cmake"
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/G4HandlerModuleConfig.cmake"
         "${CMAKE_CURRENT_BINARY_DIR}/G4HandlerModuleConfigVersion.cmake"
-        DESTINATION cmake)
+        DESTINATION lib/cmake/${COLA_MODULE_NAME})
