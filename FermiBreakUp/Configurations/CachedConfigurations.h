@@ -2,8 +2,8 @@
 // Created by Artem Novikov on 24.05.2023.
 //
 
-#ifndef FERMIBREAKUP_MYFERMIBREAKUP_CACHEDFERMICONFIGURATIONS_H_
-#define FERMIBREAKUP_MYFERMIBREAKUP_CACHEDFERMICONFIGURATIONS_H_
+#ifndef FERMIBREAKUPMYFERMIBREAKUPCACHEDFERMICONFIGURATIONSH_
+#define FERMIBREAKUPMYFERMIBREAKUPCACHEDFERMICONFIGURATIONSH_
 
 #include "Split.h"
 #include "VConfigurations.h"
@@ -14,9 +14,9 @@ namespace fermi {
   public:
     CachedConfigurations() = default;
 
-    CachedConfigurations(NucleiData nuclei_data, FermiFloat total_energy);
+    CachedConfigurations(NucleiData nucleiData, FermiFloat totalEnergy);
 
-    VConfigurations& GenerateSplits(NucleiData nuclei_data, FermiFloat total_energy) override;
+    VConfigurations& GenerateSplits(NucleiData nucleiData, FermiFloat totalEnergy) override;
 
     std::optional<FragmentVector> ChooseSplit() override;
 
@@ -26,10 +26,10 @@ namespace fermi {
     std::vector<size_t> configurations_;
     std::vector<FermiFloat> weights_;
 
-    std::vector<FragmentVector> cached_configurations_;
-    NucleiData last_nuclei_{};
+    std::vector<FragmentVector> cachedConfigurations_;
+    NucleiData lastNuclei_{};
   };
 
 }  // namespace fermi
 
-#endif //FERMIBREAKUP_MYFERMIBREAKUP_CACHEDFERMICONFIGURATIONS_H_
+#endif //FERMIBREAKUPMYFERMIBREAKUPCACHEDFERMICONFIGURATIONSH_

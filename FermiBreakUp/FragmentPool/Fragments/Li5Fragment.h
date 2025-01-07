@@ -2,8 +2,8 @@
 // Created by Artem Novikov on 18.02.2023.
 //
 
-#ifndef FERMIBREAKUP_MYFERMIBREAKUP_FRAGMENTS_LI5Fragment_H_
-#define FERMIBREAKUP_MYFERMIBREAKUP_FRAGMENTS_LI5Fragment_H_
+#ifndef FERMIBREAKUPMYFERMIBREAKUPFRAGMENTSLI5FragmentH_
+#define FERMIBREAKUPMYFERMIBREAKUPFRAGMENTSLI5FragmentH_
 
 #include "UnstableFragment.h"
 
@@ -11,7 +11,7 @@ namespace fermi {
 
   class Li5Fragment : public UnstableFragment {
   public:
-    Li5Fragment(MassNumber mass_number, ChargeNumber charge_number, int polarization, FermiFloat excitation_energy);
+    Li5Fragment(MassNumber massNumber, ChargeNumber chargeNumber, int polarization, FermiFloat excitationEnergy);
 
     Li5Fragment() = delete;
 
@@ -22,4 +22,4 @@ namespace fermi {
 
 }  // namespace fermi
 
-#endif //FERMIBREAKUP_MYFERMIBREAKUP_FRAGMENTS_LI5Fragment_H_
+#endif //FERMIBREAKUPMYFERMIBREAKUPFRAGMENTSLI5FragmentH_

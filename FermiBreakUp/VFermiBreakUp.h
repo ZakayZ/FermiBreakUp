@@ -2,8 +2,8 @@
 // Created by Artem Novikov on 21.05.2023.
 //
 
-#ifndef FERMIBREAKUP_MYFERMIBREAKUP_VFERMIBREAKUP_H_
-#define FERMIBREAKUP_MYFERMIBREAKUP_VFERMIBREAKUP_H_
+#ifndef FERMIBREAKUPMYFERMIBREAKUPVFERMIBREAKUPH_
+#define FERMIBREAKUPMYFERMIBREAKUPVFERMIBREAKUPH_
 
 #include "Particle.h"
 #include "Split.h"
@@ -17,9 +17,9 @@ namespace fermi {
     virtual ~VFermiBreakUp() = default;
 
   protected:
-    static ParticleVector ConvertToParticles(const Particle& source_nucleus, const FragmentVector& split);
+    static ParticleVector ConvertToParticles(const Particle& sourceNucleus, const FragmentVector& split);
   };
 
 }  // namespace fermi
 
-#endif //FERMIBREAKUP_MYFERMIBREAKUP_VFERMIBREAKUP_H_
+#endif //FERMIBREAKUPMYFERMIBREAKUPVFERMIBREAKUPH_

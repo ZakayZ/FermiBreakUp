@@ -10,35 +10,35 @@
 
 using namespace fermi;
 
-Configurations::Configurations(NucleiData nuclei_data, FermiFloat total_energy) {
-  Configurations::GenerateSplits(nuclei_data, total_energy);
+Configurations::Configurations(NucleiData nucleiData, FermiFloat totalEnergy) {
+  Configurations::GenerateSplits(nucleiData, totalEnergy);
 }
 
-VConfigurations& Configurations::GenerateSplits(NucleiData nuclei_data, FermiFloat total_energy) {
+VConfigurations& Configurations::GenerateSplits(NucleiData nucleiData, FermiFloat totalEnergy) {
   configurations_.clear();
   weights_.clear();
 
-  /// let's split nucleus into 2,...,A fragments
-  FermiFloat total_weight = 0;
-  auto max_fragments_count = FermiUInt(nuclei_data.mass_number);
+  // let's split nucleus into 2,...,A fragments
+  FermiFloat totalWeight = 0;
+  auto maxFragmentsCount = FermiUInt(nucleiData.massNumber);
 
-  for (uint32_t particle_count = 2; particle_count <= max_fragments_count; particle_count++) {
-    /// initialize configuration for k fragments
-    for (auto& split : Split(nuclei_data, particle_count)) {
-      /// non-normalized statistical weight for given channel with k fragments
-      auto split_weight = ConfigurationProperties::DecayProbability(split, nuclei_data.mass_number, total_energy);
-      if (split_weight != 0) {
-        total_weight += split_weight;
+  for (uint32_t particleCount = 2; particleCount <= maxFragmentsCount; particleCount++) {
+    // initialize configuration for k fragments
+    for (auto& split : Split(nucleiData, particleCount)) {
+      // non-normalized statistical weight for given channel with k fragments
+      auto splitWeight = ConfigurationProperties::DecayProbability(split, nucleiData.massNumber, totalEnergy);
+      if (splitWeight != 0) {
+        totalWeight += splitWeight;
 
-        weights_.push_back(split_weight);
-        configurations_.emplace_back(std::move(split));  /// split is moved!
+        weights_.push_back(splitWeight);
+        configurations_.emplace_back(std::move(split));  // split is moved!
       }
     }
   }
 
-  /// let's normalize statistical weights of channels
+  // let's normalize statistical weights of channels
   std::transform(weights_.begin(), weights_.end(),
-                 weights_.begin(), std::bind(std::divides(), std::placeholders::_1, total_weight));
+                 weights_.begin(), std::bind(std::divides(), std::placeholders::_1, totalWeight));
 
   return *this;
 }
@@ -48,13 +48,13 @@ std::optional<FragmentVector> Configurations::ChooseSplit() {
     return {};
   }
 
-  FermiFloat wheel_result = Randomizer::UniformRealDistribution();
-  FermiFloat accumulated_weight = 0;
+  FermiFloat wheelResult = Randomizer::uniform_real_distribution();
+  FermiFloat accumulatedWeight = 0;
 
   for (size_t i = 0; i < weights_.size(); ++i) {
-    accumulated_weight += weights_[i];
+    accumulatedWeight += weights_[i];
 
-    if (accumulated_weight >= wheel_result) {
+    if (accumulatedWeight >= wheelResult) {
       return configurations_[i];
     }
   }

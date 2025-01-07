@@ -50,11 +50,11 @@ G4HandlerConverter::G4HandlerConverter(std::unique_ptr<ExcitationHandler>&& mode
 std::unique_ptr<cola::EventData> G4HandlerConverter::operator()(std::unique_ptr<cola::EventData>&& data) {
   cola::EventParticles results;
   for (const auto& particle : data->particles) {
-    /// apply model
-    auto model_result = model_->BreakItUp(ColaToG4(particle));
+    // apply model
+    auto modelResult = model_->BreakItUp(ColaToG4(particle));
 
-    /// convert model's results to cola format
-    for (const auto& fragment : model_result) {
+    // convert model's results to cola format
+    for (const auto& fragment : modelResult) {
       results.emplace_back(G4ToCola(fragment));
     }
   }

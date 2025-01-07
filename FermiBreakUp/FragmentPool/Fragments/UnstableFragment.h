@@ -2,8 +2,8 @@
 // Created by Artem Novikov on 17.02.2023.
 //
 
-#ifndef FERMIBREAKUP_MYFERMIBREAKUP_FRAGMENTS_UNSTABLEFragment_H_
-#define FERMIBREAKUP_MYFERMIBREAKUP_FRAGMENTS_UNSTABLEFragment_H_
+#ifndef FERMIBREAKUPMYFERMIBREAKUPFRAGMENTSUNSTABLEFragmentH_
+#define FERMIBREAKUPMYFERMIBREAKUPFRAGMENTSUNSTABLEFragmentH_
 
 #include <vector>
 
@@ -24,17 +24,17 @@ namespace fermi {
     ParticleVector GetFragments(const LorentzVector& momentum) const override;
 
   protected:
-    void Build(const std::vector<NucleiData>& decay_data);
+    void Build(const std::vector<NucleiData>& decayData);
 
-    void Build(std::vector<NucleiData>&& decay_data);
+    void Build(std::vector<NucleiData>&& decayData);
 
     void FillMasses();
 
   private:
-    std::vector<NucleiData> decay_data_;
+    std::vector<NucleiData> decayData_;
     std::vector<FermiFloat> masses_;
   };
 
 }  // namespace fermi
 
-#endif //FERMIBREAKUP_MYFERMIBREAKUP_FRAGMENTS_UNSTABLEFragment_H_
+#endif //FERMIBREAKUPMYFERMIBREAKUPFRAGMENTSUNSTABLEFragmentH_

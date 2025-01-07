@@ -6,11 +6,11 @@
 
 using namespace fermi;
 
-Li5Fragment::Li5Fragment(MassNumber mass_number,
-                                   ChargeNumber charge_number,
+Li5Fragment::Li5Fragment(MassNumber massNumber,
+                                   ChargeNumber chargeNumber,
                                    int polarization,
-                                   FermiFloat excitation_energy)
-    : UnstableFragment(mass_number, charge_number, polarization, excitation_energy) {
+                                   FermiFloat excitationEnergy)
+    : UnstableFragment(massNumber, chargeNumber, polarization, excitationEnergy) {
   // Li5 ----> alpha + proton
 
   Build({NucleiData{4_m, 2_c},

@@ -2,8 +2,8 @@
 // Created by Artem Novikov on 17.02.2023.
 //
 
-#ifndef FERMIBREAKUP_MYFERMIBREAKUP_PARTICLE_H_
-#define FERMIBREAKUP_MYFERMIBREAKUP_PARTICLE_H_
+#ifndef FERMIBREAKUPMYFERMIBREAKUPPARTICLEH_
+#define FERMIBREAKUPMYFERMIBREAKUPPARTICLEH_
 
 #include <vector>
 
@@ -23,7 +23,7 @@ namespace fermi {
 
     Particle& operator=(const Particle&) = default;
 
-    Particle(MassNumber mass_number, ChargeNumber charge_number, const LorentzVector& momentum);
+    Particle(MassNumber massNumber, ChargeNumber chargeNumber, const LorentzVector& momentum);
 
     NucleiData GetNucleiData() const;
 
@@ -41,7 +41,7 @@ namespace fermi {
 
     bool IsStable() const;
 
-    void SetMassAndCharge(MassNumber mass_number, ChargeNumber charge_number);
+    void SetMassAndCharge(MassNumber massNumber, ChargeNumber chargeNumber);
 
     void SetMomentum(const LorentzVector& momentum);
 
@@ -52,16 +52,16 @@ namespace fermi {
 
     void CalculateGroundStateMass();
 
-    MassNumber mass_number_;
-    ChargeNumber charge_number_;
+    MassNumber massNumber_;
+    ChargeNumber chargeNumber_;
     LorentzVector momentum_;
 
-    FermiFloat excitation_energy_ = 0;
-    FermiFloat ground_state_mass_ = 0;
+    FermiFloat excitationEnergy_ = 0;
+    FermiFloat groundStateMass_ = 0;
   };
 
   std::ostream& operator<<(std::ostream&, const Particle&);
 
 }  // namespace fermi
 
-#endif //FERMIBREAKUP_MYFERMIBREAKUP_PARTICLE_H_
+#endif //FERMIBREAKUPMYFERMIBREAKUPPARTICLEH_

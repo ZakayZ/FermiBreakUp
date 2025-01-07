@@ -53,19 +53,19 @@ namespace {
 
   struct Wrapper {
     Wrapper(cola::VFactory* converter) {
-      meta_processor.reg(std::unique_ptr<cola::VFactory>(gen_factory), "generator", cola::FilterType::generator);
-      meta_processor.reg(std::unique_ptr<cola::VFactory>(converter), "converter", cola::FilterType::converter);
-      meta_processor.reg(std::unique_ptr<cola::VFactory>(writer_factory), "writer", cola::FilterType::writer);
+      metaProcessor.reg(std::unique_ptr<cola::VFactory>(genFactory), "generator", cola::FilterType::generator);
+      metaProcessor.reg(std::unique_ptr<cola::VFactory>(converter), "converter", cola::FilterType::converter);
+      metaProcessor.reg(std::unique_ptr<cola::VFactory>(writerFactory), "writer", cola::FilterType::writer);
     }
 
     void Run(int n = 1) {
-      auto manager = cola::ColaRunManager(meta_processor.parse("config.xml"));
+      auto manager = cola::ColaRunManager(metaProcessor.parse("config.xml"));
       manager.run(n);
     }
 
-    cola::MetaProcessor meta_processor;
-    TestGeneratorFactory* gen_factory = new TestGeneratorFactory();
-    TestWriterFactory* writer_factory = new TestWriterFactory();
+    cola::MetaProcessor metaProcessor;
+    TestGeneratorFactory* genFactory = new TestGeneratorFactory();
+    TestWriterFactory* writerFactory = new TestWriterFactory();
   };
 
   bool operator==(const cola::Particle& a, const cola::Particle& b) {
@@ -92,15 +92,15 @@ TEST(TestModule, TestFermi) {
       .pdgCode=cola::AZToPdg({4, 2}),
       .pClass=cola::ParticleClass::produced,
     };
-    wrapper.gen_factory->particles = {particle,};
-    auto& events = wrapper.writer_factory->events;
+    wrapper.genFactory->particles = {particle,};
+    auto& events = wrapper.writerFactory->events;
     events.clear();
 
-    ASSERT_NO_THROW(wrapper.Run());
+    ASSERTNOTHROW(wrapper.Run());
 
-    ASSERT_EQ(events.size(), 1);
-    ASSERT_EQ(events[0]->particles.size(), 1);
-    EXPECT_TRUE(particle == events[0]->particles[0]);
+    ASSERTEQ(events.size(), 1);
+    ASSERTEQ(events[0]->particles.size(), 1);
+    EXPECTTRUE(particle == events[0]->particles[0]);
   }
 
   {
@@ -115,14 +115,14 @@ TEST(TestModule, TestFermi) {
       .pdgCode=cola::AZToPdg({5, 3}),
       .pClass=cola::ParticleClass::produced,
     };
-    wrapper.gen_factory->particles = {particle,};
-    auto& events = wrapper.writer_factory->events;
+    wrapper.genFactory->particles = {particle,};
+    auto& events = wrapper.writerFactory->events;
     events.clear();
 
-    ASSERT_NO_THROW(wrapper.Run());
+    ASSERTNOTHROW(wrapper.Run());
 
-    ASSERT_EQ(events.size(), 1);
-    EXPECT_EQ(events[0]->particles.size(), 2);
+    ASSERTEQ(events.size(), 1);
+    EXPECTEQ(events[0]->particles.size(), 2);
   }
 }
 
@@ -141,14 +141,14 @@ TEST(TestModule, TestG4Handler) {
       .pdgCode=cola::AZToPdg({4, 2}),
       .pClass=cola::ParticleClass::produced,
     };
-    wrapper.gen_factory->particles = {particle,};
-    auto& events = wrapper.writer_factory->events;
+    wrapper.genFactory->particles = {particle,};
+    auto& events = wrapper.writerFactory->events;
     events.clear();
 
-    ASSERT_NO_THROW(wrapper.Run());
+    ASSERTNOTHROW(wrapper.Run());
 
-    ASSERT_EQ(events.size(), 1);
-    ASSERT_EQ(events[0]->particles.size(), 2);
+    ASSERTEQ(events.size(), 1);
+    ASSERTEQ(events[0]->particles.size(), 2);
   }
 
   {
@@ -163,13 +163,13 @@ TEST(TestModule, TestG4Handler) {
       .pdgCode=cola::AZToPdg({5, 3}),
       .pClass=cola::ParticleClass::produced,
     };
-    wrapper.gen_factory->particles = {particle,};
-    auto& events = wrapper.writer_factory->events;
+    wrapper.genFactory->particles = {particle,};
+    auto& events = wrapper.writerFactory->events;
     events.clear();
 
-    ASSERT_NO_THROW(wrapper.Run());
+    ASSERTNOTHROW(wrapper.Run());
 
-    ASSERT_EQ(events.size(), 1);
-    EXPECT_EQ(events[0]->particles.size(), 3);
+    ASSERTEQ(events.size(), 1);
+    EXPECTEQ(events[0]->particles.size(), 3);
   }
 }

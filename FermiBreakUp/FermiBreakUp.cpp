@@ -7,27 +7,27 @@
 
 using namespace fermi;
 
-FermiBreakUp::FermiBreakUp() : fermi_configurations_(DefaultConfigurations()) {}
+FermiBreakUp::FermiBreakUp() : fermiConfigurations_(DefaultConfigurations()) {}
 
 FermiBreakUp::FermiBreakUp(std::unique_ptr<VConfigurations>&& configurations)
-    : fermi_configurations_(std::move(configurations)) {}
+    : fermiConfigurations_(std::move(configurations)) {}
 
 ParticleVector FermiBreakUp::BreakItUp(const Particle& nucleus) {
-  /// CHECK that Excitation Energy > 0
+  // CHECK that Excitation Energy > 0
   if (nucleus.GetExcitationEnergy() < 0) {
     return {nucleus};
   }
 
-  /// Total energy of nucleus in nucleus rest frame
-  FermiFloat total_energy = nucleus.GetMomentum().m();
+  // Total energy of nucleus in nucleus rest frame
+  FermiFloat totalEnergy = nucleus.GetMomentum().m();
 
-  /// Split the nucleus
-  auto fragment_split = fermi_configurations_->GenerateSplits(nucleus.GetNucleiData(), total_energy).ChooseSplit();
-  if (!fragment_split.has_value()) {
+  // Split the nucleus
+  auto fragmentSplit = fermiConfigurations_->GenerateSplits(nucleus.GetNucleiData(), totalEnergy).ChooseSplit();
+  if (!fragmentSplit.has_value()) {
     return {nucleus};
   }
 
-  return ConvertToParticles(nucleus, fragment_split.value());
+  return ConvertToParticles(nucleus, fragmentSplit.value());
 }
 
 std::unique_ptr<VConfigurations> FermiBreakUp::DefaultConfigurations() {

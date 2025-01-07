@@ -2,8 +2,8 @@
 // Created by Artem Novikov on 09.03.2023.
 //
 
-#ifndef FERMIBREAKUP_MYFERMIBREAKUP_UTILITIES_FERMINUCLEIPROPERTIES_H_
-#define FERMIBREAKUP_MYFERMIBREAKUP_UTILITIES_FERMINUCLEIPROPERTIES_H_
+#ifndef FERMIBREAKUPMYFERMIBREAKUPUTILITIESFERMINUCLEIPROPERTIESH_
+#define FERMIBREAKUPMYFERMIBREAKUPUTILITIESFERMINUCLEIPROPERTIESH_
 
 #include <map>
 #include <memory>
@@ -17,26 +17,26 @@ namespace properties {
     FermiNucleiProperties();
 
     template <typename DataSource>
-    FermiNucleiProperties(const DataSource& data_source);
+    FermiNucleiProperties(const DataSource& dataSource);
 
     template <typename Iter>
     FermiNucleiProperties(Iter begin, Iter end);
 
-    [[nodiscard]] FermiFloat GetNuclearMass(MassNumber mass_number, ChargeNumber charge_number) const override final;
+    [[nodiscard]] FermiFloat GetNuclearMass(MassNumber massNumber, ChargeNumber chargeNumber) const override final;
 
-    [[nodiscard]] bool IsStable(MassNumber mass_number, ChargeNumber charge_number) const override final;
+    [[nodiscard]] bool IsStable(MassNumber massNumber, ChargeNumber chargeNumber) const override final;
 
-    void AddMass(MassNumber mass_number, ChargeNumber charge_number, FermiFloat mass);
+    void AddMass(MassNumber massNumber, ChargeNumber chargeNumber, FermiFloat mass);
 
-    void AddMass(NucleiData nuclei_data, FermiFloat mass);
+    void AddMass(NucleiData nucleiData, FermiFloat mass);
 
   private:
-    std::map<NucleiData, FermiFloat> nuclei_mass_;
+    std::map<NucleiData, FermiFloat> nucleiMass_;
   };
 
   template <typename DataSource>
-  FermiNucleiProperties::FermiNucleiProperties(const DataSource& data_source)
-      : FermiNucleiProperties(data_source.begin(), data_source.end()) {}
+  FermiNucleiProperties::FermiNucleiProperties(const DataSource& dataSource)
+      : FermiNucleiProperties(dataSource.begin(), dataSource.end()) {}
 
   template <typename Iter>
   FermiNucleiProperties::FermiNucleiProperties(Iter begin, Iter end) {
@@ -48,4 +48,4 @@ namespace properties {
 
 } // namespace properties
 
-#endif //FERMIBREAKUP_MYFERMIBREAKUP_UTILITIES_FERMINUCLEIPROPERTIES_H_
+#endif //FERMIBREAKUPMYFERMIBREAKUPUTILITIESFERMINUCLEIPROPERTIESH_

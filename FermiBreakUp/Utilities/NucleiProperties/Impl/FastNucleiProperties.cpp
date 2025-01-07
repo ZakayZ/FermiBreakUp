@@ -10,85 +10,85 @@ namespace properties {
 
 FastNucleiProperties::FastNucleiProperties() : FastNucleiProperties(DefaultNuclearMass()) {}
 
-FermiFloat FastNucleiProperties::GetNuclearMass(MassNumber mass_number, ChargeNumber charge_number) const {
-#if __cplusplus >= 202002L
-  if (FermiInt(mass_number) < FermiInt(charge_number)) [[unlikely]] {
+FermiFloat FastNucleiProperties::GetNuclearMass(MassNumber massNumber, ChargeNumber chargeNumber) const {
+#if _Cplusplus >= 202002L
+  if (FermiInt(massNumber) < FermiInt(chargeNumber)) [[unlikely]] {
 #else
-  if (FermiInt(mass_number) < FermiInt(charge_number)) {
+  if (FermiInt(massNumber) < FermiInt(chargeNumber)) {
 #endif
     throw std::runtime_error(
-        "invalid nuclei A = " + std::to_string(mass_number) + ", Z = " + std::to_string(charge_number));
+        "invalid nuclei A = " + std::to_string(massNumber) + ", Z = " + std::to_string(chargeNumber));
   }
 
-  auto slot = GetSlot(mass_number, charge_number);
-  if (slot < nuclei_masses_.size() && nuclei_masses_[slot].is_cached) {
-    return nuclei_masses_[slot].mass;
+  auto slot = GetSlot(massNumber, chargeNumber);
+  if (slot < nucleiMasses_.size() && nucleiMasses_[slot].isCached) {
+    return nucleiMasses_[slot].mass;
   }
 
-#ifdef _DEBUG
-  std::cerr << "Unknown particle A = " + std::to_string(mass_number) + ", Z = " + std::to_string(charge_number) << '\n';
+#ifdef DEBUG
+  std::cerr << "Unknown particle A = " + std::to_string(massNumber) + ", Z = " + std::to_string(chargeNumber) << '\n';
 #endif
-  return NuclearMass(mass_number, charge_number);
+  return NuclearMass(massNumber, chargeNumber);
 }
 
-FermiFloat FastNucleiProperties::GetNuclearMass(MassNumber mass_number, ChargeNumber charge_number) {
-#if __cplusplus >= 202002L
-  if (FermiInt(mass_number) < FermiInt(charge_number)) [[unlikely]] {
+FermiFloat FastNucleiProperties::GetNuclearMass(MassNumber massNumber, ChargeNumber chargeNumber) {
+#if _Cplusplus >= 202002L
+  if (FermiInt(massNumber) < FermiInt(chargeNumber)) [[unlikely]] {
 #else
-  if (FermiInt(mass_number) < FermiInt(charge_number)) {
+  if (FermiInt(massNumber) < FermiInt(chargeNumber)) {
 #endif
     throw std::runtime_error(
-        "invalid nuclei A = " + std::to_string(mass_number) + ", Z = " + std::to_string(charge_number));
+        "invalid nuclei A = " + std::to_string(massNumber) + ", Z = " + std::to_string(chargeNumber));
   }
 
-  auto slot = GetSlot(mass_number, charge_number);
-  if (slot < nuclei_masses_.size() && nuclei_masses_[slot].is_cached) {
-    return nuclei_masses_[slot].mass;
+  auto slot = GetSlot(massNumber, chargeNumber);
+  if (slot < nucleiMasses_.size() && nucleiMasses_[slot].isCached) {
+    return nucleiMasses_[slot].mass;
   }
 
-#ifdef _DEBUG
-  std::cerr << "Unknown particle A = " + std::to_string(mass_number) + ", Z = " + std::to_string(charge_number) << '\n';
+#ifdef DEBUG
+  std::cerr << "Unknown particle A = " + std::to_string(massNumber) + ", Z = " + std::to_string(chargeNumber) << '\n';
 #endif
-  if (slot >= nuclei_masses_.size()) {
-    nuclei_masses_.resize(slot + 1);
+  if (slot >= nucleiMasses_.size()) {
+    nucleiMasses_.resize(slot + 1);
   }
-  nuclei_masses_[slot] = MassData{.mass=NuclearMass(mass_number, charge_number), .is_valid=false, .is_cached=true};
-  return nuclei_masses_[slot].mass;
+  nucleiMasses_[slot] = MassData{.mass=NuclearMass(massNumber, chargeNumber), .isValid=false, .isCached=true};
+  return nucleiMasses_[slot].mass;
 }
 
-bool FastNucleiProperties::IsStable(MassNumber mass_number, ChargeNumber charge_number) const {
-#if __cplusplus >= 202002L
-  if (IsInvalidNuclei(mass_number, charge_number)) [[unlikely]] {
+bool FastNucleiProperties::IsStable(MassNumber massNumber, ChargeNumber chargeNumber) const {
+#if _Cplusplus >= 202002L
+  if (IsInvalidNuclei(massNumber, chargeNumber)) [[unlikely]] {
 #else
-  if (IsInvalidNuclei(mass_number, charge_number)) {
+  if (IsInvalidNuclei(massNumber, chargeNumber)) {
 #endif
-    PrintInvalidNuclei(mass_number, charge_number);
+    PrintInvalidNuclei(massNumber, chargeNumber);
     return false;
   }
 
-  auto slot = GetSlot(mass_number, charge_number);
-  if (slot >= nuclei_masses_.size() || !nuclei_masses_[slot].is_valid) {
+  auto slot = GetSlot(massNumber, chargeNumber);
+  if (slot >= nucleiMasses_.size() || !nucleiMasses_[slot].isValid) {
     return false;
   }
 
   return true;
 }
 
-void FastNucleiProperties::AddMass(MassNumber mass_number, ChargeNumber charge_number, FermiFloat mass) {
-  auto slot = GetSlot(mass_number, charge_number);
-  if (slot >= nuclei_masses_.size()) {
-    nuclei_masses_.resize(slot + 1);
+void FastNucleiProperties::AddMass(MassNumber massNumber, ChargeNumber chargeNumber, FermiFloat mass) {
+  auto slot = GetSlot(massNumber, chargeNumber);
+  if (slot >= nucleiMasses_.size()) {
+    nucleiMasses_.resize(slot + 1);
   }
-  nuclei_masses_[slot] = MassData{.mass=mass, .is_valid=true, .is_cached=true};
+  nucleiMasses_[slot] = MassData{.mass=mass, .isValid=true, .isCached=true};
 }
 
-void FastNucleiProperties::AddMass(NucleiData nuclei_data, FermiFloat mass) {
-  return AddMass(nuclei_data.mass_number, nuclei_data.charge_number, mass);
+void FastNucleiProperties::AddMass(NucleiData nucleiData, FermiFloat mass) {
+  return AddMass(nucleiData.massNumber, nucleiData.chargeNumber, mass);
 }
 
-size_t FastNucleiProperties::GetSlot(MassNumber mass_number, ChargeNumber charge_number) {
-  auto mass = FermiInt(mass_number);
-  auto charge = FermiInt(charge_number);
+size_t FastNucleiProperties::GetSlot(MassNumber massNumber, ChargeNumber chargeNumber) {
+  auto mass = FermiInt(massNumber);
+  auto charge = FermiInt(chargeNumber);
   return (mass * (mass + 1)) / 2 + charge;
 }
 

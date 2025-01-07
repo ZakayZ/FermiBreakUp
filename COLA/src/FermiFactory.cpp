@@ -21,7 +21,7 @@ using namespace cola;
 namespace {
   struct Config {
     std::optional<std::unique_ptr<fermi::VConfigurations>> configurations;
-    std::optional<std::string> nuclei_csv;
+    std::optional<std::string> nucleiCsv;
   };
 }
 
@@ -40,17 +40,17 @@ cola::FermiConverter* FermiFactory::DoCreate(const std::map<std::string, std::st
     }
   }
 
-  if (auto it = params.find("nuclei_csv"); it != params.end()) {
+  if (auto it = params.find("nucleiCsv"); it != params.end()) {
     const auto& [_, path] = *it;
-    config.nuclei_csv = path;
+    config.nucleiCsv = path;
   }
 
-  auto configurations = std::move(config.configurations).value_or(
+  auto configurations = std::move(config.configurations).valueOr(
     std::unique_ptr<fermi::VConfigurations>(new fermi::FastConfigurations())
   );
   auto model = std::make_unique<fermi::FermiBreakUp>(std::move(configurations));
-  if (config.nuclei_csv.has_value()) {
-    auto storage = properties::CSVNuclearMass(config.nuclei_csv.value());
+  if (config.nucleiCsv.hasValue()) {
+    auto storage = properties::CSVNuclearMass(config.nucleiCsv.value());
     properties::NucleiProperties::Reset(new properties::FastNucleiProperties(storage));
   }
 

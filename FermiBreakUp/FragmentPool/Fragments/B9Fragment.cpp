@@ -6,11 +6,11 @@
 
 using namespace fermi;
 
-B9Fragment::B9Fragment(MassNumber mass_number,
-                                 ChargeNumber charge_number,
+B9Fragment::B9Fragment(MassNumber massNumber,
+                                 ChargeNumber chargeNumber,
                                  int polarization,
-                                 FermiFloat excitation_energy)
-    : UnstableFragment(mass_number, charge_number, polarization, excitation_energy) {
+                                 FermiFloat excitationEnergy)
+    : UnstableFragment(massNumber, chargeNumber, polarization, excitationEnergy) {
   // B9 ----> alpha + alpha + proton
 
   Build({NucleiData{4_m, 2_c},

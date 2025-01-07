@@ -9,19 +9,19 @@
 
 using namespace fermi;
 
-CachedConfigurations::CachedConfigurations(NucleiData nuclei_data, FermiFloat total_energy) {
-  CachedConfigurations::GenerateSplits(nuclei_data, total_energy);
+CachedConfigurations::CachedConfigurations(NucleiData nucleiData, FermiFloat totalEnergy) {
+  CachedConfigurations::GenerateSplits(nucleiData, totalEnergy);
 }
 
-VConfigurations& CachedConfigurations::GenerateSplits(NucleiData nuclei_data, FermiFloat total_energy) {
-  auto max_fragments_count = FermiUInt(nuclei_data.mass_number);
-  if (nuclei_data != last_nuclei_) {
-    last_nuclei_ = nuclei_data;
-    cached_configurations_.clear();
+VConfigurations& CachedConfigurations::GenerateSplits(NucleiData nucleiData, FermiFloat totalEnergy) {
+  auto maxFragmentsCount = FermiUInt(nucleiData.massNumber);
+  if (nucleiData != lastNuclei_) {
+    lastNuclei_ = nucleiData;
+    cachedConfigurations_.clear();
 
-    for (uint32_t particle_count = 2; particle_count <= max_fragments_count; ++particle_count) {
-      for (auto& split : Split(nuclei_data, particle_count)) {
-        cached_configurations_.emplace_back(std::move(split));  /// split is moved!
+    for (uint32_t particleCount = 2; particleCount <= maxFragmentsCount; ++particleCount) {
+      for (auto& split : Split(nucleiData, particleCount)) {
+        cachedConfigurations_.emplace_back(std::move(split));  // split is moved!
       }
     }
   }
@@ -29,20 +29,20 @@ VConfigurations& CachedConfigurations::GenerateSplits(NucleiData nuclei_data, Fe
   configurations_.clear();
   weights_.clear();
 
-  FermiFloat total_weight = 0;
-  for(size_t i = 0; i < cached_configurations_.size(); ++i) {
-    auto split_weight = ConfigurationProperties::DecayProbability(cached_configurations_[i], nuclei_data.mass_number, total_energy);
+  FermiFloat totalWeight = 0;
+  for(size_t i = 0; i < cachedConfigurations_.size(); ++i) {
+    auto splitWeight = ConfigurationProperties::DecayProbability(cachedConfigurations_[i], nucleiData.massNumber, totalEnergy);
 
-    if (split_weight != 0) {
-      total_weight += split_weight;
+    if (splitWeight != 0) {
+      totalWeight += splitWeight;
 
-      weights_.push_back(split_weight);
+      weights_.push_back(splitWeight);
       configurations_.emplace_back(i);
     }
   }
 
   std::transform(weights_.begin(), weights_.end(),
-                 weights_.begin(), std::bind(std::divides<>(), std::placeholders::_1, total_weight));
+                 weights_.begin(), std::bind(std::divides<>(), std::placeholders::_1, totalWeight));
 
   return *this;
 }
@@ -52,14 +52,14 @@ std::optional<FragmentVector> CachedConfigurations::ChooseSplit() {
     return {};
   }
 
-  FermiFloat wheel_result = Randomizer::UniformRealDistribution();
-  FermiFloat accumulated_weight = 0;
+  FermiFloat wheelResult = Randomizer::uniform_real_distribution();
+  FermiFloat accumulatedWeight = 0;
 
   for (size_t i = 0; i < weights_.size(); ++i) {
-    accumulated_weight += weights_[i];
+    accumulatedWeight += weights_[i];
 
-    if (accumulated_weight >= wheel_result) {
-      return cached_configurations_[configurations_[i]];
+    if (accumulatedWeight >= wheelResult) {
+      return cachedConfigurations_[configurations_[i]];
     }
   }
 

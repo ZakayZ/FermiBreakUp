@@ -2,8 +2,8 @@
 // Created by Artem Novikov on 21.05.2023.
 //
 
-#ifndef FERMIBREAKUP_MYFERMIBREAKUP_VFERMICONFIGURATIONS_H_
-#define FERMIBREAKUP_MYFERMIBREAKUP_VFERMICONFIGURATIONS_H_
+#ifndef FERMIBREAKUPMYFERMIBREAKUPVFERMICONFIGURATIONSH_
+#define FERMIBREAKUPMYFERMIBREAKUPVFERMICONFIGURATIONSH_
 
 #include <optional>
 #include <memory>
@@ -15,7 +15,7 @@ namespace fermi {
 
   class VConfigurations {
   public:
-    virtual VConfigurations& GenerateSplits(NucleiData nuclei_data, FermiFloat total_energy) = 0;
+    virtual VConfigurations& GenerateSplits(NucleiData nucleiData, FermiFloat totalEnergy) = 0;
 
     virtual std::optional<FragmentVector> ChooseSplit() = 0;
 
@@ -26,4 +26,4 @@ namespace fermi {
 
 }  // namespace fermi
 
-#endif //FERMIBREAKUP_MYFERMIBREAKUP_VFERMICONFIGURATIONS_H_
+#endif //FERMIBREAKUPMYFERMIBREAKUPVFERMICONFIGURATIONSH_

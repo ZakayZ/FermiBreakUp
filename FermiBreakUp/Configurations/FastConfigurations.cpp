@@ -9,20 +9,20 @@
 
 using namespace fermi;
 
-FastConfigurations::FastConfigurations(NucleiData nuclei_data, FermiFloat total_energy) {
-  FastConfigurations::GenerateSplits(nuclei_data, total_energy);
+FastConfigurations::FastConfigurations(NucleiData nucleiData, FermiFloat totalEnergy) {
+  FastConfigurations::GenerateSplits(nucleiData, totalEnergy);
 }
 
-VConfigurations& FastConfigurations::GenerateSplits(NucleiData nuclei_data, FermiFloat total_energy) {
-  last_nuclei_= nuclei_data;
-  auto max_fragments_count = FermiUInt(nuclei_data.mass_number);
-  auto& cache = cached_configurations_[nuclei_data];
+VConfigurations& FastConfigurations::GenerateSplits(NucleiData nucleiData, FermiFloat totalEnergy) {
+  lastNuclei_= nucleiData;
+  auto maxFragmentsCount = FermiUInt(nucleiData.massNumber);
+  auto& cache = cachedConfigurations_[nucleiData];
   if (cache.empty()) {
     cache.reserve(100);
 
-    for (uint32_t particle_count = 2; particle_count <= max_fragments_count; ++particle_count) {
-      for (auto& split : Split(nuclei_data, particle_count)) {
-        cache.emplace_back(std::move(split));  /// split is moved!
+    for (uint32_t particleCount = 2; particleCount <= maxFragmentsCount; ++particleCount) {
+      for (auto& split : Split(nucleiData, particleCount)) {
+        cache.emplace_back(std::move(split));  // split is moved!
       }
     }
   }
@@ -30,21 +30,21 @@ VConfigurations& FastConfigurations::GenerateSplits(NucleiData nuclei_data, Ferm
   configurations_.clear();
   weights_.clear();
 
-  FermiFloat total_weight = 0;
+  FermiFloat totalWeight = 0;
   for (size_t i = 0; i < cache.size(); ++i) {
-    auto split_weight =
-        ConfigurationProperties::DecayProbability(cache[i], nuclei_data.mass_number, total_energy);
+    auto splitWeight =
+        ConfigurationProperties::DecayProbability(cache[i], nucleiData.massNumber, totalEnergy);
 
-    if (split_weight != 0) {
-      total_weight += split_weight;
+    if (splitWeight != 0) {
+      totalWeight += splitWeight;
 
-      weights_.push_back(split_weight);
+      weights_.push_back(splitWeight);
       configurations_.emplace_back(i);
     }
   }
 
   std::transform(weights_.begin(), weights_.end(),
-                 weights_.begin(), std::bind(std::divides<>(), std::placeholders::_1, total_weight));
+                 weights_.begin(), std::bind(std::divides<>(), std::placeholders::_1, totalWeight));
 
   return *this;
 }
@@ -54,14 +54,14 @@ std::optional<FragmentVector> FastConfigurations::ChooseSplit() {
     return {};
   }
 
-  FermiFloat wheel_result = Randomizer::UniformRealDistribution();
-  FermiFloat accumulated_weight = 0;
+  FermiFloat wheelResult = Randomizer::uniform_real_distribution();
+  FermiFloat accumulatedWeight = 0;
 
   for (size_t i = 0; i < weights_.size(); ++i) {
-    accumulated_weight += weights_[i];
+    accumulatedWeight += weights_[i];
 
-    if (accumulated_weight >= wheel_result) {
-      return cached_configurations_[last_nuclei_][configurations_[i]];
+    if (accumulatedWeight >= wheelResult) {
+      return cachedConfigurations_[lastNuclei_][configurations_[i]];
     }
   }
 

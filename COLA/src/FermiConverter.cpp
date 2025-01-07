@@ -12,12 +12,12 @@ using cola::FermiConverter;
 namespace {
   fermi::Particle ColaToFermi(const cola::Particle& particle) {
     auto [A, Z] = particle.getAZ();
-    auto mass_number = MassNumber(A);
-    auto charge_number = ChargeNumber(Z);
+    auto massNumber = MassNumber(A);
+    auto chargeNumber = ChargeNumber(Z);
 
     return fermi::Particle(
-      mass_number,
-      charge_number,
+      massNumber,
+      chargeNumber,
       LorentzVector(
         particle.momentum.x,
         particle.momentum.y,
@@ -55,11 +55,11 @@ FermiConverter::FermiConverter(std::unique_ptr<fermi::FermiBreakUp>&& model) : m
 std::unique_ptr<cola::EventData> FermiConverter::operator()(std::unique_ptr<cola::EventData>&& data) {
   cola::EventParticles results;
   for (const auto& particle : data->particles) {
-    /// apply model
-    auto model_result = model_->BreakItUp(ColaToFermi(particle));
+    // apply model
+    auto modelResult = model_->BreakItUp(ColaToFermi(particle));
 
-    /// convert model's results to cola format
-    for (const auto& fragment : model_result) {
+    // convert model's results to cola format
+    for (const auto& fragment : modelResult) {
       results.emplace_back(FermiToCola(fragment));
     }
   }

@@ -2,8 +2,8 @@
 // Created by Artem Novikov on 18.02.2023.
 //
 
-#ifndef FERMIBREAKUP_MYFERMIBREAKUP_FragmentPOOL_H_
-#define FERMIBREAKUP_MYFERMIBREAKUP_FragmentPOOL_H_
+#ifndef FERMIBREAKUPMYFERMIBREAKUPFragmentPOOLH_
+#define FERMIBREAKUPMYFERMIBREAKUPFragmentPOOLH_
 
 #include <memory>
 #include <map>
@@ -19,4 +19,4 @@ namespace fermi {
 
 } // namespace fermi
 
-#endif //FERMIBREAKUP_MYFERMIBREAKUP_FragmentPOOL_H_
+#endif //FERMIBREAKUPMYFERMIBREAKUPFragmentPOOLH_

@@ -2,8 +2,8 @@
 // Created by Artem Novikov on 07.02.2023.
 //
 
-#ifndef FERMIBREAKUP_MYFERMIBREAKUP_DATATYPES_H_
-#define FERMIBREAKUP_MYFERMIBREAKUP_DATATYPES_H_
+#ifndef FERMIBREAKUPMYFERMIBREAKUPDATATYPESH_
+#define FERMIBREAKUPMYFERMIBREAKUPDATATYPESH_
 
 #include <CLHEP/Vector/LorentzVector.h>
 
@@ -21,11 +21,11 @@ using ParticleMomentum = Vector3;
 
 class MassNumber {
  public:
-  using ValueType = FermiUInt;
+  using value_type = FermiUInt;
 
   MassNumber() = default;
 
-  explicit MassNumber(ValueType mass) : mass_(mass) {}
+  explicit MassNumber(value_type mass) : mass_(mass) {}
 
   MassNumber(const MassNumber& other) = default;
 
@@ -69,11 +69,11 @@ std::istream& operator>>(std::istream& in, MassNumber& mass);
 
 class ChargeNumber {
  public:
-  using ValueType = FermiUInt;
+  using value_type = FermiUInt;
 
   ChargeNumber() = default;
 
-  explicit ChargeNumber(ValueType charge) : charge_(charge) {}
+  explicit ChargeNumber(value_type charge) : charge_(charge) {}
 
   ChargeNumber(const ChargeNumber& other) = default;
 
@@ -116,20 +116,20 @@ std::ostream& operator<<(std::ostream& out, ChargeNumber charge);
 std::istream& operator>>(std::istream& in, ChargeNumber& charge);
 
 struct NucleiData {
-  MassNumber mass_number;
-  ChargeNumber charge_number;
+  MassNumber massNumber;
+  ChargeNumber chargeNumber;
 
   bool operator<(const NucleiData& other) const {
-    return mass_number < other.mass_number
-        || (mass_number == other.mass_number && charge_number < other.charge_number);
+    return massNumber < other.massNumber
+        || (massNumber == other.massNumber && chargeNumber < other.chargeNumber);
   }
 
   bool operator==(const NucleiData& other) const {
-    return mass_number == other.mass_number && charge_number == other.charge_number;
+    return massNumber == other.massNumber && chargeNumber == other.chargeNumber;
   }
 
   bool operator!=(const NucleiData& other) const {
-    return mass_number != other.mass_number || charge_number != other.charge_number;
+    return massNumber != other.massNumber || chargeNumber != other.chargeNumber;
   }
 };
 
@@ -138,10 +138,10 @@ struct std::hash<NucleiData>
 {
   std::size_t operator()(const NucleiData& key) const
   {
-    auto mass = FermiInt(key.mass_number);
-    auto charge = FermiInt(key.charge_number);
+    auto mass = FermiInt(key.massNumber);
+    auto charge = FermiInt(key.chargeNumber);
     return (mass * (mass + 1)) / 2 + charge;
   }
 };
 
-#endif //FERMIBREAKUP_MYFERMIBREAKUP_DATATYPES_H_
+#endif //FERMIBREAKUPMYFERMIBREAKUPDATATYPESH_

@@ -6,11 +6,11 @@
 
 using namespace fermi;
 
-He5Fragment::He5Fragment(MassNumber mass_number,
-                                   ChargeNumber charge_number,
+He5Fragment::He5Fragment(MassNumber massNumber,
+                                   ChargeNumber chargeNumber,
                                    int polarization,
-                                   FermiFloat excitation_energy)
-    : UnstableFragment(mass_number, charge_number, polarization, excitation_energy) {
+                                   FermiFloat excitationEnergy)
+    : UnstableFragment(massNumber, chargeNumber, polarization, excitationEnergy) {
   // He5 ----> alpha + neutron
 
   Build({NucleiData{4_m, 2_c},

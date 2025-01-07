@@ -2,8 +2,8 @@
 // Created by Artem Novikov on 20.05.2023.
 //
 
-#ifndef FERMIBREAKUP_MYFERMIBREAKUP_AAMCCFERMIBREAKUP_H_
-#define FERMIBREAKUP_MYFERMIBREAKUP_AAMCCFERMIBREAKUP_H_
+#ifndef FERMIBREAKUPMYFERMIBREAKUPAAMCCFERMIBREAKUPH_
+#define FERMIBREAKUPMYFERMIBREAKUPAAMCCFERMIBREAKUPH_
 
 #include <memory>
 
@@ -18,14 +18,14 @@ class AAMCCFermiBreakUp : public G4VFermiBreakUp {
 
   void Initialise() override;
 
-  void BreakFragment(G4FragmentVector* fragments_ptr, G4Fragment* fragment) override;
+  void BreakFragment(G4FragmentVector* fragmentsPtr, G4Fragment* fragment) override;
 
-  static G4bool IsFermiPossible(G4int Z, G4int A, G4double excitation_energy);
+  static G4bool IsFermiPossible(G4int Z, G4int A, G4double excitationEnergy);
 
-  G4bool IsApplicable(G4int Z, G4int A, G4double excitation_energy) const override;
+  G4bool IsApplicable(G4int Z, G4int A, G4double excitationEnergy) const override;
 
  private:
-  std::unique_ptr<fermi::VFermiBreakUp> fermi_model_;
+  std::unique_ptr<fermi::VFermiBreakUpMfermiModel_;
 };
 
-#endif //FERMIBREAKUP_MYFERMIBREAKUP_AAMCCFERMIBREAKUP_H_
+#endif //FERMIBREAKUPMYFERMIBREAKUPAAMCCFERMIBREAKUPH_

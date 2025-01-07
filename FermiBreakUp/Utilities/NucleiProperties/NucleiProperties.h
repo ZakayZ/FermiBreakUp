@@ -2,8 +2,8 @@
 // Created by Artem Novikov on 18.02.2023.
 //
 
-#ifndef FERMIBREAKUP_MYFERMIBREAKUP_UTILITIES_NUCLEIPROPERTIES_H_
-#define FERMIBREAKUP_MYFERMIBREAKUP_UTILITIES_NUCLEIPROPERTIES_H_
+#ifndef FERMIBREAKUPMYFERMIBREAKUPUTILITIESNUCLEIPROPERTIESH_
+#define FERMIBREAKUPMYFERMIBREAKUPUTILITIESNUCLEIPROPERTIESH_
 
 #include "Utilities/DataTypes.h"
 #include "Utilities/Singleton.h"
@@ -15,7 +15,7 @@
 
 namespace properties {
 
-    /// it is possible to use polymorphism here, but this way no inline table access is possible and it is a bottleneck
+    // it is possible to use polymorphism here, but this way no inline table access is possible and it is a bottleneck
     using NucleiProperties = Singleton<FastNucleiProperties>;
 
     static_assert(std::is_base_of_v<VNucleiProperties, std::remove_reference_t<decltype(NucleiProperties::Instance())>>,
@@ -23,4 +23,4 @@ namespace properties {
 
 } // namespace properties
 
-#endif //FERMIBREAKUP_MYFERMIBREAKUP_UTILITIES_NUCLEIPROPERTIES_H_
+#endif //FERMIBREAKUPMYFERMIBREAKUPUTILITIESNUCLEIPROPERTIESH_

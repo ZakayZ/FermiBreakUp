@@ -2,8 +2,8 @@
 // Created by Artem Novikov on 21.02.2023.
 //
 
-#ifndef FERMIBREAKUP_MYFERMIBREAKUP_FERMIBREAKUP_H_
-#define FERMIBREAKUP_MYFERMIBREAKUP_FERMIBREAKUP_H_
+#ifndef FERMIBREAKUPMYFERMIBREAKUPFERMIBREAKUPH_
+#define FERMIBREAKUPMYFERMIBREAKUPFERMIBREAKUPH_
 
 #include <memory>
 
@@ -29,9 +29,9 @@ namespace fermi {
     static std::unique_ptr<VConfigurations> DefaultConfigurations();
 
   private:
-    std::unique_ptr<VConfigurations> fermi_configurations_;
+    std::unique_ptr<VConfigurations> fermiConfigurations_;
   };
 
 }  // namespace fermi
 
-#endif //FERMIBREAKUP_MYFERMIBREAKUP_FERMIBREAKUP_H_
+#endif //FERMIBREAKUPMYFERMIBREAKUPFERMIBREAKUPH_

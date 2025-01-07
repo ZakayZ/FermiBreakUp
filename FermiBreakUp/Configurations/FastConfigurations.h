@@ -2,8 +2,8 @@
 // Created by Artem Novikov on 18.02.2024.
 //
 
-#ifndef HANDLER_MYFERMIBREAKUP_FASTFERMICONFIGURATION_H_
-#define HANDLER_MYFERMIBREAKUP_FASTFERMICONFIGURATION_H_
+#ifndef HANDLERMYFERMIBREAKUPFASTFERMICONFIGURATIONH_
+#define HANDLERMYFERMIBREAKUPFASTFERMICONFIGURATIONH_
 
 #include <unordered_map>
 
@@ -16,9 +16,9 @@ namespace fermi {
   public:
     FastConfigurations() = default;
 
-    FastConfigurations(NucleiData nuclei_data, FermiFloat total_energy);
+    FastConfigurations(NucleiData nucleiData, FermiFloat totalEnergy);
 
-    VConfigurations& GenerateSplits(NucleiData nuclei_data, FermiFloat total_energy) override;
+    VConfigurations& GenerateSplits(NucleiData nucleiData, FermiFloat totalEnergy) override;
 
     std::optional<FragmentVector> ChooseSplit() override;
 
@@ -28,10 +28,10 @@ namespace fermi {
     std::vector<size_t> configurations_;
     std::vector<FermiFloat> weights_;
 
-    std::unordered_map<NucleiData, std::vector<FragmentVector>> cached_configurations_;
-    NucleiData last_nuclei_{};
+    std::unordered_map<NucleiData, std::vector<FragmentVector>> cachedConfigurations_;
+    NucleiData lastNuclei_{};
   };
 
 }  // namespace fermi
 
-#endif //HANDLER_MYFERMIBREAKUP_FASTFERMICONFIGURATION_H_
+#endif //HANDLERMYFERMIBREAKUPFASTFERMICONFIGURATIONH_

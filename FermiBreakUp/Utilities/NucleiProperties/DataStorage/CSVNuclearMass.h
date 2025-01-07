@@ -2,8 +2,8 @@
 // Created by Artem Novikov on 18.02.2024.
 //
 
-#ifndef HANDLER_MYFERMIBREAKUP_UTILITIES_NUCLEIPROPERTIES_DATASTORAGE_CSVNUCLEARMASS_H_
-#define HANDLER_MYFERMIBREAKUP_UTILITIES_NUCLEIPROPERTIES_DATASTORAGE_CSVNUCLEARMASS_H_
+#ifndef HANDLERMYFERMIBREAKUPUTILITIESNUCLEIPROPERTIESDATASTORAGECSVNUCLEARMASSH_
+#define HANDLERMYFERMIBREAKUPUTILITIESNUCLEIPROPERTIESDATASTORAGECSVNUCLEARMASSH_
 
 #include <map>
 
@@ -17,10 +17,10 @@ namespace properties {
 
   public:
     CSVNuclearMass(
-      const std::string& csv_filename,
-      const std::string& mass_number_name = "A",
-      const std::string& charge_number_name = "Z",
-      const std::string& mass_name = "mass"
+      const std::string& csvFilename,
+      const std::string& massNumberName = "A",
+      const std::string& chargeNumberName = "Z",
+      const std::string& massName = "mass"
     );
 
     ~CSVNuclearMass() = default;
@@ -43,4 +43,4 @@ namespace properties {
 
 } // namespace properties
 
-#endif //HANDLER_MYFERMIBREAKUP_UTILITIES_NUCLEIPROPERTIES_DATASTORAGE_CSVNUCLEARMASS_H_
+#endif //HANDLERMYFERMIBREAKUPUTILITIESNUCLEIPROPERTIESDATASTORAGECSVNUCLEARMASSH_

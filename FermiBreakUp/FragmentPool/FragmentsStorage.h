@@ -2,8 +2,8 @@
 // Created by Artem Novikov on 30.01.2024.
 //
 
-#ifndef HANDLER_MYFERMIBREAKUP_FRAGMENTPOOL_STORAGE_FRAGMENTSSTORAGE_H_
-#define HANDLER_MYFERMIBREAKUP_FRAGMENTPOOL_STORAGE_FRAGMENTSSTORAGE_H_
+#ifndef HANDLERMYFERMIBREAKUPFRAGMENTPOOLSTORAGEFRAGMENTSSTORAGEH_
+#define HANDLERMYFERMIBREAKUPFRAGMENTPOOLSTORAGEFRAGMENTSSTORAGEH_
 
 #include <vector>
 
@@ -22,27 +22,27 @@ namespace fermi {
     FragmentsStorage();
 
     template <typename DataSource>
-    FragmentsStorage(const DataSource& data_source);
+    FragmentsStorage(const DataSource& dataSource);
 
     template <typename Iter>
     FragmentsStorage(Iter begin, Iter end);
 
-    [[nodiscard]] size_t Count(MassNumber mass_number, ChargeNumber charge_number) const;
+    [[nodiscard]] size_t Count(MassNumber massNumber, ChargeNumber chargeNumber) const;
 
     [[nodiscard]] size_t Count(NucleiData nuclei) const;
 
-    [[nodiscard]] RangeIterators GetFragments(MassNumber mass_number, ChargeNumber charge_number) const;
+    [[nodiscard]] RangeIterators GetFragments(MassNumber massNumber, ChargeNumber chargeNumber) const;
 
     [[nodiscard]] RangeIterators GetFragments(NucleiData nuclei) const;
 
     void AddFragment(const Fragment& fragment);
 
   private:
-    [[nodiscard]] static size_t GetSlot(MassNumber mass_number, ChargeNumber charge_number);
+    [[nodiscard]] static size_t GetSlot(MassNumber massNumber, ChargeNumber chargeNumber);
 
     std::vector<Container> fragments_;
   };
 
 } // namespace fermi
 
-#endif //HANDLER_MYFERMIBREAKUP_FRAGMENTPOOL_STORAGE_FRAGMENTSSTORAGE_H_
+#endif //HANDLERMYFERMIBREAKUPFRAGMENTPOOLSTORAGEFRAGMENTSSTORAGEH_

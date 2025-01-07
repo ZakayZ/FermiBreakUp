@@ -2,8 +2,8 @@
 // Created by Artem Novikov on 18.02.2023.
 //
 
-#ifndef FERMIBREAKUP_MYFERMIBREAKUP_UTILITIES_TABLEVALUES_NUCLEIPROPERTIESTABLE_H_
-#define FERMIBREAKUP_MYFERMIBREAKUP_UTILITIES_TABLEVALUES_NUCLEIPROPERTIESTABLE_H_
+#ifndef FERMIBREAKUPMYFERMIBREAKUPUTILITIESTABLEVALUESNUCLEIPROPERTIESTABLEH_
+#define FERMIBREAKUPMYFERMIBREAKUPUTILITIESTABLEVALUESNUCLEIPROPERTIESTABLEH_
 
 #include <vector>
 
@@ -15,9 +15,9 @@ namespace properties {
   public:
     NucleiPropertiesTable();
 
-    FermiFloat GetNuclearMass(MassNumber mass_number, ChargeNumber charge_number) const;
+    FermiFloat GetNuclearMass(MassNumber massNumber, ChargeNumber chargeNumber) const;
 
-    bool ContainsParticle(MassNumber mass_number, ChargeNumber charge_number) const;
+    bool ContainsParticle(MassNumber massNumber, ChargeNumber chargeNumber) const;
 
     FermiUInt GetMaxMass() const;
 
@@ -26,13 +26,13 @@ namespace properties {
     ~NucleiPropertiesTable() = default;
 
   private:
-    static FermiFloat ElectronicBindingEnergy(ChargeNumber charge_number);
+    static FermiFloat ElectronicBindingEnergy(ChargeNumber chargeNumber);
 
-    size_t GetIndex(MassNumber mass_number, ChargeNumber charge_number) const;
+    size_t GetIndex(MassNumber massNumber, ChargeNumber chargeNumber) const;
 
-    FermiFloat GetAtomicMass(MassNumber mass_number, ChargeNumber charge_number) const;
+    FermiFloat GetAtomicMass(MassNumber massNumber, ChargeNumber chargeNumber) const;
 
-    bool VerifyNuclei(MassNumber mass_number, ChargeNumber charge_number) const;
+    bool VerifyNuclei(MassNumber massNumber, ChargeNumber chargeNumber) const;
 
     static const MassNumber MaxMassNumber;
 
@@ -55,4 +55,4 @@ namespace properties {
 
 } // namespace properties
 
-#endif //FERMIBREAKUP_MYFERMIBREAKUP_UTILITIES_TABLEVALUES_NUCLEIPROPERTIESTABLE_H_
+#endif //FERMIBREAKUPMYFERMIBREAKUPUTILITIESTABLEVALUESNUCLEIPROPERTIESTABLEH_

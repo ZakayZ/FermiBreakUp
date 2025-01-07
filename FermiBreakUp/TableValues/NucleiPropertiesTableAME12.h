@@ -2,8 +2,8 @@
 // Created by Artem Novikov on 26.02.2023.
 //
 
-#ifndef FERMIBREAKUP_MYFERMIBREAKUP_UTILITIES_TABLEVALUES_NUCLEIPROPERTIESTABLEAME12_H_
-#define FERMIBREAKUP_MYFERMIBREAKUP_UTILITIES_TABLEVALUES_NUCLEIPROPERTIESTABLEAME12_H_
+#ifndef FERMIBREAKUPMYFERMIBREAKUPUTILITIESTABLEVALUESNUCLEIPROPERTIESTABLEAME12H_
+#define FERMIBREAKUPMYFERMIBREAKUPUTILITIESTABLEVALUESNUCLEIPROPERTIESTABLEAME12H_
 
 #include <vector>
 
@@ -15,15 +15,15 @@ namespace properties {
   public:
     NucleiPropertiesTableAME12();
 
-    FermiFloat GetNuclearMass(MassNumber mass_number, ChargeNumber charge_number) const;
+    FermiFloat GetNuclearMass(MassNumber massNumber, ChargeNumber chargeNumber) const;
 
-    FermiFloat GetMassExcess(MassNumber mass_number, ChargeNumber charge_number) const;
+    FermiFloat GetMassExcess(MassNumber massNumber, ChargeNumber chargeNumber) const;
 
-    FermiFloat GetBindingEnergy(MassNumber mass_number, ChargeNumber charge_number) const;
+    FermiFloat GetBindingEnergy(MassNumber massNumber, ChargeNumber chargeNumber) const;
 
-    FermiFloat GetBetaDecayEnergy(MassNumber mass_number, ChargeNumber charge_number) const;
+    FermiFloat GetBetaDecayEnergy(MassNumber massNumber, ChargeNumber chargeNumber) const;
 
-    bool ContainsParticle(MassNumber mass_number, ChargeNumber charge_number) const;
+    bool ContainsParticle(MassNumber massNumber, ChargeNumber chargeNumber) const;
 
     FermiUInt GetMaxMass() const;
 
@@ -32,11 +32,11 @@ namespace properties {
     ~NucleiPropertiesTableAME12() = default;
 
   private:
-    size_t GetIndex(MassNumber mass_number, ChargeNumber charge_number) const;
+    size_t GetIndex(MassNumber massNumber, ChargeNumber chargeNumber) const;
 
-    FermiFloat GetAtomicMass(MassNumber mass_number, ChargeNumber charge_number) const;
+    FermiFloat GetAtomicMass(MassNumber massNumber, ChargeNumber chargeNumber) const;
 
-    bool VerifyNuclei(MassNumber mass_number, ChargeNumber charge_number) const;
+    bool VerifyNuclei(MassNumber massNumber, ChargeNumber chargeNumber) const;
 
     static const MassNumber MaxMassNumber;
 
@@ -56,11 +56,11 @@ namespace properties {
 
     static const std::vector<size_t> ShortTable;
 
-    static std::vector<FermiFloat>* electron_mass_;
+    static std::vector<FermiFloat>* electronMass_;
   };
 
   std::ostream& operator<<(std::ostream& out, const NucleiPropertiesTableAME12& table);
 
 } // namespace properties
 
-#endif //FERMIBREAKUP_MYFERMIBREAKUP_UTILITIES_TABLEVALUES_NUCLEIPROPERTIESTABLEAME12_H_
+#endif //FERMIBREAKUPMYFERMIBREAKUPUTILITIESTABLEVALUESNUCLEIPROPERTIESTABLEAME12H_

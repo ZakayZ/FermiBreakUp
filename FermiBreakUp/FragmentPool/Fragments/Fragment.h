@@ -2,8 +2,8 @@
 // Created by Artem Novikov on 17.02.2023.
 //
 
-#ifndef FERMIBREAKUP_MYFERMIBREAKUP_FRAGMENTS_Fragment_H_
-#define FERMIBREAKUP_MYFERMIBREAKUP_FRAGMENTS_Fragment_H_
+#ifndef FERMIBREAKUPMYFERMIBREAKUPFRAGMENTSFragmentH_
+#define FERMIBREAKUPMYFERMIBREAKUPFRAGMENTSFragmentH_
 
 #include <vector>
 
@@ -14,7 +14,7 @@ namespace fermi {
 
   class Fragment {
   public:
-    Fragment(MassNumber mass_number, ChargeNumber charge_number, int polarization, FermiFloat excitation_energy);
+    Fragment(MassNumber massNumber, ChargeNumber chargeNumber, int polarization, FermiFloat excitationEnergy);
 
     Fragment(const Fragment&) = delete;
 
@@ -41,12 +41,12 @@ namespace fermi {
     virtual ~Fragment() = 0;
 
   protected:
-    MassNumber mass_number_;  /// A
-    ChargeNumber charge_number_;  /// Z
+    MassNumber massNumber_;  // A
+    ChargeNumber chargeNumber_;  // Z
     int32_t polarization;
-    FermiFloat excitation_energy_;
+    FermiFloat excitationEnergy_;
   };
 
 }  // namespace fermi
 
-#endif //FERMIBREAKUP_MYFERMIBREAKUP_FRAGMENTS_Fragment_H_
+#endif //FERMIBREAKUPMYFERMIBREAKUPFRAGMENTSFragmentH_

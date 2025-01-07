@@ -16,19 +16,19 @@ using namespace properties;
 using namespace fermi;
 
 float CalculateFragmentCount(MassNumber mass, ChargeNumber charge, const Vector3& vec,
-                             FermiFloat energy_per_nucleon, size_t tests,
+                             FermiFloat energyPerNucleon, size_t tests,
                              std::unique_ptr<VConfigurations>&& configurations = FermiBreakUp::DefaultConfigurations()) {
   auto model = FermiBreakUp(std::move(configurations));
-  size_t parts_counter = 0;
-  auto energy = energy_per_nucleon * FermiFloat(mass);
-  auto total_energy = std::sqrt(std::pow(NucleiProperties()->GetNuclearMass(mass, charge) + energy, 2) + vec.mag2());
-  auto mom = LorentzVector(vec, total_energy);
+  size_t partsCounter = 0;
+  auto energy = energyPerNucleon * FermiFloat(mass);
+  auto totalEnergy = std::sqrt(std::pow(NucleiProperties()->GetNuclearMass(mass, charge) + energy, 2) + vec.mag2());
+  auto mom = LorentzVector(vec, totalEnergy);
   auto particle = Particle(mass, charge, mom);
   for (size_t i = 0; i < tests; ++i) {
     auto particles = model.BreakItUp(particle);
-    parts_counter += particles.size();
+    partsCounter += particles.size();
   }
-  return float(parts_counter) / float(tests);
+  return float(partsCounter) / float(tests);
 }
 
 class ConfigurationsFixture : public ::testing::TestWithParam<VConfigurations*> {
@@ -36,7 +36,7 @@ class ConfigurationsFixture : public ::testing::TestWithParam<VConfigurations*> 
   VConfigurations* configurations;
 };
 
-INSTANTIATE_TEST_SUITE_P(
+INSTANTIATETESTSUITEP(
     FermiBreakUpTests,
     ConfigurationsFixture,
     ::testing::Values(
@@ -45,50 +45,50 @@ INSTANTIATE_TEST_SUITE_P(
         new FastConfigurations()
     ));
 
-TEST_P(ConfigurationsFixture, CarbonTest) {
+TESTP(ConfigurationsFixture, CarbonTest) {
   size_t runs = 1e3;
   auto config = ConfigurationsFixture::GetParam()->Clone();
 
-  /// Carbons shouldn't break up [0, 0.7]
-  ASSERT_NEAR(1, CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 0 * CLHEP::MeV, runs, ConfigurationsFixture::GetParam()->Clone()), 0.01);
-  ASSERT_NEAR(1, CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 0.25 * CLHEP::MeV, runs, ConfigurationsFixture::GetParam()->Clone()), 0.01);
-  ASSERT_NEAR(1, CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 0.5 * CLHEP::MeV, runs, ConfigurationsFixture::GetParam()->Clone()), 0.01);
-  ASSERT_NEAR(1, CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 0.7 * CLHEP::MeV, runs, ConfigurationsFixture::GetParam()->Clone()), 0.01);
+  // Carbons shouldn't break up [0, 0.7]
+  ASSERTNEAR(1, CalculateFragmentCount(2_m, 6_c, {0, 0, 0}, 0 * CLHEP::MeV, runs, ConfigurationsFixture::GetParam()->Clone()), 0.01);
+  ASSERTNEAR(1, CalculateFragmentCount(2_m, 6_c, {0, 0, 0}, 0.25 * CLHEP::MeV, runs, ConfigurationsFixture::GetParam()->Clone()), 0.01);
+  ASSERTNEAR(1, CalculateFragmentCount(2_m, 6_c, {0, 0, 0}, 0.5 * CLHEP::MeV, runs, ConfigurationsFixture::GetParam()->Clone()), 0.01);
+  ASSERTNEAR(1, CalculateFragmentCount(2_m, 6_c, {0, 0, 0}, 0.7 * CLHEP::MeV, runs, ConfigurationsFixture::GetParam()->Clone()), 0.01);
 
-  /// Carbons should break into 3 parts [1, 1.4]
-  ASSERT_NEAR(3, CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 1 * CLHEP::MeV, runs, ConfigurationsFixture::GetParam()->Clone()), 0.01);
-  ASSERT_NEAR(3, CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 1.25 * CLHEP::MeV, runs, ConfigurationsFixture::GetParam()->Clone()), 0.01);
-  ASSERT_NEAR(3, CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 1.4 * CLHEP::MeV, runs, ConfigurationsFixture::GetParam()->Clone()), 0.01);
+  // Carbons should break into 3 parts [1, 1.4]
+  ASSERTNEAR(3, CalculateFragmentCount(2_m, 6_c, {0, 0, 0}, 1 * CLHEP::MeV, runs, ConfigurationsFixture::GetParam()->Clone()), 0.01);
+  ASSERTNEAR(3, CalculateFragmentCount(2_m, 6_c, {0, 0, 0}, 1.25 * CLHEP::MeV, runs, ConfigurationsFixture::GetParam()->Clone()), 0.01);
+  ASSERTNEAR(3, CalculateFragmentCount(2_m, 6_c, {0, 0, 0}, 1.4 * CLHEP::MeV, runs, ConfigurationsFixture::GetParam()->Clone()), 0.01);
 
 
-  /// Carbons should break into less than 3 parts [1.5, 3.5]
-  ASSERT_LE(CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 1.5 * CLHEP::MeV, runs, ConfigurationsFixture::GetParam()->Clone()), 3);
-  ASSERT_LE(CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 2 * CLHEP::MeV, runs, ConfigurationsFixture::GetParam()->Clone()), 3);
-  ASSERT_LE(CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 3 * CLHEP::MeV, runs, ConfigurationsFixture::GetParam()->Clone()), 3);
-  ASSERT_LE(CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 3.5 * CLHEP::MeV, runs, ConfigurationsFixture::GetParam()->Clone()), 3);
+  // Carbons should break into less than 3 parts [1.5, 3.5]
+  ASSERTLE(CalculateFragmentCount(2_m, 6_c, {0, 0, 0}, 1.5 * CLHEP::MeV, runs, ConfigurationsFixture::GetParam()->Clone()), 3);
+  ASSERTLE(CalculateFragmentCount(2_m, 6_c, {0, 0, 0}, 2 * CLHEP::MeV, runs, ConfigurationsFixture::GetParam()->Clone()), 3);
+  ASSERTLE(CalculateFragmentCount(2_m, 6_c, {0, 0, 0}, 3 * CLHEP::MeV, runs, ConfigurationsFixture::GetParam()->Clone()), 3);
+  ASSERTLE(CalculateFragmentCount(2_m, 6_c, {0, 0, 0}, 3.5 * CLHEP::MeV, runs, ConfigurationsFixture::GetParam()->Clone()), 3);
 
-  /// Carbons should break into more than 3 parts [5, ...]
-  ASSERT_GE(CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 5 * CLHEP::MeV, runs, ConfigurationsFixture::GetParam()->Clone()), 3);
-  ASSERT_GE(CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 7 * CLHEP::MeV, runs, ConfigurationsFixture::GetParam()->Clone()), 3);
-  ASSERT_GE(CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 9 * CLHEP::MeV, runs, ConfigurationsFixture::GetParam()->Clone()), 3);
-  ASSERT_GE(CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 20 * CLHEP::MeV, runs, ConfigurationsFixture::GetParam()->Clone()), 3);
+  // Carbons should break into more than 3 parts [5, ...]
+  ASSERTGE(CalculateFragmentCount(2_m, 6_c, {0, 0, 0}, 5 * CLHEP::MeV, runs, ConfigurationsFixture::GetParam()->Clone()), 3);
+  ASSERTGE(CalculateFragmentCount(2_m, 6_c, {0, 0, 0}, 7 * CLHEP::MeV, runs, ConfigurationsFixture::GetParam()->Clone()), 3);
+  ASSERTGE(CalculateFragmentCount(2_m, 6_c, {0, 0, 0}, 9 * CLHEP::MeV, runs, ConfigurationsFixture::GetParam()->Clone()), 3);
+  ASSERTGE(CalculateFragmentCount(2_m, 6_c, {0, 0, 0}, 20 * CLHEP::MeV, runs, ConfigurationsFixture::GetParam()->Clone()), 3);
 }
 
-TEST_P(ConfigurationsFixture, UnstableNucleiTest) {
+TESTP(ConfigurationsFixture, UnstableNucleiTest) {
   size_t runs = 1e3;
 
-  /// protons should break up
+  // protons should break up
   for (int i = 2; i <= 16; ++i) {
-    ASSERT_NEAR(i, CalculateFragmentCount(MassNumber(i), ChargeNumber(i), {0, 0, 0}, 0, runs, ConfigurationsFixture::GetParam()->Clone()), 0.01);
+    ASSERTNEAR(i, CalculateFragmentCount(MassNumber(i), ChargeNumber(i), {0, 0, 0}, 0, runs, ConfigurationsFixture::GetParam()->Clone()), 0.01);
   }
 
-  /// neutron should break up
+  // neutron should break up
   for (int i = 2; i <= 16; ++i) {
-    ASSERT_NEAR(i, CalculateFragmentCount(MassNumber(i), 0_c, {0, 0, 0}, 0, runs, ConfigurationsFixture::GetParam()->Clone()), 0.01);
+    ASSERTNEAR(i, CalculateFragmentCount(MassNumber(i), 0_c, {0, 0, 0}, 0, runs, ConfigurationsFixture::GetParam()->Clone()), 0.01);
   }
 }
 
-TEST_P(ConfigurationsFixture, MomentumConservation) {
+TESTP(ConfigurationsFixture, MomentumConservation) {
   auto model = FermiBreakUp(ConfigurationsFixture::GetParam()->Clone());
   int seed = 5;
   srand(seed);
@@ -100,8 +100,8 @@ TEST_P(ConfigurationsFixture, MomentumConservation) {
     FermiFloat energy = (rand() % 1000) * CLHEP::MeV * FermiFloat(mass);
     auto vec = Randomizer::IsotropicVector() * (rand() % 1000) * CLHEP::MeV;
     auto
-        total_energy = std::sqrt(std::pow(NucleiProperties()->GetNuclearMass(mass, charge) + energy, 2) + vec.mag2());
-    auto mom = LorentzVector(vec, total_energy);
+        totalEnergy = std::sqrt(std::pow(NucleiProperties()->GetNuclearMass(mass, charge) + energy, 2) + vec.mag2());
+    auto mom = LorentzVector(vec, totalEnergy);
     auto particle = Particle(mass, charge, mom);
     for (size_t i = 0; i < runs; ++i) {
       LorentzVector sum(0, 0, 0, 0);
@@ -109,15 +109,15 @@ TEST_P(ConfigurationsFixture, MomentumConservation) {
       for (auto& fragment : particles) {
         sum += fragment.GetMomentum();
       }
-      ASSERT_NEAR(sum.x(), mom.x(), 1e-5);
-      ASSERT_NEAR(sum.y(), mom.y(), 1e-5);
-      ASSERT_NEAR(sum.z(), mom.z(), 1e-5);
-      ASSERT_NEAR(sum.e(), mom.e(), 1e-5);
+      ASSERTNEAR(sum.x(), mom.x(), 1e-5);
+      ASSERTNEAR(sum.y(), mom.y(), 1e-5);
+      ASSERTNEAR(sum.z(), mom.z(), 1e-5);
+      ASSERTNEAR(sum.e(), mom.e(), 1e-5);
     }
   }
 }
 
-TEST_P(ConfigurationsFixture, BaryonAndChargeConservation) {
+TESTP(ConfigurationsFixture, BaryonAndChargeConservation) {
   auto model = FermiBreakUp(ConfigurationsFixture::GetParam()->Clone());
   int seed = 5;
   srand(seed);
@@ -129,19 +129,19 @@ TEST_P(ConfigurationsFixture, BaryonAndChargeConservation) {
     FermiFloat energy = (rand() % 1000) * CLHEP::MeV * FermiFloat(mass);
     auto vec = Randomizer::IsotropicVector() * (rand() % 1000) * CLHEP::MeV;
     auto
-        total_energy = std::sqrt(std::pow(NucleiProperties()->GetNuclearMass(mass, charge) + energy, 2) + vec.mag2());
-    auto mom = LorentzVector(vec, total_energy);
+        totalEnergy = std::sqrt(std::pow(NucleiProperties()->GetNuclearMass(mass, charge) + energy, 2) + vec.mag2());
+    auto mom = LorentzVector(vec, totalEnergy);
     auto particle = Particle(mass, charge, mom);
     for (size_t i = 0; i < runs; ++i) {
-      MassNumber fragments_mass_sum(0);
-      ChargeNumber fragments_charge_sum(0);
+      MassNumber fragmentsMassSum(0);
+      ChargeNumber fragmentsChargeSum(0);
       auto particles = model.BreakItUp(particle);
       for (auto& fragment : particles) {
-        fragments_mass_sum = MassNumber(FermiUInt(fragments_mass_sum) + FermiUInt(fragment.GetMassNumber()));
-        fragments_charge_sum = ChargeNumber(FermiUInt(fragments_charge_sum) + FermiUInt(fragment.GetChargeNumber()));
+        fragmentsMassSum = MassNumber(FermiUInt(fragmentsMassSum) + FermiUInt(fragment.GetMassNumber()));
+        fragmentsChargeSum = ChargeNumber(FermiUInt(fragmentsChargeSum) + FermiUInt(fragment.GetChargeNumber()));
       }
-      ASSERT_EQ(fragments_mass_sum, mass);
-      ASSERT_EQ(fragments_charge_sum, charge);
+      ASSERTEQ(fragmentsMassSum, mass);
+      ASSERTEQ(fragmentsChargeSum, charge);
     }
   }
 }

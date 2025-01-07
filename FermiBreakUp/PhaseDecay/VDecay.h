@@ -2,8 +2,8 @@
 // Created by Artem Novikov on 21.02.2023.
 //
 
-#ifndef FERMIBREAKUP_MYFERMIBREAKUP_UTILITIES_VDECAY_H_
-#define FERMIBREAKUP_MYFERMIBREAKUP_UTILITIES_VDECAY_H_
+#ifndef FERMIBREAKUPMYFERMIBREAKUPUTILITIESVDECAYH_
+#define FERMIBREAKUPMYFERMIBREAKUPUTILITIESVDECAYH_
 
 #include <vector>
 #include "Utilities/DataTypes.h"
@@ -15,17 +15,17 @@ namespace fermi {
     VDecay() = default;
 
     virtual std::vector<LorentzVector> CalculateDecay(const LorentzVector& momentum,
-                                                const std::vector<FermiFloat>& fragments_mass) const = 0;
+                                                const std::vector<FermiFloat>& fragmentsMass) const = 0;
 
     virtual ~VDecay() = 0;
 
     protected:
-    static FermiFloat TwoBodyMomentum(FermiFloat total_energy, FermiFloat mass1, FermiFloat mass2);
+    static FermiFloat TwoBodyMomentum(FermiFloat totalEnergy, FermiFloat mass1, FermiFloat mass2);
 
     static std::pair<LorentzVector, LorentzVector> TwoBodyDecay(
-        FermiFloat total_energy, FermiFloat mass1, FermiFloat mass2);
+        FermiFloat totalEnergy, FermiFloat mass1, FermiFloat mass2);
     };
 
 }  // namespace fermi
 
-#endif //FERMIBREAKUP_MYFERMIBREAKUP_UTILITIES_VDECAY_H_
+#endif //FERMIBREAKUPMYFERMIBREAKUPUTILITIESVDECAYH_

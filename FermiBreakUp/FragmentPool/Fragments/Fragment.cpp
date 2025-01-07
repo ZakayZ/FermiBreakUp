@@ -7,17 +7,17 @@
 
 using namespace fermi;
 
-Fragment::Fragment(MassNumber mass_number, ChargeNumber charge_number,
-                             int polarization, FermiFloat excitation_energy)
-    : mass_number_(mass_number), charge_number_(charge_number),
-      polarization(polarization), excitation_energy_(excitation_energy) {}
+Fragment::Fragment(MassNumber massNumber, ChargeNumber chargeNumber,
+                             int polarization, FermiFloat excitationEnergy)
+    : massNumber_(massNumber), chargeNumber_(chargeNumber),
+      polarization(polarization), excitationEnergy_(excitationEnergy) {}
 
 MassNumber Fragment::GetA() const {
   return GetMassNumber();
 }
 
 MassNumber Fragment::GetMassNumber() const {
-  return mass_number_;
+  return massNumber_;
 }
 
 ChargeNumber Fragment::GetZ() const {
@@ -25,7 +25,7 @@ ChargeNumber Fragment::GetZ() const {
 }
 
 ChargeNumber Fragment::GetChargeNumber() const {
-  return charge_number_;
+  return chargeNumber_;
 }
 
 int32_t Fragment::GetPolarization() const {
@@ -33,11 +33,11 @@ int32_t Fragment::GetPolarization() const {
 }
 
 FermiFloat Fragment::GetExcitationEnergy() const {
-  return excitation_energy_;
+  return excitationEnergy_;
 }
 
 FermiFloat Fragment::GetFragmentMass() const {
-  return properties::NucleiProperties()->GetNuclearMass(mass_number_, charge_number_);
+  return properties::NucleiProperties()->GetNuclearMass(massNumber_, chargeNumber_);
 }
 
 FermiFloat Fragment::GetTotalEnergy() const {

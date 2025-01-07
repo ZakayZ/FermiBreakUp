@@ -2,8 +2,8 @@
 // Created by Artem Novikov on 18.02.2023.
 //
 
-#ifndef FERMIBREAKUP_MYFERMIBREAKUP_FRAGMENTS_B9Fragment_H_
-#define FERMIBREAKUP_MYFERMIBREAKUP_FRAGMENTS_B9Fragment_H_
+#ifndef FERMIBREAKUPMYFERMIBREAKUPFRAGMENTSB9FragmentH_
+#define FERMIBREAKUPMYFERMIBREAKUPFRAGMENTSB9FragmentH_
 
 #include "UnstableFragment.h"
 
@@ -11,7 +11,7 @@ namespace fermi {
 
   class B9Fragment : public UnstableFragment {
   public:
-    B9Fragment(MassNumber mass_number, ChargeNumber charge_number, int polarization, FermiFloat excitation_energy);
+    B9Fragment(MassNumber massNumber, ChargeNumber chargeNumber, int polarization, FermiFloat excitationEnergy);
 
     B9Fragment() = delete;
 
@@ -22,4 +22,4 @@ namespace fermi {
 
 }  // namespace fermi
 
-#endif //FERMIBREAKUP_MYFERMIBREAKUP_FRAGMENTS_B9Fragment_H_
+#endif //FERMIBREAKUPMYFERMIBREAKUPFRAGMENTSB9FragmentH_

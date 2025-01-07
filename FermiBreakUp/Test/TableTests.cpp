@@ -9,43 +9,43 @@
 #include "Utilities/NucleiProperties/DataStorage/CSVNuclearMass.h"
 
 TEST(TableTest, DefaultPropertiesTest) {
-  std::ifstream table_data("./small_nuclei_data.csv");
-  ASSERT_TRUE(table_data.is_open());
+  std::ifstream tableData("./smallNucleiData.csv");
+  ASSERTTRUE(tableData.is_open());
 
   std::string headers;
-  table_data >> headers;
+  tableData >> headers;
 
   int idx;
   properties::NucleiProperties properties;
-  while(table_data >> idx) {
+  while(tableData >> idx) {
     char s;
     MassNumber m;
     ChargeNumber c;
     FermiFloat mass;
-    table_data >> s >> m >> s >> c >> s >> mass;
+    tableData >> s >> m >> s >> c >> s >> mass;
 
-    ASSERT_TRUE(properties->IsStable(m, c));
-    ASSERT_EQ(mass, properties->GetNuclearMass(m, c));
+    ASSERTTRUE(properties->IsStable(m, c));
+    ASSERTEQ(mass, properties->GetNuclearMass(m, c));
   }
 }
 
 TEST(TableTest, FilePropertiesTest) {
-  std::ifstream table_data("./small_nuclei_data.csv");
-  ASSERT_TRUE(table_data.is_open());
+  std::ifstream tableData("./smallNucleiData.csv");
+  ASSERTTRUE(tableData.is_open());
 
   std::string headers;
-  table_data >> headers;
+  tableData >> headers;
 
   int idx;
-  properties::NucleiProperties properties(properties::CSVNuclearMass("./small_nuclei_data.csv"));
-  while(table_data >> idx) {
+  properties::NucleiProperties properties(properties::CSVNuclearMass("./smallNucleiData.csv"));
+  while(tableData >> idx) {
     char s;
     MassNumber m;
     ChargeNumber c;
     FermiFloat mass;
-    table_data >> s >> m >> s >> c >> s >> mass;
+    tableData >> s >> m >> s >> c >> s >> mass;
 
-    ASSERT_TRUE(properties->IsStable(m, c));
-    ASSERT_EQ(mass, properties->GetNuclearMass(m, c));
+    ASSERTTRUE(properties->IsStable(m, c));
+    ASSERTEQ(mass, properties->GetNuclearMass(m, c));
   }
 }

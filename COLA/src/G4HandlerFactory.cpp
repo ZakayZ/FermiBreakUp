@@ -48,27 +48,27 @@ namespace {
         Z = std::stoul(value);
       }
 
-      if (auto it = params.find("lower_mf_threshold"); it != params.end()) {
+      if (auto it = params.find("lowerMfThreshold"); it != params.end()) {
         const auto& [_, value] = *it;
-        lower_mf_threshold = StodWithFactor(value);
+        lowerMfThreshold = StodWithFactor(value);
       }
 
-      if (auto it = params.find("upper_mf_threshold"); it != params.end()) {
+      if (auto it = params.find("upperMfThreshold"); it != params.end()) {
         const auto& [_, value] = *it;
-        upper_mf_threshold = StodWithFactor(value);
+        upperMfThreshold = StodWithFactor(value);
       }
 
-      if (auto it = params.find("stable_threshold"); it != params.end()) {
+      if (auto it = params.find("stableThreshold"); it != params.end()) {
         const auto& [_, value] = *it;
-        stable_threshold = StodWithFactor(value);
+        stableThreshold = StodWithFactor(value);
       }
     }
 
     std::optional<int> A;
     std::optional<int> Z;
-    std::optional<double> stable_threshold;
-    std::optional<double> lower_mf_threshold;
-    std::optional<double> upper_mf_threshold;
+    std::optional<double> stableThreshold;
+    std::optional<double> lowerMfThreshold;
+    std::optional<double> upperMfThreshold;
   };
 }
 
@@ -77,38 +77,38 @@ cola::G4HandlerConverter* G4HandlerFactory::DoCreate(const std::map<std::string,
 
   auto model = std::make_unique<ExcitationHandler>();
 
-  if (config.stable_threshold.has_value()) {
-    model->SetStableThreshold(*config.stable_threshold);
+  if (config.stableThreshold.hasValue()) {
+    model->SetStableThreshold(*config.stableThreshold);
   }
 
-  model->SetFermiBreakUpCondition([max_A=config.A.value_or(19), max_Z=config.Z.value_or(9)] (const G4Fragment& fragment) {
-    return fragment.GetZ_asInt() < max_Z && fragment.GetA_asInt() < max_A;
+  model->SetFermiBreakUpCondition([maxA=config.A.valueOr(19), maxZ=config.Z.valueOr(9)] (const G4Fragment& fragment) {
+    return fragment.GetZAsInt() < maxZ && fragment.GetAAsInt() < maxA;
   });
 
   model->SetMultiFragmentationCondition([
-      max_A=config.A.value_or(19),
-      max_Z=config.Z.value_or(9),
-      lower_bound_transition_MF=config.lower_mf_threshold.value_or(3 * CLHEP::MeV),
-      upper_bound_transition_MF=config.upper_mf_threshold.value_or(5 * CLHEP::MeV)
+      maxA=config.A.valueOr(19),
+      maxZ=config.Z.valueOr(9),
+      lowerBoundTransitionMF=config.lowerMfThreshold.valueOr(3 * CLHEP::MeV),
+      upperBoundTransitionMF=config.upperMfThreshold.valueOr(5 * CLHEP::MeV)
     ] (const G4Fragment& fragment) {
-      auto A = fragment.GetA_asInt();
-      auto Z = fragment.GetZ_asInt();
+      auto A = fragment.GetAAsInt();
+      auto Z = fragment.GetZAsInt();
       auto Ex = fragment.GetExcitationEnergy();
-      if (A < max_A && Z < max_Z) {
+      if (A < maxA && Z < maxZ) {
         return false;
       }
-      G4double aE = 1 / (2. * (upper_bound_transition_MF - lower_bound_transition_MF));
-      G4double E0 = (upper_bound_transition_MF + lower_bound_transition_MF) / 2.;
+      G4double aE = 1 / (2. * (upperBoundTransitionMF - lowerBoundTransitionMF));
+      G4double E0 = (upperBoundTransitionMF + lowerBoundTransitionMF) / 2.;
       G4double w = G4RandFlat::shoot();
       G4double transF = 0.5 * std::tanh((Ex / A - E0) / aE) + 0.5;
 
-      if (Ex < lower_bound_transition_MF * A) { return false; }
+      if (Ex < lowerBoundTransitionMF * A) { return false; }
 
-      if (w < transF && Ex < upper_bound_transition_MF * A) { return true; }
+      if (w < transF && Ex < upperBoundTransitionMF * A) { return true; }
 
-      if (w > transF && Ex < upper_bound_transition_MF * A) { return false; }
+      if (w > transF && Ex < upperBoundTransitionMF * A) { return false; }
 
-      if (Ex > upper_bound_transition_MF * A) { return true; }
+      if (Ex > upperBoundTransitionMF * A) { return true; }
 
       return false;
   });

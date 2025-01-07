@@ -10,23 +10,23 @@
 
 using namespace fermi;
 
-Particle::Particle(MassNumber mass_number, ChargeNumber charge_number, const LorentzVector& momentum)
-    : mass_number_(mass_number), charge_number_(charge_number), momentum_(momentum) {
+Particle::Particle(MassNumber massNumber, ChargeNumber chargeNumber, const LorentzVector& momentum)
+    : massNumber_(massNumber), chargeNumber_(chargeNumber), momentum_(momentum) {
   CalculateGroundStateMass();
   CalculateExcitationEnergy();
 }
 
 NucleiData Particle::GetNucleiData() const {
-  return {mass_number_, charge_number_};
+  return {massNumber_, chargeNumber_};
 }
 
 
 MassNumber Particle::GetMassNumber() const {
-  return mass_number_;
+  return massNumber_;
 }
 
 ChargeNumber Particle::GetChargeNumber() const {
-  return charge_number_;
+  return chargeNumber_;
 }
 
 const LorentzVector& Particle::GetMomentum() const {
@@ -34,25 +34,25 @@ const LorentzVector& Particle::GetMomentum() const {
 }
 
 FermiFloat Particle::GetExcitationEnergy() const {
-  return excitation_energy_;
+  return excitationEnergy_;
 }
 
 FermiFloat Particle::GetGroundStateMass() const {
-  return ground_state_mass_;
+  return groundStateMass_;
 }
 
 FermiFloat Particle::GetBindingEnergy() const {
-  return (FermiUInt(mass_number_) - FermiUInt(charge_number_)) * CLHEP::neutron_mass_c2
-      + FermiFloat(charge_number_) * CLHEP::proton_mass_c2 - ground_state_mass_;
+  return (FermiUInt(massNumber_) - FermiUInt(chargeNumber_)) * CLHEP::neutron_mass_c2
+      + FermiFloat(chargeNumber_) * CLHEP::proton_mass_c2 - groundStateMass_;
 }
 
 bool Particle::IsStable() const {
-  return excitation_energy_ <= 0;
+  return excitationEnergy_ <= 0;
 }
 
-void Particle::SetMassAndCharge(MassNumber mass_number, ChargeNumber charge_number) {
-  mass_number_ = mass_number;
-  charge_number_ = charge_number;
+void Particle::SetMassAndCharge(MassNumber massNumber, ChargeNumber chargeNumber) {
+  massNumber_ = massNumber;
+  chargeNumber_ = chargeNumber;
   CalculateGroundStateMass();
 }
 
@@ -62,21 +62,21 @@ void Particle::SetMomentum(const LorentzVector& momentum) {
 }
 
 void Particle::CalculateExcitationEnergy() {
-  excitation_energy_ = momentum_.mag() - ground_state_mass_;
-  if (excitation_energy_ < 0) {
-//    if (excitation_energy_ < -10 * CLHEP::eV) {
+  excitationEnergy_ = momentum_.mag() - groundStateMass_;
+  if (excitationEnergy_ < 0) {
+//    if (excitationEnergy_ < -10 * CLHEP::eV) {
 //      throw std::runtime_error("Excitation Energy is negative");
-//    } /// TODO sometimes is raised in collaboration with other models
-    excitation_energy_ = 0;
+//    } // TODO sometimes is raised in collaboration with other models
+    excitationEnergy_ = 0;
   }
 }
 
 void Particle::CalculateGroundStateMass() {
-  ground_state_mass_ = properties::NucleiProperties()->GetNuclearMass(mass_number_, charge_number_);
+  groundStateMass_ = properties::NucleiProperties()->GetNuclearMass(massNumber_, chargeNumber_);
 }
 
 std::ostream& operator<<(std::ostream& out, const Particle& particle) {
-  auto old_float_field = out.flags();
+  auto oldFloatField = out.flags();
   out.setf(std::ios::floatfield);
 
   out << "Fragment: A = " << std::setw(3) << particle.GetMassNumber()
@@ -84,7 +84,7 @@ std::ostream& operator<<(std::ostream& out, const Particle& particle) {
   out.setf(std::ios::scientific, std::ios::floatfield);
 
   // Store user's precision setting and reset to (3) here: back-compatibility
-  std::streamsize old_user_precision = out.precision();
+  std::streamsize oldUserPrecision = out.precision();
 
   out << std::setprecision(3)
       << ", U = " << particle.GetExcitationEnergy() / CLHEP::MeV
@@ -97,10 +97,10 @@ std::ostream& operator<<(std::ostream& out, const Particle& particle) {
       << particle.GetMomentum().t() / CLHEP::MeV << " MeV"
       << std::endl;
 
-  /// What about Angular momentum???
+  // What about Angular momentum???
 
-  out.setf(old_float_field, std::ios::floatfield);
-  out.precision(old_user_precision);
+  out.setf(oldFloatField, std::ios::floatfield);
+  out.precision(oldUserPrecision);
 
   return out;
 }

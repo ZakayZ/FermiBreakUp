@@ -6,11 +6,11 @@
 
 using namespace fermi;
 
-Be8Fragment::Be8Fragment(MassNumber mass_number,
-                                   ChargeNumber charge_number,
+Be8Fragment::Be8Fragment(MassNumber massNumber,
+                                   ChargeNumber chargeNumber,
                                    int polarization,
-                                   FermiFloat excitation_energy)
-    : UnstableFragment(mass_number, charge_number, polarization, excitation_energy) {
+                                   FermiFloat excitationEnergy)
+    : UnstableFragment(massNumber, chargeNumber, polarization, excitationEnergy) {
   // Be8 ----> alpha + alpha
 
   Build({NucleiData{4_m, 2_c},

@@ -2,8 +2,8 @@
 // Created by Artem Novikov on 17.02.2023.
 //
 
-#ifndef FERMIBREAKUP_MYFERMIBREAKUP_INTEGERPARTITION_H_
-#define FERMIBREAKUP_MYFERMIBREAKUP_INTEGERPARTITION_H_
+#ifndef FERMIBREAKUPMYFERMIBREAKUPINTEGERPARTITIONH_
+#define FERMIBREAKUPMYFERMIBREAKUPINTEGERPARTITIONH_
 
 #include <vector>
 #include <cstddef>
@@ -21,11 +21,11 @@ namespace fermi {
 
     Iterator end() const;
 
-    IntegerPartition(uint32_t number, uint32_t terms_count, uint32_t base = 1);
+    IntegerPartition(uint32_t number, uint32_t termsCount, uint32_t base = 1);
 
   private:
     uint32_t number_;
-    uint32_t terms_count_;
+    uint32_t termsCount_;
     uint32_t base_;
   };
 
@@ -33,7 +33,7 @@ namespace fermi {
   public:
     friend class IntegerPartition;
 
-    using difference_type = size_t;
+    using differenceType = size_t;
 
     using value_type = Partition;
 
@@ -41,7 +41,7 @@ namespace fermi {
 
     using pointer = const Partition*;
 
-    using iterator_category = std::forward_iterator_tag;
+    using iteratorCategory = std::forward_iterator_tag;
 
     Iterator() = delete;
 
@@ -62,9 +62,9 @@ namespace fermi {
     bool operator!=(const Iterator& other) const;
 
   private:
-    Iterator(uint32_t terms_count);
+    Iterator(uint32_t termsCount);
 
-    Iterator(uint32_t number, uint32_t terms_count, uint32_t base);
+    Iterator(uint32_t number, uint32_t termsCount, uint32_t base);
 
     void NextPartition();
 
@@ -73,4 +73,4 @@ namespace fermi {
 
 }  // namespace fermi
 
-#endif //FERMIBREAKUP_MYFERMIBREAKUP_INTEGERPARTITION_H_
+#endif //FERMIBREAKUPMYFERMIBREAKUPINTEGERPARTITIONH_

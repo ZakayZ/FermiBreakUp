@@ -10,36 +10,36 @@ using namespace fermi;
 
 ParticleVector UnstableFragment::GetFragments(const LorentzVector& momentum) const {
   ParticleVector fragments_;
-  FermiPhaseSpaceDecay phase_decay;
+  FermiPhaseSpaceDecay phaseDecay;
 
-  std::vector<LorentzVector> fragments_momentum = phase_decay.CalculateDecay(momentum, masses_);
+  std::vector<LorentzVector> fragmentsMomentum = phaseDecay.CalculateDecay(momentum, masses_);
 
-  auto boost_vector = momentum.boostVector();
+  auto boostVector = momentum.boostVector();
 
-  for (size_t i = 0; i < decay_data_.size(); ++i) {
-    fragments_.emplace_back(decay_data_[i].mass_number, decay_data_[i].charge_number,
-                            fragments_momentum[i].boost(boost_vector));
+  for (size_t i = 0; i < decayData_.size(); ++i) {
+    fragments_.emplace_back(decayData_[i].massNumber, decayData_[i].chargeNumber,
+                            fragmentsMomentum[i].boost(boostVector));
   }
 
   return fragments_;
 }
 
-void UnstableFragment::Build(const std::vector<NucleiData>& decay_data) {
-  decay_data_ = decay_data;
+void UnstableFragment::Build(const std::vector<NucleiData>& decayData) {
+  decayData_ = decayData;
 
   FillMasses();
 }
 
-void UnstableFragment::Build(std::vector<NucleiData>&& decay_data) {
-  decay_data_ = std::move(decay_data);
+void UnstableFragment::Build(std::vector<NucleiData>&& decayData) {
+  decayData_ = std::move(decayData);
 
   FillMasses();
 }
 
 void UnstableFragment::FillMasses() {
   properties::NucleiProperties properties;
-  masses_.reserve(decay_data_.size());
-  for (const auto& decay_fragment : decay_data_) {
-    masses_.push_back(properties->GetNuclearMass(decay_fragment.mass_number, decay_fragment.charge_number));
+  masses_.reserve(decayData_.size());
+  for (const auto& decayFragment : decayData_) {
+    masses_.push_back(properties->GetNuclearMass(decayFragment.massNumber, decayFragment.chargeNumber));
   }
 }

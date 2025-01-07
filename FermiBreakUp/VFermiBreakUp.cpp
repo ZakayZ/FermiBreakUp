@@ -7,29 +7,29 @@
 
 using namespace fermi;
 
-ParticleVector VFermiBreakUp::ConvertToParticles(const Particle& source_nucleus, const FragmentVector& split) {
-  ParticleVector particle_split;
-  particle_split.reserve(2 * split.size());
+ParticleVector VFermiBreakUp::ConvertToParticles(const Particle& sourceNucleus, const FragmentVector& split) {
+  ParticleVector particleSplit;
+  particleSplit.reserve(2 * split.size());
 
-  std::vector<FermiFloat> split_masses;
-  split_masses.reserve(split.size());
-  for (auto fragment_ptr : split) {
-    split_masses.push_back(fragment_ptr->GetTotalEnergy());
+  std::vector<FermiFloat> splitMasses;
+  splitMasses.reserve(split.size());
+  for (auto fragmentPtr : split) {
+    splitMasses.push_back(fragmentPtr->GetTotalEnergy());
   }
 
-  FermiPhaseSpaceDecay phase_sampler;
-  auto particles_momentum = phase_sampler.CalculateDecay(source_nucleus.GetMomentum(), split_masses);
+  FermiPhaseSpaceDecay phaseSampler;
+  auto particlesMomentum = phaseSampler.CalculateDecay(sourceNucleus.GetMomentum(), splitMasses);
 
-  auto boost_vector = source_nucleus.GetMomentum().boostVector();
+  auto boostVector = sourceNucleus.GetMomentum().boostVector();
 
-  /// Go back to the Lab Frame
-  for (size_t fragment_idx = 0; fragment_idx < split.size(); ++fragment_idx) {
-    ParticleVector fragment_particles = split[fragment_idx]->GetFragments(
-        particles_momentum[fragment_idx].boost(boost_vector));
+  // Go back to the Lab Frame
+  for (size_t fragmentIdx = 0; fragmentIdx < split.size(); ++fragmentIdx) {
+    ParticleVector fragmentParticles = split[fragmentIdx]->GetFragments(
+        particlesMomentum[fragmentIdx].boost(boostVector));
 
-    particle_split.insert(particle_split.end(), std::make_move_iterator(fragment_particles.begin()),
-                          std::make_move_iterator(fragment_particles.end()));
+    particleSplit.insert(particleSplit.end(), std::make_move_iterator(fragmentParticles.begin()),
+                          std::make_move_iterator(fragmentParticles.end()));
   }
 
-  return particle_split;
+  return particleSplit;
 }
