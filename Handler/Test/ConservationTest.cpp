@@ -5,10 +5,10 @@
 #include <gtest/gtest.h>
 #include <memory>
 
-#include "Utilities/Randomizer.h"
-#include "Configurations/Configurations.h"
-#include "Configurations/CachedConfigurations.h"
-#include "Configurations/FastConfigurations.h"
+#include "utilities/Randomizer.h"
+#include "configurations/Configurations.h"
+#include "configurations/CachedConfigurations.h"
+#include "configurations/FastConfigurations.h"
 #include "FermiBreakUp.h"
 
 #include "AAMCCFermiBreakUp.h"
@@ -18,7 +18,7 @@ using namespace fermi;
 
 class ConfigurationsFixture : public ::testing::TestWithParam<VConfigurations*> {
  protected:
-  VConfigurations* configurations;
+  VConfigurations* Configurations;
 };
 
 INSTANTIATETESTSUITEP(

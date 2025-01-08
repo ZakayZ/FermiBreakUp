@@ -2,15 +2,15 @@
 
 #include "Handler/AAMCCFermiBreakUp.h"
 #include "FermiBreakUp/FermiBreakUp.h"
-#include "Utilities/NucleiProperties/DataStorage/CSVNuclearMass.h"
-#include "Utilities/NucleiProperties/NucleiProperties.h"
+#include "utilities/nuclei_properties/data_storage/CSVNuclearMass.h"
+#include "utilities/nuclei_properties/NucleiProperties.h"
 #include "Handler/ExcitationHandler.h"
-#include "Configurations/FastConfigurations.h"
-#include "Configurations/CachedConfigurations.h"
-#include "Configurations/Configurations.h"
+#include "configurations/FastConfigurations.h"
+#include "configurations/CachedConfigurations.h"
+#include "configurations/Configurations.h"
 
-//#include "TableValues/NucleiPropertiesTable.h"
-//#include "TableValues/NucleiPropertiesTableAME12.h"
+//#include "table_values/NucleiPropertiesTable.h"
+//#include "table_values/NucleiPropertiesTableAME12.h"
 //
 //void DumpTables() {
 //  std::ofstream thOut("../TheoreticalTable.data");
@@ -21,7 +21,7 @@
 
 using namespace fermi;
 
-void CalculateFragments(MassNumber mass,
+void CalculateFragments(AtomicMass mass,
                         ChargeNumber charge,
                         const std::string& dumpName,
                         FermiFloat step = 0.2,
@@ -33,7 +33,7 @@ void CalculateFragments(MassNumber mass,
     size_t partsCounter = 0;
     auto additionalEnergy = energyNucleon * FermiFloat(mass);
     for (size_t i = 0; i < tests; ++i) {
-      auto vec = LorentzVector(0, 0, 0, properties::NucleiProperties()->GetNuclearMass(mass, charge) + additionalEnergy);
+      auto vec = LorentzVector(0, 0, 0, properties::nuclei_properties()->GetNuclearMass(mass, charge) + additionalEnergy);
       auto particles = model.BreakItUp(Particle(mass, charge, vec));
       partsCounter += particles.size();
     }
@@ -51,12 +51,12 @@ void CalculateFragments(MassNumber mass,
   std::cout << dumpName << ": done\n";
 }
 
-void CalculateMomentum(MassNumber mass, ChargeNumber charge, const std::string& dumpName, FermiFloat energy,
+void CalculateMomentum(AtomicMass mass, ChargeNumber charge, const std::string& dumpName, FermiFloat energy,
                        const Vector3& momentum, size_t tests = 1e4) {
   auto model = FermiBreakUp();
   std::ofstream out(dumpName);
   auto vec = LorentzVector(momentum.x(), momentum.y(), momentum.z(),
-                           std::sqrt(std::pow(properties::NucleiProperties()->GetNuclearMass(mass, charge) + energy, 2)
+                           std::sqrt(std::pow(properties::nuclei_properties()->GetNuclearMass(mass, charge) + energy, 2)
                                          + momentum.mag2()));
   out << vec / mass << '\n';
   std::vector<FermiFloat> xComponent, yComponent, zComponent, magnitude;
@@ -65,7 +65,7 @@ void CalculateMomentum(MassNumber mass, ChargeNumber charge, const std::string& 
     auto sum = LorentzVector();
     for (const auto& particle : particles) {
       sum += particle.GetMomentum();
-      out << particle.GetMomentum() / particle.GetMassNumber() << ' ';
+      out << particle.GetMomentum() / particle.GetAtomicMass() << ' ';
     }
     out << '\n';
   }
@@ -73,7 +73,7 @@ void CalculateMomentum(MassNumber mass, ChargeNumber charge, const std::string& 
   std::cout << dumpName << ": done\n";
 }
 
-void CalculateFragmentsHandler(MassNumber mass, ChargeNumber charge, const std::string& dumpName,
+void CalculateFragmentsHandler(AtomicMass mass, ChargeNumber charge, const std::string& dumpName,
                                FermiFloat excessEnergy, size_t tests = 1e4, bool log = false) {
   auto handler = ExcitationHandler();
   std::ofstream out(dumpName);

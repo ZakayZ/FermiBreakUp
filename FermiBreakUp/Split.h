@@ -8,8 +8,8 @@
 #include <vector>
 #include <algorithm>
 
-#include "FragmentPool/Fragments/Fragment.h"
-#include "Utilities/IntegerPartition.h"
+#include "fragment_pool/fragments/Fragment.h"
+#include "utilities/IntegerPartition.h"
 
 namespace fermi {
 

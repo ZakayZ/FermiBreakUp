@@ -2,8 +2,8 @@
 // Created by Artem Novikov on 24.05.2023.
 //
 
-#include "Utilities/ConfigurationProperties.h"
-#include "Utilities/Randomizer.h"
+#include "utilities/ConfigurationProperties.h"
+#include "utilities/Randomizer.h"
 
 #include "CachedConfigurations.h"
 
@@ -14,7 +14,7 @@ CachedConfigurations::CachedConfigurations(NucleiData nucleiData, FermiFloat tot
 }
 
 VConfigurations& CachedConfigurations::GenerateSplits(NucleiData nucleiData, FermiFloat totalEnergy) {
-  auto maxFragmentsCount = FermiUInt(nucleiData.massNumber);
+  auto maxFragmentsCount = FermiUInt(nucleiData.atomicMass);
   if (nucleiData != lastNuclei_) {
     lastNuclei_ = nucleiData;
     cachedConfigurations_.clear();
@@ -31,7 +31,7 @@ VConfigurations& CachedConfigurations::GenerateSplits(NucleiData nucleiData, Fer
 
   FermiFloat totalWeight = 0;
   for(size_t i = 0; i < cachedConfigurations_.size(); ++i) {
-    auto splitWeight = ConfigurationProperties::DecayProbability(cachedConfigurations_[i], nucleiData.massNumber, totalEnergy);
+    auto splitWeight = ConfigurationProperties::DecayProbability(cachedConfigurations_[i], nucleiData.atomicMass, totalEnergy);
 
     if (splitWeight != 0) {
       totalWeight += splitWeight;

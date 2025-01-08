@@ -8,45 +8,45 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic -Werror")
 find_package(CLHEP REQUIRED)
 
 set(Tables
-    TableValues/NucleiPropertiesTable.cpp
-    TableValues/NucleiPropertiesTableAME12.cpp
+    table_values/NucleiPropertiesTable.cpp
+    table_values/NucleiPropertiesTableAME12.cpp
 )
 
-set(Utilities
-    Utilities/DataTypes.cpp
-    Utilities/IntegerPartition.cpp
-    Utilities/NucleiProperties/VNucleiProperties.cpp
-    Utilities/NucleiProperties/Impl/FermiNucleiProperties.cpp
-    Utilities/NucleiProperties/Impl/FastNucleiProperties.cpp
-    Utilities/NucleiProperties/Impl/NativeNucleiProperties.cpp
-    Utilities/NucleiProperties/DataStorage/CSVNuclearMass.cpp
-    Utilities/NucleiProperties/DataStorage/DefaultNuclearMass.cpp
-    Utilities/ConfigurationProperties.cpp
-    Utilities/Randomizer.cpp
+set(utilities
+    utilities/DataTypes.cpp
+    utilities/IntegerPartition.cpp
+    utilities/nuclei_properties/VNucleiProperties.cpp
+    utilities/nuclei_properties/impl/FermiNucleiProperties.cpp
+    utilities/nuclei_properties/impl/FastNucleiProperties.cpp
+    utilities/nuclei_properties/impl/NativeNucleiProperties.cpp
+    utilities/nuclei_properties/data_storage/CSVNuclearMass.cpp
+    utilities/nuclei_properties/data_storage/DefaultNuclearMass.cpp
+    utilities/ConfigurationProperties.cpp
+    utilities/Randomizer.cpp
 )
 
 set(PhaseSpace
-    PhaseDecay/VDecay.cpp
-    PhaseDecay/Decay.cpp
-    PhaseDecay/KopylovDecay.cpp
+    phase_decay/VDecay.cpp
+    phase_decay/Decay.cpp
+    phase_decay/KopylovDecay.cpp
 )
 
-set(FragmentPool
-    FragmentPool/FragmentsStorage.cpp
-    FragmentPool/DataSource/DefaultPoolSource.cpp
-    FragmentPool/Fragments/Fragment.cpp
-    FragmentPool/Fragments/StableFragment.cpp
-    FragmentPool/Fragments/UnstableFragment.cpp
-    FragmentPool/Fragments/B9Fragment.cpp
-    FragmentPool/Fragments/Be8Fragment.cpp
-    FragmentPool/Fragments/Li5Fragment.cpp
-    FragmentPool/Fragments/He5Fragment.cpp
+set(fragment_pool
+    fragment_pool/FragmentsStorage.cpp
+    fragment_pool/data_source/DefaultPoolSource.cpp
+    fragment_pool/fragments/Fragment.cpp
+    fragment_pool/fragments/StableFragment.cpp
+    fragment_pool/fragments/UnstableFragment.cpp
+    fragment_pool/fragments/B9Fragment.cpp
+    fragment_pool/fragments/Be8Fragment.cpp
+    fragment_pool/fragments/Li5Fragment.cpp
+    fragment_pool/fragments/He5Fragment.cpp
 )
 
 set(Configurations
-    Configurations/Configurations.cpp
-    Configurations/CachedConfigurations.cpp
-    Configurations/FastConfigurations.cpp
+    configurations/Configurations.cpp
+    configurations/CachedConfigurations.cpp
+    configurations/FastConfigurations.cpp
 )
 
 set(FermiBreakUpModel
@@ -57,10 +57,10 @@ set(FermiBreakUpModel
     VConfigurations.cpp
 )
 
-set(Sources ${FermiBreakUpModel} ${FragmentPool} ${Utilities} ${PhaseSpace} ${Tables} ${Configurations})
+set(Sources ${FermiBreakUpModel} ${fragment_pool} ${utilities} ${PhaseSpace} ${Tables} ${Configurations})
 
 # default config
-FILE(CREATE_LINK ${PROJECT_SOURCE_DIR}/Data/small_nuclei_data.csv small_nuclei_data.csv)
+FILE(CREATE_LINK ${PROJECT_SOURCE_DIR}/data/small_nuclei_data.csv small_nuclei_data.csv)
 
 add_library(FermiBreakUp SHARED ${Sources})
 

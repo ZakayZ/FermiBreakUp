@@ -7,7 +7,7 @@
 
 #include <vector>
 
-#include "Utilities/DataTypes.h"
+#include "utilities/DataTypes.h"
 
 namespace fermi {
 
@@ -23,11 +23,11 @@ namespace fermi {
 
     Particle& operator=(const Particle&) = default;
 
-    Particle(MassNumber massNumber, ChargeNumber chargeNumber, const LorentzVector& momentum);
+    Particle(AtomicMass atomicMass, ChargeNumber chargeNumber, const LorentzVector& momentum);
 
     NucleiData GetNucleiData() const;
 
-    MassNumber GetMassNumber() const;
+    AtomicMass GetAtomicMass() const;
 
     ChargeNumber GetChargeNumber() const;
 
@@ -41,7 +41,7 @@ namespace fermi {
 
     bool IsStable() const;
 
-    void SetMassAndCharge(MassNumber massNumber, ChargeNumber chargeNumber);
+    void SetMassAndCharge(AtomicMass atomicMass, ChargeNumber chargeNumber);
 
     void SetMomentum(const LorentzVector& momentum);
 
@@ -52,7 +52,7 @@ namespace fermi {
 
     void CalculateGroundStateMass();
 
-    MassNumber massNumber_;
+    AtomicMass atomicMass_;
     ChargeNumber chargeNumber_;
     LorentzVector momentum_;
 

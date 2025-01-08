@@ -2,8 +2,8 @@
 // Created by Artem Novikov on 18.02.2024.
 //
 
-#include "Utilities/ConfigurationProperties.h"
-#include "Utilities/Randomizer.h"
+#include "utilities/ConfigurationProperties.h"
+#include "utilities/Randomizer.h"
 
 #include "FastConfigurations.h"
 
@@ -15,7 +15,7 @@ FastConfigurations::FastConfigurations(NucleiData nucleiData, FermiFloat totalEn
 
 VConfigurations& FastConfigurations::GenerateSplits(NucleiData nucleiData, FermiFloat totalEnergy) {
   lastNuclei_= nucleiData;
-  auto maxFragmentsCount = FermiUInt(nucleiData.massNumber);
+  auto maxFragmentsCount = FermiUInt(nucleiData.atomicMass);
   auto& cache = cachedConfigurations_[nucleiData];
   if (cache.empty()) {
     cache.reserve(100);
@@ -33,7 +33,7 @@ VConfigurations& FastConfigurations::GenerateSplits(NucleiData nucleiData, Fermi
   FermiFloat totalWeight = 0;
   for (size_t i = 0; i < cache.size(); ++i) {
     auto splitWeight =
-        ConfigurationProperties::DecayProbability(cache[i], nucleiData.massNumber, totalEnergy);
+        ConfigurationProperties::DecayProbability(cache[i], nucleiData.atomicMass, totalEnergy);
 
     if (splitWeight != 0) {
       totalWeight += splitWeight;

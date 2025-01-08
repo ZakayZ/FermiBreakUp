@@ -18,11 +18,11 @@ public:
 
   template <typename... Args>
   Singleton(Args&& ... args) {
-    instance_ = std::move(std::make_unique<T>(std::forward<Args>(args)...));
+    Reset(std::forward<Args>(args)...);
   }
 
   Singleton(T* ptr) {
-    instance_.reset(ptr);
+    Reset(ptr);
   }
 
   ~Singleton() = default;
@@ -36,7 +36,7 @@ public:
     instance_.reset(ptr);
   }
 
-  static const T& Instance() {
+  static T& Instance() {
     if (instance_ == nullptr) {
       instance_ = std::make_unique<T>();
     }

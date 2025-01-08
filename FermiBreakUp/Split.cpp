@@ -7,8 +7,8 @@
 #include <array>
 
 #include "Split.h"
-#include "FragmentPool/FragmentPool.h"
-#include "Utilities/IntegerPartition.h"
+#include "fragment_pool/FragmentPool.h"
+#include "utilities/IntegerPartition.h"
 
 using namespace fermi;
 
@@ -21,7 +21,7 @@ Split::Split(NucleiData nucleiData, const uint32_t fragmentCount) {
   reserve(100);
 
   // Form all possible partition by combination of A partitions and Z partitions (Z partitions include null parts)
-  for (auto& massPartition : IntegerPartition(nucleiData.massNumber, fragmentCount, 1)) {
+  for (auto& massPartition : IntegerPartition(nucleiData.atomicMass, fragmentCount, 1)) {
     for (auto& chargePartition : IntegerPartition(nucleiData.chargeNumber, fragmentCount, 0)) {
       // Some splits are invalid, some nuclei doesn't exist
       if (IsSplitPossible(massPartition, chargePartition)) {
@@ -35,13 +35,13 @@ Split::Split(NucleiData nucleiData, const uint32_t fragmentCount) {
 
 std::string Split::ValidateInputs(NucleiData nucleiData, uint32_t fragmentCount) {
   std::string errorMessage;
-  if (nucleiData.massNumber < 0_m || nucleiData.chargeNumber < 0_c) {
-    errorMessage = "Non valid arguments A = " + std::to_string(nucleiData.massNumber) + " Z = "
+  if (nucleiData.atomicMass < 0_m || nucleiData.chargeNumber < 0_c) {
+    errorMessage = "Non valid arguments A = " + std::to_string(nucleiData.atomicMass) + " Z = "
         + std::to_string(nucleiData.chargeNumber) + " #fragments = " + std::to_string(fragmentCount);
   }
-  if (FermiUInt(nucleiData.chargeNumber) > FermiUInt(nucleiData.massNumber)
-      || fragmentCount > FermiUInt(nucleiData.massNumber)) {
-    errorMessage = "Non physical arguments = " + std::to_string(nucleiData.massNumber) + " Z = "
+  if (FermiUInt(nucleiData.chargeNumber) > FermiUInt(nucleiData.atomicMass)
+      || fragmentCount > FermiUInt(nucleiData.atomicMass)) {
+    errorMessage = "Non physical arguments = " + std::to_string(nucleiData.atomicMass) + " Z = "
         + std::to_string(nucleiData.chargeNumber) + " #fragments = " + std::to_string(fragmentCount);
   }
 
@@ -49,14 +49,14 @@ std::string Split::ValidateInputs(NucleiData nucleiData, uint32_t fragmentCount)
 }
 
 std::vector<size_t> Split::FragmentVariations(const Partition& massPartition, const Partition& chargePartition) {
-  auto& fragmentPool = fermi::FragmentPool::Instance();
+  auto& fragmentPool = fermi::fragment_pool::Instance();
 
   auto fragmentCount = massPartition.size();
   std::vector<size_t> fragmentVariations;
   fragmentVariations.reserve(fragmentCount);
 
   for (size_t fragmentIdx = 0; fragmentIdx < fragmentCount; ++fragmentIdx) {
-    auto possibleFragments = fragmentPool.Count(MassNumber(massPartition[fragmentIdx]),
+    auto possibleFragments = fragmentPool.Count(AtomicMass(massPartition[fragmentIdx]),
                                                   ChargeNumber(chargePartition[fragmentIdx]));
     fragmentVariations.push_back(possibleFragments);
   }
@@ -64,12 +64,12 @@ std::vector<size_t> Split::FragmentVariations(const Partition& massPartition, co
 }
 
 bool Split::IsSplitPossible(const Partition& massPartition, const Partition& chargePartition) {
-  auto& fragmentPool = fermi::FragmentPool::Instance();
+  auto& fragmentPool = fermi::fragment_pool::Instance();
 
   auto fragmentCount = massPartition.size();
 
   for (size_t fragmentIdx = 0; fragmentIdx < fragmentCount; ++fragmentIdx) {
-    if (fragmentPool.Count(MassNumber(massPartition[fragmentIdx]),
+    if (fragmentPool.Count(AtomicMass(massPartition[fragmentIdx]),
                             ChargeNumber(chargePartition[fragmentIdx])) == 0) {
       return false;
     }
@@ -79,19 +79,19 @@ bool Split::IsSplitPossible(const Partition& massPartition, const Partition& cha
 
 std::vector<FragmentVector> Split::GeneratePossibleSplits(
     const Partition& massPartition, const Partition& chargePartition) {
-  auto& fragmentPool = fermi::FragmentPool::Instance();
+  auto& fragmentPool = fermi::fragment_pool::Instance();
   size_t fragmentCount = massPartition.size();
 
   auto fragmentVariation = FragmentVariations(massPartition, chargePartition);
   size_t splitsCount = std::accumulate(fragmentVariation.begin(), fragmentVariation.end(), 1, std::multiplies<>());
 
   std::vector<FragmentVector> splits(splitsCount);
-  for(auto& split: splits) {
+  for (auto& split: splits) {
     split.reserve(fragmentCount);
   }
 
   for (size_t fragmentIdx = 0; fragmentIdx < fragmentCount; ++fragmentIdx) {
-    auto fragmentRange = fragmentPool.GetFragments(MassNumber(massPartition[fragmentIdx]),
+    auto fragmentRange = fragmentPool.GetFragments(AtomicMass(massPartition[fragmentIdx]),
                                                      ChargeNumber(chargePartition[fragmentIdx]));
     size_t offset = 0;
     size_t step = fragmentVariation[fragmentIdx];

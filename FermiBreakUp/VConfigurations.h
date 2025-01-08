@@ -8,7 +8,7 @@
 #include <optional>
 #include <memory>
 
-#include "Utilities/DataTypes.h"
+#include "utilities/DataTypes.h"
 #include "Split.h"
 
 namespace fermi {

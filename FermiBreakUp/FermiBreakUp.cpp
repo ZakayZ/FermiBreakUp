@@ -3,14 +3,14 @@
 //
 
 #include "FermiBreakUp.h"
-#include "Utilities/DataTypes.h"
+#include "utilities/DataTypes.h"
 
 using namespace fermi;
 
 FermiBreakUp::FermiBreakUp() : fermiConfigurations_(DefaultConfigurations()) {}
 
-FermiBreakUp::FermiBreakUp(std::unique_ptr<VConfigurations>&& configurations)
-    : fermiConfigurations_(std::move(configurations)) {}
+FermiBreakUp::FermiBreakUp(std::unique_ptr<VConfigurations>&& Configurations)
+    : fermiConfigurations_(std::move(Configurations)) {}
 
 ParticleVector FermiBreakUp::BreakItUp(const Particle& nucleus) {
   // CHECK that Excitation Energy > 0

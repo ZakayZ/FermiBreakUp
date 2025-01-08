@@ -16,7 +16,7 @@ Fermi Break Up
 - Создать свой билдер, наследуемый от `properties::VFermiPropertiesBuilder`, который заполнит таблицу в методе `Build`.
 Для инициализации таблицы с помощью билдера следует добавить следующие строчку:
 ```c++
-properties::NucleiProperties props(*Your builder here*);
+properties::nuclei_properties props(*Your builder here*);
 ```
 
-Аналогично можно реализовать заполнение таблицы с возможными фрагментами распада `fermi::FragmentPool`.
+Аналогично можно реализовать заполнение таблицы с возможными фрагментами распада `fermi::fragment_pool`.

@@ -5,24 +5,24 @@
 #include <iomanip>
 #include <CLHEP/Units/PhysicalConstants.h>
 
-#include "Utilities/NucleiProperties/NucleiProperties.h"
+#include "utilities/nuclei_properties/NucleiProperties.h"
 #include "Particle.h"
 
 using namespace fermi;
 
-Particle::Particle(MassNumber massNumber, ChargeNumber chargeNumber, const LorentzVector& momentum)
-    : massNumber_(massNumber), chargeNumber_(chargeNumber), momentum_(momentum) {
+Particle::Particle(AtomicMass atomicMass, ChargeNumber chargeNumber, const LorentzVector& momentum)
+    : atomicMass_(atomicMass), chargeNumber_(chargeNumber), momentum_(momentum) {
   CalculateGroundStateMass();
   CalculateExcitationEnergy();
 }
 
 NucleiData Particle::GetNucleiData() const {
-  return {massNumber_, chargeNumber_};
+  return {atomicMass_, chargeNumber_};
 }
 
 
-MassNumber Particle::GetMassNumber() const {
-  return massNumber_;
+AtomicMass Particle::GetAtomicMass() const {
+  return atomicMass_;
 }
 
 ChargeNumber Particle::GetChargeNumber() const {
@@ -42,7 +42,7 @@ FermiFloat Particle::GetGroundStateMass() const {
 }
 
 FermiFloat Particle::GetBindingEnergy() const {
-  return (FermiUInt(massNumber_) - FermiUInt(chargeNumber_)) * CLHEP::neutron_mass_c2
+  return (FermiUInt(atomicMass_) - FermiUInt(chargeNumber_)) * CLHEP::neutron_mass_c2
       + FermiFloat(chargeNumber_) * CLHEP::proton_mass_c2 - groundStateMass_;
 }
 
@@ -50,8 +50,8 @@ bool Particle::IsStable() const {
   return excitationEnergy_ <= 0;
 }
 
-void Particle::SetMassAndCharge(MassNumber massNumber, ChargeNumber chargeNumber) {
-  massNumber_ = massNumber;
+void Particle::SetMassAndCharge(AtomicMass atomicMass, ChargeNumber chargeNumber) {
+  atomicMass_ = atomicMass;
   chargeNumber_ = chargeNumber;
   CalculateGroundStateMass();
 }
@@ -72,14 +72,14 @@ void Particle::CalculateExcitationEnergy() {
 }
 
 void Particle::CalculateGroundStateMass() {
-  groundStateMass_ = properties::NucleiProperties()->GetNuclearMass(massNumber_, chargeNumber_);
+  groundStateMass_ = properties::nuclei_properties()->GetNuclearMass(atomicMass_, chargeNumber_);
 }
 
 std::ostream& operator<<(std::ostream& out, const Particle& particle) {
   auto oldFloatField = out.flags();
   out.setf(std::ios::floatfield);
 
-  out << "Fragment: A = " << std::setw(3) << particle.GetMassNumber()
+  out << "Fragment: A = " << std::setw(3) << particle.GetAtomicMass()
       << ", Z = " << std::setw(3) << particle.GetChargeNumber();
   out.setf(std::ios::scientific, std::ios::floatfield);
 

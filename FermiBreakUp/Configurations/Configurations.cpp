@@ -5,8 +5,8 @@
 #include <functional>
 
 #include "Configurations.h"
-#include "Utilities/ConfigurationProperties.h"
-#include "Utilities/Randomizer.h"
+#include "utilities/ConfigurationProperties.h"
+#include "utilities/Randomizer.h"
 
 using namespace fermi;
 
@@ -20,13 +20,13 @@ VConfigurations& Configurations::GenerateSplits(NucleiData nucleiData, FermiFloa
 
   // let's split nucleus into 2,...,A fragments
   FermiFloat totalWeight = 0;
-  auto maxFragmentsCount = FermiUInt(nucleiData.massNumber);
+  auto maxFragmentsCount = FermiUInt(nucleiData.atomicMass);
 
   for (uint32_t particleCount = 2; particleCount <= maxFragmentsCount; particleCount++) {
     // initialize configuration for k fragments
     for (auto& split : Split(nucleiData, particleCount)) {
       // non-normalized statistical weight for given channel with k fragments
-      auto splitWeight = ConfigurationProperties::DecayProbability(split, nucleiData.massNumber, totalEnergy);
+      auto splitWeight = ConfigurationProperties::DecayProbability(split, nucleiData.atomicMass, totalEnergy);
       if (splitWeight != 0) {
         totalWeight += splitWeight;
 

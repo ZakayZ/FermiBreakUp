@@ -54,7 +54,7 @@ def draw_particle_count():
 
     # plt.suptitle("Average fragment count with Fermi Break Up")
     plt.tight_layout()
-    plt.savefig("Data/img/FragmentCount.png", bbox_inches='tight')
+    plt.savefig("data/img/FragmentCount.png", bbox_inches='tight')
     plt.show()
 
 
@@ -136,7 +136,7 @@ def draw_momentum():
 
     plt.suptitle(r"Fermi break-up of $^{12}_6$N with excitation energy 5 MeV/nucleon")
     plt.tight_layout()
-    plt.savefig('Data/img/FragmentDistribution2D.png', bbox_inches='tight')
+    plt.savefig('data/img/FragmentDistribution2D.png', bbox_inches='tight')
     plt.show()
 
 
@@ -197,7 +197,7 @@ def draw_momentum_distr():
 
     plt.suptitle(r"Fermi break-up of $^{12}_6$N with excitation energy 5 MeV/nucleon")
     plt.tight_layout()
-    plt.savefig('Data/img/FragmentDistribution.png', bbox_inches='tight')
+    plt.savefig('data/img/FragmentDistribution.png', bbox_inches='tight')
     plt.show()
 
 
@@ -232,8 +232,8 @@ def draw_distribution():
             plt.title(f'{names[id // 2]} {"0.5" if id % 2 == 0 else "4.0"} MeV/nucleon')
 
     plt.tight_layout()
-    plt.suptitle("Fragments distribution")
-    plt.savefig(f"Data/img/HandlerCountScatter.png", bbox_inches='tight')
+    plt.suptitle("fragments distribution")
+    plt.savefig(f"data/img/HandlerCountScatter.png", bbox_inches='tight')
 
     plt.show()
 

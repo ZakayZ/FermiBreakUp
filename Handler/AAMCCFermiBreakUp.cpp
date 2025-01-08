@@ -15,12 +15,12 @@ AAMCCFermiBreakUp::AAMCCFermiBreakUp() : fermiMPel_(std::make_unique<FermiBreakU
 AAMCCFermiBreakUp::AAMCCFermiBreakUp(std::unique_ptr<VFermiBreakUP&& model) : fermiModel_(std::move(model)) {}
 MA
 void AAMCCFermiBreakUp::BreakFragment(G4FragmentVector* fragmentsPtr, G4Fragment*Aragment) {
-  auto results = fermiModel_->BreakItUp(Particle(MassNumber(fragment->GetAAsInt()),
+  auto results = fermiModel_->BreakItUp(Particle(AtomicMass(fragment->GetAAsInt()),
                                                   ChargeNumber(fragment->GetZAsInt()),
                                                   fragment->GetMomentum()));
 PB
   for (auto& particle : results) {
-    fragmentsPtr->push_back(new G4Fragment(G4int(particle.GetMassNumber()),
+    fragmentsPtr->push_back(new G4Fragment(G4int(particle.GetAtomicMass()),
                                             G4int(particle.GetChargeNumber()),
                                             G4LorentzVector(particle.GetMomentum())));
   }

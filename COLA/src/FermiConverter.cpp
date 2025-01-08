@@ -3,7 +3,7 @@
 //
 
 #include <FermiBreakUp.h>
-#include <Utilities/NucleiProperties/NucleiProperties.h>
+#include <utilities/nuclei_properties/NucleiProperties.h>
 
 #include "FermiConverter.h"
 
@@ -12,11 +12,11 @@ using cola::FermiConverter;
 namespace {
   fermi::Particle ColaToFermi(const cola::Particle& particle) {
     auto [A, Z] = particle.getAZ();
-    auto massNumber = MassNumber(A);
+    auto atomicMass = AtomicMass(A);
     auto chargeNumber = ChargeNumber(Z);
 
     return fermi::Particle(
-      massNumber,
+      atomicMass,
       chargeNumber,
       LorentzVector(
         particle.momentum.x,
@@ -42,7 +42,7 @@ namespace {
         .z=particle.GetMomentum().z(),
       },
       .pdgCode=cola::AZToPdg(cola::AZ{
-        static_cast<int>(particle.GetMassNumber()),
+        static_cast<int>(particle.GetAtomicMass()),
         static_cast<int>(particle.GetChargeNumber())
       }),
       .pClass=cola::ParticleClass::produced,

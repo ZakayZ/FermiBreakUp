@@ -31,10 +31,10 @@ namespace fermi {
     static FermiFloat CalculateGammaFactor(size_t fragmentsCount);
 
     // Kappa = V/V_0 it is used in calculation of Coulomb energy
-    static const FermiFloat Kappa;
+    static const FermiFloat KAPPA;
 
     // Nuclear radius r0 (is a model parameter)
-    static const FermiFloat r0;
+    static const FermiFloat R0;
   };
 
 }  // namespace fermi

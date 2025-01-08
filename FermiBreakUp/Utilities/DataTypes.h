@@ -19,21 +19,21 @@ using Vector3 = CLHEP::Hep3Vector;
 
 using ParticleMomentum = Vector3;
 
-class MassNumber {
+class AtomicMass {
  public:
   using value_type = FermiUInt;
 
-  MassNumber() = default;
+  AtomicMass() = default;
 
-  explicit MassNumber(value_type mass) : mass_(mass) {}
+  explicit AtomicMass(value_type mass) : mass_(mass) {}
 
-  MassNumber(const MassNumber& other) = default;
+  AtomicMass(const AtomicMass& other) = default;
 
-  MassNumber(MassNumber&& other) = default;
+  AtomicMass(AtomicMass&& other) = default;
 
-  MassNumber& operator=(const MassNumber& other) = default;
+  AtomicMass& operator=(const AtomicMass& other) = default;
 
-  MassNumber& operator=(MassNumber&& other) = default;
+  AtomicMass& operator=(AtomicMass&& other) = default;
 
   operator FermiUInt() const { return mass_; }
 
@@ -41,31 +41,31 @@ class MassNumber {
 
   operator FermiFloat() const { return mass_; }
 
-  bool operator<(const MassNumber& other) const { return mass_ < other.mass_; }
+  bool operator<(const AtomicMass& other) const { return mass_ < other.mass_; }
 
-  bool operator>(const MassNumber& other) const { return mass_ > other.mass_; }
+  bool operator>(const AtomicMass& other) const { return mass_ > other.mass_; }
 
-  bool operator<=(const MassNumber& other) const { return mass_ <= other.mass_; }
+  bool operator<=(const AtomicMass& other) const { return mass_ <= other.mass_; }
 
-  bool operator>=(const MassNumber& other) const { return mass_ >= other.mass_; }
+  bool operator>=(const AtomicMass& other) const { return mass_ >= other.mass_; }
 
-  bool operator==(const MassNumber& other) const { return mass_ == other.mass_; }
+  bool operator==(const AtomicMass& other) const { return mass_ == other.mass_; }
 
-  bool operator!=(const MassNumber& other) const { return mass_ != other.mass_; }
+  bool operator!=(const AtomicMass& other) const { return mass_ != other.mass_; }
 
  private:
   uint32_t mass_;
 };
 
-MassNumber operator ""_m(unsigned long long mass);
+AtomicMass operator ""_m(unsigned long long mass);
 
 namespace std {
-std::string to_string(MassNumber mass);
+std::string to_string(AtomicMass mass);
 }
 
-std::ostream& operator<<(std::ostream& out, const MassNumber& mass);
+std::ostream& operator<<(std::ostream& out, const AtomicMass& mass);
 
-std::istream& operator>>(std::istream& in, MassNumber& mass);
+std::istream& operator>>(std::istream& in, AtomicMass& mass);
 
 class ChargeNumber {
  public:
@@ -116,20 +116,20 @@ std::ostream& operator<<(std::ostream& out, ChargeNumber charge);
 std::istream& operator>>(std::istream& in, ChargeNumber& charge);
 
 struct NucleiData {
-  MassNumber massNumber;
+  AtomicMass atomicMass;
   ChargeNumber chargeNumber;
 
   bool operator<(const NucleiData& other) const {
-    return massNumber < other.massNumber
-        || (massNumber == other.massNumber && chargeNumber < other.chargeNumber);
+    return atomicMass < other.atomicMass
+        || (atomicMass == other.atomicMass && chargeNumber < other.chargeNumber);
   }
 
   bool operator==(const NucleiData& other) const {
-    return massNumber == other.massNumber && chargeNumber == other.chargeNumber;
+    return atomicMass == other.atomicMass && chargeNumber == other.chargeNumber;
   }
 
   bool operator!=(const NucleiData& other) const {
-    return massNumber != other.massNumber || chargeNumber != other.chargeNumber;
+    return atomicMass != other.atomicMass || chargeNumber != other.chargeNumber;
   }
 };
 
@@ -138,7 +138,7 @@ struct std::hash<NucleiData>
 {
   std::size_t operator()(const NucleiData& key) const
   {
-    auto mass = FermiInt(key.massNumber);
+    auto mass = FermiInt(key.atomicMass);
     auto charge = FermiInt(key.chargeNumber);
     return (mass * (mass + 1)) / 2 + charge;
   }

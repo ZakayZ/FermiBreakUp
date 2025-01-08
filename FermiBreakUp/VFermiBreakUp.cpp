@@ -3,7 +3,7 @@
 //
 
 #include "VFermiBreakUp.h"
-#include "PhaseDecay/FermiPhaseSpaceDecay.h"
+#include "phase_decay/FermiPhaseSpaceDecay.h"
 
 using namespace fermi;
 
