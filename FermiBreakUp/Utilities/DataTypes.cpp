@@ -4,7 +4,7 @@
 
 #include "DataTypes.h"
 
-ChargeNumber operator ""_c(unsigned long long charge) {
+ChargeNumber operator ""_c(uint64_t charge) {
   return ChargeNumber(charge);
 }
 
@@ -24,7 +24,7 @@ std::istream& operator>>(std::istream& in, ChargeNumber& charge) {
   return in;
 }
 
-AtomicMass operator ""_m(unsigned long long mass) {
+AtomicMass operator ""_m(uint64_t mass) {
   return AtomicMass(mass);
 }
 

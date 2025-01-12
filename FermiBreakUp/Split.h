@@ -17,32 +17,22 @@ namespace fermi {
 
   class Split : public std::vector<FragmentVector> {
   private:
-    using Base = std::vector<FragmentVector>;
+    using Container = std::vector<FragmentVector>;
 
   public:
-    Split(NucleiData nucleiData, uint32_t fragmentCount);
+    Split(NucleiData nucleiData, FermiUInt fragmentCount);
 
-    using Base::iterator;
-    using Base::const_iterator;
-    using Base::begin;
-    using Base::cbegin;
-    using Base::end;
-    using Base::cend;
+    using Container::iterator;
+    using Container::const_iterator;
+    using Container::begin;
+    using Container::cbegin;
+    using Container::end;
+    using Container::cend;
 
   private:
-    static std::string ValidateInputs(NucleiData nucleiData, uint32_t fragmentCount);
-
-    static std::vector<size_t> FragmentVariations(const Partition& massPartition,
-                                                  const Partition& chargePartition);
-
-    static bool IsSplitPossible(const Partition& massPartition, const Partition& chargePartition);
-
-    static std::vector<FragmentVector> GeneratePossibleSplits(const Partition& massPartition,
-                                                              const Partition& chargePartition);
-
     void AddValidSplits(std::vector<FragmentVector>&& possibleSplits);
   };
 
 }  // namespace fermi
 
-#endif //FERMIBREAKUPMYFERMIBREAKUPParticleSPLITICC_
+#endif // FERMIBREAKUPMYFERMIBREAKUPParticleSPLITICC_

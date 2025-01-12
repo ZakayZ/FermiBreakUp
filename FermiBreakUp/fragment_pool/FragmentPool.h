@@ -15,8 +15,8 @@
 
 namespace fermi {
 
-    using fragment_pool = Singleton<FragmentsStorage>;
+    using FragmentPool = Singleton<FragmentsStorage>;
 
 } // namespace fermi
 
-#endif //FERMIBREAKUPMYFERMIBREAKUPFragmentPOOLH_
+#endif // FERMIBREAKUPMYFERMIBREAKUPFragmentPOOLH_

@@ -11,7 +11,7 @@ namespace fermi {
 
   class KopylovDecay : public VDecay{
   public:
-    std::vector<LorentzVector> CalculateDecay(const LorentzVector& momentum,
+    std::vector<LorentzVector> CalculateDecay(const LorentzVector& totalMomentum,
                                               const std::vector<FermiFloat>& fragmentsMass) const override;
 
   private:
@@ -20,4 +20,4 @@ namespace fermi {
 
 }  // namespace fermi
 
-#endif //FERMIBREAKUPMYFERMIBREAKUPUTILITIESKOPYLOVDECAYH_
+#endif // FERMIBREAKUPMYFERMIBREAKUPUTILITIESKOPYLOVDECAYH_

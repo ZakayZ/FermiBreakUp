@@ -12,23 +12,15 @@ Fragment::Fragment(AtomicMass atomicMass, ChargeNumber chargeNumber,
     : atomicMass_(atomicMass), chargeNumber_(chargeNumber),
       polarization(polarization), excitationEnergy_(excitationEnergy) {}
 
-AtomicMass Fragment::GetA() const {
-  return GetAtomicMass();
-}
-
 AtomicMass Fragment::GetAtomicMass() const {
   return atomicMass_;
-}
-
-ChargeNumber Fragment::GetZ() const {
-  return GetChargeNumber();
 }
 
 ChargeNumber Fragment::GetChargeNumber() const {
   return chargeNumber_;
 }
 
-int32_t Fragment::GetPolarization() const {
+FermiInt Fragment::GetPolarization() const {
   return polarization;
 }
 

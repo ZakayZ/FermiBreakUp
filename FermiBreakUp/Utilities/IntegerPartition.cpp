@@ -17,7 +17,7 @@ IntegerPartition::Iterator IntegerPartition::end() const {
   return {0};
 }
 
-////////////////////////////////////ITERATOR//////////////////////////////
+///////////////////////////////// // ITERATOR//////////////////////////////
 
 IntegerPartition::Iterator::pointer IntegerPartition::Iterator::operator->() const {
   return &partition_;

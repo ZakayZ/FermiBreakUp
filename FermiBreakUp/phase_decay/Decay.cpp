@@ -13,11 +13,62 @@ using namespace fermi;
 
 static const size_t MaxTryCount = 1e6;
 
-std::vector<LorentzVector> Decay::CalculateDecay(const LorentzVector& momentum,
+namespace {
+  std::vector<FermiFloat> CalculateVirtualMasses(const std::vector<FermiFloat>& masses, FermiFloat energy) {
+    auto probabilityDistribution = Randomizer::ProbabilityDistribution(masses.size());
+
+    // Calculate virtual masses
+    std::vector<FermiFloat> virtualMasses(masses.size());
+    virtualMasses[0] = 0;
+    std::partial_sum(masses.begin(), masses.end(), virtualMasses.begin());
+
+    std::transform(probabilityDistribution.begin(),
+                   probabilityDistribution.end(),
+                   probabilityDistribution.begin(),
+                   std::bind(std::multiplies<FermiFloat>(), std::placeholders::_1, energy));
+
+    std::transform(probabilityDistribution.begin(),
+                   probabilityDistribution.end(),
+                   virtualMasses.begin(),
+                   virtualMasses.begin(),
+                   std::plus<FermiFloat>());
+    return virtualMasses;
+  }
+
+  FermiFloat CalculateMomentumMagnitudes(std::vector<FermiFloat>& daughterMomentum,
+                                         const std::vector<FermiFloat>& masses,
+                                         const std::vector<FermiFloat>& virtualMasses) {
+    size_t sz = daughterMomentum.size();
+    FermiFloat weight = 1;
+    for (size_t i = 0; i + 1 < sz; ++i) {
+      if (virtualMasses[i] + masses[i + 1] > virtualMasses[i + 1]) {
+        throw std::runtime_error("FermiPhaseSpaceDecay::KopylovNBodyDecay: Error sampling fragments momenta!!");
+      }
+
+      daughterMomentum[i] = TwoBodyMomentum(virtualMasses[i + 1], virtualMasses[i], masses[i + 1]);
+      weight *= daughterMomentum[i];
+    }
+    daughterMomentum[sz - 1] = TwoBodyMomentum(virtualMasses[sz - 2], masses[sz - 2], masses[sz - 1]);
+    return weight;
+  }
+
+  FermiFloat CalculateMaxWeight(const std::vector<FermiFloat>& masses, FermiFloat maxEnergy) {
+    FermiFloat minEnergy = 0;
+    FermiFloat maxWeight = 1.0;
+    for (size_t i = 0; i < masses.size(); ++i) {
+      maxEnergy += masses[i];
+      minEnergy += masses[i - 1];
+      maxWeight *= TwoBodyMomentum(maxEnergy, minEnergy, masses[i]);
+    }
+    return maxWeight;
+  }
+} // namespace
+
+std::vector<LorentzVector> Decay::CalculateDecay(const LorentzVector& totalMomentum,
                                                  const std::vector<FermiFloat>& fragmentsMass) const {
   std::vector<LorentzVector> result;
   result.reserve(fragmentsMass.size());
-  auto totalEnergy = momentum.m();
+  auto totalEnergy = totalMomentum.m();
 
   // 2 bodies case is faster
   if (fragmentsMass.size() == 2) {
@@ -61,56 +112,3 @@ std::vector<LorentzVector> Decay::CalculateDecay(const LorentzVector& momentum,
 
   return result;
 }
-
-std::vector<FermiFloat> Decay::CalculateVirtualMasses(const std::vector<FermiFloat>& masses, FermiFloat energy) {
-  auto probabilityDistribution = Randomizer::ProbabilityDistribution(masses.size());
-
-  // Calculate virtual masses
-  std::vector<FermiFloat> virtualMasses(masses.size());
-  virtualMasses[0] = 0;
-  std::partial_sum(masses.begin(), masses.end(), virtualMasses.begin());
-
-  std::transform(probabilityDistribution.begin(),
-                 probabilityDistribution.end(),
-                 probabilityDistribution.begin(),
-                 std::bind(std::multiplies<FermiFloat>(), std::placeholders::_1, energy));
-
-  std::transform(probabilityDistribution.begin(),
-                 probabilityDistribution.end(),
-                 virtualMasses.begin(),
-                 virtualMasses.begin(),
-                 std::plus<FermiFloat>());
-  return virtualMasses;
-}
-
-FermiFloat Decay::CalculateMomentumMagnitudes(std::vector<FermiFloat>& daughterMomentum,
-                                              const std::vector<FermiFloat>& masses,
-                                              const std::vector<FermiFloat>& virtualMasses) {
-  size_t sz = daughterMomentum.size();
-  FermiFloat weight = 1;
-  for (size_t i = 0; i < sz - 1; ++i) {
-    daughterMomentum[i] = TwoBodyMomentum(virtualMasses[i + 1], virtualMasses[i], masses[i + 1]);
-    weight *= daughterMomentum[i];
-
-    if (daughterMomentum[i] < 0) {
-      std::cerr << "FermiPhaseSpaceDecay::Decay: Daughter momentum less than zero\n";
-      return 0;
-    }
-  }
-  daughterMomentum[sz - 1] = TwoBodyMomentum(virtualMasses[sz - 2], masses[sz - 2], masses[sz - 1]);
-  return weight;
-}
-
-FermiFloat Decay::CalculateMaxWeight(const std::vector<FermiFloat>& masses, FermiFloat maxEnergy) {
-  FermiFloat minEnergy = 0;
-  FermiFloat maxWeight = 1.0;
-  for (size_t i = 0; i < masses.size(); ++i) {
-    maxEnergy += masses[i];
-    minEnergy += masses[i - 1];
-    maxWeight *= TwoBodyMomentum(maxEnergy, minEnergy, masses[i]);
-  }
-  return maxWeight;
-}
-
-
-

@@ -24,4 +24,4 @@ namespace fermi {
 
 }  // namespace fermi
 
-#endif //FERMIBREAKUPMYFERMIBREAKUPFRAGMENTSSTABLEFragmentH_
+#endif // FERMIBREAKUPMYFERMIBREAKUPFRAGMENTSSTABLEFragmentH_

@@ -18,14 +18,14 @@ CSVNuclearMass::CSVNuclearMass(const std::string& csvFilename,
     throw std::runtime_error("invalid CSV file path");
   }
 
-  int massNumberIdx = -1, chargeNumberIdx = -1, massIdx = -1;
+  int32_t massNumberIdx = -1, chargeNumberIdx = -1, massIdx = -1;
 
   std::string line;
   in >> line;
   line += ',';
-  int columnIdx = 0;
-  uint start = 0;
-  auto comma = line.find(',', start);
+  int32_t columnIdx = 0;
+  uint32_t start = 0;
+  size_t comma = line.find(',', start);
   while (comma != std::string::npos) {
     if (line.substr(start, comma - start) == massNumberName) {
       massNumberIdx = columnIdx;
@@ -43,7 +43,7 @@ CSVNuclearMass::CSVNuclearMass(const std::string& csvFilename,
     start = comma + 1;
     comma = line.find(',', start);
   }
-  int columnsCount = columnIdx;
+  int32_t columnsCount = columnIdx;
 
   if (massNumberIdx == -1) {
     throw std::runtime_error("no mass number found");
@@ -87,7 +87,7 @@ CSVNuclearMass::CSVNuclearMass(const std::string& csvFilename,
       throw std::runtime_error("invalid row format: " + line);
     }
 
-    masses_.emplace(NucleiData{m, c}, mass);
+    emplace(NucleiData{m, c}, mass);
   }
 }
 

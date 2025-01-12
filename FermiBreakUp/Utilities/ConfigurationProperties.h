@@ -13,7 +13,7 @@ namespace fermi {
 
   class ConfigurationProperties {
   public:
-    static FermiFloat DecayProbability(const FragmentVector& split, uint32_t atomicWeight, FermiFloat totalEnergy);
+    static FermiFloat DecayProbability(const FragmentVector& split, FermiUInt atomicWeight, FermiFloat totalEnergy);
 
     static FermiFloat CoulombBarrier(const FragmentVector& split);
 
@@ -26,17 +26,17 @@ namespace fermi {
     static FermiFloat CalculateConfigurationFactor(const FragmentVector& split);
 
   private:
-    static FermiFloat CalculateConstFactor(uint32_t atomicWeight, size_t fragmentsCount);
+    static FermiFloat CalculateConstFactor(FermiUInt atomicWeight, size_t fragmentsCount);
 
     static FermiFloat CalculateGammaFactor(size_t fragmentsCount);
 
     // Kappa = V/V_0 it is used in calculation of Coulomb energy
-    static const FermiFloat KAPPA;
+    static const FermiFloat Kappa;
 
-    // Nuclear radius r0 (is a model parameter)
+    // Nuclear radius R0 (is a model parameter)
     static const FermiFloat R0;
   };
 
 }  // namespace fermi
 
-#endif //FERMIBREAKUPMYFERMIBREAKUPUTILITIESCONFIGURATIONPROPERTIESH_
+#endif // FERMIBREAKUPMYFERMIBREAKUPUTILITIESCONFIGURATIONPROPERTIESH_

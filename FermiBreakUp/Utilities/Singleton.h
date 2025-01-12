@@ -63,4 +63,4 @@ private:
   static inline std::unique_ptr<T> instance_;
 };
 
-#endif //HANDLERMYFERMIBREAKUPUTILITIESSINGLETONH_
+#endif // HANDLERMYFERMIBREAKUPUTILITIESSINGLETONH_

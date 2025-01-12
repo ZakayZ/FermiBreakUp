@@ -21,4 +21,4 @@ public:
   static std::vector<FermiFloat> ProbabilityDistribution(size_t pointCount);
 };
 
-#endif //FERMIBREAKUPMYFERMIBREAKUPUTILITIESRANDOMIZERH_
+#endif // FERMIBREAKUPMYFERMIBREAKUPUTILITIESRANDOMIZERH_

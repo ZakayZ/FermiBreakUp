@@ -7,7 +7,9 @@
 
 #include <CLHEP/Vector/LorentzVector.h>
 
-using FermiInt = int;
+#include <string>
+
+using FermiInt = int32_t;
 
 using FermiUInt = uint32_t;
 
@@ -54,13 +56,13 @@ class AtomicMass {
   bool operator!=(const AtomicMass& other) const { return mass_ != other.mass_; }
 
  private:
-  uint32_t mass_;
+  FermiUInt mass_;
 };
 
-AtomicMass operator ""_m(unsigned long long mass);
+AtomicMass operator ""_m(uint64_t mass);
 
 namespace std {
-std::string to_string(AtomicMass mass);
+  std::string to_string(AtomicMass mass);
 }
 
 std::ostream& operator<<(std::ostream& out, const AtomicMass& mass);
@@ -102,10 +104,10 @@ class ChargeNumber {
   bool operator!=(const ChargeNumber& other) const { return charge_ != other.charge_; }
 
  private:
-  uint32_t charge_;
+  FermiUInt charge_;
 };
 
-ChargeNumber operator ""_c(unsigned long long charge);
+ChargeNumber operator ""_c(uint64_t charge);
 
 namespace std {
 std::string to_string(ChargeNumber charge);
@@ -144,4 +146,4 @@ struct std::hash<NucleiData>
   }
 };
 
-#endif //FERMIBREAKUPMYFERMIBREAKUPDATATYPESH_
+#endif // FERMIBREAKUPMYFERMIBREAKUPDATATYPESH_

@@ -11,7 +11,7 @@
 
 namespace properties {
 
-  class CSVNuclearMass {
+  class CSVNuclearMass : private std::map<NucleiData, FermiFloat> {
   private:
     using Container = std::map<NucleiData, FermiFloat>;
 
@@ -23,24 +23,14 @@ namespace properties {
       const std::string& massName = "mass"
     );
 
-    ~CSVNuclearMass() = default;
-
-    Container::iterator begin() { return masses_.begin(); }
-
-    [[nodiscard]] Container::const_iterator begin() const { return masses_.begin(); }
-
-    [[nodiscard]] Container::const_iterator cbegin() const { return masses_.cbegin(); }
-
-    Container::iterator end() { return masses_.end(); }
-
-    [[nodiscard]] Container::const_iterator end() const { return masses_.end(); }
-
-    [[nodiscard]] Container::const_iterator cend() const { return masses_.cend(); }
-
-  private:
-    Container masses_;
+    using Container::iterator;
+    using Container::const_iterator;
+    using Container::begin;
+    using Container::cbegin;
+    using Container::end;
+    using Container::cend;
   };
 
 } // namespace properties
 
-#endif //HANDLERMYFERMIBREAKUPUTILITIESNUCLEIPROPERTIESDATASTORAGECSVNUCLEARMASSH_
+#endif // HANDLERMYFERMIBREAKUPUTILITIESNUCLEIPROPERTIESDATASTORAGECSVNUCLEARMASSH_

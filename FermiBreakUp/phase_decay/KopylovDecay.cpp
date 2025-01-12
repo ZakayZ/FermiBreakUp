@@ -11,15 +11,40 @@
 
 using namespace fermi;
 
-std::vector<LorentzVector> KopylovDecay::CalculateDecay(const LorentzVector& momentum,
-                                                        const std::vector<FermiFloat>& fragmentsMass) const {
+namespace {
+  LorentzVector ChangeFrameOfReference(const LorentzVector& vec, const Vector3& boostVector) {
+    auto copy = vec;
+    copy.boost(boostVector);
+    return copy;
+  }
+} // namespace
+
+std::vector<LorentzVector> KopylovDecay::CalculateDecay(
+  const LorentzVector& totalMomentum,
+  const std::vector<FermiFloat>& fragmentsMass) const
+{
+  assert(fragmentsMass.size() > 0);
+
   std::vector<LorentzVector> result(fragmentsMass.size());
 
-  FermiFloat parentMass = momentum.m();
+  if (fragmentsMass.size() == 1) {
+    result[0] = totalMomentum;
+    return result;
+  }
+
+  // 2 bodies case is faster
+  if (fragmentsMass.size() == 2) {
+    std::tie(result[0], result[1]) = TwoBodyDecay(totalMomentum.m(), fragmentsMass[0], fragmentsMass[1]);
+    return result;
+  }
+
+  // N body case
+  FermiFloat parentMass = totalMomentum.m();
   FermiFloat totalFragmentsMass = std::accumulate(fragmentsMass.begin(), fragmentsMass.end(), FermiFloat(0));
   FermiFloat mu = totalFragmentsMass;
   FermiFloat mass = parentMass;
   FermiFloat kineticEnergy = parentMass - totalFragmentsMass;
+  assert(kineticEnergy > 0);
 
   auto momentumRestLab = LorentzVector(0, 0, 0, parentMass);
   for (size_t i = fragmentsMass.size() - 1; i > 0; --i) {
@@ -27,28 +52,23 @@ std::vector<LorentzVector> KopylovDecay::CalculateDecay(const LorentzVector& mom
     kineticEnergy *= i > 1 ? BetaKopylov(i) : 0;
     auto restMass = mu + kineticEnergy;
 
-    auto momentumMagnitudeFragmentsCm = TwoBodyMomentum(mass, fragmentsMass[i], restMass);
-    if (momentumMagnitudeFragmentsCm < 0) {
+    if (fragmentsMass[i] + restMass < mass) {
       throw std::runtime_error("FermiPhaseSpaceDecay::KopylovNBodyDecay: Error sampling fragments momenta!!");
     }
-
-    ParticleMomentum randomMomentum = Randomizer::IsotropicVector(momentumMagnitudeFragmentsCm);
-    auto momentumFragmentsCm = LorentzVector(randomMomentum,
-                                               std::sqrt(randomMomentum.mag2() + std::pow(fragmentsMass[i], 2)));
-    auto momentumRestCm = LorentzVector(-randomMomentum, std::sqrt(randomMomentum.mag2() + std::pow(restMass, 2)));
+    auto [momentumFragmentsCm, momentumRestCm] = TwoBodyDecay(mass, fragmentsMass[i], restMass);
 
     // change framework
-    Vector3 boostVector = momentumRestLab.boostVector();
+    const auto boostVector = momentumRestLab.boostVector();
 
-    momentumRestLab = LorentzVector(momentumRestCm).boost(boostVector);
-    auto momentumFragmentsLab = LorentzVector(momentumFragmentsCm).boost(boostVector);
+    momentumRestLab = ChangeFrameOfReference(momentumRestCm, boostVector);
+    auto momentumFragmentsLab = ChangeFrameOfReference(momentumFragmentsCm, boostVector);
 
     result[i] = momentumFragmentsLab;
 
     mass = restMass;
   }
 
-  result[0] = momentumRestLab;
+  result[0] = std::move(momentumRestLab);
 
   return result;
 }

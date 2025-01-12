@@ -7,14 +7,14 @@
 
 using namespace fermi;
 
-// KAPPA = V/V_0 it is used in calculation of Coulomb energy, KAPPA is dimensionless
-const FermiFloat ConfigurationProperties::KAPPA = 1.0;
+// Kappa = V/V_0 it is used in calculation of Coulomb energy, Kappa is dimensionless
+const FermiFloat ConfigurationProperties::Kappa = 1.0;
 
 // R0 is the nuclear radius
 const FermiFloat ConfigurationProperties::R0 = 1.3 * CLHEP::fermi;
 
 FermiFloat ConfigurationProperties::DecayProbability(const FragmentVector& split,
-                                                     uint32_t atomicWeight,
+                                                     FermiUInt atomicWeight,
                                                      FermiFloat totalEnergy) {
   FermiFloat kineticEnergy = CalculateKineticEnergy(split, totalEnergy);  // in MeV
   // Check that there is enough energy to produce K fragments
@@ -43,7 +43,7 @@ FermiFloat ConfigurationProperties::DecayProbability(const FragmentVector& split
 
 FermiFloat ConfigurationProperties::CoulombBarrier(const FragmentVector& split) {
   //  Calculates Coulomb Barrier (MeV) for given channel with K fragments.
-  static const FermiFloat coefficient = (3. / 5.) * (CLHEP::elm_coupling / R0) * std::pow(1. / (1. + KAPPA), 1. / 3.);
+  static const FermiFloat coefficient = (3. / 5.) * (CLHEP::elm_coupling / R0) * std::pow(1. / (1. + Kappa), 1. / 3.);
 
   FermiFloat massSum = 0;
   FermiFloat chargeSum = 0;
@@ -132,8 +132,8 @@ FermiFloat ConfigurationProperties::CalculateConfigurationFactor(const FragmentV
   return GN;
 }
 
-FermiFloat ConfigurationProperties::CalculateConstFactor(uint32_t atomicWeight, size_t fragmentsCount) {
-  static const FermiFloat constantPart = std::pow(R0 / CLHEP::hbarc, 3.0) * KAPPA * std::sqrt(2.0 / CLHEP::pi) / 3.0;
+FermiFloat ConfigurationProperties::CalculateConstFactor(FermiUInt atomicWeight, size_t fragmentsCount) {
+  static const FermiFloat constantPart = std::pow(R0 / CLHEP::hbarc, 3.0) * Kappa * std::sqrt(2.0 / CLHEP::pi) / 3.0;
   FermiFloat coefficient = std::pow(constantPart * atomicWeight, fragmentsCount - 1);
   return coefficient;
 }

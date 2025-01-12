@@ -22,15 +22,11 @@ namespace fermi {
 
     virtual ParticleVector GetFragments(const LorentzVector& momentum) const = 0;
 
-    AtomicMass GetA() const;
-
     AtomicMass GetAtomicMass() const;
-
-    ChargeNumber GetZ() const;
 
     ChargeNumber GetChargeNumber() const;
 
-    int32_t GetPolarization() const;
+    FermiInt GetPolarization() const;
 
     FermiFloat GetExcitationEnergy() const;
 
@@ -41,12 +37,12 @@ namespace fermi {
     virtual ~Fragment() = 0;
 
   protected:
-    AtomicMass atomicMass_;     // A
+    AtomicMass atomicMass_;  // A
     ChargeNumber chargeNumber_; // Z
-    int32_t polarization;
+    FermiInt polarization;
     FermiFloat excitationEnergy_;
   };
 
 }  // namespace fermi
 
-#endif //FERMIBREAKUPMYFERMIBREAKUPFRAGMENTSFragmentH_
+#endif // FERMIBREAKUPMYFERMIBREAKUPFRAGMENTSFragmentH_

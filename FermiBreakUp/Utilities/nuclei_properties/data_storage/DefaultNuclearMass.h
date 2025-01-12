@@ -11,7 +11,7 @@
 
 namespace properties {
 
-  class DefaultNuclearMass {
+  class DefaultNuclearMass : private std::vector<std::pair<const NucleiData, FermiFloat>> {
   private:
     using Container = std::vector<std::pair<const NucleiData, FermiFloat>>;
 
@@ -20,22 +20,14 @@ namespace properties {
 
     ~DefaultNuclearMass() = default;
 
-    Container::iterator begin() { return masses_.begin(); }
-
-    [[nodiscard]] Container::const_iterator begin() const { return masses_.begin(); }
-
-    [[nodiscard]] Container::const_iterator cbegin() const { return masses_.cbegin(); }
-
-    Container::iterator end() { return masses_.end(); }
-
-    [[nodiscard]] Container::const_iterator end() const { return masses_.end(); }
-
-    Container::const_iterator cend() const { return masses_.cend(); }
-
-  private:
-    Container masses_;
+    using Container::iterator;
+    using Container::const_iterator;
+    using Container::begin;
+    using Container::cbegin;
+    using Container::end;
+    using Container::cend;
   };
 
 } // properties
 
-#endif //HANDLERMYFERMIBREAKUPUTILITIESNUCLEIPROPERTIESDATASTORAGEDEFAULTNUCLEARMASSH_
+#endif // HANDLERMYFERMIBREAKUPUTILITIESNUCLEIPROPERTIESDATASTORAGEDEFAULTNUCLEARMASSH_

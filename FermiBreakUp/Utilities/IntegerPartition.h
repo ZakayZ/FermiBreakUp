@@ -6,8 +6,6 @@
 #define FERMIBREAKUPMYFERMIBREAKUPINTEGERPARTITIONH_
 
 #include <vector>
-#include <cstddef>
-#include <cstdint>
 
 namespace fermi {
 
@@ -73,4 +71,4 @@ namespace fermi {
 
 }  // namespace fermi
 
-#endif //FERMIBREAKUPMYFERMIBREAKUPINTEGERPARTITIONH_
+#endif // FERMIBREAKUPMYFERMIBREAKUPINTEGERPARTITIONH_
