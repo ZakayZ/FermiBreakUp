@@ -2,8 +2,8 @@
 // Created by Artem Novikov on 17.02.2023.
 //
 
-#ifndef FERMIBREAKUPMYFERMIBREAKUPPARTICLEH_
-#define FERMIBREAKUPMYFERMIBREAKUPPARTICLEH_
+#ifndef FERMIBREAKUP_PARTICLE_H
+#define FERMIBREAKUP_PARTICLE_H
 
 #include <vector>
 
@@ -64,4 +64,4 @@ namespace fermi {
 
 }  // namespace fermi
 
-#endif // FERMIBREAKUPMYFERMIBREAKUPPARTICLEH_
+#endif // FERMIBREAKUP_PARTICLE_H

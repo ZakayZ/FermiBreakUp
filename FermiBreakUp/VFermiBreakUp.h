@@ -2,8 +2,8 @@
 // Created by Artem Novikov on 21.05.2023.
 //
 
-#ifndef FERMIBREAKUPMYFERMIBREAKUPVFERMIBREAKUPH_
-#define FERMIBREAKUPMYFERMIBREAKUPVFERMIBREAKUPH_
+#ifndef FERMIBREAKUP_VFERMIBREAKUP_H
+#define FERMIBREAKUP_VFERMIBREAKUP_H
 
 #include "Particle.h"
 #include "Split.h"
@@ -22,4 +22,4 @@ namespace fermi {
 
 }  // namespace fermi
 
-#endif // FERMIBREAKUPMYFERMIBREAKUPVFERMIBREAKUPH_
+#endif // FERMIBREAKUP_VFERMIBREAKUP_H

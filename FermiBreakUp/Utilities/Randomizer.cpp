@@ -7,14 +7,14 @@
 
 #include "Randomizer.h"
 
-FermiFloat Randomizer::uniform_real_distribution() {
+FermiFloat Randomizer::SampleUniform() {
   static std::random_device device;
   static std::mt19937 generator(device());
   static std::uniform_real_distribution<FermiFloat> distribution(0, 1);
   return distribution(generator);
 }
 
-FermiFloat Randomizer::normal_distribution(FermiFloat mean, FermiFloat deviation) {
+FermiFloat Randomizer::SampleNormal(FermiFloat mean, FermiFloat deviation) {
   static std::random_device device;
   static std::mt19937 generator(device());
   static std::normal_distribution<FermiFloat> distribution(0, 1);
@@ -22,14 +22,12 @@ FermiFloat Randomizer::normal_distribution(FermiFloat mean, FermiFloat deviation
 }
 
 ParticleMomentum Randomizer::IsotropicVector(FermiFloat magnitude) {
-  auto cos = 1.0 - 2.0 * uniform_real_distribution();
+  auto cos = 1.0 - 2.0 * SampleUniform();
   auto sin = std::sqrt(1.0 - std::pow(cos, 2));
-  auto phi = CLHEP::twopi * uniform_real_distribution();
+  auto phi = CLHEP::twopi * SampleUniform();
   ParticleMomentum momentum(magnitude * std::cos(phi) * sin,
                             magnitude * std::sin(phi) * sin,
                             magnitude * cos);
-//  ParticleMomentum momentum(normal_distribution(), normal_distribution(), normal_distribution());
-//  momentum = momentum * (magnitude) / momentum.mag();
   return momentum;
 }
 
@@ -39,7 +37,7 @@ std::vector<FermiFloat> Randomizer::ProbabilityDistribution(size_t pointCount) {
   probabilityDistribution.reserve(pointCount);
 
   probabilityDistribution.push_back(0);
-  std::generate_n(std::back_inserter(probabilityDistribution), pointCount - 2, Randomizer::uniform_real_distribution);
+  std::generate_n(std::back_inserter(probabilityDistribution), pointCount - 2, Randomizer::SampleUniform);
   probabilityDistribution.push_back(1);
 
   std::sort(probabilityDistribution.begin(), probabilityDistribution.end());

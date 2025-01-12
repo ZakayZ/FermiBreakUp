@@ -86,7 +86,7 @@ std::vector<LorentzVector> Decay::CalculateDecay(const LorentzVector& totalMomen
   size_t tryCount = 0;
   FermiFloat configurationWeight = 0;
   std::vector<FermiFloat> momentumMagnitudes(fragmentsMass.size());
-  while (configurationWeight < Randomizer::uniform_real_distribution() * maxWeight) {
+  while (configurationWeight < Randomizer::SampleUniform() * maxWeight) {
     auto virtualMasses = CalculateVirtualMasses(fragmentsMass, totalEnergy - totalMass);
 
     configurationWeight = CalculateMomentumMagnitudes(momentumMagnitudes, fragmentsMass, virtualMasses);

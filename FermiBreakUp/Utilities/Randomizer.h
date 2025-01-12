@@ -2,8 +2,8 @@
 // Created by Artem Novikov on 19.02.2023.
 //
 
-#ifndef FERMIBREAKUPMYFERMIBREAKUPUTILITIESRANDOMIZERH_
-#define FERMIBREAKUPMYFERMIBREAKUPUTILITIESRANDOMIZERH_
+#ifndef FERMIBREAKUP_UTILITIES_RANDOMIZER_H
+#define FERMIBREAKUP_UTILITIES_RANDOMIZER_H
 
 #include <vector>
 #include <algorithm>
@@ -12,13 +12,13 @@
 
 class Randomizer {
 public:
-  static FermiFloat uniform_real_distribution();
+  static FermiFloat SampleUniform();
 
-  static FermiFloat normal_distribution(FermiFloat mean = 0, FermiFloat deviation = 1);
+  static FermiFloat SampleNormal(FermiFloat mean = 0, FermiFloat deviation = 1);
 
   static ParticleMomentum IsotropicVector(FermiFloat magnitude = 1);
 
   static std::vector<FermiFloat> ProbabilityDistribution(size_t pointCount);
 };
 
-#endif // FERMIBREAKUPMYFERMIBREAKUPUTILITIESRANDOMIZERH_
+#endif // FERMIBREAKUP_UTILITIES_RANDOMIZER_H

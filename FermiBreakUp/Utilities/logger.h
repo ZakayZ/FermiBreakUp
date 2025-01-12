@@ -2,8 +2,8 @@
 // Created by Artem Novikov on 08.01.2025.
 //
 
-#ifndef FERMIBREAKUPMYFERMIBREAKUPUTILITIESLOGGER_
-#define FERMIBREAKUPMYFERMIBREAKUPUTILITIESLOGGER_
+#ifndef FERMIBREAKUP_UTILITIES_LOGGER_H
+#define FERMIBREAKUP_UTILITIES_LOGGER_H
 
 #include <string_view>
 #include <string>
@@ -136,4 +136,4 @@ private:
 #define LOG_ERROR(logger, msg) LOG_MSG(logger, LogLevel::ERROR, msg)
 #define LOG_ERROR(msg) LOG_MSG(LogLevel::ERROR, msg)
 
-#endif // FERMIBREAKUPMYFERMIBREAKUPUTILITIESLOGGER_
+#endif // FERMIBREAKUP_UTILITIES_LOGGER_H
