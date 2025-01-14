@@ -41,8 +41,6 @@ namespace fermi {
 
     bool IsStable() const;
 
-    void SetMassAndCharge(AtomicMass atomicMass, ChargeNumber chargeNumber);
-
     void SetMomentum(const LorentzVector& momentum);
 
     ~Particle() = default;
@@ -50,18 +48,16 @@ namespace fermi {
   private:
     void CalculateExcitationEnergy();
 
-    void CalculateGroundStateMass();
-
     AtomicMass atomicMass_;
     ChargeNumber chargeNumber_;
     LorentzVector momentum_;
 
-    FermiFloat excitationEnergy_ = 0;
     FermiFloat groundStateMass_ = 0;
+    FermiFloat excitationEnergy_ = 0;
   };
 
   std::ostream& operator<<(std::ostream&, const Particle&);
 
-}  // namespace fermi
+} // namespace fermi
 
 #endif // FERMIBREAKUP_PARTICLE_H

@@ -12,7 +12,9 @@ namespace fermi {
 
   template <typename DataSource>
   FragmentsStorage::FragmentsStorage(const DataSource& dataSource)
-      : FragmentsStorage(dataSource.begin(), dataSource.end()) {}
+    : FragmentsStorage(dataSource.begin(), dataSource.end())
+  {
+  }
 
   template <typename Iter>
   FragmentsStorage::FragmentsStorage(Iter begin, Iter end) {

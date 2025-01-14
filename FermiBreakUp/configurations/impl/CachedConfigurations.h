@@ -29,6 +29,6 @@ namespace fermi {
     NucleiData lastNuclei_{};
   };
 
-}  // namespace fermi
+} // namespace fermi
 
 #endif // FERMIBREAKUP_CONFIGURATIONS_CACHEDCONFIGURATIONS_H

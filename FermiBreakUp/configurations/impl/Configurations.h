@@ -28,6 +28,6 @@ namespace fermi {
     std::vector<FermiFloat> weights_;
   };
 
-}  // namespace fermi
+} // namespace fermi
 
 #endif // FERMIBREAKUP_CONFIGURATIONS_CONFIGURATIONS_H

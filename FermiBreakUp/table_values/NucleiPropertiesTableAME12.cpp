@@ -8,7 +8,7 @@
 
 #include "NucleiPropertiesTableAME12.h"
 
-using namespace properties;
+using namespace fermi;
 
 const AtomicMass NucleiPropertiesTableAME12::MaxMassNumber = 5_m;
 

@@ -27,6 +27,6 @@ namespace fermi {
     virtual ~VDecay() = default;
   };
 
-}  // namespace fermi
+} // namespace fermi
 
 #endif // FERMIBREAKUP_PHASE_DECAY_VDECAY_H

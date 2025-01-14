@@ -10,15 +10,19 @@
 
 #include "DataTypes.h"
 
-class Randomizer {
-public:
-  static FermiFloat SampleUniform();
+namespace fermi {
 
-  static FermiFloat SampleNormal(FermiFloat mean = 0, FermiFloat deviation = 1);
+  class Randomizer {
+  public:
+    static FermiFloat SampleUniform();
 
-  static ParticleMomentum IsotropicVector(FermiFloat magnitude = 1);
+    static FermiFloat SampleNormal(FermiFloat mean = 0, FermiFloat deviation = 1);
 
-  static std::vector<FermiFloat> ProbabilityDistribution(size_t pointCount);
-};
+    static ParticleMomentum IsotropicVector(FermiFloat magnitude = 1);
+
+    static std::vector<FermiFloat> ProbabilityDistribution(size_t pointCount);
+  };
+
+} // namespace fermi
 
 #endif // FERMIBREAKUP_UTILITIES_RANDOMIZER_H

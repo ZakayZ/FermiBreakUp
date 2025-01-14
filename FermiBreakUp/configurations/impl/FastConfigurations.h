@@ -31,6 +31,6 @@ namespace fermi {
     NucleiData lastNuclei_{};
   };
 
-}  // namespace fermi
+} // namespace fermi
 
 #endif // FERMIBREAKUP_CONFIGURATIONS_FASTCONFIGURATIONS_H

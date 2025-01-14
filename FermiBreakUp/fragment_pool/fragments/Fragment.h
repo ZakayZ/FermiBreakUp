@@ -49,6 +49,6 @@ namespace fermi {
     FermiFloat excitationEnergy_;
   };
 
-}  // namespace fermi
+} // namespace fermi
 
 #endif // FERMIBREAKUP_FRAGMENT_POOL_FRAGMENTS_FRAGMENT_H

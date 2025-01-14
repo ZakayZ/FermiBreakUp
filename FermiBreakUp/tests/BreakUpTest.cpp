@@ -12,7 +12,7 @@
 #include "util/nuclei_properties/NucleiProperties.h"
 #include "util/Randomizer.h"
 
-using namespace properties;
+using namespace fermi;
 using namespace fermi;
 
 float CalculateFragmentCount(AtomicMass mass, ChargeNumber charge, const Vector3& vec,

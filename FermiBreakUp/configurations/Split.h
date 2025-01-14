@@ -20,6 +20,6 @@ namespace fermi {
   FermiFloat DecayProbability(const FragmentVector& split,
                               FermiUInt atomicWeight,
                               FermiFloat totalEnergy);
-}  // namespace fermi
+} // namespace fermi
 
 #endif // FERMIBREAKUP_SPLIT_H

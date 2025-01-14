@@ -11,15 +11,20 @@
 using namespace fermi;
 
 Particle::Particle(AtomicMass atomicMass, ChargeNumber chargeNumber, const LorentzVector& momentum)
-    : atomicMass_(atomicMass), chargeNumber_(chargeNumber), momentum_(momentum) {
-  CalculateGroundStateMass();
+  : atomicMass_(atomicMass)
+  , chargeNumber_(chargeNumber)
+  , momentum_(momentum)
+  , groundStateMass_(NucleiProperties()->GetNuclearMass(atomicMass_, chargeNumber_))
+{
   CalculateExcitationEnergy();
 }
 
 NucleiData Particle::GetNucleiData() const {
-  return {atomicMass_, chargeNumber_};
+  return {
+    atomicMass_,
+    chargeNumber_,
+  };
 }
-
 
 AtomicMass Particle::GetAtomicMass() const {
   return atomicMass_;
@@ -50,12 +55,6 @@ bool Particle::IsStable() const {
   return excitationEnergy_ <= 0;
 }
 
-void Particle::SetMassAndCharge(AtomicMass atomicMass, ChargeNumber chargeNumber) {
-  atomicMass_ = atomicMass;
-  chargeNumber_ = chargeNumber;
-  CalculateGroundStateMass();
-}
-
 void Particle::SetMomentum(const LorentzVector& momentum) {
   momentum_ = momentum;
   CalculateExcitationEnergy();
@@ -69,10 +68,6 @@ void Particle::CalculateExcitationEnergy() {
 //    } // TODO sometimes is raised in collaboration with other models
     excitationEnergy_ = 0;
   }
-}
-
-void Particle::CalculateGroundStateMass() {
-  groundStateMass_ = properties::NucleiProperties()->GetNuclearMass(atomicMass_, chargeNumber_);
 }
 
 std::ostream& operator<<(std::ostream& out, const Particle& particle) {

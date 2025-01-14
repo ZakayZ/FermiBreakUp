@@ -69,6 +69,6 @@ namespace fermi {
     Partition partition_;
   };
 
-}  // namespace fermi
+} // namespace fermi
 
 #endif // FERMIBREAKUP_UTILITIES_INTEGERPARTITION_H

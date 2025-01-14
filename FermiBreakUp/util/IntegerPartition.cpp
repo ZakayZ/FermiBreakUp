@@ -7,7 +7,11 @@
 using namespace fermi;
 
 IntegerPartition::IntegerPartition(uint32_t number, uint32_t termsCount, uint32_t base)
-    : number_(number), termsCount_(termsCount), base_(base) {}
+  : number_(number)
+  , termsCount_(termsCount)
+  , base_(base)
+{
+}
 
 IntegerPartition::Iterator IntegerPartition::begin() const {
   return {number_, termsCount_, base_};

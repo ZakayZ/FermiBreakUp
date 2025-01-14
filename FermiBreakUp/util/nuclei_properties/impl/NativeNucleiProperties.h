@@ -7,7 +7,7 @@
 
 #include "util/nuclei_properties/VNucleiProperties.h"
 
-namespace properties {
+namespace fermi {
 
   class NativeNucleiProperties : public VNucleiProperties {
   public:
@@ -25,6 +25,6 @@ namespace properties {
     static bool IsInvalidNuclei(AtomicMass atomicMass, ChargeNumber chargeNumber);
   };
 
-} // namespace properties
+} // namespace fermi
 
 #endif // FERMIBREAKUP_UTILITIES_NUCLEI_PROPERTIES_IMPL_NATIVENUCLEIPROPERTIES_H

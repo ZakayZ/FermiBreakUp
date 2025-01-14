@@ -9,145 +9,142 @@
 
 #include <string>
 
-using FermiInt = int32_t;
+namespace fermi {
+  using FermiInt = int32_t;
 
-using FermiUInt = uint32_t;
+  using FermiUInt = uint32_t;
 
-using FermiFloat = double;
+  using FermiFloat = double;
 
-using LorentzVector = CLHEP::HepLorentzVector;
+  using LorentzVector = CLHEP::HepLorentzVector;
 
-using Vector3 = CLHEP::Hep3Vector;
+  using Vector3 = CLHEP::Hep3Vector;
 
-using ParticleMomentum = Vector3;
+  using ParticleMomentum = Vector3;
 
-class AtomicMass {
- public:
-  using value_type = FermiUInt;
+  class AtomicMass {
+  public:
+    using ValueType = FermiUInt;
 
-  AtomicMass() = default;
+    AtomicMass() = default;
 
-  explicit constexpr AtomicMass(value_type mass) : mass_(mass) {}
+    explicit constexpr AtomicMass(ValueType mass) : mass_(mass) {}
 
-  AtomicMass(const AtomicMass& other) = default;
+    AtomicMass(const AtomicMass& other) = default;
 
-  AtomicMass(AtomicMass&& other) = default;
+    AtomicMass(AtomicMass&& other) = default;
 
-  AtomicMass& operator=(const AtomicMass& other) = default;
+    AtomicMass& operator=(const AtomicMass& other) = default;
 
-  AtomicMass& operator=(AtomicMass&& other) = default;
+    AtomicMass& operator=(AtomicMass&& other) = default;
 
-  constexpr operator FermiUInt() const { return mass_; }
+    constexpr operator FermiUInt() const { return mass_; }
 
-  constexpr operator FermiInt() const { return mass_; }
+    constexpr operator FermiInt() const { return mass_; }
 
-  constexpr operator FermiFloat() const { return mass_; }
+    constexpr operator FermiFloat() const { return mass_; }
 
-  bool operator<(const AtomicMass& other) const { return mass_ < other.mass_; }
+    bool operator<(const AtomicMass& other) const { return mass_ < other.mass_; }
 
-  bool operator>(const AtomicMass& other) const { return mass_ > other.mass_; }
+    bool operator>(const AtomicMass& other) const { return mass_ > other.mass_; }
 
-  bool operator<=(const AtomicMass& other) const { return mass_ <= other.mass_; }
+    bool operator<=(const AtomicMass& other) const { return mass_ <= other.mass_; }
 
-  bool operator>=(const AtomicMass& other) const { return mass_ >= other.mass_; }
+    bool operator>=(const AtomicMass& other) const { return mass_ >= other.mass_; }
 
-  bool operator==(const AtomicMass& other) const { return mass_ == other.mass_; }
+    bool operator==(const AtomicMass& other) const { return mass_ == other.mass_; }
 
-  bool operator!=(const AtomicMass& other) const { return mass_ != other.mass_; }
+    bool operator!=(const AtomicMass& other) const { return mass_ != other.mass_; }
 
- private:
-  FermiUInt mass_;
-};
+  private:
+    FermiUInt mass_;
+  };
 
-constexpr AtomicMass operator ""_m(uint64_t mass) {
-  return AtomicMass(mass);
-}
+  class ChargeNumber {
+  public:
+    using ValueType = FermiUInt;
+
+    ChargeNumber() = default;
+
+    explicit constexpr ChargeNumber(ValueType charge) : charge_(charge) {}
+
+    ChargeNumber(const ChargeNumber& other) = default;
+
+    ChargeNumber(ChargeNumber&& other) = default;
+
+    ChargeNumber& operator=(const ChargeNumber& other) = default;
+
+    ChargeNumber& operator=(ChargeNumber&& other) = default;
+
+    constexpr operator FermiUInt() const { return charge_; }
+
+    constexpr operator FermiInt() const { return charge_; }
+
+    constexpr operator FermiFloat() const { return charge_; }
+
+    bool operator<(const ChargeNumber& other) const { return charge_ < other.charge_; }
+
+    bool operator>(const ChargeNumber& other) const { return charge_ > other.charge_; }
+
+    bool operator<=(const ChargeNumber& other) const { return charge_ <= other.charge_; }
+
+    bool operator>=(const ChargeNumber& other) const { return charge_ >= other.charge_; }
+
+    bool operator==(const ChargeNumber& other) const { return charge_ == other.charge_; }
+
+    bool operator!=(const ChargeNumber& other) const { return charge_ != other.charge_; }
+
+  private:
+    FermiUInt charge_;
+  };
+
+  struct NucleiData {
+    AtomicMass atomicMass;
+    ChargeNumber chargeNumber;
+
+    bool operator<(const NucleiData& other) const {
+      return atomicMass < other.atomicMass
+          || (atomicMass == other.atomicMass && chargeNumber < other.chargeNumber);
+    }
+
+    bool operator==(const NucleiData& other) const {
+      return atomicMass == other.atomicMass && chargeNumber == other.chargeNumber;
+    }
+
+    bool operator!=(const NucleiData& other) const {
+      return atomicMass != other.atomicMass || chargeNumber != other.chargeNumber;
+    }
+  };
+
+} // namespace fermi
 
 namespace std {
-  std::string to_string(AtomicMass mass);
+  template <>
+  struct hash<fermi::NucleiData> {
+    size_t operator()(const fermi::NucleiData& key) const
+    {
+      auto mass = fermi::FermiInt(key.atomicMass);
+      auto charge = fermi::FermiInt(key.chargeNumber);
+      return (mass * (mass + 1)) / 2 + charge;
+    }
+  };
+
+  string to_string(fermi::AtomicMass mass);
+  string to_string(fermi::ChargeNumber charge);
 }
 
-std::ostream& operator<<(std::ostream& out, const AtomicMass& mass);
-
-std::istream& operator>>(std::istream& in, AtomicMass& mass);
-
-class ChargeNumber {
- public:
-  using value_type = FermiUInt;
-
-  ChargeNumber() = default;
-
-  explicit constexpr ChargeNumber(value_type charge) : charge_(charge) {}
-
-  ChargeNumber(const ChargeNumber& other) = default;
-
-  ChargeNumber(ChargeNumber&& other) = default;
-
-  ChargeNumber& operator=(const ChargeNumber& other) = default;
-
-  ChargeNumber& operator=(ChargeNumber&& other) = default;
-
-  constexpr operator FermiUInt() const { return charge_; }
-
-  constexpr operator FermiInt() const { return charge_; }
-
-  constexpr operator FermiFloat() const { return charge_; }
-
-  bool operator<(const ChargeNumber& other) const { return charge_ < other.charge_; }
-
-  bool operator>(const ChargeNumber& other) const { return charge_ > other.charge_; }
-
-  bool operator<=(const ChargeNumber& other) const { return charge_ <= other.charge_; }
-
-  bool operator>=(const ChargeNumber& other) const { return charge_ >= other.charge_; }
-
-  bool operator==(const ChargeNumber& other) const { return charge_ == other.charge_; }
-
-  bool operator!=(const ChargeNumber& other) const { return charge_ != other.charge_; }
-
- private:
-  FermiUInt charge_;
-};
-
-constexpr ChargeNumber operator ""_c(uint64_t charge) {
-  return ChargeNumber(charge);
+constexpr fermi::AtomicMass operator ""_m(uint64_t mass) {
+  return fermi::AtomicMass(mass);
 }
 
-namespace std {
-std::string to_string(ChargeNumber charge);
+constexpr fermi::ChargeNumber operator ""_c(uint64_t charge) {
+  return fermi::ChargeNumber(charge);
 }
 
-std::ostream& operator<<(std::ostream& out, ChargeNumber charge);
+std::ostream& operator<<(std::ostream& out, const fermi::AtomicMass& mass);
+std::istream& operator>>(std::istream& in, fermi::AtomicMass& mass);
 
-std::istream& operator>>(std::istream& in, ChargeNumber& charge);
-
-struct NucleiData {
-  AtomicMass atomicMass;
-  ChargeNumber chargeNumber;
-
-  bool operator<(const NucleiData& other) const {
-    return atomicMass < other.atomicMass
-        || (atomicMass == other.atomicMass && chargeNumber < other.chargeNumber);
-  }
-
-  bool operator==(const NucleiData& other) const {
-    return atomicMass == other.atomicMass && chargeNumber == other.chargeNumber;
-  }
-
-  bool operator!=(const NucleiData& other) const {
-    return atomicMass != other.atomicMass || chargeNumber != other.chargeNumber;
-  }
-};
-
-template <>
-struct std::hash<NucleiData>
-{
-  std::size_t operator()(const NucleiData& key) const
-  {
-    auto mass = FermiInt(key.atomicMass);
-    auto charge = FermiInt(key.chargeNumber);
-    return (mass * (mass + 1)) / 2 + charge;
-  }
-};
+std::ostream& operator<<(std::ostream& out, const fermi::ChargeNumber& charge);
+std::istream& operator>>(std::istream& in, fermi::ChargeNumber& charge);
 
 #endif // FERMIBREAKUP_UTILITIES_DATATYPES_H

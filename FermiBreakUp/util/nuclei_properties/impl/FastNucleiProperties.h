@@ -10,7 +10,7 @@
 #include "util/DataTypes.h"
 #include "util/nuclei_properties/VNucleiProperties.h"
 
-namespace properties {
+namespace fermi {
   class FastNucleiProperties : public VNucleiProperties {
   public:
     FastNucleiProperties();
@@ -25,17 +25,19 @@ namespace properties {
 
     [[nodiscard]] bool IsStable(AtomicMass atomicMass, ChargeNumber chargeNumber) const override;
 
-    void AddMass(AtomicMass atomicMass, ChargeNumber chargeNumber, FermiFloat mass);
+    void AddStableNuclei(AtomicMass atomicMass, ChargeNumber chargeNumber, FermiFloat mass);
 
-    void AddMass(NucleiData nucleiData, FermiFloat mass);
+    void AddStableNuclei(NucleiData nucleiData, FermiFloat mass);
 
     ~FastNucleiProperties() = default;
 
   private:
     struct MassData {
       FermiFloat mass;
-      bool isValid = false;
-      bool isCached = false;
+
+      bool isStable = false; // value was added via AddMass, it is considered stable
+
+      bool isCached = false; // value has been calculated earlier
     };
 
     [[nodiscard]] static size_t GetSlot(AtomicMass atomicMass, ChargeNumber chargeNumber);
@@ -53,10 +55,10 @@ namespace properties {
   FastNucleiProperties::FastNucleiProperties(Iter begin, Iter end) {
     static_assert(std::is_same_v<typename Iter::value_type, std::pair<const NucleiData, FermiFloat>>, "invalid iterator");
     for (auto it = begin; it != end; ++it) {
-      AddMass(it->first, it->second);
+      AddStableNuclei(it->first, it->second);
     }
   }
 
-} // namespace properties
+} // namespace fermi
 
 #endif // FERMIBREAKUP_UTILITIES_NUCLEI_PROPERTIES_IMPL_FASTNUCLEIPROPERTIES_H

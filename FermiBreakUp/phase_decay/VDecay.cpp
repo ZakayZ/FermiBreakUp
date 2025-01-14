@@ -5,6 +5,8 @@
 #include "VDecay.h"
 #include "util/Randomizer.h"
 
+using namespace fermi;
+
 FermiFloat fermi::TwoBodyMomentum(FermiFloat totalEnergy, FermiFloat mass1, FermiFloat mass2) {
   assert(totalEnergy > mass1 + mass2);
 

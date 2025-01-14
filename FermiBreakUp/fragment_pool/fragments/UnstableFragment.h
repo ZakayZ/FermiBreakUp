@@ -75,6 +75,6 @@ namespace fermi {
 
   #undef AddUnstaleFragment
 
-}  // namespace fermi
+} // namespace fermi
 
 #endif // FERMIBREAKUP_FRAGMENT_POOL_FRAGMENTS_UNSTABLEFRAGMENT_H

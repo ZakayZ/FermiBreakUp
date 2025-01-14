@@ -20,6 +20,6 @@ namespace fermi {
     static ParticleVector ConvertToParticles(const Particle& sourceNucleus, const FragmentVector& split);
   };
 
-}  // namespace fermi
+} // namespace fermi
 
 #endif // FERMIBREAKUP_VFERMIBREAKUP_H

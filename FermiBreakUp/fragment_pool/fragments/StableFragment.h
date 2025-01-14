@@ -22,6 +22,6 @@ namespace fermi {
     ParticleVector GetFragments(const LorentzVector& momentum) const override;
   };
 
-}  // namespace fermi
+} // namespace fermi
 
 #endif // FERMIBREAKUP_FRAGMENT_POOL_FRAGMENTS_STABLEFRAGMENT_H

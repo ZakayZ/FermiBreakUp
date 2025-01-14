@@ -15,6 +15,6 @@ namespace fermi {
 
     static_assert(std::is_base_of<VDecay, FermiPhaseSpaceDecay>::value, "Incorrect phase sampler");
 
-}  // namespace fermi
+} // namespace fermi
 
 #endif // FERMIBREAKUP_PHASE_DECAY_FERMIPHASESPACEDECAY_H

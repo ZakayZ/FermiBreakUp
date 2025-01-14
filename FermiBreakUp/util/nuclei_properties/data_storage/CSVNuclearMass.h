@@ -5,15 +5,15 @@
 #ifndef FERMIBREAKUP_UTILITIES_NUCLEI_PROPERTIES_DATA_STORAGE_CSVNUCLEARMASS_H
 #define FERMIBREAKUP_UTILITIES_NUCLEI_PROPERTIES_DATA_STORAGE_CSVNUCLEARMASS_H
 
-#include <map>
+#include <unordered_map>
 
 #include "util/DataTypes.h"
 
-namespace properties {
+namespace fermi {
 
-  class CSVNuclearMass : private std::map<NucleiData, FermiFloat> {
+  class CSVNuclearMass : private std::unordered_map<NucleiData, FermiFloat> {
   private:
-    using Container = std::map<NucleiData, FermiFloat>;
+    using Container = std::unordered_map<NucleiData, FermiFloat>;
 
   public:
     CSVNuclearMass(
@@ -31,6 +31,6 @@ namespace properties {
     using Container::cend;
   };
 
-} // namespace properties
+} // namespace fermi
 
 #endif // FERMIBREAKUP_UTILITIES_NUCLEI_PROPERTIES_DATA_STORAGE_CSVNUCLEARMASS_H

@@ -9,7 +9,7 @@
 
 #include "util/DataTypes.h"
 
-namespace properties {
+namespace fermi {
 
   class NucleiPropertiesTable {
   public:
@@ -53,6 +53,6 @@ namespace properties {
 
   std::ostream& operator<<(std::ostream& out, const NucleiPropertiesTable& table);
 
-} // namespace properties
+} // namespace fermi
 
 #endif // FERMIBREAKUP_TABLE_VALUES_NUCLEIPROPERTIESTABLE_H

@@ -6,7 +6,7 @@
 
 #include "CSVNuclearMass.h"
 
-namespace properties {
+namespace fermi {
 
 CSVNuclearMass::CSVNuclearMass(const std::string& csvFilename,
                                const std::string& massNumberName,
@@ -91,4 +91,4 @@ CSVNuclearMass::CSVNuclearMass(const std::string& csvFilename,
   }
 }
 
-} // namespace properties
+} // namespace fermi

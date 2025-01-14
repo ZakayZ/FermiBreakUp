@@ -10,7 +10,7 @@
 
 #include "util/nuclei_properties/VNucleiProperties.h"
 
-namespace properties {
+namespace fermi {
 
   class FermiNucleiProperties : public VNucleiProperties {
   public:
@@ -48,6 +48,6 @@ namespace properties {
     }
   }
 
-} // namespace properties
+} // namespace fermi
 
 #endif // FERMIBREAKUP_UTILITIES_NUCLEI_PROPERTIES_IMPL_FERMINUCLEIPROPERTIES_H

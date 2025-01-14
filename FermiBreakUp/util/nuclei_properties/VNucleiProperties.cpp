@@ -6,7 +6,7 @@
 
 #include "VNucleiProperties.h"
 
-namespace properties {
+namespace fermi {
   FermiFloat VNucleiProperties::AtomicWeight(AtomicMass atomicMass, ChargeNumber chargeNumber) {
     constexpr FermiFloat hydrogenMassExcess = 7.28897;
     constexpr FermiFloat neutronMassExcess = 8.07132;
@@ -54,4 +54,4 @@ namespace properties {
     std::cerr << "Unsupported values for A = " << atomicMass << " and Z = " << chargeNumber << std::endl;
   }
 
-} // namespace properties
+} // namespace fermi

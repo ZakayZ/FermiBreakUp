@@ -13,14 +13,14 @@
 #include "impl/FastNucleiProperties.h"
 #include "VNucleiProperties.h"
 
-namespace properties {
+namespace fermi {
 
     // it is possible to use polymorphism here, but this way no inline table access is possible and it is a bottleneck
     using NucleiProperties = Singleton<FastNucleiProperties>;
 
     static_assert(std::is_base_of_v<VNucleiProperties, std::remove_reference_t<decltype(NucleiProperties::Instance())>>,
-                "Incorrect Nuclei properties class");
+                "Incorrect Nuclei fermi class");
 
-} // namespace properties
+} // namespace fermi
 
 #endif // FERMIBREAKUP_UTILITIES_NUCLEI_PROPERTIES_NUCLEIPROPERTIES_H

@@ -10,8 +10,8 @@ using namespace fermi;
 
 FermiBreakUp::FermiBreakUp() : configurations_(DefaultConfigurations()) {};
 
-FermiBreakUp::FermiBreakUp(std::unique_ptr<VConfigurations>&& Configurations)
-  : configurations_(std::move(Configurations))
+FermiBreakUp::FermiBreakUp(std::unique_ptr<VConfigurations>&& configurations)
+  : configurations_(std::move(configurations))
 {
 }
 

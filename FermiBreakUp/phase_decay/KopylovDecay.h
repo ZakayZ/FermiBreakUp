@@ -18,6 +18,6 @@ namespace fermi {
     static FermiFloat BetaKopylov(size_t k);
   };
 
-}  // namespace fermi
+} // namespace fermi
 
 #endif // FERMIBREAKUP_PHASE_DECAY_KOPYLOVDECAY_H

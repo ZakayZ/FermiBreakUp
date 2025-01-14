@@ -33,7 +33,7 @@ void CalculateFragments(AtomicMass mass,
     size_t partsCounter = 0;
     auto additionalEnergy = energyNucleon * FermiFloat(mass);
     for (size_t i = 0; i < tests; ++i) {
-      auto vec = LorentzVector(0, 0, 0, properties::NucleiProperties()->GetNuclearMass(mass, charge) + additionalEnergy);
+      auto vec = LorentzVector(0, 0, 0, NucleiProperties()->GetNuclearMass(mass, charge) + additionalEnergy);
       auto particles = model.BreakItUp(Particle(mass, charge, vec));
       partsCounter += particles.size();
     }
@@ -56,7 +56,7 @@ void CalculateMomentum(AtomicMass mass, ChargeNumber charge, const std::string& 
   auto model = FermiBreakUp();
   std::ofstream out(dumpName);
   auto vec = LorentzVector(momentum.x(), momentum.y(), momentum.z(),
-                           std::sqrt(std::pow(properties::NucleiProperties()->GetNuclearMass(mass, charge) + energy, 2)
+                           std::sqrt(std::pow(NucleiProperties()->GetNuclearMass(mass, charge) + energy, 2)
                                          + momentum.mag2()));
   out << vec / mass << '\n';
   std::vector<FermiFloat> xComponent, yComponent, zComponent, magnitude;

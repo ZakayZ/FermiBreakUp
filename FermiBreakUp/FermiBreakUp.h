@@ -20,7 +20,7 @@ namespace fermi {
   public:
     FermiBreakUp();
 
-    FermiBreakUp(std::unique_ptr<VConfigurations>&& Configurations);
+    FermiBreakUp(std::unique_ptr<VConfigurations>&& configurations);
 
     ParticleVector BreakItUp(const Particle& nucleus) override;
 
@@ -32,6 +32,6 @@ namespace fermi {
     std::unique_ptr<VConfigurations> configurations_;
   };
 
-}  // namespace fermi
+} // namespace fermi
 
 #endif // FERMIBREAKUP_FERMIBREAKUP_H

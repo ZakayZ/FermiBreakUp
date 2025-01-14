@@ -7,7 +7,7 @@
 #include "NucleiPropertiesTable.h"
 #include "CLHEP/Units/PhysicalConstants.h"
 
-using namespace properties;
+using namespace fermi;
 
 const AtomicMass NucleiPropertiesTable::MaxMassNumber = 9_m;
 

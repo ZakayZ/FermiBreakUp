@@ -7,6 +7,8 @@
 
 #include "Randomizer.h"
 
+using namespace fermi;
+
 FermiFloat Randomizer::SampleUniform() {
   static std::random_device device;
   static std::mt19937 generator(device());

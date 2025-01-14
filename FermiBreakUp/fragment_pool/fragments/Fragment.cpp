@@ -35,7 +35,7 @@ FermiFloat Fragment::GetExcitationEnergy() const {
 }
 
 FermiFloat Fragment::GetMass() const {
-  return properties::NucleiProperties()->GetNuclearMass(atomicMass_, chargeNumber_);
+  return fermi::NucleiProperties()->GetNuclearMass(atomicMass_, chargeNumber_);
 }
 
 FermiFloat Fragment::GetTotalEnergy() const {

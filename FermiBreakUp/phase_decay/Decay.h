@@ -15,6 +15,6 @@ namespace fermi {
                                               const std::vector<FermiFloat>& fragmentsMass) const override;
   };
 
-}  // namespace fermi
+} // namespace fermi
 
 #endif // FERMIBREAKUP_PHASE_DECAY_DECAY_H

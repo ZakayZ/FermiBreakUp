@@ -16,7 +16,7 @@ UnstableFragment::UnstableFragment(AtomicMass atomicMass,
   : Fragment(atomicMass, chargeNumber, polarization, excitationEnergy)
   , decayData_(std::move(decayData))
 {
-  properties::NucleiProperties properties;
+  NucleiProperties properties;
   masses_.reserve(decayData_.size());
   for (const auto& decayFragment : decayData_) {
     masses_.push_back(properties->GetNuclearMass(decayFragment.atomicMass, decayFragment.chargeNumber));

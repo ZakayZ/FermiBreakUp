@@ -16,7 +16,7 @@ TEST(TableTest, DefaultPropertiesTest) {
   tableData >> headers;
 
   int idx;
-  properties::NucleiProperties properties;
+  fermi::NucleiProperties fermi;
   while(tableData >> idx) {
     char s;
     AtomicMass m;
@@ -24,8 +24,8 @@ TEST(TableTest, DefaultPropertiesTest) {
     FermiFloat mass;
     tableData >> s >> m >> s >> c >> s >> mass;
 
-    ASSERTTRUE(properties->IsStable(m, c));
-    ASSERTEQ(mass, properties->GetNuclearMass(m, c));
+    ASSERTTRUE(fermi->IsStable(m, c));
+    ASSERTEQ(mass, fermi->GetNuclearMass(m, c));
   }
 }
 
@@ -37,7 +37,7 @@ TEST(TableTest, FilePropertiesTest) {
   tableData >> headers;
 
   int idx;
-  properties::NucleiProperties properties(properties::CSVNuclearMass("./smallNucleiData.csv"));
+  fermi::NucleiProperties fermi(fermi::CSVNuclearMass("./smallNucleiData.csv"));
   while(tableData >> idx) {
     char s;
     AtomicMass m;
@@ -45,7 +45,7 @@ TEST(TableTest, FilePropertiesTest) {
     FermiFloat mass;
     tableData >> s >> m >> s >> c >> s >> mass;
 
-    ASSERTTRUE(properties->IsStable(m, c));
-    ASSERTEQ(mass, properties->GetNuclearMass(m, c));
+    ASSERTTRUE(fermi->IsStable(m, c));
+    ASSERTEQ(mass, fermi->GetNuclearMass(m, c));
   }
 }

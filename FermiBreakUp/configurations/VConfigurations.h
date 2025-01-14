@@ -24,6 +24,6 @@ namespace fermi {
     virtual ~VConfigurations() = default;
   };
 
-}  // namespace fermi
+} // namespace fermi
 
 #endif // FERMIBREAKUP_VCONFIGURATIONS_H

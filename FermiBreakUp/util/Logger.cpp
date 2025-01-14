@@ -1,5 +1,7 @@
 #include "logger.h"
 
+using namespace fermi;
+
 void StreamLogger::Log(const std::string_view fileName,
                        const int line,
                        const std::string_view funcName,
