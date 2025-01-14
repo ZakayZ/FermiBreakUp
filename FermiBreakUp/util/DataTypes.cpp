@@ -4,10 +4,6 @@
 
 #include "DataTypes.h"
 
-ChargeNumber operator ""_c(uint64_t charge) {
-  return ChargeNumber(charge);
-}
-
 std::string std::to_string(ChargeNumber charge) {
   return std::to_string(FermiUInt(charge));
 }
@@ -22,10 +18,6 @@ std::istream& operator>>(std::istream& in, ChargeNumber& charge) {
   in >> val;
   charge = ChargeNumber(val);
   return in;
-}
-
-AtomicMass operator ""_m(uint64_t mass) {
-  return AtomicMass(mass);
 }
 
 std::string std::to_string(AtomicMass mass) {

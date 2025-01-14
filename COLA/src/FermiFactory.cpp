@@ -10,8 +10,8 @@
 #include <configurations/FastConfigurations.h>
 #include <configurations/Configurations.h>
 #include <FermiBreakUp.h>
-#include <utilities/nuclei_properties/data_storage/CSVNuclearMass.h>
-#include <utilities/nuclei_properties/NucleiProperties.h>
+#include <util/nuclei_properties/data_storage/CSVNuclearMass.h>
+#include <util/nuclei_properties/NucleiProperties.h>
 
 #include "FermiFactory.h"
 #include "FermiConverter.h"
@@ -51,7 +51,7 @@ cola::FermiConverter* FermiFactory::DoCreate(const std::map<std::string, std::st
   auto model = std::make_unique<fermi::FermiBreakUp>(std::move(Configurations));
   if (config.nucleiCsv.hasValue()) {
     auto storage = properties::CSVNuclearMass(config.nucleiCsv.value());
-    properties::nuclei_properties::Reset(new properties::FastNucleiProperties(storage));
+    properties::NucleiProperties::Reset(new properties::FastNucleiProperties(storage));
   }
 
   return new FermiConverter(std::move(model));

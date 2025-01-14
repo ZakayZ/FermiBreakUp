@@ -37,10 +37,6 @@ set(fragment_pool
     fragment_pool/fragments/Fragment.cpp
     fragment_pool/fragments/StableFragment.cpp
     fragment_pool/fragments/UnstableFragment.cpp
-    fragment_pool/fragments/B9Fragment.cpp
-    fragment_pool/fragments/Be8Fragment.cpp
-    fragment_pool/fragments/Li5Fragment.cpp
-    fragment_pool/fragments/He5Fragment.cpp
 )
 
 set(Configurations

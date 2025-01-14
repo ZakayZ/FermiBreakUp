@@ -5,7 +5,7 @@
 #include <gtest/gtest.h>
 #include <memory>
 
-#include "utilities/Randomizer.h"
+#include "util/Randomizer.h"
 #include "configurations/Configurations.h"
 #include "configurations/CachedConfigurations.h"
 #include "configurations/FastConfigurations.h"

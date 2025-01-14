@@ -27,7 +27,7 @@ class AtomicMass {
 
   AtomicMass() = default;
 
-  explicit AtomicMass(value_type mass) : mass_(mass) {}
+  explicit constexpr AtomicMass(value_type mass) : mass_(mass) {}
 
   AtomicMass(const AtomicMass& other) = default;
 
@@ -37,11 +37,11 @@ class AtomicMass {
 
   AtomicMass& operator=(AtomicMass&& other) = default;
 
-  operator FermiUInt() const { return mass_; }
+  constexpr operator FermiUInt() const { return mass_; }
 
-  operator FermiInt() const { return mass_; }
+  constexpr operator FermiInt() const { return mass_; }
 
-  operator FermiFloat() const { return mass_; }
+  constexpr operator FermiFloat() const { return mass_; }
 
   bool operator<(const AtomicMass& other) const { return mass_ < other.mass_; }
 
@@ -59,7 +59,9 @@ class AtomicMass {
   FermiUInt mass_;
 };
 
-AtomicMass operator ""_m(uint64_t mass);
+constexpr AtomicMass operator ""_m(uint64_t mass) {
+  return AtomicMass(mass);
+}
 
 namespace std {
   std::string to_string(AtomicMass mass);
@@ -75,7 +77,7 @@ class ChargeNumber {
 
   ChargeNumber() = default;
 
-  explicit ChargeNumber(value_type charge) : charge_(charge) {}
+  explicit constexpr ChargeNumber(value_type charge) : charge_(charge) {}
 
   ChargeNumber(const ChargeNumber& other) = default;
 
@@ -85,11 +87,11 @@ class ChargeNumber {
 
   ChargeNumber& operator=(ChargeNumber&& other) = default;
 
-  operator FermiUInt() const { return charge_; }
+  constexpr operator FermiUInt() const { return charge_; }
 
-  operator FermiInt() const { return charge_; }
+  constexpr operator FermiInt() const { return charge_; }
 
-  operator FermiFloat() const { return charge_; }
+  constexpr operator FermiFloat() const { return charge_; }
 
   bool operator<(const ChargeNumber& other) const { return charge_ < other.charge_; }
 
@@ -107,7 +109,9 @@ class ChargeNumber {
   FermiUInt charge_;
 };
 
-ChargeNumber operator ""_c(uint64_t charge);
+constexpr ChargeNumber operator ""_c(uint64_t charge) {
+  return ChargeNumber(charge);
+}
 
 namespace std {
 std::string to_string(ChargeNumber charge);

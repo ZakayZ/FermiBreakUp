@@ -16,6 +16,10 @@ namespace properties {
   constexpr FermiFloat AlphaMass = 3.727379 * CLHEP::GeV;
   constexpr FermiFloat He3Mass = 2.808391 * CLHEP::GeV;
 
+  constexpr int HashNuclei(const AtomicMass atomicMass, const ChargeNumber chargeNumber) {
+    return static_cast<int>(atomicMass) * 100 + static_cast<int>(chargeNumber);
+  }
+
   FermiFloat NativeNucleiProperties::GetNuclearMass(AtomicMass atomicMass, ChargeNumber chargeNumber) const {
     if (IsInvalidNuclei(atomicMass, chargeNumber)) {
       std::cerr << "NucleiProperties::GetNuclearMass: Wrong values for A = " << atomicMass
@@ -23,25 +27,13 @@ namespace properties {
       return 0;
     }
 
-    if (chargeNumber <= 2_c) {
-      if (chargeNumber == 1_c && atomicMass == 1_m) {
-        return ProtonMass;
-      }
-      if (chargeNumber == 0_c && atomicMass == 1_m) {
-        return NeutronMass;
-      }
-      if (chargeNumber == 1_c && atomicMass == 2_m) {
-        return DeuteronMass;
-      }
-      if (chargeNumber == 1_c && atomicMass == 3_m) {
-        return TritonMass;
-      }
-      if (chargeNumber == 2_c && atomicMass == 4_m) {
-        return AlphaMass;
-      }
-      if (chargeNumber == 2_c && atomicMass == 3_m) {
-        return He3Mass;
-      }
+    switch (HashNuclei(atomicMass, chargeNumber)) {
+      case HashNuclei(1_m, 1_c): return ProtonMass;
+      case HashNuclei(1_m, 0_c): return NeutronMass;
+      case HashNuclei(2_m, 1_c): return DeuteronMass;
+      case HashNuclei(3_m, 1_c): return TritonMass;
+      case HashNuclei(4_m, 2_c): return AlphaMass;
+      case HashNuclei(3_m, 2_c): return He3Mass;
     }
 
     NucleiPropertiesTableAME12 tableAME12;

@@ -13,7 +13,11 @@ namespace fermi {
 
   class UnstableFragment : public Fragment {
   public:
-    using Fragment::Fragment;
+    UnstableFragment(AtomicMass atomicMass,
+                     ChargeNumber chargeNumber,
+                     FermiInt polarization,
+                     FermiFloat excitationEnergy,
+                     std::vector<NucleiData>&& decayData);
 
     UnstableFragment() = delete;
 
@@ -23,16 +27,53 @@ namespace fermi {
 
     ParticleVector GetFragments(const LorentzVector& momentum) const override;
 
-  protected:
-    void BuildDecay(std::vector<NucleiData>&& decayData);
-    void BuildDecay(const std::vector<NucleiData>& decayData);
-
   private:
-    void FillMasses();
-
     std::vector<NucleiData> decayData_;
     std::vector<FermiFloat> masses_;
   };
+
+  #define AddUnstaleFragment(NAME, FRAGMENTS) \
+    inline UnstableFragment NAME(             \
+        AtomicMass atomicMass,                \
+        ChargeNumber chargeNumber,            \
+        FermiInt polarization,                \
+        FermiFloat excitationEnergy)          \
+    {                                         \
+      return UnstableFragment(                \
+        atomicMass,                           \
+        chargeNumber,                         \
+        polarization,                         \
+        excitationEnergy,                     \
+        FRAGMENTS                             \
+      );                                      \
+    }
+
+  // He5 ----> alpha + neutron
+  AddUnstaleFragment(He5Fragment, std::vector<NucleiData>({
+    NucleiData{4_m, 2_c},
+    NucleiData{1_m, 0_c},
+  }));
+
+  // B9 ----> alpha + alpha + proton
+  AddUnstaleFragment(B9Fragment, std::vector<NucleiData>({
+    NucleiData{4_m, 2_c},
+    NucleiData{4_m, 2_c},
+    NucleiData{1_m, 1_c},
+  }));
+
+  // Be8 ----> alpha + alpha
+  AddUnstaleFragment(Be8Fragment, std::vector<NucleiData>({
+    NucleiData{4_m, 2_c},
+    NucleiData{4_m, 2_c},
+  }));
+
+  // Li5 ----> alpha + proton
+  AddUnstaleFragment(Li5Fragment, std::vector<NucleiData>({
+    NucleiData{4_m, 2_c},
+    NucleiData{1_m, 1_c},
+  }));
+
+  #undef AddUnstaleFragment
 
 }  // namespace fermi
 
