@@ -9,8 +9,8 @@
 #include "configurations/FastConfigurations.h"
 #include "configurations/Configurations.h"
 #include "FermiBreakUp.h"
-#include "utilities/nuclei_properties/NucleiProperties.h"
-#include "utilities/Randomizer.h"
+#include "util/nuclei_properties/NucleiProperties.h"
+#include "util/Randomizer.h"
 
 using namespace properties;
 using namespace fermi;

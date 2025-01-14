@@ -11,7 +11,7 @@ namespace fermi {
 
   class B9Fragment : public UnstableFragment {
   public:
-    B9Fragment(AtomicMass atomicMass, ChargeNumber chargeNumber, int polarization, FermiFloat excitationEnergy);
+    B9Fragment(AtomicMass atomicMass, ChargeNumber chargeNumber, FermiInt polarization, FermiFloat excitationEnergy);
 
     B9Fragment() = delete;
 

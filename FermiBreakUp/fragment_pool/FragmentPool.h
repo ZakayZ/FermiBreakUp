@@ -8,8 +8,8 @@
 #include <memory>
 #include <map>
 
-#include "utilities/DataTypes.h"
-#include "utilities/Singleton.h"
+#include "util/DataTypes.h"
+#include "util/Singleton.h"
 #include "fragments/Fragment.h"
 #include "FragmentsStorage.h"
 

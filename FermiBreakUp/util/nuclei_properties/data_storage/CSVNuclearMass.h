@@ -7,7 +7,7 @@
 
 #include <map>
 
-#include "utilities/DataTypes.h"
+#include "util/DataTypes.h"
 
 namespace properties {
 

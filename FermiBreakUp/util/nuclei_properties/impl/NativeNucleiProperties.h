@@ -5,15 +5,15 @@
 #ifndef FERMIBREAKUP_UTILITIES_NUCLEI_PROPERTIES_IMPL_NATIVENUCLEIPROPERTIES_H
 #define FERMIBREAKUP_UTILITIES_NUCLEI_PROPERTIES_IMPL_NATIVENUCLEIPROPERTIES_H
 
-#include "utilities/nuclei_properties/VNucleiProperties.h"
+#include "util/nuclei_properties/VNucleiProperties.h"
 
 namespace properties {
 
   class NativeNucleiProperties : public VNucleiProperties {
   public:
-    [[nodiscard]] FermiFloat GetNuclearMass(AtomicMass atomicMass, ChargeNumber chargeNumber) const override final;
+    [[nodiscard]] FermiFloat GetNuclearMass(AtomicMass atomicMass, ChargeNumber chargeNumber) const override;
 
-    [[nodiscard]] bool IsStable(AtomicMass atomicMass, ChargeNumber chargeNumber) const override final;
+    [[nodiscard]] bool IsStable(AtomicMass atomicMass, ChargeNumber chargeNumber) const override;
 
   private:
     static FermiFloat AtomicWeight(AtomicMass atomicMass, ChargeNumber chargeNumber);
@@ -23,13 +23,6 @@ namespace properties {
     static FermiFloat BindingEnergy(AtomicMass atomicMass, ChargeNumber chargeNumber);
 
     static bool IsInvalidNuclei(AtomicMass atomicMass, ChargeNumber chargeNumber);
-
-    static const FermiFloat protonMass;
-    static const FermiFloat neutronMass;
-    static const FermiFloat deuteronMass;
-    static const FermiFloat tritonMass;
-    static const FermiFloat alphaMass;
-    static const FermiFloat He3Mass;
   };
 
 } // namespace properties

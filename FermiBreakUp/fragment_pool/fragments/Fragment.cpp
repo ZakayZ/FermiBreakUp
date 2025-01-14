@@ -3,14 +3,20 @@
 //
 
 #include "Fragment.h"
-#include "utilities/nuclei_properties/NucleiProperties.h"
+#include "util/nuclei_properties/NucleiProperties.h"
 
 using namespace fermi;
 
-Fragment::Fragment(AtomicMass atomicMass, ChargeNumber chargeNumber,
-                             int polarization, FermiFloat excitationEnergy)
-    : atomicMass_(atomicMass), chargeNumber_(chargeNumber),
-      polarization(polarization), excitationEnergy_(excitationEnergy) {}
+Fragment::Fragment(AtomicMass atomicMass,
+                   ChargeNumber chargeNumber,
+                   FermiInt polarization,
+                   FermiFloat excitationEnergy)
+    : atomicMass_(atomicMass)
+    , chargeNumber_(chargeNumber)
+    , polarization_(polarization)
+    , excitationEnergy_(excitationEnergy)
+{
+}
 
 AtomicMass Fragment::GetAtomicMass() const {
   return atomicMass_;
@@ -21,19 +27,17 @@ ChargeNumber Fragment::GetChargeNumber() const {
 }
 
 FermiInt Fragment::GetPolarization() const {
-  return polarization;
+  return polarization_;
 }
 
 FermiFloat Fragment::GetExcitationEnergy() const {
   return excitationEnergy_;
 }
 
-FermiFloat Fragment::GetFragmentMass() const {
-  return properties::nuclei_properties()->GetNuclearMass(atomicMass_, chargeNumber_);
+FermiFloat Fragment::GetMass() const {
+  return properties::NucleiProperties()->GetNuclearMass(atomicMass_, chargeNumber_);
 }
 
 FermiFloat Fragment::GetTotalEnergy() const {
-  return GetFragmentMass() + GetExcitationEnergy();
+  return GetMass() + GetExcitationEnergy();
 }
-
-Fragment::~Fragment() = default;

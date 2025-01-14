@@ -2,11 +2,11 @@
 // Created by Artem Novikov on 19.02.2023.
 //
 
-#include <functional>
+#include "util/Randomizer.h"
+
+#include "configurations/Split.h"
 
 #include "Configurations.h"
-#include "utilities/ConfigurationProperties.h"
-#include "utilities/Randomizer.h"
 
 using namespace fermi;
 
@@ -24,9 +24,9 @@ VConfigurations& Configurations::GenerateSplits(NucleiData nucleiData, FermiFloa
 
   for (uint32_t particleCount = 2; particleCount <= maxFragmentsCount; particleCount++) {
     // initialize configuration for k fragments
-    for (auto& split : Split(nucleiData, particleCount)) {
+    for (auto& split : PossibleSplits(nucleiData, particleCount)) {
       // non-normalized statistical weight for given channel with k fragments
-      auto splitWeight = ConfigurationProperties::DecayProbability(split, nucleiData.atomicMass, totalEnergy);
+      auto splitWeight = DecayProbability(split, nucleiData.atomicMass, totalEnergy);
       if (splitWeight != 0) {
         totalWeight += splitWeight;
 
@@ -45,10 +45,10 @@ VConfigurations& Configurations::GenerateSplits(NucleiData nucleiData, FermiFloa
 
 std::optional<FragmentVector> Configurations::ChooseSplit() {
   if (configurations_.empty()) {
-    return {};
+    return std::nullopt;
   }
 
-  FermiFloat wheelResult = Randomizer::uniform_real_distribution();
+  FermiFloat wheelResult = Randomizer::SampleUniform();
   FermiFloat accumulatedWeight = 0;
 
   for (size_t i = 0; i < weights_.size(); ++i) {

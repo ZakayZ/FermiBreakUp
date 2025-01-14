@@ -5,7 +5,7 @@
 #ifndef FERMIBREAKUP_UTILITIES_NUCLEI_PROPERTIES_VNUCLEIPROPERTIES_H
 #define FERMIBREAKUP_UTILITIES_NUCLEI_PROPERTIES_VNUCLEIPROPERTIES_H
 
-#include "utilities/DataTypes.h"
+#include "util/DataTypes.h"
 
 namespace properties {
 
@@ -15,7 +15,7 @@ namespace properties {
 
     virtual bool IsStable(AtomicMass atomicMass, ChargeNumber chargeNumber) const = 0;
 
-    virtual ~VNucleiProperties() = 0;
+    virtual ~VNucleiProperties() = default;
 
   protected:
     static FermiFloat AtomicWeight(AtomicMass atomicMass, ChargeNumber chargeNumber);

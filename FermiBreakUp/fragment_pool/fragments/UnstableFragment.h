@@ -24,13 +24,12 @@ namespace fermi {
     ParticleVector GetFragments(const LorentzVector& momentum) const override;
 
   protected:
-    void Build(const std::vector<NucleiData>& decayData);
-
-    void Build(std::vector<NucleiData>&& decayData);
-
-    void FillMasses();
+    void BuildDecay(std::vector<NucleiData>&& decayData);
+    void BuildDecay(const std::vector<NucleiData>& decayData);
 
   private:
+    void FillMasses();
+
     std::vector<NucleiData> decayData_;
     std::vector<FermiFloat> masses_;
   };

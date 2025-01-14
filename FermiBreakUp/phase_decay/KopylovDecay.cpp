@@ -7,7 +7,7 @@
 #include <CLHEP/Random/RandGamma.h>
 
 #include "KopylovDecay.h"
-#include "utilities/Randomizer.h"
+#include "util/Randomizer.h"
 
 using namespace fermi;
 

@@ -5,8 +5,7 @@
 #ifndef FERMIBREAKUP_CONFIGURATIONS_CACHEDCONFIGURATIONS_H
 #define FERMIBREAKUP_CONFIGURATIONS_CACHEDCONFIGURATIONS_H
 
-#include "Split.h"
-#include "VConfigurations.h"
+#include "configurations/VConfigurations.h"
 
 namespace fermi {
 
@@ -14,9 +13,9 @@ namespace fermi {
   public:
     CachedConfigurations() = default;
 
-    CachedConfigurations(NucleiData nucleiData, FermiFloat totalEnergy);
+    CachedConfigurations(const NucleiData nucleiData, const FermiFloat totalEnergy);
 
-    VConfigurations& GenerateSplits(NucleiData nucleiData, FermiFloat totalEnergy) override;
+    VConfigurations& GenerateSplits(const NucleiData nucleiData, const FermiFloat totalEnergy) override;
 
     std::optional<FragmentVector> ChooseSplit() override;
 

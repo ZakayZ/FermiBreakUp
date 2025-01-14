@@ -11,7 +11,7 @@ namespace fermi {
 
   class He5Fragment : public UnstableFragment {
   public:
-    He5Fragment(AtomicMass atomicMass, ChargeNumber chargeNumber, int polarization, FermiFloat excitationEnergy);
+    He5Fragment(AtomicMass atomicMass, ChargeNumber chargeNumber, FermiInt polarization, FermiFloat excitationEnergy);
 
     He5Fragment() = delete;
 

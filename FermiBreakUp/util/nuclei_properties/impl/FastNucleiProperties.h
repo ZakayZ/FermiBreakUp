@@ -7,11 +7,10 @@
 
 #include <vector>
 
-#include "utilities/DataTypes.h"
-#include "utilities/nuclei_properties/VNucleiProperties.h"
+#include "util/DataTypes.h"
+#include "util/nuclei_properties/VNucleiProperties.h"
 
 namespace properties {
-
   class FastNucleiProperties : public VNucleiProperties {
   public:
     FastNucleiProperties();
@@ -22,11 +21,9 @@ namespace properties {
     template <typename Iter>
     FastNucleiProperties(Iter begin, Iter end);
 
-    [[nodiscard]] FermiFloat GetNuclearMass(AtomicMass atomicMass, ChargeNumber chargeNumber) const override final;
+    [[nodiscard]] FermiFloat GetNuclearMass(AtomicMass atomicMass, ChargeNumber chargeNumber) const override;
 
-    [[nodiscard]] FermiFloat GetNuclearMass(AtomicMass atomicMass, ChargeNumber chargeNumber);
-
-    [[nodiscard]] bool IsStable(AtomicMass atomicMass, ChargeNumber chargeNumber) const override final;
+    [[nodiscard]] bool IsStable(AtomicMass atomicMass, ChargeNumber chargeNumber) const override;
 
     void AddMass(AtomicMass atomicMass, ChargeNumber chargeNumber, FermiFloat mass);
 
@@ -43,12 +40,14 @@ namespace properties {
 
     [[nodiscard]] static size_t GetSlot(AtomicMass atomicMass, ChargeNumber chargeNumber);
 
-    std::vector<MassData> nucleiMasses_;
+    mutable std::vector<MassData> nucleiMasses_;
   };
 
   template <typename data_source>
   FastNucleiProperties::FastNucleiProperties(const data_source& dataSource)
-      : FastNucleiProperties(dataSource.begin(), dataSource.end()) {}
+    : FastNucleiProperties(dataSource.begin(), dataSource.end())
+  {
+  }
 
   template <typename Iter>
   FastNucleiProperties::FastNucleiProperties(Iter begin, Iter end) {

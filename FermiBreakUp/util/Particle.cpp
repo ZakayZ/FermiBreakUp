@@ -5,7 +5,7 @@
 #include <iomanip>
 #include <CLHEP/Units/PhysicalConstants.h>
 
-#include "utilities/nuclei_properties/NucleiProperties.h"
+#include "nuclei_properties/NucleiProperties.h"
 #include "Particle.h"
 
 using namespace fermi;
@@ -72,7 +72,7 @@ void Particle::CalculateExcitationEnergy() {
 }
 
 void Particle::CalculateGroundStateMass() {
-  groundStateMass_ = properties::nuclei_properties()->GetNuclearMass(atomicMass_, chargeNumber_);
+  groundStateMass_ = properties::NucleiProperties()->GetNuclearMass(atomicMass_, chargeNumber_);
 }
 
 std::ostream& operator<<(std::ostream& out, const Particle& particle) {
@@ -83,12 +83,11 @@ std::ostream& operator<<(std::ostream& out, const Particle& particle) {
       << ", Z = " << std::setw(3) << particle.GetChargeNumber();
   out.setf(std::ios::scientific, std::ios::floatfield);
 
-  // Store user's precision setting and reset to (3) here: back-compatibility
-  std::streamsize oldUserPrecision = out.precision();
+  auto oldUserPrecision = out.precision();
 
   out << std::setprecision(3)
       << ", U = " << particle.GetExcitationEnergy() / CLHEP::MeV
-      << " MeV  IsGroundState= " << particle.IsStable() << std::endl
+      << " MeV  IsGroundState= " << particle.IsStable() << '\n'
       << "          P = ("
       << particle.GetMomentum().x() / CLHEP::MeV << ","
       << particle.GetMomentum().y() / CLHEP::MeV << ","
@@ -96,8 +95,6 @@ std::ostream& operator<<(std::ostream& out, const Particle& particle) {
       << ") MeV   E = "
       << particle.GetMomentum().t() / CLHEP::MeV << " MeV"
       << std::endl;
-
-  // What about Angular momentum???
 
   out.setf(oldFloatField, std::ios::floatfield);
   out.precision(oldUserPrecision);

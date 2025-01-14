@@ -7,14 +7,20 @@
 
 #include <vector>
 
-#include "utilities/DataTypes.h"
-#include "Particle.h"
+#include "util/DataTypes.h"
+#include "util/Particle.h"
 
 namespace fermi {
+  class Fragment;
+
+  using FragmentVector = std::vector<const Fragment*>;
 
   class Fragment {
   public:
-    Fragment(AtomicMass atomicMass, ChargeNumber chargeNumber, int polarization, FermiFloat excitationEnergy);
+    Fragment(AtomicMass atomicMass,
+             ChargeNumber chargeNumber,
+             FermiInt polarization,
+             FermiFloat excitationEnergy);
 
     Fragment(const Fragment&) = delete;
 
@@ -30,16 +36,16 @@ namespace fermi {
 
     FermiFloat GetExcitationEnergy() const;
 
-    FermiFloat GetFragmentMass() const;
+    FermiFloat GetMass() const;
 
     FermiFloat GetTotalEnergy() const;
 
-    virtual ~Fragment() = 0;
+    virtual ~Fragment() = default;
 
   protected:
     AtomicMass atomicMass_;  // A
     ChargeNumber chargeNumber_; // Z
-    FermiInt polarization;
+    FermiInt polarization_;
     FermiFloat excitationEnergy_;
   };
 

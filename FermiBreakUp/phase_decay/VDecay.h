@@ -7,7 +7,7 @@
 
 #include <vector>
 #include <optional>
-#include "utilities/DataTypes.h"
+#include "util/DataTypes.h"
 
 namespace fermi {
 

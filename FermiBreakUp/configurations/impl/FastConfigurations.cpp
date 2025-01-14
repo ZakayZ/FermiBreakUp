@@ -2,8 +2,9 @@
 // Created by Artem Novikov on 18.02.2024.
 //
 
-#include "utilities/ConfigurationProperties.h"
-#include "utilities/Randomizer.h"
+#include "util/Randomizer.h"
+
+#include "configurations/Split.h"
 
 #include "FastConfigurations.h"
 
@@ -21,7 +22,7 @@ VConfigurations& FastConfigurations::GenerateSplits(NucleiData nucleiData, Fermi
     cache.reserve(100);
 
     for (uint32_t particleCount = 2; particleCount <= maxFragmentsCount; ++particleCount) {
-      for (auto& split : Split(nucleiData, particleCount)) {
+      for (auto& split : PossibleSplits(nucleiData, particleCount)) {
         cache.emplace_back(std::move(split));  // split is moved!
       }
     }
@@ -32,8 +33,7 @@ VConfigurations& FastConfigurations::GenerateSplits(NucleiData nucleiData, Fermi
 
   FermiFloat totalWeight = 0;
   for (size_t i = 0; i < cache.size(); ++i) {
-    auto splitWeight =
-        ConfigurationProperties::DecayProbability(cache[i], nucleiData.atomicMass, totalEnergy);
+    auto splitWeight = DecayProbability(cache[i], nucleiData.atomicMass, totalEnergy);
 
     if (splitWeight != 0) {
       totalWeight += splitWeight;
@@ -51,10 +51,10 @@ VConfigurations& FastConfigurations::GenerateSplits(NucleiData nucleiData, Fermi
 
 std::optional<FragmentVector> FastConfigurations::ChooseSplit() {
   if (configurations_.empty()) {
-    return {};
+    return std::nullopt;
   }
 
-  FermiFloat wheelResult = Randomizer::uniform_real_distribution();
+  FermiFloat wheelResult = Randomizer::SampleUniform();
   FermiFloat accumulatedWeight = 0;
 
   for (size_t i = 0; i < weights_.size(); ++i) {

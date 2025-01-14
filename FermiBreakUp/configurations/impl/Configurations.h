@@ -7,11 +7,10 @@
 
 #include <vector>
 
-#include "Split.h"
-#include "VConfigurations.h"
+#include "configurations/VConfigurations.h"
+#include "fragment_pool/fragments/Fragment.h"
 
 namespace fermi {
-
   class Configurations : public VConfigurations {
   public:
     Configurations() = default;
@@ -25,7 +24,7 @@ namespace fermi {
     [[nodiscard]] std::unique_ptr<fermi::VConfigurations> Clone() const override;
 
   private:
-    std::vector<fermi::FragmentVector> configurations_;
+    std::vector<FragmentVector> configurations_;
     std::vector<FermiFloat> weights_;
   };
 

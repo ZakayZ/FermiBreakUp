@@ -3,6 +3,7 @@
 //
 
 #include "VFermiBreakUp.h"
+#include "fragment_pool/fragments/Fragment.h"
 #include "phase_decay/FermiPhaseSpaceDecay.h"
 
 using namespace fermi;

@@ -5,7 +5,7 @@
 #include <gtest/gtest.h>
 #include <numeric>
 
-#include "utilities/IntegerPartition.h"
+#include "util/IntegerPartition.h"
 
 using namespace fermi;
 

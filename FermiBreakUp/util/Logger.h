@@ -17,7 +17,7 @@ enum class LogLevel : int {
   WARN = 3,
   ERROR = 4,
   NONE = 5,
-}
+};
 
 class ILogger {
 public:
@@ -82,7 +82,7 @@ public:
     return Logger(impl_, level);
   }
 
-  operator bool()() const {
+  operator bool() const {
     return impl_ != nullptr;
   }
 
@@ -90,8 +90,8 @@ public:
     return Logger(GlobalImpl, GlobalLevel);
   }
 
-  static std::shared_ptr<ILogger> GlobalImpl = std::make_shared<StreamLogger>(std::cerr);
-  static LogLevel GlobalLevel = LogLevel::TRACE;
+  static inline std::shared_ptr<ILogger> GlobalImpl = std::make_shared<StreamLogger>(std::cerr);
+  static inline LogLevel GlobalLevel = LogLevel::TRACE;
 
 private:
   static inline std::string LogLevelNames[static_cast<int>(LogLevel::NONE)] = {

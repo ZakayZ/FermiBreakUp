@@ -5,8 +5,8 @@
 #ifndef FERMIBREAKUP_VFERMIBREAKUP_H
 #define FERMIBREAKUP_VFERMIBREAKUP_H
 
-#include "Particle.h"
-#include "Split.h"
+#include "fragment_pool/fragments/Fragment.h"
+#include "util/Particle.h"
 
 namespace fermi {
 

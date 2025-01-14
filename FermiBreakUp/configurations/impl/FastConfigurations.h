@@ -7,8 +7,7 @@
 
 #include <unordered_map>
 
-#include "Split.h"
-#include "VConfigurations.h"
+#include "configurations/VConfigurations.h"
 
 namespace fermi {
 
@@ -16,9 +15,9 @@ namespace fermi {
   public:
     FastConfigurations() = default;
 
-    FastConfigurations(NucleiData nucleiData, FermiFloat totalEnergy);
+    FastConfigurations(const NucleiData nucleiData, const FermiFloat totalEnergy);
 
-    VConfigurations& GenerateSplits(NucleiData nucleiData, FermiFloat totalEnergy) override;
+    VConfigurations& GenerateSplits(const NucleiData nucleiData, const FermiFloat totalEnergy) override;
 
     std::optional<FragmentVector> ChooseSplit() override;
 

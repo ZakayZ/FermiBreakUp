@@ -7,5 +7,7 @@
 using namespace fermi;
 
 ParticleVector StableFragment::GetFragments(const LorentzVector& momentum) const {
-  return {Particle(GetAtomicMass(), GetChargeNumber(), momentum)};
+  return {
+    Particle(GetAtomicMass(), GetChargeNumber(), momentum),
+  };
 }

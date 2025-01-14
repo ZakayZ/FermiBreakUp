@@ -11,7 +11,7 @@ namespace fermi {
 
   class Li5Fragment : public UnstableFragment {
   public:
-    Li5Fragment(AtomicMass atomicMass, ChargeNumber chargeNumber, int polarization, FermiFloat excitationEnergy);
+    Li5Fragment(AtomicMass atomicMass, ChargeNumber chargeNumber, FermiInt polarization, FermiFloat excitationEnergy);
 
     Li5Fragment() = delete;
 

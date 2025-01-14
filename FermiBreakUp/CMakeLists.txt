@@ -12,17 +12,17 @@ set(Tables
     table_values/NucleiPropertiesTableAME12.cpp
 )
 
-set(utilities
-    utilities/DataTypes.cpp
-    utilities/IntegerPartition.cpp
-    utilities/nuclei_properties/VNucleiProperties.cpp
-    utilities/nuclei_properties/impl/FermiNucleiProperties.cpp
-    utilities/nuclei_properties/impl/FastNucleiProperties.cpp
-    utilities/nuclei_properties/impl/NativeNucleiProperties.cpp
-    utilities/nuclei_properties/data_storage/CSVNuclearMass.cpp
-    utilities/nuclei_properties/data_storage/DefaultNuclearMass.cpp
-    utilities/ConfigurationProperties.cpp
-    utilities/Randomizer.cpp
+set(util
+    util/DataTypes.cpp
+    util/IntegerPartition.cpp
+    util/nuclei_properties/VNucleiProperties.cpp
+    util/nuclei_properties/impl/FermiNucleiProperties.cpp
+    util/nuclei_properties/impl/FastNucleiProperties.cpp
+    util/nuclei_properties/impl/NativeNucleiProperties.cpp
+    util/nuclei_properties/data_storage/CSVNuclearMass.cpp
+    util/nuclei_properties/data_storage/DefaultNuclearMass.cpp
+    util/Particle.cpp
+    util/Randomizer.cpp
 )
 
 set(PhaseSpace
@@ -44,20 +44,18 @@ set(fragment_pool
 )
 
 set(Configurations
-    configurations/Configurations.cpp
-    configurations/CachedConfigurations.cpp
-    configurations/FastConfigurations.cpp
+    configurations/impl/Configurations.cpp
+    configurations/impl/CachedConfigurations.cpp
+    configurations/impl/FastConfigurations.cpp
+    configurations/Split.cpp
 )
 
 set(FermiBreakUpModel
     VFermiBreakUp.cpp
-    Particle.cpp
-    Split.cpp
     FermiBreakUp.cpp
-    VConfigurations.cpp
 )
 
-set(Sources ${FermiBreakUpModel} ${fragment_pool} ${utilities} ${PhaseSpace} ${Tables} ${Configurations})
+set(Sources ${FermiBreakUpModel} ${fragment_pool} ${util} ${PhaseSpace} ${Tables} ${Configurations})
 
 # default config
 FILE(CREATE_LINK ${PROJECT_SOURCE_DIR}/data/small_nuclei_data.csv small_nuclei_data.csv)

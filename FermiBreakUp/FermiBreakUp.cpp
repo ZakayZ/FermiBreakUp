@@ -3,14 +3,17 @@
 //
 
 #include "FermiBreakUp.h"
-#include "utilities/DataTypes.h"
+
+#include "configurations/impl/Configurations.h"
 
 using namespace fermi;
 
-FermiBreakUp::FermiBreakUp() : fermiConfigurations_(DefaultConfigurations()) {}
+FermiBreakUp::FermiBreakUp() : configurations_(DefaultConfigurations()) {};
 
 FermiBreakUp::FermiBreakUp(std::unique_ptr<VConfigurations>&& Configurations)
-    : fermiConfigurations_(std::move(Configurations)) {}
+  : configurations_(std::move(Configurations))
+{
+}
 
 ParticleVector FermiBreakUp::BreakItUp(const Particle& nucleus) {
   // CHECK that Excitation Energy > 0
@@ -19,10 +22,10 @@ ParticleVector FermiBreakUp::BreakItUp(const Particle& nucleus) {
   }
 
   // Total energy of nucleus in nucleus rest frame
-  FermiFloat totalEnergy = nucleus.GetMomentum().m();
+  auto totalEnergy = nucleus.GetMomentum().m();
 
   // Split the nucleus
-  auto fragmentSplit = fermiConfigurations_->GenerateSplits(nucleus.GetNucleiData(), totalEnergy).ChooseSplit();
+  auto fragmentSplit = configurations_->GenerateSplits(nucleus.GetNucleiData(), totalEnergy).ChooseSplit();
   if (!fragmentSplit.has_value()) {
     return {nucleus};
   }

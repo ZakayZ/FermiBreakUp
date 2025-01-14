@@ -7,7 +7,7 @@
 #include <functional>
 
 #include "Decay.h"
-#include "utilities/Randomizer.h"
+#include "util/Randomizer.h"
 
 using namespace fermi;
 
