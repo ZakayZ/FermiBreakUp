@@ -14,7 +14,6 @@
 #include "G4ReactionProductVector.hh"
 #include "G4IonTable.hh"
 #include "G4DeexPrecoParameters.hh"
-#include "G4Fragment.hh"
 #include "G4NistManager.hh"
 
 #include "G4VMultiFragmentation.hh"
@@ -204,10 +203,6 @@ class ExcitationHandler {
   Condition evaporationCondition_;
 
   Float stableThreshold_ = 0;
-
-  static const size_t EvaporationIterationThreshold;
-
-  static const char* ErrorNoModel;
 };
 
 #endif //FERMIBREAKUPHANDLEREXCITATIONHANDLERH_

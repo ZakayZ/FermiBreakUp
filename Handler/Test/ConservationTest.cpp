@@ -17,7 +17,7 @@
 using namespace fermi;
 
 class ConfigurationsFixture : public ::testing::TestWithParam<VConfigurations*> {
- protected:
+protected:
   VConfigurations* Configurations;
 };
 

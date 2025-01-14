@@ -7,6 +7,8 @@
 
 #include <memory>
 
+#include <memory>
+
 #include "G4VFermiBreakUp.hh"
 #include "VFermiBreakUp.h"
 
@@ -25,7 +27,7 @@ class AAMCCFermiBreakUp : public G4VFermiBreakUp {
   G4bool IsApplicable(G4int Z, G4int A, G4double excitationEnergy) const override;
 
  private:
-  std::unique_ptr<fermi::VFermiBreakUpMfermiModel_;
+  std::unique_ptr<fermi::VFermiBreakUp> fermiModel_;
 };
 
 #endif //FERMIBREAKUPMYFERMIBREAKUPAAMCCFERMIBREAKUPH_
