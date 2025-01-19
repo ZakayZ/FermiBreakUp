@@ -7,6 +7,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic -Werror")
 
 add_executable(Runner main.cpp)
 
-add_subdirectory(Handler)
+# add_subdirectory(Handler)
+# target_link_libraries(Runner PUBLIC Handler)
 
-target_link_libraries(Runner PUBLIC Handler)
+add_subdirectory(FermiBreakUp)
+target_link_libraries(Runner PUBLIC FermiBreakUp)

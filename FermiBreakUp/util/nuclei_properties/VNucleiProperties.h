@@ -16,11 +16,6 @@ namespace fermi {
     virtual bool IsStable(AtomicMass atomicMass, ChargeNumber chargeNumber) const = 0;
 
     virtual ~VNucleiProperties() = default;
-
-  protected:
-    static FermiFloat EstimateNuclearMass(AtomicMass atomicMass, ChargeNumber chargeNumber);
-    static FermiFloat WeitzsaeckerBindingEnergy(AtomicMass atomicMass, ChargeNumber chargeNumber);
-    static FermiFloat EstimateAtomicWeight(AtomicMass atomicMass, ChargeNumber chargeNumber);
   };
 
 } // namespace fermi

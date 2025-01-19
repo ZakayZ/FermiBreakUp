@@ -10,28 +10,20 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic -Werror")
 
 find_package(CLHEP REQUIRED)
 
-set(Tables
-    table_values/NucleiPropertiesTable.cpp
-    table_values/NucleiPropertiesTableAME12.cpp
-)
-
 set(util
     util/DataTypes.cpp
     util/IntegerPartition.cpp
-    util/nuclei_properties/VNucleiProperties.cpp
-    util/nuclei_properties/impl/FermiNucleiProperties.cpp
-    util/nuclei_properties/impl/FastNucleiProperties.cpp
-    util/nuclei_properties/impl/NativeNucleiProperties.cpp
-    util/nuclei_properties/data_storage/CSVNuclearMass.cpp
-    util/nuclei_properties/data_storage/DefaultNuclearMass.cpp
     util/Particle.cpp
     util/Randomizer.cpp
     util/Logger.cpp
+
+    util/nuclei_properties/impl/FermiNucleiProperties.cpp
+
+    util/nuclei_properties/data_storage/CSVNuclearMass.cpp
+    util/nuclei_properties/data_storage/DefaultNuclearMass.cpp
 )
 
 set(PhaseSpace
-    phase_decay/Helper.cpp
-    phase_decay/Decay.cpp
     phase_decay/KopylovDecay.cpp
 )
 
@@ -48,7 +40,7 @@ set(FermiBreakUpModel
     FermiBreakUp.cpp
 )
 
-set(Sources ${FermiBreakUpModel} ${fragment_pool} ${util} ${PhaseSpace} ${Tables})
+set(Sources ${FermiBreakUpModel} ${fragment_pool} ${util} ${PhaseSpace})
 
 # default config
 FILE(CREATE_LINK ${PROJECT_SOURCE_DIR}/data/small_nuclei_data.csv small_nuclei_data.csv)

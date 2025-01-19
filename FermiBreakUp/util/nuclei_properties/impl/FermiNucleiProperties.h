@@ -1,16 +1,16 @@
 //
-// Created by Artem Novikov on 09.03.2023.
+// Created by Artem Novikov on 18.02.2024.
 //
 
-#ifndef FERMIBREAKUP_UTILITIES_NUCLEI_PROPERTIES_IMPL_FERMINUCLEIPROPERTIES_H
-#define FERMIBREAKUP_UTILITIES_NUCLEI_PROPERTIES_IMPL_FERMINUCLEIPROPERTIES_H
+#ifndef FERMIBREAKUP_UTILITIES_NUCLEI_PROPERTIES_IMPL_FermiNucleiProperties_H
+#define FERMIBREAKUP_UTILITIES_NUCLEI_PROPERTIES_IMPL_FermiNucleiProperties_H
 
-#include <unordered_map>
+#include <vector>
 
+#include "util/DataTypes.h"
 #include "util/nuclei_properties/VNucleiProperties.h"
 
 namespace fermi {
-
   class FermiNucleiProperties : public VNucleiProperties {
   public:
     FermiNucleiProperties();
@@ -25,12 +25,24 @@ namespace fermi {
 
     [[nodiscard]] bool IsStable(AtomicMass atomicMass, ChargeNumber chargeNumber) const override;
 
-    void AddMass(AtomicMass atomicMass, ChargeNumber chargeNumber, FermiFloat mass);
+    void AddStableNuclei(AtomicMass atomicMass, ChargeNumber chargeNumber, FermiFloat mass);
 
-    void AddMass(NucleiData nucleiData, FermiFloat mass);
+    void AddStableNuclei(NucleiData nucleiData, FermiFloat mass);
+
+    ~FermiNucleiProperties() = default;
 
   private:
-    std::unordered_map<NucleiData, FermiFloat> nucleiMass_;
+    struct MassData {
+      FermiFloat mass;
+
+      bool isStable = false; // value was added via AddMass, it is considered stable
+
+      bool isCached = false; // value has been calculated earlier
+    };
+
+    [[nodiscard]] static size_t GetSlot(AtomicMass atomicMass, ChargeNumber chargeNumber);
+
+    mutable std::vector<MassData> nucleiMasses_;
   };
 
   template <typename data_source>
@@ -43,10 +55,10 @@ namespace fermi {
   FermiNucleiProperties::FermiNucleiProperties(Iter begin, Iter end) {
     static_assert(std::is_same_v<typename Iter::value_type, std::pair<const NucleiData, FermiFloat>>, "invalid iterator");
     for (auto it = begin; it != end; ++it) {
-      AddMass(it->first, it->second);
+      AddStableNuclei(it->first, it->second);
     }
   }
 
 } // namespace fermi
 
-#endif // FERMIBREAKUP_UTILITIES_NUCLEI_PROPERTIES_IMPL_FERMINUCLEIPROPERTIES_H
+#endif // FERMIBREAKUP_UTILITIES_NUCLEI_PROPERTIES_IMPL_FermiNucleiProperties_H

@@ -11,7 +11,6 @@
 #include "util/Randomizer.h"
 #include "util/Logger.h"
 
-#include "Helper.h"
 #include "KopylovDecay.h"
 
 using namespace fermi;
@@ -33,6 +32,31 @@ namespace {
 
     return y1 / (y1 + y2);
   }
+
+  FermiFloat TwoBodyMomentum2(FermiFloat totalEnergy, FermiFloat mass1, FermiFloat mass2) {
+    ASSERT_MSG(totalEnergy > mass1 + mass2, "totalEnergy is less than fragments mass");
+
+    return (totalEnergy + mass1 + mass2)
+        * (totalEnergy + mass1 - mass2)
+        * (totalEnergy - mass1 + mass2)
+        * (totalEnergy - mass1 - mass2)
+        / (4.0 * std::pow(totalEnergy, 2));
+  }
+
+  std::pair<LorentzVector, LorentzVector> TwoBodyDecay(
+    FermiFloat totalEnergy,
+    FermiFloat mass1,
+    FermiFloat mass2)
+  {
+    const auto mag2 = TwoBodyMomentum2(totalEnergy, mass1, mass2);
+    const auto momentum = Randomizer::IsotropicVector(std::sqrt(mag2));
+
+    return {
+      LorentzVector(momentum, std::sqrt(mag2 + std::pow(mass1, 2))),
+      LorentzVector(-momentum, std::sqrt(mag2 + std::pow(mass2, 2))),
+    };
+  }
+
 } // namespace
 
 std::vector<LorentzVector> KopylovDecay::CalculateDecay(

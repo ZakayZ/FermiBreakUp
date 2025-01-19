@@ -9,15 +9,13 @@
 #include "util/Singleton.h"
 
 #include "impl/FermiNucleiProperties.h"
-#include "impl/NativeNucleiProperties.h"
-#include "impl/FastNucleiProperties.h"
 #include "VNucleiProperties.h"
 
 namespace fermi {
 
   // it is possible to use polymorphism here
   // but it is a bottleneck and no virtual call is made
-  using NucleiProperties = Singleton<FastNucleiProperties>;
+  using NucleiProperties = Singleton<FermiNucleiProperties>;
 
   static_assert(std::is_base_of_v<VNucleiProperties, std::remove_reference_t<decltype(NucleiProperties::Instance())>>,
               "Incorrect Nuclei fermi class");
