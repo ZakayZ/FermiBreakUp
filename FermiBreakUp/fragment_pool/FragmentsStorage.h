@@ -17,7 +17,23 @@ namespace fermi {
     using Container = std::vector<const Fragment*>;
 
   public:
-    using RangeIterators = std::pair<Container::const_iterator, Container::const_iterator>;
+    class IteratorRange {
+    public:
+      using const_iterator = Container::const_iterator;
+
+      IteratorRange(const_iterator begin, const_iterator end)
+        : begin_(begin)
+        , end_(end)
+      {
+      }
+
+      const_iterator begin() const { return begin_; }
+      const_iterator end() const { return end_; }
+
+    private:
+      const_iterator begin_;
+      const_iterator end_;
+    };
 
     FragmentsStorage();
 
@@ -31,14 +47,16 @@ namespace fermi {
 
     [[nodiscard]] size_t Count(NucleiData nuclei) const;
 
-    [[nodiscard]] RangeIterators GetFragments(AtomicMass atomicMass, ChargeNumber chargeNumber) const;
+    [[nodiscard]] IteratorRange GetFragments(AtomicMass atomicMass, ChargeNumber chargeNumber) const;
 
-    [[nodiscard]] RangeIterators GetFragments(NucleiData nuclei) const;
+    [[nodiscard]] IteratorRange GetFragments(NucleiData nuclei) const;
 
     void AddFragment(const Fragment& fragment);
 
   private:
     [[nodiscard]] static size_t GetSlot(AtomicMass atomicMass, ChargeNumber chargeNumber);
+
+    static inline const Container EmptyContainer_ = {};
 
     std::vector<Container> fragments_;
   };

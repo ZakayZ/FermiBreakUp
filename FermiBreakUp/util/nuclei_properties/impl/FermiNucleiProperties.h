@@ -6,7 +6,6 @@
 #define FERMIBREAKUP_UTILITIES_NUCLEI_PROPERTIES_IMPL_FERMINUCLEIPROPERTIES_H
 
 #include <unordered_map>
-#include <memory>
 
 #include "util/nuclei_properties/VNucleiProperties.h"
 

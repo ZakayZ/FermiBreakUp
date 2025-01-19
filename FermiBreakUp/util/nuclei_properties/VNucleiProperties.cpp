@@ -6,52 +6,45 @@
 
 #include "VNucleiProperties.h"
 
-namespace fermi {
-  FermiFloat VNucleiProperties::AtomicWeight(AtomicMass atomicMass, ChargeNumber chargeNumber) {
-    constexpr FermiFloat hydrogenMassExcess = 7.28897;
-    constexpr FermiFloat neutronMassExcess = 8.07132;
+using namespace fermi;
 
-    FermiFloat mass = FermiFloat(FermiUInt(atomicMass) - FermiUInt(chargeNumber)) * neutronMassExcess
-        + FermiFloat(chargeNumber) * hydrogenMassExcess - BindingEnergy(atomicMass, chargeNumber)
-        + FermiFloat(atomicMass) * CLHEP::amu_c2;
+FermiFloat VNucleiProperties::WeitzsaeckerBindingEnergy(AtomicMass atomicMass, ChargeNumber chargeNumber) {
+  // Weitzsaecker's Mass formula
+  const auto nucleiParity = (FermiInt(atomicMass) - FermiInt(chargeNumber)) % 2;                   // pairing
+  const auto chargeParity = FermiInt(chargeNumber) % 2;
 
-    return mass;
+  FermiFloat binding =
+          -15.67 * FermiFloat(atomicMass)                                                          // nuclear volume
+          + 17.23 * std::pow(atomicMass, 2. / 3.)                                                  // surface energy
+          + 93.15 * std::pow(FermiFloat(atomicMass) / 2. - FermiFloat(chargeNumber), 2)
+              / FermiFloat(atomicMass)                                                             // asymmetry
+          + 0.6984523 * std::pow(FermiFloat(chargeNumber), 2) / std::cbrt(FermiFloat(atomicMass)); // coulomb
+
+  if (nucleiParity == chargeParity) {
+    binding += 12.0 * (nucleiParity + chargeParity - 1) / std::sqrt(FermiFloat(atomicMass));      // pairing
   }
 
-  FermiFloat VNucleiProperties::NuclearMass(AtomicMass atomicMass, ChargeNumber chargeNumber) {
-    auto mass = AtomicWeight(atomicMass, chargeNumber);
-    // atomic mass is converted to nuclear mass according formula in AME03
-    mass -= FermiFloat(chargeNumber) * CLHEP::electron_mass_c2;
-    mass += (14.4381 * std::pow(chargeNumber, 2.39) + 1.55468 * 1e-6 * std::pow(chargeNumber, 5.35)) * CLHEP::eV;
+  return -binding * CLHEP::MeV;
+}
 
-    return mass;
-  }
+FermiFloat VNucleiProperties::EstimateAtomicWeight(AtomicMass atomicMass, ChargeNumber chargeNumber) {
+  constexpr FermiFloat hydrogenMassExcess = 7.28897;
+  constexpr FermiFloat neutronMassExcess = 8.07132;
 
-  FermiFloat VNucleiProperties::BindingEnergy(AtomicMass atomicMass, ChargeNumber chargeNumber) {
-    // Weitzsaecker's Mass formula
-    FermiInt nucleiParity = (FermiInt(atomicMass) - FermiInt(chargeNumber)) % 2;                  // pairing
-    FermiInt chargeParity = FermiInt(chargeNumber) % 2;
+  return FermiFloat(FermiInt(atomicMass) - FermiInt(chargeNumber)) * neutronMassExcess
+      + FermiFloat(chargeNumber) * hydrogenMassExcess - WeitzsaeckerBindingEnergy(atomicMass, chargeNumber)
+      + FermiFloat(atomicMass) * CLHEP::amu_c2;
+}
 
-    FermiFloat binding =
-        -15.67 * FermiFloat(atomicMass)                                                           // nuclear volume
-            + 17.23 * std::pow(atomicMass, 2. / 3.)                                               // surface energy
-            + 93.15 * std::pow(FermiFloat(atomicMass) / 2. - FermiFloat(chargeNumber), 2)
-                / FermiFloat(atomicMass)                                                          // asymmetry
-            + 0.6984523 * std::pow(FermiUInt(chargeNumber), 2) * std::pow(atomicMass, -1. / 3.);  // coulomb
+FermiFloat VNucleiProperties::EstimateNuclearMass(AtomicMass atomicMass, ChargeNumber chargeNumber) {
+  auto mass = EstimateAtomicWeight(atomicMass, chargeNumber);
 
-    if (nucleiParity == chargeParity) {
-      binding += (nucleiParity + chargeParity - 1) * 12.0 / std::sqrt(FermiFloat(atomicMass));    // pairing
-    }
+  // atomic mass is converted to nuclear mass according formula in AME03
+  mass -= FermiFloat(chargeNumber) * CLHEP::electron_mass_c2;
+  mass += (
+    14.4381 * std::pow(FermiFloat(chargeNumber), 2.39) 
+    + 1.55468e-6 * std::pow(FermiFloat(chargeNumber), 5.35)
+  ) * CLHEP::eV;
 
-    return -binding * CLHEP::MeV;
-  }
-
-  bool VNucleiProperties::IsInvalidNuclei(AtomicMass atomicMass, ChargeNumber chargeNumber) {
-    return atomicMass < 1_m || chargeNumber < 0_c || FermiUInt(chargeNumber) > FermiUInt(atomicMass);
-  }
-
-  void VNucleiProperties::PrintInvalidNuclei(AtomicMass atomicMass, ChargeNumber chargeNumber) {
-    std::cerr << "Unsupported values for A = " << atomicMass << " and Z = " << chargeNumber << std::endl;
-  }
-
-} // namespace fermi
+  return mass;
+}

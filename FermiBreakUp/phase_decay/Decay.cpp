@@ -6,8 +6,11 @@
 #include <algorithm>
 #include <functional>
 
-#include "Decay.h"
 #include "util/Randomizer.h"
+#include "util/Logger.h"
+
+#include "Helper.h"
+#include "Decay.h"
 
 using namespace fermi;
 
@@ -19,7 +22,7 @@ namespace {
 
     // Calculate virtual masses
     std::vector<FermiFloat> virtualMasses(masses.size());
-    virtualMasses[0] = 0;
+    virtualMasses[0] = 0.;
     std::partial_sum(masses.begin(), masses.end(), virtualMasses.begin());
 
     std::transform(probabilityDistribution.begin(),
@@ -41,9 +44,7 @@ namespace {
     size_t sz = daughterMomentum.size();
     FermiFloat weight = 1;
     for (size_t i = 0; i + 1 < sz; ++i) {
-      if (virtualMasses[i] + masses[i + 1] > virtualMasses[i + 1]) {
-        throw std::runtime_error("FermiPhaseSpaceDecay::KopylovNBodyDecay: Error sampling fragments momenta!!");
-      }
+      ASSERT_MSG(virtualMasses[i] + masses[i + 1] <= virtualMasses[i + 1], "fragment's masses are larger than initial particle");
 
       daughterMomentum[i] = TwoBodyMomentum(virtualMasses[i + 1], virtualMasses[i], masses[i + 1]);
       weight *= daughterMomentum[i];
@@ -79,7 +80,7 @@ std::vector<LorentzVector> Decay::CalculateDecay(const LorentzVector& totalMomen
   }
 
   // N body case
-  FermiFloat totalMass = std::accumulate(fragmentsMass.begin(), fragmentsMass.end(), FermiFloat(0));
+  FermiFloat totalMass = std::accumulate(fragmentsMass.begin(), fragmentsMass.end(), 0.);
   FermiFloat maxEnergy = totalEnergy - totalMass + fragmentsMass[0];
   FermiFloat maxWeight = CalculateMaxWeight(fragmentsMass, maxEnergy);
 

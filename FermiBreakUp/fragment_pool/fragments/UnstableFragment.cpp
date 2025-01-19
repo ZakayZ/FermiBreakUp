@@ -8,11 +8,13 @@
 
 using namespace fermi;
 
-UnstableFragment::UnstableFragment(AtomicMass atomicMass,
-                                   ChargeNumber chargeNumber,
-                                   FermiInt polarization,
-                                   FermiFloat excitationEnergy,
-                                   std::vector<NucleiData>&& decayData)
+UnstableFragment::UnstableFragment(
+  AtomicMass atomicMass,
+  ChargeNumber chargeNumber,
+  FermiInt polarization,
+  FermiFloat excitationEnergy,
+  std::vector<NucleiData>&& decayData
+)
   : Fragment(atomicMass, chargeNumber, polarization, excitationEnergy)
   , decayData_(std::move(decayData))
 {
@@ -23,22 +25,17 @@ UnstableFragment::UnstableFragment(AtomicMass atomicMass,
   }
 }
 
-ParticleVector UnstableFragment::GetFragments(const LorentzVector& momentum) const {
-  ParticleVector fragments_;
-  fragments_.reserve(masses_.size());
-
+void UnstableFragment::AppendDecayFragments(const LorentzVector& momentum, std::vector<Particle>& fragments) const {
   FermiPhaseSpaceDecay phaseDecay;
 
   auto fragmentsMomentum = phaseDecay.CalculateDecay(momentum, masses_);
 
-  auto boostVector = momentum.boostVector();
+  const auto boostVector = momentum.boostVector();
 
   for (size_t i = 0; i < decayData_.size(); ++i) {
-    fragments_.emplace_back(
+    fragments.emplace_back(
       decayData_[i].atomicMass,
       decayData_[i].chargeNumber,
       fragmentsMomentum[i].boost(boostVector));
   }
-
-  return fragments_;
 }

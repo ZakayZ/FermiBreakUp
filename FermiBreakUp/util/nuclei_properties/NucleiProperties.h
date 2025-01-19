@@ -15,11 +15,12 @@
 
 namespace fermi {
 
-    // it is possible to use polymorphism here, but this way no inline table access is possible and it is a bottleneck
-    using NucleiProperties = Singleton<FastNucleiProperties>;
+  // it is possible to use polymorphism here
+  // but it is a bottleneck and no virtual call is made
+  using NucleiProperties = Singleton<FastNucleiProperties>;
 
-    static_assert(std::is_base_of_v<VNucleiProperties, std::remove_reference_t<decltype(NucleiProperties::Instance())>>,
-                "Incorrect Nuclei fermi class");
+  static_assert(std::is_base_of_v<VNucleiProperties, std::remove_reference_t<decltype(NucleiProperties::Instance())>>,
+              "Incorrect Nuclei fermi class");
 
 } // namespace fermi
 

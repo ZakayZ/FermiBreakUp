@@ -5,15 +5,9 @@
 #ifndef FERMIBREAKUP_PARTICLE_H
 #define FERMIBREAKUP_PARTICLE_H
 
-#include <vector>
-
 #include "DataTypes.h"
 
 namespace fermi {
-
-  class Particle;
-
-  using ParticleVector = std::vector<Particle>;
 
   class Particle {
   public:
@@ -37,11 +31,7 @@ namespace fermi {
 
     FermiFloat GetGroundStateMass() const;
 
-    FermiFloat GetBindingEnergy() const;
-
     bool IsStable() const;
-
-    void SetMomentum(const LorentzVector& momentum);
 
     ~Particle() = default;
 
@@ -56,8 +46,10 @@ namespace fermi {
     FermiFloat excitationEnergy_ = 0;
   };
 
-  std::ostream& operator<<(std::ostream&, const Particle&);
-
 } // namespace fermi
+
+namespace std {
+  ostream& operator<<(ostream&, const ::fermi::Particle&);
+} // namespace std
 
 #endif // FERMIBREAKUP_PARTICLE_H

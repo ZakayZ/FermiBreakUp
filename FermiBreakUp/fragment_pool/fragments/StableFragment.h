@@ -13,13 +13,7 @@ namespace fermi {
   public:
     using Fragment::Fragment;
 
-    StableFragment() = delete;
-
-    StableFragment(const StableFragment&) = delete;
-
-    StableFragment& operator=(const StableFragment&) = delete;
-
-    ParticleVector GetFragments(const LorentzVector& momentum) const override;
+    void AppendDecayFragments(const LorentzVector& momentum, std::vector<Particle>& fragments) const override;
   };
 
 } // namespace fermi

@@ -22,22 +22,22 @@ size_t Cnk(size_t n, size_t k) {
 }
 
 TEST(PartitionTests, SmallOnePaddingTest) {
-  const size_t partitionNumber = 6;
-  const size_t partitionParts = 3;
+  constexpr size_t partitionNumber = 6;
+  constexpr size_t partitionParts = 3;
 
   size_t partitionCounter = 0;
   for (const auto& partition : IntegerPartition(partitionNumber, partitionParts, 1)) {
     auto copy = partition;
     size_t weight = 1;
-    while (std::prevPermutation(copy.begin(), copy.end())) {
+    while (std::prev_permutation(copy.begin(), copy.end())) {
       ++weight;
     }
 
     partitionCounter += weight;
-    ASSERTEQ(std::accumulate(partition.begin(), partition.end(), 0u), partitionNumber);
+    ASSERT_EQ(std::accumulate(partition.begin(), partition.end(), 0u), partitionNumber);
   }
 
-  ASSERTEQ(partitionCounter, Cnk(partitionNumber - 1, partitionParts - 1));
+  ASSERT_EQ(partitionCounter, Cnk(partitionNumber - 1, partitionParts - 1));
 }
 
 TEST(PartitionTests, BigOnePaddingTest) {
@@ -48,51 +48,51 @@ TEST(PartitionTests, BigOnePaddingTest) {
   for (const auto& partition : IntegerPartition(partitionNumber, partitionParts, 1)) {
     auto copy = partition;
     size_t weight = 1;
-    while (std::prevPermutation(copy.begin(), copy.end())) {
+    while (std::prev_permutation(copy.begin(), copy.end())) {
       ++weight;
     }
 
     partitionCounter += weight;
-    ASSERTEQ(std::accumulate(partition.begin(), partition.end(), 0u), partitionNumber);
+    ASSERT_EQ(std::accumulate(partition.begin(), partition.end(), 0u), partitionNumber);
   }
 
-  ASSERTEQ(partitionCounter, Cnk(partitionNumber - 1, partitionParts - 1));
+  ASSERT_EQ(partitionCounter, Cnk(partitionNumber - 1, partitionParts - 1));
 }
 
 TEST(PartitionTests, SmallZeroPaddingTest) {
-  const size_t partitionNumber = 7;
-  const size_t partitionParts = 3;
+  constexpr size_t partitionNumber = 7;
+  constexpr size_t partitionParts = 3;
 
   size_t partitionCounter = 0;
   for (const auto& partition : IntegerPartition(partitionNumber, partitionParts, 0)) {
     auto copy = partition;
     size_t weight = 1;
-    while (std::prevPermutation(copy.begin(), copy.end())) {
+    while (std::prev_permutation(copy.begin(), copy.end())) {
       ++weight;
     }
 
     partitionCounter += weight;
-    ASSERTEQ(std::accumulate(partition.begin(), partition.end(), 0u), partitionNumber);
+    ASSERT_EQ(std::accumulate(partition.begin(), partition.end(), 0u), partitionNumber);
   }
 
-  ASSERTEQ(partitionCounter, Cnk(partitionNumber + partitionParts - 1, partitionParts - 1));
+  ASSERT_EQ(partitionCounter, Cnk(partitionNumber + partitionParts - 1, partitionParts - 1));
 }
 
 TEST(PartitionTests, BigZeroPaddingTest) {
-  const size_t partitionNumber = 16;
-  const size_t partitionParts = 4;
+  constexpr size_t partitionNumber = 16;
+  constexpr size_t partitionParts = 4;
 
   size_t partitionCounter = 0;
   for (const auto& partition : IntegerPartition(partitionNumber, partitionParts, 0)) {
     auto copy = partition;
     size_t weight = 1;
-    while (std::prevPermutation(copy.begin(), copy.end())) {
+    while (std::prev_permutation(copy.begin(), copy.end())) {
       ++weight;
     }
 
     partitionCounter += weight;
-    ASSERTEQ(std::accumulate(partition.begin(), partition.end(), 0u), partitionNumber);
+    ASSERT_EQ(std::accumulate(partition.begin(), partition.end(), 0u), partitionNumber);
   }
 
-  ASSERTEQ(partitionCounter, Cnk(partitionNumber + partitionParts - 1, partitionParts - 1));
+  ASSERT_EQ(partitionCounter, Cnk(partitionNumber + partitionParts - 1, partitionParts - 1));
 }

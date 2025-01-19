@@ -7,6 +7,7 @@
 
 #include <CLHEP/Vector/LorentzVector.h>
 
+#include <memory>
 #include <string>
 
 namespace fermi {
@@ -21,6 +22,16 @@ namespace fermi {
   using Vector3 = CLHEP::Hep3Vector;
 
   using ParticleMomentum = Vector3;
+
+  using FermiStr = std::string;
+
+  template <typename Key, typename Value>
+  class VCache {
+  public:
+    virtual std::shared_ptr<Value> Insert(const Key& key, Value&& value) = 0;
+    virtual std::shared_ptr<Value> Get(const Key& key) = 0;
+    virtual ~VCache() = default;
+  };
 
   class AtomicMass {
   public:
@@ -120,17 +131,23 @@ namespace fermi {
 
 namespace std {
   template <>
-  struct hash<fermi::NucleiData> {
-    size_t operator()(const fermi::NucleiData& key) const
+  struct hash<::fermi::NucleiData> {
+    size_t operator()(const ::fermi::NucleiData& key) const
     {
-      auto mass = fermi::FermiInt(key.atomicMass);
-      auto charge = fermi::FermiInt(key.chargeNumber);
+      auto mass = ::fermi::FermiInt(key.atomicMass);
+      auto charge = ::fermi::FermiInt(key.chargeNumber);
       return (mass * (mass + 1)) / 2 + charge;
     }
   };
 
-  string to_string(fermi::AtomicMass mass);
-  string to_string(fermi::ChargeNumber charge);
+  string to_string(::fermi::AtomicMass mass);
+  string to_string(::fermi::ChargeNumber charge);
+
+  std::ostream& operator<<(std::ostream& out, const ::fermi::AtomicMass& mass);
+  std::istream& operator>>(std::istream& in, ::fermi::AtomicMass& mass);
+
+  std::ostream& operator<<(std::ostream& out, const ::fermi::ChargeNumber& charge);
+  std::istream& operator>>(std::istream& in, ::fermi::ChargeNumber& charge);
 }
 
 constexpr fermi::AtomicMass operator ""_m(uint64_t mass) {
@@ -140,11 +157,5 @@ constexpr fermi::AtomicMass operator ""_m(uint64_t mass) {
 constexpr fermi::ChargeNumber operator ""_c(uint64_t charge) {
   return fermi::ChargeNumber(charge);
 }
-
-std::ostream& operator<<(std::ostream& out, const fermi::AtomicMass& mass);
-std::istream& operator>>(std::istream& in, fermi::AtomicMass& mass);
-
-std::ostream& operator<<(std::ostream& out, const fermi::ChargeNumber& charge);
-std::istream& operator>>(std::istream& in, fermi::ChargeNumber& charge);
 
 #endif // FERMIBREAKUP_UTILITIES_DATATYPES_H

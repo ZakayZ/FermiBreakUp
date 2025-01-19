@@ -2,8 +2,10 @@
 // Created by Artem Novikov on 09.03.2023.
 //
 
-#include "FermiNucleiProperties.h"
+#include "util/Logger.h"
 #include "util/nuclei_properties/data_storage/DefaultNuclearMass.h"
+
+#include "FermiNucleiProperties.h"
 
 using namespace fermi;
 
@@ -18,15 +20,13 @@ FermiFloat FermiNucleiProperties::GetNuclearMass(AtomicMass atomicMass, ChargeNu
     return it->second;
   }
 
-  #ifdef DEBUG
-  std::cerr << "Unknown particle A = " + std::to_string(atomicMass) + ", Z = " + std::to_string(chargeNumber) << '\n';
-  #endif
-  return NuclearMass(atomicMass, chargeNumber);
+  LOG_DEBUG("Unknown particle: A = " << atomicMass << ", Z = " << chargeNumber);
+  return EstimateNuclearMass(atomicMass, chargeNumber);
 }
 
 bool FermiNucleiProperties::IsStable(AtomicMass atomicMass, ChargeNumber chargeNumber) const {
-  if (IsInvalidNuclei(atomicMass, chargeNumber)) {
-    PrintInvalidNuclei(atomicMass, chargeNumber);
+  if (atomicMass < 1_m || chargeNumber < 0_c || FermiUInt(chargeNumber) > FermiUInt(atomicMass)) {
+    LOG_DEBUG("Unsupported values for A = " << atomicMass << " and Z = " << chargeNumber);
     return false;
   }
 

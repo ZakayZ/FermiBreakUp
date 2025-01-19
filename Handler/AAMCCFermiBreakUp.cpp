@@ -2,24 +2,20 @@
 // Created by Artem Novikov on 20.05.2023.
 //
 
-#include <vector>
-
 #include "G4Fragment.hh"
 #include "AAMCCFermiBreakUp.h"
 #include "FermiBreakUp.h"
 
 using namespace fermi;
 
-AAMCCFermiBreakUp::AAMCCFermiBreakUp() : fermiModel_(std::make_unique<FermiBreakUp>()) {}
-
-AAMCCFermiBreakUp::AAMCCFermiBreakUp(std::unique_ptr<VFermiBreakUp>&& model) : fermiModel_(std::move(model)) {}
+AAMCCFermiBreakUp::AAMCCFermiBreakUp(FermiBreakUp&& model) : fermiModel_(std::move(model)) {}
 
 void AAMCCFermiBreakUp::BreakFragment(G4FragmentVector* fragmentsPtr, G4Fragment* fragment) {
-  auto results = fermiModel_->BreakItUp(Particle(MassNumber(fragment->GetA_asInt()),
+  auto results = fermiModel_.BreakItUp(Particle(MassNumber(fragment->GetA_asInt()),
                                                  ChargeNumber(fragment->GetZ_asInt()),
                                                  fragment->GetMomentum()));
 
-  for (auto& particle : results) {
+  for (const auto& particle : results) {
     fragmentsPtr->push_back(new G4Fragment(G4int(particle.GetMassNumber()),
                                            G4int(particle.GetChargeNumber()),
                                            G4LorentzVector(particle.GetMomentum())));

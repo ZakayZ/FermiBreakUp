@@ -18,8 +18,6 @@ namespace fermi {
   public:
     DefaultNuclearMass();
 
-    ~DefaultNuclearMass() = default;
-
     using Container::iterator;
     using Container::const_iterator;
     using Container::begin;

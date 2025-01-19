@@ -11,9 +11,9 @@
 
 namespace fermi {
 
-    using FermiPhaseSpaceDecay = KopylovDecay; // or just Decay
+  using FermiPhaseSpaceDecay = KopylovDecay; // or just Decay
 
-    static_assert(std::is_base_of<VDecay, FermiPhaseSpaceDecay>::value, "Incorrect phase sampler");
+  static_assert(std::is_base_of<VDecay, FermiPhaseSpaceDecay>::value, "Incorrect phase sampler");
 
 } // namespace fermi
 

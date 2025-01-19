@@ -21,7 +21,7 @@ protected:
   VConfigurations* Configurations;
 };
 
-INSTANTIATETESTSUITEP(
+INSTANTIATE_TEST_SUITE_P(
     ConservationTests,
     ConfigurationsFixture,
     ::testing::Values(
@@ -30,7 +30,7 @@ INSTANTIATETESTSUITEP(
         new FastConfigurations()
     ));
 
-TESTP(ConfigurationsFixture, MassAndChargeConservation) {
+TEST_P(ConfigurationsFixture, MassAndChargeConservation) {
   auto model = ExcitationHandler();
   auto fermi = std::make_unique<FermiBreakUp>(ConfigurationsFixture::GetParam()->Clone());
   model.SetFermiBreakUp(std::make_unique<AAMCCFermiBreakUp>(std::move(fermi)));
@@ -51,21 +51,21 @@ TESTP(ConfigurationsFixture, MassAndChargeConservation) {
     for (size_t i = 0; i < runs; ++i) {
       G4int massTotal = 0;
       auto fragments = model.BreakItUp(particle);
-      for (auto& fragment : fragments) {
+      for (const auto& fragment : fragments) {
         massTotal += fragment.GetDefinition()->GetAtomicMass();
         chargeTotal += fragment.GetDefinition()->GetAtomicNumber();
       }
 
-      ASSERTEQ(massTotal, mass) << "violates mass conservation: " << mass << ' ' << charge << ' ' << energyPerNuclei;
+      ASSERT_EQ(massTotal, mass) << "violates mass conservation: " << mass << ' ' << charge << ' ' << energyPerNuclei;
     }
 
     // test mean, because of multifragmentation model
-    ASSERTNEAR(G4double(chargeTotal) / runs, charge, 2 * charge / std::sqrt(runs)) << "violates charge conservation: " << mass << ' ' << charge << ' ' << energyPerNuclei;
+    ASSERT_NEAR(G4double(chargeTotal) / runs, charge, 2 * charge / std::sqrt(runs)) << "violates charge conservation: " << mass << ' ' << charge << ' ' << energyPerNuclei;
   }
 }
 
 // Is doesn't work because of multi-fragmentation model *(
-TESTP(ConfigurationsFixture, Vector4Conservation) {
+TEST_P(ConfigurationsFixture, Vector4Conservation) {
   auto model = ExcitationHandler();
   auto fermi = std::make_unique<FermiBreakUp>(ConfigurationsFixture::GetParam()->Clone());
   model.SetFermiBreakUp(std::make_unique<AAMCCFermiBreakUp>(std::move(fermi)));
@@ -94,9 +94,9 @@ TESTP(ConfigurationsFixture, Vector4Conservation) {
       }
     }
 
-    ASSERTNEAR(sumMomentum.x() / runs, totalMomentum.x(), std::max(1e-3, std::abs(totalMomentum.x()) / std::sqrt(runs)));
-    ASSERTNEAR(sumMomentum.y() / runs, totalMomentum.y(), std::max(1e-3, std::abs(totalMomentum.y()) / std::sqrt(runs)));
-    ASSERTNEAR(sumMomentum.z() / runs, totalMomentum.z(), std::max(1e-3, std::abs(totalMomentum.z()) / std::sqrt(runs)));
-    ASSERTNEAR(sumEnergy / runs, totalMomentum.e(), std::max(1e-3, std::abs(totalMomentum.e()) / std::sqrt(runs)));
+    ASSERT_NEAR(sumMomentum.x() / runs, totalMomentum.x(), std::max(1e-3, std::abs(totalMomentum.x()) / std::sqrt(runs)));
+    ASSERT_NEAR(sumMomentum.y() / runs, totalMomentum.y(), std::max(1e-3, std::abs(totalMomentum.y()) / std::sqrt(runs)));
+    ASSERT_NEAR(sumMomentum.z() / runs, totalMomentum.z(), std::max(1e-3, std::abs(totalMomentum.z()) / std::sqrt(runs)));
+    ASSERT_NEAR(sumEnergy / runs, totalMomentum.e(), std::max(1e-3, std::abs(totalMomentum.e()) / std::sqrt(runs)));
   }
 }

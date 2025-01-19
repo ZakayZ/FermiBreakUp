@@ -18,15 +18,9 @@ namespace fermi {
     virtual ~VNucleiProperties() = default;
 
   protected:
-    static FermiFloat AtomicWeight(AtomicMass atomicMass, ChargeNumber chargeNumber);
-
-    static FermiFloat NuclearMass(AtomicMass atomicMass, ChargeNumber chargeNumber);
-
-    static FermiFloat BindingEnergy(AtomicMass atomicMass, ChargeNumber chargeNumber);
-
-    static void PrintInvalidNuclei(AtomicMass atomicMass, ChargeNumber chargeNumber);
-
-    static bool IsInvalidNuclei(AtomicMass atomicMass, ChargeNumber chargeNumber);
+    static FermiFloat EstimateNuclearMass(AtomicMass atomicMass, ChargeNumber chargeNumber);
+    static FermiFloat WeitzsaeckerBindingEnergy(AtomicMass atomicMass, ChargeNumber chargeNumber);
+    static FermiFloat EstimateAtomicWeight(AtomicMass atomicMass, ChargeNumber chargeNumber);
   };
 
 } // namespace fermi

@@ -6,6 +6,8 @@
 #define FERMIBREAKUP_TABLE_VALUES_NUCLEIPROPERTIESTABLEAME12_H
 
 #include <vector>
+#include <array>
+#include <optional>
 
 #include "util/DataTypes.h"
 
@@ -38,29 +40,29 @@ namespace fermi {
 
     bool VerifyNuclei(AtomicMass atomicMass, ChargeNumber chargeNumber) const;
 
-    static const AtomicMass MaxMassNumber;
+    static constexpr AtomicMass MaxMassNumber = 295_m;
+    static constexpr ChargeNumber MaxChargeNumber = 120_c;
 
-    static const ChargeNumber MaxChargeNumber;
+    static constexpr size_t ParticleCount = 3353;
+    static constexpr size_t ShortTableCount = FermiUInt(MaxMassNumber);
 
-    static const size_t ParticleCount;
+    static const std::array<FermiFloat, ParticleCount> MassExcess;
 
-    static const std::vector<FermiFloat> MassExcess;
+    static const std::array<FermiFloat, ParticleCount> BetaEnergy;
 
-    static const std::vector<FermiFloat> BetaEnergy;
+    static const std::array<size_t, ParticleCount> IndexCharge;
 
-    static const std::vector<size_t> IndexCharge;
+    static const std::array<size_t, ParticleCount> IndexMass;
 
-    static const std::vector<size_t> IndexMass;
+    static const std::array<size_t, ShortTableCount> ShortTable;
 
-    static const size_t ShortTableCount;
-
-    static const std::vector<size_t> ShortTable;
-
-    static std::vector<FermiFloat>* electronMass_;
+    static inline std::optional<std::vector<FermiFloat>> electronMass_ = std::nullopt;
   };
 
-  std::ostream& operator<<(std::ostream& out, const NucleiPropertiesTableAME12& table);
-
 } // namespace fermi
+
+namespace std {
+  ostream& operator<<(ostream& out, const ::fermi::NucleiPropertiesTableAME12& table);
+} // namespace std
 
 #endif // FERMIBREAKUP_TABLE_VALUES_NUCLEIPROPERTIESTABLEAME12_H

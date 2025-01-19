@@ -4,9 +4,11 @@
 
 #include <CLHEP/Units/PhysicalConstants.h>
 
-#include "NativeNucleiProperties.h"
+#include "util/Logger.h"
 #include "table_values/NucleiPropertiesTable.h"
 #include "table_values/NucleiPropertiesTableAME12.h"
+
+#include "NativeNucleiProperties.h"
 
 using namespace fermi;
 
@@ -22,8 +24,8 @@ constexpr FermiUInt HashNuclei(AtomicMass atomicMass, ChargeNumber chargeNumber)
 }
 
 FermiFloat NativeNucleiProperties::GetNuclearMass(AtomicMass atomicMass, ChargeNumber chargeNumber) const {
-  if (IsInvalidNuclei(atomicMass, chargeNumber)) {
-    PrintInvalidNuclei(atomicMass, chargeNumber);
+  if (atomicMass < 1_m || chargeNumber < 0_c || FermiUInt(chargeNumber) > FermiUInt(atomicMass)) {
+    LOG_DEBUG("Unsupported values for A = " << atomicMass << " and Z = " << chargeNumber);
     return 0;
   }
 
@@ -53,8 +55,8 @@ FermiFloat NativeNucleiProperties::GetNuclearMass(AtomicMass atomicMass, ChargeN
 }
 
 bool NativeNucleiProperties::IsStable(AtomicMass atomicMass, ChargeNumber chargeNumber) const {
-  if (IsInvalidNuclei(atomicMass, chargeNumber)) {
-    PrintInvalidNuclei(atomicMass, chargeNumber);
+  if (atomicMass < 1_m || chargeNumber < 0_c || FermiUInt(chargeNumber) > FermiUInt(atomicMass)) {
+    LOG_DEBUG("Unsupported values for A = " << atomicMass << " and Z = " << chargeNumber);
     return false;
   }
 
@@ -67,15 +69,15 @@ FermiFloat NativeNucleiProperties::AtomicWeight(AtomicMass atomicMass, ChargeNum
   FermiFloat NeutronMassExcess  = tableAME12.GetMassExcess(1_m, 0_c);
 
   FermiFloat mass = FermiFloat(FermiUInt(atomicMass) - FermiUInt(chargeNumber)) * NeutronMassExcess
-      + FermiFloat(chargeNumber) * hydrogenMassExcess - BindingEnergy(atomicMass, chargeNumber)
+      + FermiFloat(chargeNumber) * hydrogenMassExcess - WeitzsaeckerBindingEnergy(atomicMass, chargeNumber)
       + FermiFloat(atomicMass) * CLHEP::amu_c2;
 
   return mass;
 }
 
 FermiFloat NativeNucleiProperties::NuclearMass(AtomicMass atomicMass, ChargeNumber chargeNumber) {
-  if (IsInvalidNuclei(atomicMass, chargeNumber)) {
-    PrintInvalidNuclei(atomicMass, chargeNumber);
+  if (atomicMass < 1_m || chargeNumber < 0_c || FermiUInt(chargeNumber) > FermiUInt(atomicMass)) {
+    LOG_DEBUG("Unsupported values for A = " << atomicMass << " and Z = " << chargeNumber);
     return 0;
   }
 
@@ -85,27 +87,4 @@ FermiFloat NativeNucleiProperties::NuclearMass(AtomicMass atomicMass, ChargeNumb
   mass += (14.4381 * std::pow(chargeNumber, 2.39) + 1.55468 * 1e-6 * std::pow(chargeNumber, 5.35)) * CLHEP::eV;
 
   return mass;
-}
-
-FermiFloat NativeNucleiProperties::BindingEnergy(AtomicMass atomicMass, ChargeNumber chargeNumber) {
-  // Weitzsaecker's Mass formula
-  FermiUInt NPairing = (FermiUInt(atomicMass) - FermiUInt(chargeNumber)) % 2;                      // pairing
-  FermiUInt ZPairing = FermiUInt(chargeNumber) % 2;
-
-  FermiFloat binding =
-          - 15.67 * FermiFloat(atomicMass)                                                           // nuclear volume
-          + 17.23 * std::pow(atomicMass, 2. / 3.)                                                    // surface energy
-          + 93.15 * ((FermiFloat(atomicMass) / 2. - FermiFloat(chargeNumber))
-          * (FermiFloat(atomicMass) / 2. - FermiFloat(chargeNumber))) / FermiFloat(atomicMass)     // asymmetry
-          + 0.6984523 * std::pow(FermiUInt(chargeNumber), 2) * std::pow(atomicMass, -1. / 3.);      // coulomb
-
-  if (NPairing == ZPairing) {
-    binding += (NPairing + ZPairing - 1) * 12.0 / std::sqrt(FermiFloat(atomicMass));               // pairing
-  }
-
-  return -binding * CLHEP::MeV;
-}
-
-bool NativeNucleiProperties::IsInvalidNuclei(AtomicMass atomicMass, ChargeNumber chargeNumber) {
-  return atomicMass < 1_m || chargeNumber < 0_c || FermiUInt(chargeNumber) > FermiUInt(atomicMass);
 }

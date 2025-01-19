@@ -11,8 +11,9 @@ namespace fermi {
 
   class Decay : public VDecay {
   public:
-    std::vector<LorentzVector> CalculateDecay(const LorentzVector& totalMomentum,
-                                              const std::vector<FermiFloat>& fragmentsMass) const override;
+    std::vector<LorentzVector> CalculateDecay(
+      const LorentzVector& totalMomentum,
+      const std::vector<FermiFloat>& fragmentsMass) const override;
   };
 
 } // namespace fermi

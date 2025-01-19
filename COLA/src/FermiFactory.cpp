@@ -50,8 +50,8 @@ cola::FermiConverter* FermiFactory::DoCreate(const std::map<std::string, std::st
   );
   auto model = std::make_unique<fermi::FermiBreakUp>(std::move(Configurations));
   if (config.nucleiCsv.hasValue()) {
-    auto storage = properties::CSVNuclearMass(config.nucleiCsv.value());
-    properties::NucleiProperties::Reset(new properties::FastNucleiProperties(storage));
+    auto storage = fermi::CSVNuclearMass(config.nucleiCsv.value());
+    fermi::NucleiProperties::Reset(new fermi::FastNucleiProperties(storage));
   }
 
   return new FermiConverter(std::move(model));

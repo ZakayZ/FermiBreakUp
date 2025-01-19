@@ -96,11 +96,11 @@ TEST(TestModule, TestFermi) {
     auto& events = wrapper.writerFactory->events;
     events.clear();
 
-    ASSERTNOTHROW(wrapper.Run());
+    ASSERT_NO_THROW(wrapper.Run());
 
-    ASSERTEQ(events.size(), 1);
-    ASSERTEQ(events[0]->particles.size(), 1);
-    EXPECTTRUE(particle == events[0]->particles[0]);
+    ASSERT_EQ(events.size(), 1);
+    ASSERT_EQ(events[0]->particles.size(), 1);
+    EXPECT_TRUE(particle == events[0]->particles[0]);
   }
 
   {
@@ -119,10 +119,10 @@ TEST(TestModule, TestFermi) {
     auto& events = wrapper.writerFactory->events;
     events.clear();
 
-    ASSERTNOTHROW(wrapper.Run());
+    ASSERT_NO_THROW(wrapper.Run());
 
-    ASSERTEQ(events.size(), 1);
-    EXPECTEQ(events[0]->particles.size(), 2);
+    ASSERT_EQ(events.size(), 1);
+    EXPECT_EQ(events[0]->particles.size(), 2);
   }
 }
 
@@ -145,10 +145,10 @@ TEST(TestModule, TestG4Handler) {
     auto& events = wrapper.writerFactory->events;
     events.clear();
 
-    ASSERTNOTHROW(wrapper.Run());
+    ASSERT_NO_THROW(wrapper.Run());
 
-    ASSERTEQ(events.size(), 1);
-    ASSERTEQ(events[0]->particles.size(), 2);
+    ASSERT_EQ(events.size(), 1);
+    ASSERT_EQ(events[0]->particles.size(), 2);
   }
 
   {
@@ -167,9 +167,9 @@ TEST(TestModule, TestG4Handler) {
     auto& events = wrapper.writerFactory->events;
     events.clear();
 
-    ASSERTNOTHROW(wrapper.Run());
+    ASSERT_NO_THROW(wrapper.Run());
 
-    ASSERTEQ(events.size(), 1);
-    EXPECTEQ(events[0]->particles.size(), 3);
+    ASSERT_EQ(events.size(), 1);
+    EXPECT_EQ(events[0]->particles.size(), 3);
   }
 }

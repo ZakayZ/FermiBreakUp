@@ -19,10 +19,6 @@ namespace fermi {
     static FermiFloat AtomicWeight(AtomicMass atomicMass, ChargeNumber chargeNumber);
 
     static FermiFloat NuclearMass(AtomicMass atomicMass, ChargeNumber chargeNumber);
-
-    static FermiFloat BindingEnergy(AtomicMass atomicMass, ChargeNumber chargeNumber);
-
-    static bool IsInvalidNuclei(AtomicMass atomicMass, ChargeNumber chargeNumber);
   };
 
 } // namespace fermi

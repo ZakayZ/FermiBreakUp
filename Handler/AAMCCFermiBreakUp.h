@@ -7,16 +7,14 @@
 
 #include <memory>
 
-#include <memory>
-
 #include "G4VFermiBreakUp.hh"
-#include "VFermiBreakUp.h"
+#include "FermiBreakUp.h"
 
 class AAMCCFermiBreakUp : public G4VFermiBreakUp {
  public:
-  AAMCCFermiBreakUp();
+  AAMCCFermiBreakUp() = default;
 
-  AAMCCFermiBreakUp(std::unique_ptr<fermi::VFermiBreakUp>&& model);
+  AAMCCFermiBreakUp(fermi::FermiBreakUp&& model);
 
   void Initialise() override;
 
@@ -27,7 +25,7 @@ class AAMCCFermiBreakUp : public G4VFermiBreakUp {
   G4bool IsApplicable(G4int Z, G4int A, G4double excitationEnergy) const override;
 
  private:
-  std::unique_ptr<fermi::VFermiBreakUp> fermiModel_;
+  fermi::FermiBreakUp fermiModel_;
 };
 
-#endif //FERMIBREAKUPMYFERMIBREAKUPAAMCCFERMIBREAKUPH_
+#endif // FERMIBREAKUPMYFERMIBREAKUPAAMCCFERMIBREAKUPH_

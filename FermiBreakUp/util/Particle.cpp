@@ -3,9 +3,12 @@
 //
 
 #include <iomanip>
+#include "Logger.h"
 #include <CLHEP/Units/PhysicalConstants.h>
 
 #include "nuclei_properties/NucleiProperties.h"
+#include "util/Logger.h"
+
 #include "Particle.h"
 
 using namespace fermi;
@@ -16,6 +19,9 @@ Particle::Particle(AtomicMass atomicMass, ChargeNumber chargeNumber, const Loren
   , momentum_(momentum)
   , groundStateMass_(NucleiProperties()->GetNuclearMass(atomicMass_, chargeNumber_))
 {
+  ASSERT_MSG(FermiUInt(atomicMass_) >= FermiUInt(chargeNumber),
+             "imposible particle: A = " << atomicMass_ << ", Z = " << chargeNumber);
+
   CalculateExcitationEnergy();
 }
 
@@ -46,52 +52,41 @@ FermiFloat Particle::GetGroundStateMass() const {
   return groundStateMass_;
 }
 
-FermiFloat Particle::GetBindingEnergy() const {
-  return (FermiUInt(atomicMass_) - FermiUInt(chargeNumber_)) * CLHEP::neutron_mass_c2
-      + FermiFloat(chargeNumber_) * CLHEP::proton_mass_c2 - groundStateMass_;
-}
-
 bool Particle::IsStable() const {
-  return excitationEnergy_ <= 0;
-}
-
-void Particle::SetMomentum(const LorentzVector& momentum) {
-  momentum_ = momentum;
-  CalculateExcitationEnergy();
+  return excitationEnergy_ <= 0.;
 }
 
 void Particle::CalculateExcitationEnergy() {
   excitationEnergy_ = momentum_.mag() - groundStateMass_;
-  if (excitationEnergy_ < 0) {
-//    if (excitationEnergy_ < -10 * CLHEP::eV) {
-//      throw std::runtime_error("Excitation Energy is negative");
-//    } // TODO sometimes is raised in collaboration with other models
-    excitationEnergy_ = 0;
+  if (excitationEnergy_ < 0.) {
+    if (excitationEnergy_ < -10 * CLHEP::eV) {
+      LOG_WARN("Excitation Energy is too negative: " << excitationEnergy_ / CLHEP::MeV << " MeV");
+    }
+    excitationEnergy_ = 0.;
   }
 }
 
-std::ostream& operator<<(std::ostream& out, const Particle& particle) {
-  auto oldFloatField = out.flags();
+std::ostream& std::operator<<(std::ostream& out, const Particle& particle) {
+  const auto oldFlags = out.flags();
+  const auto oldUserPrecision = out.precision();
+
   out.setf(std::ios::floatfield);
+  out << "FermiParticle: { A = " << particle.GetAtomicMass()
+      << ", Z = " << particle.GetChargeNumber();
 
-  out << "Fragment: A = " << std::setw(3) << particle.GetAtomicMass()
-      << ", Z = " << std::setw(3) << particle.GetChargeNumber();
   out.setf(std::ios::scientific, std::ios::floatfield);
-
-  auto oldUserPrecision = out.precision();
-
   out << std::setprecision(3)
-      << ", U = " << particle.GetExcitationEnergy() / CLHEP::MeV
-      << " MeV  IsGroundState= " << particle.IsStable() << '\n'
-      << "          P = ("
-      << particle.GetMomentum().x() / CLHEP::MeV << ","
-      << particle.GetMomentum().y() / CLHEP::MeV << ","
+      << ", U = " << particle.GetExcitationEnergy() / CLHEP::MeV << " MeV"
+      << ", IsGroundState = " << (particle.IsStable() ? "yes" : "no")
+      << ", P = ("
+      << particle.GetMomentum().x() / CLHEP::MeV << ", "
+      << particle.GetMomentum().y() / CLHEP::MeV << ", "
       << particle.GetMomentum().z() / CLHEP::MeV
-      << ") MeV   E = "
-      << particle.GetMomentum().t() / CLHEP::MeV << " MeV"
-      << std::endl;
+      << ") MeV, E = "
+      << particle.GetMomentum().t() / CLHEP::MeV << " MeV}"
+      << " }";
 
-  out.setf(oldFloatField, std::ios::floatfield);
+  out.setf(oldFlags, std::ios::floatfield);
   out.precision(oldUserPrecision);
 
   return out;

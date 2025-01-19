@@ -6,8 +6,8 @@
 
 using namespace fermi;
 
-ParticleVector StableFragment::GetFragments(const LorentzVector& momentum) const {
-  return {
-    Particle(GetAtomicMass(), GetChargeNumber(), momentum),
-  };
+void StableFragment::AppendDecayFragments(const LorentzVector& momentum, std::vector<Particle>& fragments) const {
+  fragments.emplace_back(
+    Particle(GetAtomicMass(), GetChargeNumber(), momentum)
+  );
 }

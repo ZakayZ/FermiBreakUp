@@ -7,29 +7,23 @@
 
 #include <memory>
 
+#include "Split.h"
 #include "util/Particle.h"
-
-#include "configurations/VConfigurations.h"
-#include "configurations/impl/Configurations.h"
-
-#include "VFermiBreakUp.h"
 
 namespace fermi {
 
-  class FermiBreakUp : public VFermiBreakUp {
+  class FermiBreakUp {
   public:
-    FermiBreakUp();
+    using SplitCache = VCache<NucleiData, FragmentSplits>;
 
-    FermiBreakUp(std::unique_ptr<VConfigurations>&& configurations);
+    FermiBreakUp() = default;
 
-    ParticleVector BreakItUp(const Particle& nucleus) override;
+    FermiBreakUp(std::unique_ptr<SplitCache>&& cache);
 
-    ~FermiBreakUp() = default;
-
-    static std::unique_ptr<VConfigurations> DefaultConfigurations();
+    std::vector<Particle> BreakItUp(const Particle& nucleus) const;
 
   private:
-    std::unique_ptr<VConfigurations> configurations_;
+    std::unique_ptr<SplitCache> cache_ = nullptr;
   };
 
 } // namespace fermi

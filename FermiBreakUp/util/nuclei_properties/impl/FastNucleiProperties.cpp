@@ -3,7 +3,8 @@
 //
 
 #include "util/nuclei_properties/data_storage/DefaultNuclearMass.h"
-#include <stdexcept>
+
+#include "util/Logger.h"
 
 #include "FastNucleiProperties.h"
 
@@ -15,24 +16,22 @@ FastNucleiProperties::FastNucleiProperties()
 }
 
 FermiFloat FastNucleiProperties::GetNuclearMass(AtomicMass atomicMass, ChargeNumber chargeNumber) const {
-  if (FermiInt(atomicMass) < FermiInt(chargeNumber)) {
-    throw std::runtime_error(
-      "invalid nuclei A = " + std::to_string(atomicMass) + ", Z = " + std::to_string(chargeNumber));
-  }
+  ASSERT_MSG(FermiInt(atomicMass) >= FermiInt(chargeNumber),
+             "invalid nuclei A = " << atomicMass << ", Z = " << chargeNumber);
 
   auto slot = GetSlot(atomicMass, chargeNumber);
   if (slot < nucleiMasses_.size() && nucleiMasses_[slot].isCached) {
     return nucleiMasses_[slot].mass;
   }
 
-#ifdef DEBUG
-  std::cerr << "Unknown particle A = " + std::to_string(atomicMass) + ", Z = " + std::to_string(chargeNumber) << '\n';
-#endif
+  LOG_DEBUG("Unknown particle: A = " << atomicMass << ", Z = " << chargeNumber);
+
   if (slot >= nucleiMasses_.size()) {
-    nucleiMasses_.resize(slot + 1);
+    nucleiMasses_.resize(slot + FermiUInt(atomicMass));
   }
+
   nucleiMasses_[slot] = MassData{
-    NuclearMass(atomicMass, chargeNumber), // mass
+    EstimateNuclearMass(atomicMass, chargeNumber), // mass
     false, // isStable
     true, // isCached
   };
@@ -40,8 +39,8 @@ FermiFloat FastNucleiProperties::GetNuclearMass(AtomicMass atomicMass, ChargeNum
 }
 
 bool FastNucleiProperties::IsStable(AtomicMass atomicMass, ChargeNumber chargeNumber) const {
-  if (IsInvalidNuclei(atomicMass, chargeNumber)) {
-    PrintInvalidNuclei(atomicMass, chargeNumber);
+  if (atomicMass < 1_m || chargeNumber < 0_c || FermiUInt(chargeNumber) > FermiUInt(atomicMass)) {
+    LOG_DEBUG("Unknown particle: A = " << atomicMass << ", Z = " << chargeNumber);
     return false;
   }
 
@@ -51,14 +50,14 @@ bool FastNucleiProperties::IsStable(AtomicMass atomicMass, ChargeNumber chargeNu
 }
 
 void FastNucleiProperties::AddStableNuclei(AtomicMass atomicMass, ChargeNumber chargeNumber, FermiFloat mass) {
-  if (static_cast<FermiUInt>(chargeNumber) > static_cast<FermiUInt>(atomicMass)) {
-    throw std::runtime_error(
-      "Invalid particle: A = " + std::to_string(atomicMass) + ", Z = " + std::to_string(chargeNumber));
-  }
+  ASSERT_MSG(FermiInt(atomicMass) >= FermiInt(chargeNumber),
+             "invalid particle: A = " << atomicMass << ", Z = " << chargeNumber);
+
   auto slot = GetSlot(atomicMass, chargeNumber);
   if (slot >= nucleiMasses_.size()) {
-    nucleiMasses_.resize(slot + 1);
+    nucleiMasses_.resize(slot + FermiUInt(atomicMass));
   }
+
   nucleiMasses_[slot] = MassData{
     mass, // mass
     true, // isStable

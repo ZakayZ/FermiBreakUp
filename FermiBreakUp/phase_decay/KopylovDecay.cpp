@@ -2,12 +2,17 @@
 // Created by Artem Novikov on 21.02.2023.
 //
 
+#include <exception>
 #include <numeric>
 #include <functional>
+
 #include <CLHEP/Random/RandGamma.h>
 
-#include "KopylovDecay.h"
 #include "util/Randomizer.h"
+#include "util/Logger.h"
+
+#include "Helper.h"
+#include "KopylovDecay.h"
 
 using namespace fermi;
 
@@ -17,51 +22,65 @@ namespace {
     copy.boost(boostVector);
     return copy;
   }
+
+  FermiFloat BetaKopylov(size_t k) {
+    constexpr FermiFloat beta = 1.5;
+
+    // Notice that alpha > beta always
+    const FermiFloat alpha = 1.5 * static_cast<FermiFloat>(k - 1);
+    const FermiFloat y1 = CLHEP::RandGamma::shoot(alpha, 1);
+    const FermiFloat y2 = CLHEP::RandGamma::shoot(beta, 1);
+
+    return y1 / (y1 + y2);
+  }
 } // namespace
 
 std::vector<LorentzVector> KopylovDecay::CalculateDecay(
   const LorentzVector& totalMomentum,
   const std::vector<FermiFloat>& fragmentsMass) const
 {
-  assert(fragmentsMass.size() > 0);
+  LOG_TRACE("Kopylov Decay called");
+  ASSERT_MSG(fragmentsMass.size() > 0, "Kopylov Decay called for empty split");
 
   std::vector<LorentzVector> result(fragmentsMass.size());
 
   if (fragmentsMass.size() == 1) {
+    LOG_DEBUG("No decay is needed, only one fragment");
     result[0] = totalMomentum;
     return result;
   }
 
   // 2 bodies case is faster
   if (fragmentsMass.size() == 2) {
+    LOG_DEBUG("Decay for 2 fragments");
     std::tie(result[0], result[1]) = TwoBodyDecay(totalMomentum.m(), fragmentsMass[0], fragmentsMass[1]);
     return result;
   }
 
   // N body case
-  FermiFloat parentMass = totalMomentum.m();
-  FermiFloat totalFragmentsMass = std::accumulate(fragmentsMass.begin(), fragmentsMass.end(), FermiFloat(0));
-  FermiFloat mu = totalFragmentsMass;
-  FermiFloat mass = parentMass;
-  FermiFloat kineticEnergy = parentMass - totalFragmentsMass;
-  assert(kineticEnergy > 0);
+  LOG_DEBUG("Decay for N fragments");
+  auto const parentMass = totalMomentum.m();
+  auto const totalFragmentsMass = std::accumulate(fragmentsMass.begin(), fragmentsMass.end(), 0.);
+
+  auto mu = totalFragmentsMass;
+  auto mass = parentMass;
+  auto kineticEnergy = parentMass - totalFragmentsMass;
+  ASSERT_MSG(kineticEnergy >= 0.,
+             "Kopylov Decay started for impossible split: fragments mass is too large");
 
   auto momentumRestLab = LorentzVector(0, 0, 0, parentMass);
   for (size_t i = fragmentsMass.size() - 1; i > 0; --i) {
     mu -= fragmentsMass[i];
-    kineticEnergy *= i > 1 ? BetaKopylov(i) : 0;
-    auto restMass = mu + kineticEnergy;
+    kineticEnergy *= i > 1 ? BetaKopylov(i) : 0.;
+    const auto restMass = mu + kineticEnergy;
 
-    if (fragmentsMass[i] + restMass < mass) {
-      throw std::runtime_error("FermiPhaseSpaceDecay::KopylovNBodyDecay: Error sampling fragments momenta!!");
-    }
+    ASSERT_MSG(fragmentsMass[i] + restMass <= mass,
+               "Kopylov Decay: something went wrong, fragments mass is greater than the whole");
     auto [momentumFragmentsCm, momentumRestCm] = TwoBodyDecay(mass, fragmentsMass[i], restMass);
 
-    // change framework
     const auto boostVector = momentumRestLab.boostVector();
-
     momentumRestLab = ChangeFrameOfReference(momentumRestCm, boostVector);
-    auto momentumFragmentsLab = ChangeFrameOfReference(momentumFragmentsCm, boostVector);
+    const auto momentumFragmentsLab = ChangeFrameOfReference(momentumFragmentsCm, boostVector);
 
     result[i] = momentumFragmentsLab;
 
@@ -71,14 +90,4 @@ std::vector<LorentzVector> KopylovDecay::CalculateDecay(
   result[0] = std::move(momentumRestLab);
 
   return result;
-}
-
-FermiFloat KopylovDecay::BetaKopylov(size_t k) {
-  // Notice that alpha > beta always
-  static const FermiFloat beta = 1.5;
-  FermiFloat alpha = 1.5 * static_cast<FermiFloat>(k - 1);
-  FermiFloat y1 = CLHEP::RandGamma::shoot(alpha, 1);
-  FermiFloat y2 = CLHEP::RandGamma::shoot(beta, 1);
-
-  return y1 / (y1 + y2);
 }

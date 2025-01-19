@@ -17,10 +17,10 @@ namespace fermi {
 
   public:
     CSVNuclearMass(
-      const std::string& csvFilename,
-      const std::string& massNumberName = "A",
-      const std::string& chargeNumberName = "Z",
-      const std::string& massName = "mass"
+      const FermiStr& csvFilename,
+      const FermiStr& massNumberName = "A",
+      const FermiStr& chargeNumberName = "Z",
+      const FermiStr& massName = "mass"
     );
 
     using Container::iterator;

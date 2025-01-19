@@ -6,12 +6,14 @@
 
 #include "CSVNuclearMass.h"
 
-namespace fermi {
+using namespace fermi;
 
-CSVNuclearMass::CSVNuclearMass(const std::string& csvFilename,
-                               const std::string& massNumberName,
-                               const std::string& chargeNumberName,
-                               const std::string& massName) {
+CSVNuclearMass::CSVNuclearMass(
+  const FermiStr& csvFilename,
+  const FermiStr& massNumberName,
+  const FermiStr& chargeNumberName,
+  const FermiStr& massName)
+{
   std::ifstream in(csvFilename);
 
   if (!in.is_open()) {
@@ -20,13 +22,13 @@ CSVNuclearMass::CSVNuclearMass(const std::string& csvFilename,
 
   int32_t massNumberIdx = -1, chargeNumberIdx = -1, massIdx = -1;
 
-  std::string line;
+  FermiStr line;
   in >> line;
   line += ',';
   int32_t columnIdx = 0;
   uint32_t start = 0;
   size_t comma = line.find(',', start);
-  while (comma != std::string::npos) {
+  while (comma != FermiStr::npos) {
     if (line.substr(start, comma - start) == massNumberName) {
       massNumberIdx = columnIdx;
     }
@@ -65,7 +67,7 @@ CSVNuclearMass::CSVNuclearMass(const std::string& csvFilename,
     columnIdx = 0;
     start = 0;
     comma = line.find(',', start);
-    while (comma != std::string::npos) {
+    while (comma != FermiStr::npos) {
       if (columnIdx == massNumberIdx) {
         m = AtomicMass(std::stoi(line.substr(start, comma - start)));
       }
@@ -90,5 +92,3 @@ CSVNuclearMass::CSVNuclearMass(const std::string& csvFilename,
     emplace(NucleiData{m, c}, mass);
   }
 }
-
-} // namespace fermi

@@ -8,10 +8,10 @@ namespace cola {
   public:
     G4HandlerConverter(std::unique_ptr<ExcitationHandler>&& model);
 
-    std::unique_ptr<cola::EventData> operator()(std::unique_ptr<cola::EventData>&& data) override final;
+    std::unique_ptr<cola::EventData> operator()(std::unique_ptr<cola::EventData>&& data) final;
 
   private:
     std::unique_ptr<ExcitationHandler> model_;
   };
 
-}  // namespace cola
+} // namespace cola

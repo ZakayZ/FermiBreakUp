@@ -5,7 +5,7 @@
 #ifndef FERMIBREAKUP_TABLE_VALUES_NUCLEIPROPERTIESTABLE_H
 #define FERMIBREAKUP_TABLE_VALUES_NUCLEIPROPERTIESTABLE_H
 
-#include <vector>
+#include <array>
 
 #include "util/DataTypes.h"
 
@@ -13,8 +13,6 @@ namespace fermi {
 
   class NucleiPropertiesTable {
   public:
-    NucleiPropertiesTable();
-
     FermiFloat GetNuclearMass(AtomicMass atomicMass, ChargeNumber chargeNumber) const;
 
     bool ContainsParticle(AtomicMass atomicMass, ChargeNumber chargeNumber) const;
@@ -34,21 +32,19 @@ namespace fermi {
 
     bool VerifyNuclei(AtomicMass atomicMass, ChargeNumber chargeNumber) const;
 
-    static const AtomicMass MaxMassNumber;
+    static constexpr AtomicMass MaxMassNumber = 339_m;
+    static constexpr ChargeNumber MaxChargeNumber = 136_c;
 
-    static const ChargeNumber MaxChargeNumber;
+    static constexpr size_t ParticleCount = 8979;
+    static constexpr size_t ShortTableCount = 137;
 
-    static const size_t ParticleCount;
+    static const std::array<FermiFloat, ParticleCount> AtomicMassExcess;
 
-    static const std::vector<FermiFloat> AtomicMassExcess;
+    static const std::array<size_t, ParticleCount> IndexCharge;
 
-    static const std::vector<size_t> IndexCharge;
+    static const std::array<size_t, ParticleCount> IndexMass;
 
-    static const std::vector<size_t> IndexMass;
-
-    static const size_t ShortTableCount;
-
-    static const std::vector<size_t> ShortTable;
+    static const std::array<size_t, ShortTableCount> ShortTable;
   };
 
   std::ostream& operator<<(std::ostream& out, const NucleiPropertiesTable& table);

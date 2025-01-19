@@ -5,27 +5,22 @@
 #ifndef FERMIBREAKUP_FRAGMENT_POOL_FRAGMENTS_UNSTABLEFRAGMENT_H
 #define FERMIBREAKUP_FRAGMENT_POOL_FRAGMENTS_UNSTABLEFRAGMENT_H
 
-#include <vector>
-
 #include "Fragment.h"
 
 namespace fermi {
 
   class UnstableFragment : public Fragment {
   public:
-    UnstableFragment(AtomicMass atomicMass,
-                     ChargeNumber chargeNumber,
-                     FermiInt polarization,
-                     FermiFloat excitationEnergy,
-                     std::vector<NucleiData>&& decayData);
+    UnstableFragment(
+      AtomicMass atomicMass,
+      ChargeNumber chargeNumber,
+      FermiInt polarization,
+      FermiFloat excitationEnergy,
+      std::vector<NucleiData>&& decayData);
 
-    UnstableFragment() = delete;
-
-    UnstableFragment(const UnstableFragment&) = delete;
-
-    const UnstableFragment& operator=(const UnstableFragment&) = delete;
-
-    ParticleVector GetFragments(const LorentzVector& momentum) const override;
+    void AppendDecayFragments(
+      const LorentzVector& momentum,
+      std::vector<Particle>& particles) const override;
 
   private:
     std::vector<NucleiData> decayData_;

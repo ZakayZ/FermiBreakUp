@@ -10,27 +10,10 @@
 
 using namespace fermi;
 
-const AtomicMass NucleiPropertiesTableAME12::MaxMassNumber = 5_m;
-
-const ChargeNumber NucleiPropertiesTableAME12::MaxChargeNumber = 0_c;
-
-const size_t NucleiPropertiesTableAME12::ParticleCount = 3353;
-
-const size_t NucleiPropertiesTableAME12::ShortTableCount = FermiUInt(MaxMassNumber);
-
-std::vector<FermiFloat>* NucleiPropertiesTableAME12::electronMass_ = nullptr;
-
 NucleiPropertiesTableAME12::NucleiPropertiesTableAME12() {
-  assert(ShortTableCount == ShortTable.size());
-
-  assert(ParticleCount == IndexCharge.size());
-  assert(ParticleCount == IndexMass.size());
-  assert(ParticleCount == MassExcess.size());
-  assert(ParticleCount == BetaEnergy.size());
-
   // calculate electron mass in orbit with binding energy
-  if (electronMass_ == nullptr) {
-    electronMass_ = new std::vector<FermiFloat>(FermiUInt(MaxChargeNumber));
+  if (!electronMass_.has_value()) {
+    electronMass_ = std::vector<FermiFloat>(FermiUInt(MaxChargeNumber));
     auto& electronMass = *electronMass_;
     for (FermiUInt iz = 1; iz < FermiUInt(MaxChargeNumber); ++iz) {
       electronMass[iz] = static_cast<FermiFloat>(iz) * CLHEP::electron_mass_c2
@@ -109,7 +92,7 @@ FermiUInt NucleiPropertiesTableAME12::GetMaxCharge() const {
   return MaxChargeNumber;
 }
 
-std::ostream& operator<<(std::ostream& out, const NucleiPropertiesTableAME12& table) {
+std::ostream& std::operator<<(std::ostream& out, const ::fermi::NucleiPropertiesTableAME12& table) {
   out << "A Z mass massExcess bindingEnergy betaDecayEnergy\n";
   for (size_t i = 1; i <= table.GetMaxMass(); ++i) {
     for (size_t j = 0; j <= table.GetMaxCharge(); ++j) {
@@ -125,7 +108,7 @@ std::ostream& operator<<(std::ostream& out, const NucleiPropertiesTableAME12& ta
   return out;
 }
 
-const std::vector<FermiFloat> NucleiPropertiesTableAME12::MassExcess = {
+const std::array<FermiFloat, NucleiPropertiesTableAME12::ParticleCount> NucleiPropertiesTableAME12::MassExcess = {
     8071.31714, 7288.97059, 13135.72174, 14949.80611, 14931.21551, 28667, 24621.123, 2424.91561, 25323.186, 32892.440,
     11231.233, 11678.886, 37139, 41875.717, 17592.095, 14086.87893, 18375.034, 47320, 49135, 26073.126,
     14907.10520, 15768.999, 27676.550, 31609.681, 20945.804, 4941.671, 22921.577, 35064.269, 40935.896, 24954.902,
@@ -492,7 +475,7 @@ const std::vector<FermiFloat> NucleiPropertiesTableAME12::MassExcess = {
     196044, 199266, 201427
 };
 
-const std::vector<FermiFloat> NucleiPropertiesTableAME12::BetaEnergy = {
+const std::array<FermiFloat, NucleiPropertiesTableAME12::ParticleCount> NucleiPropertiesTableAME12::BetaEnergy = {
     782.347, 0, 0, 18.591, -13736, 0, 22196.208, -22898.270, 0, 21661.208,
     -447.653, -25460, 0, 24283.622, 3505.216, -4288.155, -28945, 0, 23062, 11166.021,
     -861.893, -11907.551, 0, 10663.878, 16004.133, -17979.906, -12142.691, 0, 15980.994, 13606.450,
@@ -831,7 +814,7 @@ const std::vector<FermiFloat> NucleiPropertiesTableAME12::BetaEnergy = {
     -3222, 0, 0
 };
 
-const std::vector<size_t> NucleiPropertiesTableAME12::IndexCharge = {
+const std::array<size_t, NucleiPropertiesTableAME12::ParticleCount> NucleiPropertiesTableAME12::IndexCharge = {
     0, 1, 1, 1, 2, 3, 1, 2, 3, 1,
     2, 3, 4, 1, 2, 3, 4, 5, 1, 2,
     3, 4, 5, 2, 3, 4, 5, 6, 2, 3,
@@ -1170,7 +1153,7 @@ const std::vector<size_t> NucleiPropertiesTableAME12::IndexCharge = {
     117, 118, 118
 };
 
-const std::vector<size_t> NucleiPropertiesTableAME12::IndexMass = {
+const std::array<size_t, NucleiPropertiesTableAME12::ParticleCount> NucleiPropertiesTableAME12::IndexMass = {
     1, 1, 2, 3, 3, 3, 4, 4, 4, 5,
     5, 5, 5, 6, 6, 6, 6, 6, 7, 7,
     7, 7, 7, 8, 8, 8, 8, 8, 9, 9,
@@ -1509,7 +1492,7 @@ const std::vector<size_t> NucleiPropertiesTableAME12::IndexMass = {
     294, 294, 295
 };
 
-const std::vector<size_t> NucleiPropertiesTableAME12::ShortTable = {
+const std::array<size_t, NucleiPropertiesTableAME12::ShortTableCount> NucleiPropertiesTableAME12::ShortTable = {
     0, 2, 3, 6, 9, 13, 18, 23, 28, 33,
     39, 44, 50, 56, 62, 68, 75, 81, 88, 96,
     104, 113, 122, 131, 140, 149, 158, 167, 177, 186,

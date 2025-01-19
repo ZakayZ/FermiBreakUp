@@ -2,28 +2,11 @@
 // Created by Artem Novikov on 18.02.2023.
 //
 
-#include <cassert>
+#include <CLHEP/Units/PhysicalConstants.h>
 
 #include "NucleiPropertiesTable.h"
-#include "CLHEP/Units/PhysicalConstants.h"
 
 using namespace fermi;
-
-const AtomicMass NucleiPropertiesTable::MaxMassNumber = 9_m;
-
-const ChargeNumber NucleiPropertiesTable::MaxChargeNumber = 6_c;
-
-const size_t NucleiPropertiesTable::ParticleCount = 8979;
-
-const size_t NucleiPropertiesTable::ShortTableCount = 137;
-
-NucleiPropertiesTable::NucleiPropertiesTable() {
-  assert(ShortTable.size() == ShortTableCount);
-
-  assert(AtomicMassExcess.size() == ParticleCount);
-  assert(IndexCharge.size() == ParticleCount);
-  assert(IndexMass.size() == ParticleCount);
-}
 
 FermiFloat NucleiPropertiesTable::GetNuclearMass(AtomicMass atomicMass, ChargeNumber chargeNumber) const {
   if (VerifyNuclei(atomicMass, chargeNumber)) {
@@ -90,7 +73,7 @@ std::ostream& operator<<(std::ostream& out, const NucleiPropertiesTable& table) 
   return out;
 }
 
-const std::vector<FermiFloat> NucleiPropertiesTable::AtomicMassExcess = {
+const std::array<FermiFloat, NucleiPropertiesTable::ParticleCount> NucleiPropertiesTable::AtomicMassExcess = {
     -4.84, -0.17, -2.62, 2.56, 2.57, 8.20, 10.41, 17.72, 22.14, 30.93,
     36.75, 46.58, 53.73, 65.03, 72.83, 82.30, 91.32, 104.63, 113.70, 1.90,
     1.21, -3.08, 0.10, -0.68, 3.08, 4.24, 9.32, 12.81, 19.94, 24.99,
@@ -991,7 +974,7 @@ const std::vector<FermiFloat> NucleiPropertiesTable::AtomicMassExcess = {
     342.65, 344.65, 345.52, 347.87, 350.58, 351.04, 352.67, 353.55, 359.66
 };
 
-const std::vector<size_t> NucleiPropertiesTable::IndexCharge = {
+const std::array<size_t, NucleiPropertiesTable::ParticleCount> NucleiPropertiesTable::IndexCharge = {
     8, 8, 8, 8, 8, 8, 8, 8, 8, 8,
     8, 8, 8, 8, 8, 8, 8, 8, 8, 9,
     9, 9, 9, 9, 9, 9, 9, 9, 9, 9,
@@ -1892,7 +1875,7 @@ const std::vector<size_t> NucleiPropertiesTable::IndexCharge = {
     134, 134, 134, 134, 135, 135, 135, 135, 136
 };
 
-const std::vector<size_t> NucleiPropertiesTable::IndexMass = {
+const std::array<size_t, NucleiPropertiesTable::ParticleCount> NucleiPropertiesTable::IndexMass = {
     16, 17, 18, 19, 20, 21, 22, 23, 24, 25,
     26, 27, 28, 29, 30, 31, 32, 33, 34, 17,
     18, 19, 20, 21, 22, 23, 24, 25, 26, 27,
@@ -2793,7 +2776,7 @@ const std::vector<size_t> NucleiPropertiesTable::IndexMass = {
     336, 337, 338, 339, 336, 337, 338, 339, 339
 };
 
-const std::vector<size_t> NucleiPropertiesTable::ShortTable = {
+const std::array<size_t, NucleiPropertiesTable::ShortTableCount> NucleiPropertiesTable::ShortTable = {
     0, 19, 41, 65, 91, 119, 150, 183, 218, 255,
     294, 335, 377, 421, 466, 513, 561, 610, 660, 711,
     764, 818, 873, 928, 984, 1042, 1101, 1161, 1222, 1284,
