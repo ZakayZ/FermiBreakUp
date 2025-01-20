@@ -78,7 +78,7 @@ INSTANTIATE_TEST_SUITE_P(
         CacheTypes[2]
     ));
 
-TEST_P(ConfigurationsFixture, CarbonTest) {
+TEST_P(ConfigurationsFixture, CarbonDecay) {
   Logger::GlobalLevel = LogLevel::ERROR;
   constexpr size_t RUNS = 1e3;
 
@@ -106,7 +106,7 @@ TEST_P(ConfigurationsFixture, CarbonTest) {
   ASSERT_GE(CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 20 * CLHEP::MeV, RUNS, GetCache(ConfigurationsFixture::GetParam())), 3);
 }
 
-TEST_P(ConfigurationsFixture, UnstableNucleiTest) {
+TEST_P(ConfigurationsFixture, UnstableNuclei) {
   Logger::GlobalLevel = LogLevel::ERROR;
   constexpr size_t RUNS = 1e3;
 

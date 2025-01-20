@@ -21,7 +21,7 @@ size_t Cnk(size_t n, size_t k) {
   return factorial(n) / factorial(k) / factorial(n - k);
 }
 
-TEST(PartitionTests, SmallOnePaddingTest) {
+TEST(PartitionTests, SmallOnePadding) {
   constexpr size_t partitionNumber = 6;
   constexpr size_t partitionParts = 3;
 
@@ -40,7 +40,7 @@ TEST(PartitionTests, SmallOnePaddingTest) {
   ASSERT_EQ(partitionCounter, Cnk(partitionNumber - 1, partitionParts - 1));
 }
 
-TEST(PartitionTests, BigOnePaddingTest) {
+TEST(PartitionTests, BigOnePadding) {
   const size_t partitionNumber = 20;
   const size_t partitionParts = 7;
 
@@ -59,7 +59,7 @@ TEST(PartitionTests, BigOnePaddingTest) {
   ASSERT_EQ(partitionCounter, Cnk(partitionNumber - 1, partitionParts - 1));
 }
 
-TEST(PartitionTests, SmallZeroPaddingTest) {
+TEST(PartitionTests, SmallZeroPadding) {
   constexpr size_t partitionNumber = 7;
   constexpr size_t partitionParts = 3;
 
@@ -78,7 +78,7 @@ TEST(PartitionTests, SmallZeroPaddingTest) {
   ASSERT_EQ(partitionCounter, Cnk(partitionNumber + partitionParts - 1, partitionParts - 1));
 }
 
-TEST(PartitionTests, BigZeroPaddingTest) {
+TEST(PartitionTests, BigZeroPadding) {
   constexpr size_t partitionNumber = 16;
   constexpr size_t partitionParts = 4;
 

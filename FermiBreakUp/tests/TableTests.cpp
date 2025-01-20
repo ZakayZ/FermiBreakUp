@@ -10,7 +10,7 @@
 
 using namespace fermi;
 
-TEST(TableTest, DefaultPropertiesTest) {
+TEST(TableTest, DefaultProperties) {
   std::ifstream tableData("./small_nuclei_data.csv");
   ASSERT_TRUE(tableData.is_open());
 
@@ -31,7 +31,7 @@ TEST(TableTest, DefaultPropertiesTest) {
   }
 }
 
-TEST(TableTest, FilePropertiesTest) {
+TEST(TableTest, FileProperties) {
   std::ifstream tableData("./small_nuclei_data.csv");
   ASSERT_TRUE(tableData.is_open());
 

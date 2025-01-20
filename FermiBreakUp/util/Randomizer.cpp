@@ -2,8 +2,10 @@
 // Created by Artem Novikov on 19.02.2023.
 //
 
+#include <algorithm>
 #include <numeric>
 #include <random>
+
 #include <CLHEP/Units/PhysicalConstants.h>
 
 #include "Randomizer.h"

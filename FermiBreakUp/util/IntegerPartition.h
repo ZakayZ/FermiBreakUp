@@ -5,6 +5,8 @@
 #ifndef FERMIBREAKUP_UTILITIES_INTEGERPARTITION_H
 #define FERMIBREAKUP_UTILITIES_INTEGERPARTITION_H
 
+#include <cstddef>
+#include <cstdint>
 #include <vector>
 
 namespace fermi {
@@ -31,17 +33,11 @@ namespace fermi {
   public:
     friend class IntegerPartition;
 
-    using differenceType = size_t;
-
+    using differenceType = ssize_t;
     using value_type = Partition;
-
     using reference = const Partition&;
-
     using pointer = const Partition*;
-
     using iteratorCategory = std::forward_iterator_tag;
-
-    Iterator() = delete;
 
     Iterator(const Iterator&) = default;
 
@@ -60,7 +56,8 @@ namespace fermi {
     bool operator!=(const Iterator& other) const;
 
   private:
-    Iterator(uint32_t termsCount);
+    // represents end partition
+    Iterator() = default;
 
     Iterator(uint32_t number, uint32_t termsCount, uint32_t base);
 

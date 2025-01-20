@@ -5,8 +5,9 @@
 #include <algorithm>
 #include <iterator>
 #include <numeric>
-#include <string>
+#include <optional>
 
+#include "util/DataTypes.h"
 #include <CLHEP/Units/PhysicalConstants.h>
 
 #include "fragment_pool/FragmentPool.h"
@@ -150,7 +151,6 @@ FermiFloat fermi::DecayWeight(const FragmentVector& split, AtomicMass atomicMass
   const auto massFactor = MassFactor(split);
 
   // This is the constant (doesn't depend on energy) part
-  // TODO: excessive because normalized weights are used
   const auto coef = ConstFactor(atomicMass, split.size());
 
   // Calculation of 1/gamma(3(k-1)/2)
@@ -175,44 +175,36 @@ namespace {
                << " Z = " << nucleiData.chargeNumber);
   }
 
-  std::vector<size_t> FragmentVariations(const Partition& massPartition, const Partition& chargePartition) {
-    auto& fragmentPool = fermi::FragmentPool::Instance();
-
-    auto fragmentCount = massPartition.size();
-    std::vector<size_t> fragmentVariations;
-    fragmentVariations.reserve(fragmentCount);
-
-    for (size_t fragmentIdx = 0; fragmentIdx < fragmentCount; ++fragmentIdx) {
-      auto possibleFragments = fragmentPool.Count(AtomicMass(massPartition[fragmentIdx]),
-                                                  ChargeNumber(chargePartition[fragmentIdx]));
-      fragmentVariations.push_back(possibleFragments);
-    }
-
-    return fragmentVariations;
-  }
-
-  std::optional<FragmentSplits> PossibleSplits(const Partition& massPartition, const Partition& chargePartition) {
+  FragmentSplits PossibleSplits(const Partition& massPartition, const Partition& chargePartition) {
     auto& fragmentPool = FragmentPool::Instance();
-    size_t fragmentCount = massPartition.size();
+    const auto fragmentCount = massPartition.size();
 
-    auto fragmentVariation = FragmentVariations(massPartition, chargePartition);
-    if (std::any_of(fragmentVariation.begin(), fragmentVariation.end(), [](size_t n) { return n == 0; })) {
-      return std::nullopt;
+    // count 
+    size_t splitsCount = 1;
+    for (size_t fragmentIdx = 0; fragmentIdx < fragmentCount; ++fragmentIdx) {
+      splitsCount *= fragmentPool.Count(AtomicMass(massPartition[fragmentIdx]),
+                                        ChargeNumber(chargePartition[fragmentIdx]));
+      if (splitsCount == 0) {
+        return {};
+      }
     }
-    size_t splitsCount = std::accumulate(fragmentVariation.begin(), fragmentVariation.end(), 1, std::multiplies<>());
 
+    // allocate in advance
     FragmentSplits splits(splitsCount);
     for (auto& split: splits) {
       split.reserve(fragmentCount);
     }
 
+    // incrementally build splits
+    // chosen order matters, because later there is no need to sort splits to remove duplicates
     for (size_t fragmentIdx = 0; fragmentIdx < fragmentCount; ++fragmentIdx) {
       auto fragmentRange = fragmentPool.GetFragments(AtomicMass(massPartition[fragmentIdx]),
                                                      ChargeNumber(chargePartition[fragmentIdx]));
       size_t offset = 0;
-      size_t step = fragmentVariation[fragmentIdx];
+      // must be same as count, but we have random access iterator, so it would be faster
+      const size_t stride = std::distance(fragmentRange.begin(), fragmentRange.end());
       for (const auto fragmentPtr : fragmentRange) {
-        for (size_t pos = offset; pos < splitsCount; pos += step) {
+        for (size_t pos = offset; pos < splitsCount; pos += stride) {
           splits[pos].emplace_back(fragmentPtr);
         }
         ++offset;
@@ -255,8 +247,8 @@ void fermi::GenerateSplits(NucleiData nucleiData, FragmentSplits& splits) {
     for (auto& massPartition : IntegerPartition(nucleiData.atomicMass, fragmentCount, 1)) {
       for (auto& chargePartition : IntegerPartition(nucleiData.chargeNumber, fragmentCount, 0)) {
         // Some splits are invalid, some nuclei doesn't exist
-        if (auto partitionSplits = PossibleSplits(massPartition, chargePartition)) {
-          AddUniqueSplits(splits, *std::move(partitionSplits));
+        if (auto partitionSplits = PossibleSplits(massPartition, chargePartition); !partitionSplits.empty()) {
+          AddUniqueSplits(splits, std::move(partitionSplits));
         }
       }
     }

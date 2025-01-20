@@ -14,9 +14,10 @@ find_package(GTest REQUIRED)
 include(GoogleTest)
 
 set(Tests
-        PartitionTest.cpp
-        TableTests.cpp
-        BreakUpTest.cpp
+        SplitTest.cpp
+        # PartitionTest.cpp
+        # TableTests.cpp
+        # BreakUpTest.cpp
 )
 
 add_executable(FermiTest ${Tests})

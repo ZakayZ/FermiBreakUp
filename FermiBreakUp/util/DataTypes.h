@@ -68,7 +68,7 @@ namespace fermi {
     bool operator!=(const AtomicMass& other) const { return mass_ != other.mass_; }
 
   private:
-    FermiUInt mass_;
+    ValueType mass_;
   };
 
   class ChargeNumber {
@@ -106,7 +106,7 @@ namespace fermi {
     bool operator!=(const ChargeNumber& other) const { return charge_ != other.charge_; }
 
   private:
-    FermiUInt charge_;
+    ValueType charge_;
   };
 
   struct NucleiData {
@@ -150,11 +150,11 @@ namespace std {
   std::istream& operator>>(std::istream& in, ::fermi::ChargeNumber& charge);
 }
 
-constexpr fermi::AtomicMass operator ""_m(uint64_t mass) {
+constexpr fermi::AtomicMass operator ""_m(unsigned long long mass) {
   return fermi::AtomicMass(mass);
 }
 
-constexpr fermi::ChargeNumber operator ""_c(uint64_t charge) {
+constexpr fermi::ChargeNumber operator ""_c(unsigned long long charge) {
   return fermi::ChargeNumber(charge);
 }
 

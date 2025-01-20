@@ -18,10 +18,10 @@ IntegerPartition::Iterator IntegerPartition::begin() const {
 }
 
 IntegerPartition::Iterator IntegerPartition::end() const {
-  return {0};
+  return {};
 }
 
-///////////////////////////////// // ITERATOR//////////////////////////////
+/////////////////////////////////// ITERATOR //////////////////////////////
 
 IntegerPartition::Iterator::pointer IntegerPartition::Iterator::operator->() const {
   return &partition_;
@@ -50,11 +50,9 @@ bool IntegerPartition::Iterator::operator!=(const IntegerPartition::Iterator& ot
   return partition_ != other.partition_;
 }
 
-IntegerPartition::Iterator::Iterator(uint32_t termsCount) {
-  partition_.resize(termsCount, 0); // end partition
-}
-
-IntegerPartition::Iterator::Iterator(uint32_t number, uint32_t termsCount, uint32_t base) : Iterator(termsCount) {
+IntegerPartition::Iterator::Iterator(uint32_t number, uint32_t termsCount, uint32_t base)
+  : partition_(termsCount, 0)
+{
   // No possible partitions
   if (number < base * termsCount || termsCount == 0 || number == 0) { return; }
 
