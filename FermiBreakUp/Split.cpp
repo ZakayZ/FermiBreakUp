@@ -56,7 +56,7 @@ namespace {
 
   FermiFloat KineticEnergy(const FragmentVector& split, FermiFloat totalEnergy) {
     auto kineticEnergy = totalEnergy;
-    for (auto fragmentPtr : split) {
+    for (const auto fragmentPtr : split) {
       kineticEnergy -= fragmentPtr->GetTotalEnergy();
     }
 
@@ -70,7 +70,7 @@ namespace {
 
   FermiFloat MassFactor(const FragmentVector& split) {
     FermiFloat massSum = 0.;
-    FermiFloat massProduct = 1;
+    FermiFloat massProduct = 1.;
     for (const auto fragmentPtr : split) {
       auto fragmentMass = fragmentPtr->GetMass();
       massProduct *= fragmentMass;
@@ -111,9 +111,9 @@ namespace {
   }
 
   FermiFloat ConstFactor(AtomicMass atomicMass, size_t fragmentsCount) {
-    static const FermiFloat coef = std::pow(R0 / CLHEP::hbarc, 3) * Kappa * std::sqrt(2.0 / CLHEP::pi) / 3.0;
+    static const FermiFloat COEF = std::pow(R0 / CLHEP::hbarc, 3) * Kappa * std::sqrt(2.0 / CLHEP::pi) / 3.0;
 
-    return std::pow(coef * static_cast<FermiFloat>(atomicMass), fragmentsCount - 1);
+    return std::pow(COEF * static_cast<FermiFloat>(atomicMass), fragmentsCount - 1);
   }
 
   FermiFloat GammaFactor(size_t fragmentsCount) {
@@ -237,9 +237,14 @@ namespace {
 } // namespace
 
 FragmentSplits fermi::GenerateSplits(NucleiData nucleiData) {
+  FragmentSplits splits;
+  GenerateSplits(nucleiData, splits);
+  return splits;
+}
+
+void fermi::GenerateSplits(NucleiData nucleiData, FragmentSplits& splits) {
   ThrowOnInvalidInputs(nucleiData);
 
-  FragmentSplits splits;
   splits.reserve(ExpectedSplitSize);
 
   // let's split nucleus into 2, ..., A fragments
@@ -256,6 +261,4 @@ FragmentSplits fermi::GenerateSplits(NucleiData nucleiData) {
       }
     }
   }
-
-  return splits;
 }

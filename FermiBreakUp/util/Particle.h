@@ -14,8 +14,10 @@ namespace fermi {
     Particle() = delete;
 
     Particle(const Particle&) = default;
+    Particle(Particle&&) = default;
 
     Particle& operator=(const Particle&) = default;
+    Particle& operator=(Particle&&) = default;
 
     Particle(AtomicMass atomicMass, ChargeNumber chargeNumber, const LorentzVector& momentum);
 
@@ -32,8 +34,6 @@ namespace fermi {
     FermiFloat GetGroundStateMass() const;
 
     bool IsStable() const;
-
-    ~Particle() = default;
 
   private:
     void CalculateExcitationEnergy();

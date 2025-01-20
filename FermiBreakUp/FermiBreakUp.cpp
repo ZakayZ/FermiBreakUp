@@ -83,33 +83,6 @@ namespace {
 
     return std::move(out).str();
   }
-
-  std::vector<Particle> SelectSplit(const Particle& particle, const FragmentSplits& splits) {
-    LOG_TRACE("Selecting Split for " << particle << " from " << splits.size() << " splits");
-    if (splits.empty()) {
-      LOG_DEBUG("No splits found");
-      return {particle};
-    }
-
-    // get phase space weights for every split
-    std::vector<FermiFloat> weights(splits.size());
-    std::transform(
-      splits.begin(), splits.end(), 
-      weights.begin(),
-      [atomicMass=particle.GetAtomicMass(), totalEnergy=particle.GetMomentum().m()](const auto& split) {
-        return DecayWeight(split, atomicMass, totalEnergy);
-      });
-
-    if (std::all_of(weights.begin(), weights.end(), [](auto weight) { return weight == 0.; })) {
-      LOG_WARN("Every split has zero weight");
-      return {particle};
-    }
-
-    const auto& chosenSplit = splits[Randomizer::SampleDistribution(weights)];
-    LOG_DEBUG("From " << splits.size() << " splits chosen split: " << LogSplit(chosenSplit));
-
-    return SplitToParticle(particle, chosenSplit);
-  }
 } // namespace
 
 FermiBreakUp::FermiBreakUp(std::unique_ptr<SplitCache>&& cache)
@@ -139,7 +112,35 @@ std::vector<Particle> FermiBreakUp::BreakItUp(const Particle& particle) const {
 
     return SelectSplit(particle, *splitsPtr);
   } else {
-    const auto splits = GenerateSplits(particle.GetNucleiData());
-    return SelectSplit(particle, splits);
+    splits_.clear();
+    GenerateSplits(particle.GetNucleiData(), splits_);
+    return SelectSplit(particle, splits_);
   }
+}
+
+std::vector<Particle> FermiBreakUp::SelectSplit(const Particle& particle, const FragmentSplits& splits) const {
+  LOG_TRACE("Selecting Split for " << particle << " from " << splits.size() << " splits");
+  if (splits.empty()) {
+    LOG_DEBUG("No splits found");
+    return {particle};
+  }
+
+  // get phase space weights for every split
+  weights_.resize(splits.size());
+  std::transform(
+    splits.begin(), splits.end(), 
+    weights_.begin(),
+    [atomicMass=particle.GetAtomicMass(), totalEnergy=particle.GetMomentum().m()](const auto& split) {
+      return DecayWeight(split, atomicMass, totalEnergy);
+    });
+
+  if (std::all_of(weights_.begin(), weights_.end(), [](auto weight) { return weight == 0.; })) {
+    LOG_WARN("Every split has zero weight");
+    return {particle};
+  }
+
+  const auto& chosenSplit = splits[Randomizer::SampleDistribution(weights_)];
+  LOG_DEBUG("From " << splits.size() << " splits chosen split: " << LogSplit(chosenSplit));
+
+  return SplitToParticle(particle, chosenSplit);
 }

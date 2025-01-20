@@ -21,7 +21,7 @@ UnstableFragment::UnstableFragment(
   NucleiProperties properties;
   masses_.reserve(decayData_.size());
   for (const auto& decayFragment : decayData_) {
-    masses_.push_back(properties->GetNuclearMass(decayFragment.atomicMass, decayFragment.chargeNumber));
+    masses_.emplace_back(properties->GetNuclearMass(decayFragment.atomicMass, decayFragment.chargeNumber));
   }
 }
 

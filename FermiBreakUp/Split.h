@@ -6,7 +6,6 @@
 #define FERMIBREAKUP_SPLIT_H
 
 #include "fragment_pool/fragments/Fragment.h"
-#include "util/IntegerPartition.h"
 #include "util/DataTypes.h"
 
 namespace fermi {
@@ -14,8 +13,9 @@ namespace fermi {
 
   FermiFloat DecayWeight(const FragmentVector& split, AtomicMass atomicMass, FermiFloat totalEnergy);
 
-  FragmentSplits GenerateSplits(NucleiData nucleiData);
+  void GenerateSplits(NucleiData nucleiData, FragmentSplits& splits);
 
+  FragmentSplits GenerateSplits(NucleiData nucleiData);
 } // namespace fermi
 
 #endif // FERMIBREAKUP_SPLIT_H

@@ -14,18 +14,21 @@ using namespace fermi;
 namespace {
   FermiFloat WeitzsaeckerBindingEnergy(AtomicMass atomicMass, ChargeNumber chargeNumber) {
     // Weitzsaecker's Mass formula
-    const auto nucleiParity = (FermiInt(atomicMass) - FermiInt(chargeNumber)) % 2;                   // pairing
+    const auto nucleiParity = (FermiInt(atomicMass) - FermiInt(chargeNumber)) % 2;            // pairing
     const auto chargeParity = FermiInt(chargeNumber) % 2;
 
+    const auto atomicMassF = FermiFloat(atomicMass);
+    const auto chargeNumberF = FermiFloat(chargeNumber);
+
     FermiFloat binding =
-            -15.67 * FermiFloat(atomicMass)                                                          // nuclear volume
-            + 17.23 * std::pow(atomicMass, 2. / 3.)                                                  // surface energy
-            + 93.15 * std::pow(FermiFloat(atomicMass) / 2. - FermiFloat(chargeNumber), 2)
-                / FermiFloat(atomicMass)                                                             // asymmetry
-            + 0.6984523 * std::pow(FermiFloat(chargeNumber), 2) / std::cbrt(FermiFloat(atomicMass)); // coulomb
+            -15.67 * atomicMassF                                                              // nuclear volume
+            + 17.23 * std::pow(atomicMassF, 2. / 3.)                                          // surface energy
+            + 93.15 * std::pow(atomicMassF / 2. - chargeNumberF, 2)
+                / atomicMassF                                                                 // asymmetry
+            + 0.6984523 * std::pow(chargeNumberF, 2) / std::cbrt(atomicMassF);                // coulomb
 
     if (nucleiParity == chargeParity) {
-      binding += 12.0 * (nucleiParity + chargeParity - 1) / std::sqrt(FermiFloat(atomicMass)); // pairing
+      binding += 12.0 * (nucleiParity + chargeParity - 1) / std::sqrt(atomicMassF);    // pairing
     }
 
     return -binding * CLHEP::MeV;
@@ -60,10 +63,10 @@ FermiNucleiProperties::FermiNucleiProperties()
 }
 
 FermiFloat FermiNucleiProperties::GetNuclearMass(AtomicMass atomicMass, ChargeNumber chargeNumber) const {
-  ASSERT_MSG(FermiInt(atomicMass) >= FermiInt(chargeNumber),
+  ASSERT_MSG(FermiUInt(atomicMass) >= FermiUInt(chargeNumber),
              "invalid nuclei A = " << atomicMass << ", Z = " << chargeNumber);
 
-  auto slot = GetSlot(atomicMass, chargeNumber);
+  const auto slot = GetSlot(atomicMass, chargeNumber);
   if (slot < nucleiMasses_.size() && nucleiMasses_[slot].isCached) {
     return nucleiMasses_[slot].mass;
   }
@@ -88,16 +91,16 @@ bool FermiNucleiProperties::IsStable(AtomicMass atomicMass, ChargeNumber chargeN
     return false;
   }
 
-  auto slot = GetSlot(atomicMass, chargeNumber);
+  const auto slot = GetSlot(atomicMass, chargeNumber);
 
   return slot < nucleiMasses_.size() && nucleiMasses_[slot].isStable;
 }
 
 void FermiNucleiProperties::AddStableNuclei(AtomicMass atomicMass, ChargeNumber chargeNumber, FermiFloat mass) {
-  ASSERT_MSG(FermiInt(atomicMass) >= FermiInt(chargeNumber),
+  ASSERT_MSG(FermiUInt(atomicMass) >= FermiUInt(chargeNumber),
              "invalid particle: A = " << atomicMass << ", Z = " << chargeNumber);
 
-  auto slot = GetSlot(atomicMass, chargeNumber);
+  const auto slot = GetSlot(atomicMass, chargeNumber);
   if (slot >= nucleiMasses_.size()) {
     nucleiMasses_.resize(slot + FermiUInt(atomicMass));
   }
@@ -114,7 +117,7 @@ void FermiNucleiProperties::AddStableNuclei(NucleiData nucleiData, FermiFloat ma
 }
 
 size_t FermiNucleiProperties::GetSlot(AtomicMass atomicMass, ChargeNumber chargeNumber) {
-  auto mass = FermiInt(atomicMass);
-  auto charge = FermiInt(chargeNumber);
+  const auto mass = FermiUInt(atomicMass);
+  const auto charge = FermiUInt(chargeNumber);
   return (mass * (mass + 1)) / 2 + charge;
 }

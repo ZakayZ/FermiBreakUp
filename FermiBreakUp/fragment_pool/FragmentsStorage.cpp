@@ -25,11 +25,11 @@ FragmentsStorage::FragmentsStorage(Iter begin, Iter end) {
 }
 
 size_t FragmentsStorage::Count(AtomicMass atomicMass, ChargeNumber chargeNumber) const {
-  if (FermiInt(atomicMass) < FermiInt(chargeNumber)) {
+  if (FermiUInt(atomicMass) < FermiUInt(chargeNumber)) {
     return 0;
   }
 
-  auto slot = GetSlot(atomicMass, chargeNumber);
+  const auto slot = GetSlot(atomicMass, chargeNumber);
   if (slot >= fragments_.size()) {
     return 0;
   }
@@ -42,11 +42,11 @@ size_t FragmentsStorage::Count(NucleiData nuclei) const {
 }
 
 FragmentsStorage::IteratorRange FragmentsStorage::GetFragments(AtomicMass atomicMass, ChargeNumber chargeNumber) const {
-  if (FermiInt(atomicMass) < FermiInt(chargeNumber)) {
+  if (FermiUInt(atomicMass) < FermiUInt(chargeNumber)) {
     return {EmptyContainer_.begin(), EmptyContainer_.end()};
   }
 
-  auto slot = GetSlot(atomicMass, chargeNumber);
+  const auto slot = GetSlot(atomicMass, chargeNumber);
   if (slot >= fragments_.size()) {
     return {EmptyContainer_.begin(), EmptyContainer_.end()};
   }
@@ -59,7 +59,7 @@ FragmentsStorage::IteratorRange FragmentsStorage::GetFragments(NucleiData nuclei
 }
 
 void FragmentsStorage::AddFragment(const Fragment& fragment) {
-  auto slot = GetSlot(fragment.GetAtomicMass(), fragment.GetChargeNumber());
+  const auto slot = GetSlot(fragment.GetAtomicMass(), fragment.GetChargeNumber());
   if (slot >= fragments_.size()) {
     fragments_.resize(slot + 1);
   }
@@ -67,7 +67,7 @@ void FragmentsStorage::AddFragment(const Fragment& fragment) {
 }
 
 size_t FragmentsStorage::GetSlot(AtomicMass atomicMass, ChargeNumber chargeNumber) {
-  auto mass = FermiInt(atomicMass);
-  auto charge = FermiInt(chargeNumber);
+  const auto mass = FermiUInt(atomicMass);
+  const auto charge = FermiUInt(chargeNumber);
   return (mass * (mass + 1)) / 2 + charge;
 }
