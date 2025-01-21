@@ -8,7 +8,18 @@
 
 using namespace fermi;
 
-FragmentsStorage::FragmentsStorage() : FragmentsStorage(DefaultPoolSource()) {}
+namespace {
+  inline size_t GetSlot(AtomicMass atomicMass, ChargeNumber chargeNumber) {
+    const auto mass = FermiUInt(atomicMass);
+    const auto charge = FermiUInt(chargeNumber);
+    return (mass * (mass + 1)) / 2 + charge;
+  }
+} // namespace
+
+FragmentsStorage::FragmentsStorage()
+  : FragmentsStorage(DefaultPoolSource())
+{
+}
 
 template <typename DataSource>
 FragmentsStorage::FragmentsStorage(const DataSource& dataSource)
@@ -64,10 +75,4 @@ void FragmentsStorage::AddFragment(const Fragment& fragment) {
     fragments_.resize(slot + 1);
   }
   fragments_[slot].push_back(&fragment);
-}
-
-size_t FragmentsStorage::GetSlot(AtomicMass atomicMass, ChargeNumber chargeNumber) {
-  const auto mass = FermiUInt(atomicMass);
-  const auto charge = FermiUInt(chargeNumber);
-  return (mass * (mass + 1)) / 2 + charge;
 }

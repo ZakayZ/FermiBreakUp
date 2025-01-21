@@ -33,7 +33,7 @@ namespace fermi {
   public:
     friend class IntegerPartition;
 
-    using differenceType = ssize_t;
+    using differenceType = int64_t;
     using value_type = Partition;
     using reference = const Partition&;
     using pointer = const Partition*;

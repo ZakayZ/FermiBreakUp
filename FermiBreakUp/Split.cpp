@@ -7,6 +7,7 @@
 #include <numeric>
 #include <optional>
 
+#include "fragment_pool/fragments/Fragment.h"
 #include "util/DataTypes.h"
 #include <CLHEP/Units/PhysicalConstants.h>
 
@@ -73,7 +74,7 @@ namespace {
     FermiFloat massSum = 0.;
     FermiFloat massProduct = 1.;
     for (const auto fragmentPtr : split) {
-      auto fragmentMass = fragmentPtr->GetMass();
+      const auto fragmentMass = fragmentPtr->GetMass();
       massProduct *= fragmentMass;
       massSum += fragmentMass;
     }
@@ -179,7 +180,7 @@ namespace {
     auto& fragmentPool = FragmentPool::Instance();
     const auto fragmentCount = massPartition.size();
 
-    // count 
+    // count all possible splits due to multiplicity of fragments
     size_t splitsCount = 1;
     for (size_t fragmentIdx = 0; fragmentIdx < fragmentCount; ++fragmentIdx) {
       splitsCount *= fragmentPool.Count(AtomicMass(massPartition[fragmentIdx]),
@@ -190,41 +191,37 @@ namespace {
     }
 
     // allocate in advance
-    FragmentSplits splits(splitsCount);
-    for (auto& split: splits) {
-      split.reserve(fragmentCount);
-    }
+    FragmentSplits splits(splitsCount, FragmentVector(fragmentCount));
 
     // incrementally build splits
-    // chosen order matters, because later there is no need to sort splits to remove duplicates
+    // !! chosen order matters, because later there we need to remove duplicates
+    size_t groupSize = splitsCount;
     for (size_t fragmentIdx = 0; fragmentIdx < fragmentCount; ++fragmentIdx) {
-      auto fragmentRange = fragmentPool.GetFragments(AtomicMass(massPartition[fragmentIdx]),
-                                                     ChargeNumber(chargePartition[fragmentIdx]));
-      size_t offset = 0;
-      // must be same as count, but we have random access iterator, so it would be faster
-      const size_t stride = std::distance(fragmentRange.begin(), fragmentRange.end());
-      for (const auto fragmentPtr : fragmentRange) {
-        for (size_t pos = offset; pos < splitsCount; pos += stride) {
-          splits[pos].emplace_back(fragmentPtr);
+      const auto fragmentRange = fragmentPool.GetFragments(AtomicMass(massPartition[fragmentIdx]),
+                                                           ChargeNumber(chargePartition[fragmentIdx]));
+      // no remainder here!
+      const size_t multiplicity = std::distance(fragmentRange.begin(), fragmentRange.end());
+      groupSize /= multiplicity;
+
+      for (size_t offset = 0; offset < splitsCount;) {
+        for (const auto fragmentPtr : fragmentRange) {
+          for (size_t pos = 0; pos < groupSize; ++pos) {
+            splits[offset + pos][fragmentIdx] = fragmentPtr;
+          }
+          offset += groupSize;
         }
-        ++offset;
       }
     }
 
-    return splits;
-  }
-
-  void AddUniqueSplits(FragmentSplits& splits, std::vector<FragmentVector>&& sortedSplits) {
-    // sort particles to compare
-    for (auto& split : sortedSplits) {
+    // remove duplicate splits
+    for (auto& split : splits) {
       std::sort(split.begin(), split.end(), std::greater<>());
-      // greater, because they already partially sorted as greater 
+      // greater, because they already partially sorted as greater due to integer partition
     }
+    const auto uniqueEndIt = std::unique(splits.begin(), splits.end());
+    splits.resize(uniqueEndIt - splits.begin());
 
-    auto uniqueEnd = std::unique(sortedSplits.begin(), sortedSplits.end());
-    splits.insert(splits.end(),
-                  std::make_move_iterator(sortedSplits.begin()),
-                  std::make_move_iterator(uniqueEnd));
+    return splits;
   }
 } // namespace
 
@@ -248,7 +245,10 @@ void fermi::GenerateSplits(NucleiData nucleiData, FragmentSplits& splits) {
       for (auto& chargePartition : IntegerPartition(nucleiData.chargeNumber, fragmentCount, 0)) {
         // Some splits are invalid, some nuclei doesn't exist
         if (auto partitionSplits = PossibleSplits(massPartition, chargePartition); !partitionSplits.empty()) {
-          AddUniqueSplits(splits, std::move(partitionSplits));
+          splits.insert(splits.end(),
+            std::make_move_iterator(partitionSplits.begin()),
+            std::make_move_iterator(partitionSplits.end())
+          );
         }
       }
     }

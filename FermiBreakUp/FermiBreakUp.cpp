@@ -52,6 +52,7 @@ namespace {
       splitMasses.begin(),
       std::mem_fn(&Fragment::GetTotalEnergy));
 
+    // 
     FermiPhaseSpaceDecay phaseSampler;
     std::vector<LorentzVector> particlesMomentum;
     try {
@@ -104,8 +105,6 @@ std::vector<Particle> FermiBreakUp::BreakItUp(const Particle& particle) const {
       LOG_DEBUG("Particle is stable with excitation energy = " << particle.GetExcitationEnergy() / CLHEP::MeV << " MeV");
       auto splits = GenerateSplits(particle.GetNucleiData());
       splitsPtr = cache_->Insert(particle.GetNucleiData(), std::move(splits));
-
-      ASSERT_MSG(splitsPtr != nullptr, "");
     } else {
       LOG_DEBUG("Splits taken from cache");
     }
@@ -126,6 +125,7 @@ std::vector<Particle> FermiBreakUp::SelectSplit(const Particle& particle, const 
   }
 
   // get phase space weights for every split
+  // we can't cache them, because calculations is probabilistic
   weights_.resize(splits.size());
   std::transform(
     splits.begin(), splits.end(), 

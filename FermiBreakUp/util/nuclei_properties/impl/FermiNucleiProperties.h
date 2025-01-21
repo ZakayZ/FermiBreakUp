@@ -40,8 +40,6 @@ namespace fermi {
       bool isCached = false; // value has been calculated earlier
     };
 
-    [[nodiscard]] static size_t GetSlot(AtomicMass atomicMass, ChargeNumber chargeNumber);
-
     mutable std::vector<MassData> nucleiMasses_;
   };
 

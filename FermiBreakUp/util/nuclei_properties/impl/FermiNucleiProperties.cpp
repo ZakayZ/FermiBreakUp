@@ -55,6 +55,12 @@ namespace {
 
     return mass;
   }
+
+  inline size_t GetSlot(AtomicMass atomicMass, ChargeNumber chargeNumber) {
+    const auto mass = FermiUInt(atomicMass);
+    const auto charge = FermiUInt(chargeNumber);
+    return (mass * (mass + 1)) / 2 + charge;
+  }
 } // namespace
 
 FermiNucleiProperties::FermiNucleiProperties()
@@ -114,10 +120,4 @@ void FermiNucleiProperties::AddStableNuclei(AtomicMass atomicMass, ChargeNumber 
 
 void FermiNucleiProperties::AddStableNuclei(NucleiData nucleiData, FermiFloat mass) {
   return AddStableNuclei(nucleiData.atomicMass, nucleiData.chargeNumber, mass);
-}
-
-size_t FermiNucleiProperties::GetSlot(AtomicMass atomicMass, ChargeNumber chargeNumber) {
-  const auto mass = FermiUInt(atomicMass);
-  const auto charge = FermiUInt(chargeNumber);
-  return (mass * (mass + 1)) / 2 + charge;
 }

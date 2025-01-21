@@ -54,8 +54,6 @@ namespace fermi {
     void AddFragment(const Fragment& fragment);
 
   private:
-    [[nodiscard]] static size_t GetSlot(AtomicMass atomicMass, ChargeNumber chargeNumber);
-
     static inline const Container EmptyContainer_ = {};
 
     std::vector<Container> fragments_;

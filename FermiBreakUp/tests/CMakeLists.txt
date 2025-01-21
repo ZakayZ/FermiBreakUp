@@ -15,9 +15,9 @@ include(GoogleTest)
 
 set(Tests
         SplitTest.cpp
-        # PartitionTest.cpp
-        # TableTests.cpp
-        # BreakUpTest.cpp
+        PartitionTest.cpp
+        TableTests.cpp
+        BreakUpTest.cpp
 )
 
 add_executable(FermiTest ${Tests})
