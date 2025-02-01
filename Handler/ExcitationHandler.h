@@ -2,8 +2,8 @@
 // Created by Artem Novikov on 17.05.2023.
 //
 
-#ifndef FERMIBREAKUP_HANDLER_EXCITATIONHANDLER_H_
-#define FERMIBREAKUP_HANDLER_EXCITATIONHANDLER_H_
+#ifndef FERMIBREAKUPHANDLEREXCITATIONHANDLERH_
+#define FERMIBREAKUPHANDLEREXCITATIONHANDLERH_
 
 #include <functional>
 #include <memory>
@@ -14,7 +14,6 @@
 #include "G4ReactionProductVector.hh"
 #include "G4IonTable.hh"
 #include "G4DeexPrecoParameters.hh"
-#include "G4Fragment.hh"
 #include "G4NistManager.hh"
 
 #include "G4VMultiFragmentation.hh"
@@ -39,43 +38,43 @@ class ExcitationHandler {
 
   std::vector<G4ReactionProduct> BreakItUp(const G4Fragment& fragment);
 
-  /// parameters setters
+  // parameters setters
   ExcitationHandler& SetMultiFragmentation(std::unique_ptr<G4VMultiFragmentation>&& model = DefaultMultiFragmentation()) {
-    multi_fragmentation_model_ = std::move(model);
+    multiFragmentationModel_ = std::move(model);
     return *this;
   }
 
   ExcitationHandler& SetFermiBreakUp(std::unique_ptr<G4VFermiBreakUp>&& model = DefaultFermiBreakUp(),
-                                     bool set_models = true) {
-    fermi_break_up_model_ = std::move(model);
-    if (set_models) {
-      evaporation_model_->SetFermiBreakUp(fermi_break_up_model_.get());
+                                     bool setModels = true) {
+    fermiBreakUpModel_ = std::move(model);
+    if (setModels) {
+      evaporationModel_->SetFermiBreakUp(fermiBreakUpModel_.get());
     }
     return *this;
   }
 
   ExcitationHandler& SetEvaporation(std::unique_ptr<G4VEvaporation>&& model = DefaultEvaporation(),
-                                    bool set_models = true) {
-    evaporation_model_ = std::move(model);
-    if (set_models) {
-      evaporation_model_->SetPhotonEvaporation(photon_evaporation_model_.get());
-      evaporation_model_->SetFermiBreakUp(fermi_break_up_model_.get());
+                                    bool setModels = true) {
+    evaporationModel_ = std::move(model);
+    if (setModels) {
+      evaporationModel_->SetPhotonEvaporation(photonEvaporationModel_.get());
+      evaporationModel_->SetFermiBreakUp(fermiBreakUpModel_.get());
     }
     return *this;
   }
 
   ExcitationHandler& SetPhotonEvaporation(std::unique_ptr<G4VEvaporationChannel>&& model = DefaultPhotonEvaporation(),
-                                          bool set_models = true) {
-    photon_evaporation_model_ = std::move(model);
-    if (set_models) {
-      evaporation_model_->SetPhotonEvaporation(photon_evaporation_model_.get());
+                                          bool setModels = true) {
+    photonEvaporationModel_ = std::move(model);
+    if (setModels) {
+      evaporationModel_->SetPhotonEvaporation(photonEvaporationModel_.get());
     }
     return *this;
   }
 
   template <class F>
   ExcitationHandler& SetMultiFragmentationCondition(F&& f) {
-    multi_fragmentation_condition_ = std::forward<F>(f);
+    multiFragmentationCondition_ = std::forward<F>(f);
     return *this;
   }
 
@@ -85,7 +84,7 @@ class ExcitationHandler {
 
   template <class F>
   ExcitationHandler& SetFermiBreakUpCondition(F&& f) {
-    fermi_condition_ = std::forward<F>(f);
+    fermiCondition_ = std::forward<F>(f);
     return *this;
   }
 
@@ -95,7 +94,7 @@ class ExcitationHandler {
 
   template <class F>
   ExcitationHandler& SetEvaporationCondition(F&& f) {
-    evaporation_condition_ = std::forward<F>(f);
+    evaporationCondition_ = std::forward<F>(f);
     return *this;
   }
 
@@ -105,7 +104,7 @@ class ExcitationHandler {
 
   template <class F>
   ExcitationHandler& SetPhotonEvaporationCondition(F&& f) {
-    photon_evaporation_condition_ = std::forward<F>(f);
+    photonEvaporationCondition_ = std::forward<F>(f);
     return *this;
   }
 
@@ -114,47 +113,47 @@ class ExcitationHandler {
   }
 
   ExcitationHandler& SetStableThreshold(Float threshold) {
-    stable_threshold_ = threshold;
+    stableThreshold_ = threshold;
     return *this;
   }
 
-  /// parameters getters
-  std::unique_ptr<G4VMultiFragmentation>& GetMultiFragmentation() { return multi_fragmentation_model_; }
+  // parameters getters
+  std::unique_ptr<G4VMultiFragmentation>& GetMultiFragmentation() { return multiFragmentationModel_; }
 
-  const std::unique_ptr<G4VMultiFragmentation>& GetMultiFragmentation() const { return multi_fragmentation_model_; }
+  const std::unique_ptr<G4VMultiFragmentation>& GetMultiFragmentation() const { return multiFragmentationModel_; }
 
-  std::unique_ptr<G4VFermiBreakUp>& GetFermiBreakUp() { return fermi_break_up_model_; }
+  std::unique_ptr<G4VFermiBreakUp>& GetFermiBreakUp() { return fermiBreakUpModel_; }
 
-  const std::unique_ptr<G4VFermiBreakUp>& GetFermiBreakUp() const { return fermi_break_up_model_; }
+  const std::unique_ptr<G4VFermiBreakUp>& GetFermiBreakUp() const { return fermiBreakUpModel_; }
 
-  std::unique_ptr<G4VEvaporation>& GetEvaporation() { return evaporation_model_; }
+  std::unique_ptr<G4VEvaporation>& GetEvaporation() { return evaporationModel_; }
 
-  const std::unique_ptr<G4VEvaporation>& GetEvaporation() const { return evaporation_model_; }
+  const std::unique_ptr<G4VEvaporation>& GetEvaporation() const { return evaporationModel_; }
 
-  Condition& GetMultiFragmentationCondition() { return multi_fragmentation_condition_; }
+  Condition& GetMultiFragmentationCondition() { return multiFragmentationCondition_; }
 
-  const Condition& GetMultiFragmentationCondition() const { return multi_fragmentation_condition_; }
+  const Condition& GetMultiFragmentationCondition() const { return multiFragmentationCondition_; }
 
-  Condition& GetFermiBreakUpCondition() { return fermi_condition_; }
+  Condition& GetFermiBreakUpCondition() { return fermiCondition_; }
 
-  const Condition& GetFermiBreakUpCondition() const { return fermi_condition_; }
+  const Condition& GetFermiBreakUpCondition() const { return fermiCondition_; }
 
-  Condition& GetEvaporationCondition() { return evaporation_condition_; }
+  Condition& GetEvaporationCondition() { return evaporationCondition_; }
 
-  const Condition& GetEvaporationCondition() const { return evaporation_condition_; }
+  const Condition& GetEvaporationCondition() const { return evaporationCondition_; }
 
-  Condition& GetPhotonEvaporationCondition() { return photon_evaporation_condition_; }
+  Condition& GetPhotonEvaporationCondition() { return photonEvaporationCondition_; }
 
-  const Condition& GetPhotonEvaporationCondition() const { return photon_evaporation_condition_; }
+  const Condition& GetPhotonEvaporationCondition() const { return photonEvaporationCondition_; }
 
-  Float GetStableThreshold() const { return stable_threshold_; }
+  Float GetStableThreshold() const { return stableThreshold_; }
 
  protected:
   static G4ParticleDefinition* SpecialParticleDefinition(const G4Fragment& fragment);
 
-  static void EvaporationError(const G4Fragment& fragment, const G4Fragment& current_fragment, size_t iter);
+  static void EvaporationError(const G4Fragment& fragment, const G4Fragment& currentFragment, size_t iter);
 
-  /// default models and conditions
+  // default models and conditions
   static std::unique_ptr<G4VMultiFragmentation> DefaultMultiFragmentation();
 
   static std::unique_ptr<G4VFermiBreakUp> DefaultFermiBreakUp();
@@ -178,36 +177,32 @@ class ExcitationHandler {
   bool IsStable(const G4Fragment& fragment, const G4NistManager* nist) const;
 
   void ApplyMultiFragmentation(std::unique_ptr<G4Fragment> fragment, G4FragmentVector& results,
-                               std::queue<G4Fragment*>& next_stage);
+                               std::queue<G4Fragment*>& nextStage);
 
   void ApplyFermiBreakUp(std::unique_ptr<G4Fragment> fragment, G4FragmentVector& results,
-                         std::queue<G4Fragment*>& next_stage);
+                         std::queue<G4Fragment*>& nextStage);
 
   void ApplyEvaporation(std::unique_ptr<G4Fragment> fragment, G4FragmentVector& results,
-                        std::queue<G4Fragment*>& next_stage);
+                        std::queue<G4Fragment*>& nextStage);
 
   void ApplyPhotonEvaporation(std::unique_ptr<G4Fragment> fragment, G4FragmentVector& results);
 
   void GroupFragments(const G4FragmentVector& fragments, G4FragmentVector& results,
-                      std::queue<G4Fragment*>& next_stage);
+                      std::queue<G4Fragment*>& nextStage);
 
   std::vector<G4ReactionProduct> ConvertResults(const G4FragmentVector& results);
 
-  std::unique_ptr<G4VMultiFragmentation> multi_fragmentation_model_;
-  std::unique_ptr<G4VFermiBreakUp> fermi_break_up_model_;
-  std::unique_ptr<G4VEvaporationChannel> photon_evaporation_model_;
-  std::unique_ptr<G4VEvaporation> evaporation_model_;
+  std::unique_ptr<G4VMultiFragmentation> multiFragmentationModel_;
+  std::unique_ptr<G4VFermiBreakUp> fermiBreakUpModel_;
+  std::unique_ptr<G4VEvaporationChannel> photonEvaporationModel_;
+  std::unique_ptr<G4VEvaporation> evaporationModel_;
 
-  Condition multi_fragmentation_condition_;
-  Condition fermi_condition_;
-  Condition photon_evaporation_condition_;
-  Condition evaporation_condition_;
+  Condition multiFragmentationCondition_;
+  Condition fermiCondition_;
+  Condition photonEvaporationCondition_;
+  Condition evaporationCondition_;
 
-  Float stable_threshold_ = 0;
-
-  static const size_t EvaporationIterationThreshold;
-
-  static const char* ErrorNoModel;
+  Float stableThreshold_ = 0;
 };
 
-#endif //FERMIBREAKUP_HANDLER_EXCITATIONHANDLER_H_
+#endif //FERMIBREAKUPHANDLEREXCITATIONHANDLERH_

@@ -2,34 +2,145 @@
 // Created by Artem Novikov on 21.02.2023.
 //
 
+#include <algorithm>
+#include <sstream>
+
+#include "Splitter.h"
+#include "util/DataTypes.h"
+#include <CLHEP/Units/PhysicalConstants.h>
+
+#include "fragment_pool/fragments/Fragment.h"
+#include "phase_decay/FermiPhaseSpaceDecay.h"
+#include "util/Logger.h"
+#include "util/Particle.h"
+#include "util/Randomizer.h"
+
 #include "FermiBreakUp.h"
-#include "Utilities/DataTypes.h"
 
-using namespace fermi;
+using namespace fbu;
 
-FermiBreakUp::FermiBreakUp() : fermi_configurations_(DefaultConfigurations()) {}
+namespace {
+  constexpr char SPACES_OFFSET[] = "   ";
 
-FermiBreakUp::FermiBreakUp(std::unique_ptr<VConfigurations>&& configurations)
-    : fermi_configurations_(std::move(configurations)) {}
+  FermiStr LogProducts(const std::vector<Particle>& particles) {
+    std::ostringstream out;
 
-ParticleVector FermiBreakUp::BreakItUp(const Particle& nucleus) {
-  /// CHECK that Excitation Energy > 0
-  if (nucleus.GetExcitationEnergy() < 0) {
-    return {nucleus};
+    out << "[\n";
+    for (const auto& particle: particles) {
+      out << SPACES_OFFSET << particle << ";\n";
+    }
+    out << "]";
+
+    return std::move(out).str();
   }
 
-  /// Total energy of nucleus in nucleus rest frame
-  FermiFloat total_energy = nucleus.GetMomentum().m();
-
-  /// Split the nucleus
-  auto fragment_split = fermi_configurations_->GenerateSplits(nucleus.GetNucleiData(), total_energy).ChooseSplit();
-  if (!fragment_split.has_value()) {
-    return {nucleus};
+  const LorentzVector ChangeFrameOfReference(const LorentzVector& vec, const Vector3& boost) {
+    auto copy = vec;
+    copy.boost(boost);
+    return copy;
   }
 
-  return ConvertToParticles(nucleus, fragment_split.value());
+  std::vector<Particle> SplitToParticles(const Particle& sourceParticle, const FragmentVector& split) {
+    LOG_TRACE("Converting split to particles");
+
+    std::vector<FermiFloat> splitMasses(split.size());
+    std::transform(
+      split.begin(), split.end(),
+      splitMasses.begin(),
+      std::mem_fn(&Fragment::GetTotalEnergy));
+
+    FermiPhaseSpaceDecay phaseSampler;
+    std::vector<LorentzVector> particlesMomentum;
+    try {
+      particlesMomentum = phaseSampler.CalculateDecay(sourceParticle.GetMomentum(), splitMasses);
+    } catch (std::exception& e) {
+      LOG_ERROR(e.what() 
+        << " with split weight: "
+        << Splitter::DecayWeight(split, sourceParticle.GetAtomicMass(), sourceParticle.GetMomentum().m()));
+      return {sourceParticle};
+    }
+
+    // Go back to the Lab Frame
+    std::vector<Particle> particleSplit;
+    particleSplit.reserve(2 * split.size());
+    const auto boostVector = sourceParticle.GetMomentum().boostVector();
+    for (size_t fragmentIdx = 0; fragmentIdx < split.size(); ++fragmentIdx) {
+      const auto fragmentMomentum = ChangeFrameOfReference(particlesMomentum[fragmentIdx], boostVector);
+      split[fragmentIdx]->AppendDecayFragments(fragmentMomentum, particleSplit);
+    }
+
+    LOG_DEBUG("Break up products: " << LogProducts(particleSplit));
+    return particleSplit;
+  }
+
+  FermiStr LogSplit(const FragmentVector& split) {
+    std::ostringstream out;
+
+    out << "[\n";
+    for (const auto fragmentPtr: split) {
+      out << SPACES_OFFSET << *fragmentPtr << ";\n";
+    }
+    out << "]";
+
+    return std::move(out).str();
+  }
+} // namespace
+
+FermiBreakUp::FermiBreakUp(std::unique_ptr<SplitCache>&& cache)
+  : cache_(std::move(cache))
+{
 }
 
-std::unique_ptr<VConfigurations> FermiBreakUp::DefaultConfigurations() {
-  return std::make_unique<Configurations>();
+std::vector<Particle> FermiBreakUp::SelectSplit(const Particle& particle, const FragmentSplits& splits) const {
+  LOG_TRACE("Selecting Split for " << particle << " from " << splits.size() << " splits");
+  if (splits.empty()) {
+    LOG_DEBUG("No splits found");
+    return {particle};
+  }
+
+  // get phase space weights for every split
+  // we can't cache them, because calculations is probabilistic
+  weights_.resize(splits.size());
+  std::transform(
+    splits.begin(), splits.end(), 
+    weights_.begin(),
+    [atomicMass=particle.GetAtomicMass(), totalEnergy=particle.GetMomentum().m()](const auto& split) {
+      return Splitter::DecayWeight(split, atomicMass, totalEnergy);
+    });
+
+  if (std::all_of(weights_.begin(), weights_.end(), [](auto weight) { return weight == 0.; })) {
+    LOG_WARN("Every split has zero weight");
+    return {particle};
+  }
+
+  const auto& chosenSplit = splits[Randomizer::SampleDistribution(weights_)];
+  LOG_DEBUG("From " << splits.size() << " splits chosen split: " << LogSplit(chosenSplit));
+
+  return SplitToParticles(particle, chosenSplit);
+}
+
+std::vector<Particle> FermiBreakUp::BreakItUp(const Particle& particle) const {
+  LOG_TRACE("Breaking up particle: " << particle);
+
+  if (particle.GetExcitationEnergy() < 0.) {
+    LOG_DEBUG("Particle is stable with excitation energy = " << particle.GetExcitationEnergy());
+    return {particle};
+  }
+
+  if (cache_) {
+    auto splitsPtr = cache_->Get(particle.GetNucleiData());
+    if (splitsPtr == nullptr) {
+      LOG_DEBUG("Particle is stable with excitation energy = " << particle.GetExcitationEnergy() / CLHEP::MeV << " MeV");
+      auto splits = Splitter::GenerateSplits(particle.GetNucleiData());
+      splitsPtr = cache_->Insert(particle.GetNucleiData(), std::move(splits));
+    } else {
+      LOG_DEBUG("Splits taken from cache");
+    }
+
+    return SelectSplit(particle, *splitsPtr);
+  } else {
+    splits_.clear();
+    Splitter::GenerateSplits(particle.GetNucleiData(), splits_);
+    return SelectSplit(particle, splits_);
+  }
 }

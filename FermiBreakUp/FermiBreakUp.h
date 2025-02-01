@@ -2,36 +2,36 @@
 // Created by Artem Novikov on 21.02.2023.
 //
 
-#ifndef FERMIBREAKUP_MYFERMIBREAKUP_FERMIBREAKUP_H_
-#define FERMIBREAKUP_MYFERMIBREAKUP_FERMIBREAKUP_H_
+#ifndef FERMIBREAKUP_FERMIBREAKUP_H
+#define FERMIBREAKUP_FERMIBREAKUP_H
 
 #include <memory>
 
-#include "Particle.h"
+#include "Splitter.h"
+#include "util/Particle.h"
 
-#include "VConfigurations.h"
-#include "Configurations/Configurations.h"
+namespace fbu {
 
-#include "VFermiBreakUp.h"
-
-namespace fermi {
-
-  class FermiBreakUp : public VFermiBreakUp {
+  class FermiBreakUp {
   public:
-    FermiBreakUp();
+    using SplitCache = VCache<NucleiData, FragmentSplits>;
 
-    FermiBreakUp(std::unique_ptr<VConfigurations>&& configurations);
+    FermiBreakUp() = default;
 
-    ParticleVector BreakItUp(const Particle& nucleus) override final;
+    FermiBreakUp(std::unique_ptr<SplitCache>&& cache);
 
-    ~FermiBreakUp() = default;
-
-    static std::unique_ptr<VConfigurations> DefaultConfigurations();
+    std::vector<Particle> BreakItUp(const Particle& nucleus) const;
 
   private:
-    std::unique_ptr<VConfigurations> fermi_configurations_;
+    std::vector<Particle> SelectSplit(const Particle& particle, const FragmentSplits& splits) const;
+
+    mutable std::unique_ptr<SplitCache> cache_ = nullptr;
+
+    // improve performance, reusing allocated memory
+    mutable std::vector<FermiFloat> weights_;
+    mutable FragmentSplits splits_;
   };
 
-}  // namespace fermi
+} // namespace fbu
 
-#endif //FERMIBREAKUP_MYFERMIBREAKUP_FERMIBREAKUP_H_
+#endif // FERMIBREAKUP_FERMIBREAKUP_H

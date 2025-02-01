@@ -8,7 +8,7 @@ namespace cola {
 
   class G4HandlerFactory final : public cola::VFactory {
   public:
-    cola::VFilter* create(const std::map<std::string, std::string>& params) override final {
+    cola::VFilter* create(const std::map<std::string, std::string>& params) final {
       return DoCreate(params);
     }
 
@@ -16,4 +16,4 @@ namespace cola {
     cola::G4HandlerConverter* DoCreate(const std::map<std::string, std::string>& params);
   };
 
-}  // namespace cola
+} // namespace cola

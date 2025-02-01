@@ -54,11 +54,11 @@ def draw_particle_count():
 
     # plt.suptitle("Average fragment count with Fermi Break Up")
     plt.tight_layout()
-    plt.savefig("Data/img/FragmentCount.png", bbox_inches='tight')
+    plt.savefig("Results/img/FragmentCount.png", bbox_inches='tight')
     plt.show()
 
 
-# draw_particle_count()
+draw_particle_count()
 
 
 def parse_momentum(filename: str):
@@ -136,7 +136,7 @@ def draw_momentum():
 
     plt.suptitle(r"Fermi break-up of $^{12}_6$N with excitation energy 5 MeV/nucleon")
     plt.tight_layout()
-    plt.savefig('Data/img/FragmentDistribution2D.png', bbox_inches='tight')
+    plt.savefig('Results/img/FragmentDistribution2D.png', bbox_inches='tight')
     plt.show()
 
 
@@ -197,11 +197,11 @@ def draw_momentum_distr():
 
     plt.suptitle(r"Fermi break-up of $^{12}_6$N with excitation energy 5 MeV/nucleon")
     plt.tight_layout()
-    plt.savefig('Data/img/FragmentDistribution.png', bbox_inches='tight')
+    plt.savefig('Results/img/FragmentDistribution.png', bbox_inches='tight')
     plt.show()
 
 
-# draw_momentum_distr()
+draw_momentum_distr()
 
 
 def get_az_df(data):
@@ -215,27 +215,27 @@ def get_az_df(data):
     return pd.DataFrame({"A": A, "Z": Z})
 
 
-def draw_distribution():
-    elements = ["C12_05", "C12_4", "C13_05", "C13_4", "N12_05", "N12_4", "N13_05", "N13_4", "Au197_05", "Au197_4"]
-    names = [r"$^{12}_6C$", r"$^{13}_6C$", r"$^{12}_7N$", r"$^{13}_7N$", r"$^{197}_{79}Au$"]
-    plt.subplots(2, 5, figsize=(18, 10))
-    for id, element in enumerate(elements):
-        with open(f"Results/{element}_distr.dat", "r") as f:
-            res = get_az_df(json.load(f))
-            plt.subplot(5, 2, id + 1)
-            plt.scatter(x=res["A"], y=res["Z"], alpha=0.2)
-            plt.grid(True)
-            plt.grid(True, which='minor')
-            plt.minorticks_on()
-            plt.xlabel('A')
-            plt.ylabel('Z')
-            plt.title(f'{names[id // 2]} {"0.5" if id % 2 == 0 else "4.0"} MeV/nucleon')
+# def draw_distribution():
+#     elements = ["C12_05", "C12_4", "C13_05", "C13_4", "N12_05", "N12_4", "N13_05", "N13_4", "Au197_05", "Au197_4"]
+#     names = [r"$^{12}_6C$", r"$^{13}_6C$", r"$^{12}_7N$", r"$^{13}_7N$", r"$^{197}_{79}Au$"]
+#     plt.subplots(2, 5, figsize=(18, 10))
+#     for id, element in enumerate(elements):
+#         with open(f"Results/{element}_distr.dat", "r") as f:
+#             res = get_az_df(json.load(f))
+#             plt.subplot(5, 2, id + 1)
+#             plt.scatter(x=res["A"], y=res["Z"], alpha=0.2)
+#             plt.grid(True)
+#             plt.grid(True, which='minor')
+#             plt.minorticks_on()
+#             plt.xlabel('A')
+#             plt.ylabel('Z')
+#             plt.title(f'{names[id // 2]} {"0.5" if id % 2 == 0 else "4.0"} MeV/nucleon')
 
-    plt.tight_layout()
-    plt.suptitle("Fragments distribution")
-    plt.savefig(f"Data/img/HandlerCountScatter.png", bbox_inches='tight')
+#     plt.tight_layout()
+#     plt.suptitle("fragments distribution")
+#     plt.savefig(f"data/img/HandlerCountScatter.png", bbox_inches='tight')
 
-    plt.show()
+#     plt.show()
 
 
 # draw_distribution()

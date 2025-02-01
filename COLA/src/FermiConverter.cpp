@@ -3,21 +3,21 @@
 //
 
 #include <FermiBreakUp.h>
-#include <Utilities/NucleiProperties/NucleiProperties.h>
+#include <util/nuclei_properties/NucleiProperties.h>
 
 #include "FermiConverter.h"
 
 using cola::FermiConverter;
 
 namespace {
-  fermi::Particle ColaToFermi(const cola::Particle& particle) {
+  fbu::Particle ColaToFermi(const cola::Particle& particle) {
     auto [A, Z] = particle.getAZ();
-    auto mass_number = MassNumber(A);
-    auto charge_number = ChargeNumber(Z);
+    auto atomicMass = AtomicMass(A);
+    auto chargeNumber = ChargeNumber(Z);
 
-    return fermi::Particle(
-      mass_number,
-      charge_number,
+    return fbu::Particle(
+      atomicMass,
+      chargeNumber,
       LorentzVector(
         particle.momentum.x,
         particle.momentum.y,
@@ -27,7 +27,7 @@ namespace {
     );
   }
 
-  cola::Particle FermiToCola(const fermi::Particle& particle) {
+  cola::Particle FermiToCola(const fbu::Particle& particle) {
     return cola::Particle{
       .position=cola::LorentzVector{
         .t=0,
@@ -42,7 +42,7 @@ namespace {
         .z=particle.GetMomentum().z(),
       },
       .pdgCode=cola::AZToPdg(cola::AZ{
-        static_cast<int>(particle.GetMassNumber()),
+        static_cast<int>(particle.GetAtomicMass()),
         static_cast<int>(particle.GetChargeNumber())
       }),
       .pClass=cola::ParticleClass::produced,
@@ -50,16 +50,16 @@ namespace {
   }
 }
 
-FermiConverter::FermiConverter(std::unique_ptr<fermi::FermiBreakUp>&& model) : model_(std::move(model)) {}
+FermiConverter::FermiConverter(std::unique_ptr<fbu::FermiBreakUp>&& model) : model_(std::move(model)) {}
 
 std::unique_ptr<cola::EventData> FermiConverter::operator()(std::unique_ptr<cola::EventData>&& data) {
   cola::EventParticles results;
   for (const auto& particle : data->particles) {
-    /// apply model
-    auto model_result = model_->BreakItUp(ColaToFermi(particle));
+    // apply model
+    auto modelResult = model_->BreakItUp(ColaToFermi(particle));
 
-    /// convert model's results to cola format
-    for (const auto& fragment : model_result) {
+    // convert model's results to cola format
+    for (const auto& fragment : modelResult) {
       results.emplace_back(FermiToCola(fragment));
     }
   }

@@ -36,3 +36,5 @@
 OldFermiBreakUp
 .idea
 *build*
+.cache
+Results/
