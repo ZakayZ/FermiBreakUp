@@ -1,5 +1,0 @@
-@PACKAGE_INIT@
-
-find_package(COLA REQUIRED)
-
-include(@CMAKE_INSTALL_PREFIX@/lib/cmake/FermiBreakUp/FermiBreakUpExport.cmake)
