@@ -9,7 +9,7 @@
 
 #include "fragment_pool/fragments/Fragment.h"
 
-namespace fermi {
+namespace fbu {
 
   class DefaultPoolSource : private std::vector<const Fragment*> {
   private:
@@ -24,6 +24,6 @@ namespace fermi {
     using Container::cend;
   };
 
-} // namespace fermi
+} // namespace fbu
 
 #endif // FERMIBREAKUP_FRAGMENT_POOL_DATA_SOURCE_DEFAULTPOOLSOURCE_H

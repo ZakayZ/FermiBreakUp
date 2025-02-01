@@ -6,7 +6,7 @@
 
 #include "FragmentsStorage.h"
 
-using namespace fermi;
+using namespace fbu;
 
 namespace {
   inline size_t GetSlot(AtomicMass atomicMass, ChargeNumber chargeNumber) {

@@ -9,9 +9,9 @@
 
 #include <CLHEP/Units/PhysicalConstants.h>
 
-#include "Split.h"
+#include "Splitter.h"
 
-using namespace fermi;
+using namespace fbu;
 
 TEST(SplitTest, NoDuplicates) {
   FragmentSplits splits; // speeds up test
@@ -20,7 +20,7 @@ TEST(SplitTest, NoDuplicates) {
       const auto mass = AtomicMass(a);
       const auto charge = ChargeNumber(z);
       splits.clear();
-      GenerateSplits({mass, charge}, splits);
+      Splitter::GenerateSplits({mass, charge}, splits);
 
       for (auto& split : splits) {
         std::sort(split.begin(), split.end());

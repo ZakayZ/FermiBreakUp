@@ -22,7 +22,7 @@
 //  prOut << NucleiPropertiesTableAME12();
 //}
 
-using namespace fermi;
+using namespace fbu;
 
 void CalculateFragments(
   AtomicMass mass,
@@ -122,8 +122,8 @@ void CalculateMomentum(
 // void CalculateMomentumHandler(G4int mass, G4int charge, const std::string& dumpName, FermiFloat energy,
 //                        const Vector3& momentum, size_t tests = 1e4) {
 //   auto model = ExcitationHandler();
-//   auto fermi = std::make_unique<FermiBreakUp>(std::make_unique<LFUCache<NucleiData, FragmentSplits>>(1000));
-//   model.SetFermiBreakUp(std::make_unique<AAMCCFermiBreakUp>(std::move(fermi)));
+//   auto fbu = std::make_unique<FermiBreakUp>(std::make_unique<LFUCache<NucleiData, FragmentSplits>>(1000));
+//   model.SetFermiBreakUp(std::make_unique<AAMCCFermiBreakUp>(std::move(fbu)));
 //   std::ofstream out(dumpName);
 //   auto vec = LorentzVector(momentum.x(), momentum.y(), momentum.z(),
 //                            std::sqrt(std::pow(G4NucleiProperties::GetNuclearMass(mass, charge) + energy, 2)

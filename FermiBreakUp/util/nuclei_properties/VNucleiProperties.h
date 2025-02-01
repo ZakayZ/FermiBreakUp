@@ -7,7 +7,7 @@
 
 #include "util/DataTypes.h"
 
-namespace fermi {
+namespace fbu {
 
   class VNucleiProperties {
   public:
@@ -18,6 +18,6 @@ namespace fermi {
     virtual ~VNucleiProperties() = default;
   };
 
-} // namespace fermi
+} // namespace fbu
 
 #endif // FERMIBREAKUP_UTILITIES_NUCLEI_PROPERTIES_VNUCLEIPROPERTIES_H

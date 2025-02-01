@@ -14,7 +14,7 @@ class AAMCCFermiBreakUp : public G4VFermiBreakUp {
  public:
   AAMCCFermiBreakUp() = default;
 
-  AAMCCFermiBreakUp(fermi::FermiBreakUp&& model);
+  AAMCCFermiBreakUp(fbu::FermiBreakUp&& model);
 
   void Initialise() override;
 
@@ -25,7 +25,7 @@ class AAMCCFermiBreakUp : public G4VFermiBreakUp {
   G4bool IsApplicable(G4int Z, G4int A, G4double excitationEnergy) const override;
 
  private:
-  fermi::FermiBreakUp fermiModel_;
+  fbu::FermiBreakUp fermiModel_;
 };
 
 #endif // FERMIBREAKUPMYFERMIBREAKUPAAMCCFERMIBREAKUPH_

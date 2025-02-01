@@ -4,7 +4,7 @@
 
 #include "DataTypes.h"
 
-using namespace fermi;
+using namespace fbu;
 
 FermiStr std::to_string(AtomicMass mass) {
   return std::to_string(AtomicMass::ValueType(mass));

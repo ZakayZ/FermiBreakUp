@@ -33,7 +33,7 @@ set(fragment_pool
 )
 
 set(FermiBreakUpModel
-    Split.cpp
+    Splitter.cpp
     FermiBreakUp.cpp
 )
 

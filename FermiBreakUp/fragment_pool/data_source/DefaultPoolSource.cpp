@@ -11,7 +11,7 @@
 
 using CLHEP::MeV;
 
-using namespace fermi;
+using namespace fbu;
 
 DefaultPoolSource::DefaultPoolSource() {
   #define INSTANTIATE_MACRO(x, y) __CONCAT(x, y)

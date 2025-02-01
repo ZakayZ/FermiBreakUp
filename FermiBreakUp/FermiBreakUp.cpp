@@ -5,7 +5,7 @@
 #include <algorithm>
 #include <sstream>
 
-#include "Split.h"
+#include "Splitter.h"
 #include "util/DataTypes.h"
 #include <CLHEP/Units/PhysicalConstants.h>
 
@@ -17,7 +17,7 @@
 
 #include "FermiBreakUp.h"
 
-using namespace fermi;
+using namespace fbu;
 
 namespace {
   constexpr char SPACES_OFFSET[] = "   ";
@@ -40,11 +40,8 @@ namespace {
     return copy;
   }
 
-  std::vector<Particle> SplitToParticle(const Particle& sourceParticle, const FragmentVector& split) {
+  std::vector<Particle> SplitToParticles(const Particle& sourceParticle, const FragmentVector& split) {
     LOG_TRACE("Converting split to particles");
-
-    std::vector<Particle> particleSplit;
-    particleSplit.reserve(2 * split.size());
 
     std::vector<FermiFloat> splitMasses(split.size());
     std::transform(
@@ -52,17 +49,20 @@ namespace {
       splitMasses.begin(),
       std::mem_fn(&Fragment::GetTotalEnergy));
 
-    // 
     FermiPhaseSpaceDecay phaseSampler;
     std::vector<LorentzVector> particlesMomentum;
     try {
       particlesMomentum = phaseSampler.CalculateDecay(sourceParticle.GetMomentum(), splitMasses);
     } catch (std::exception& e) {
-      LOG_ERROR(e.what() << " with split weight: " << DecayWeight(split, sourceParticle.GetAtomicMass(), sourceParticle.GetMomentum().m()));
+      LOG_ERROR(e.what() 
+        << " with split weight: "
+        << Splitter::DecayWeight(split, sourceParticle.GetAtomicMass(), sourceParticle.GetMomentum().m()));
       return {sourceParticle};
     }
 
     // Go back to the Lab Frame
+    std::vector<Particle> particleSplit;
+    particleSplit.reserve(2 * split.size());
     const auto boostVector = sourceParticle.GetMomentum().boostVector();
     for (size_t fragmentIdx = 0; fragmentIdx < split.size(); ++fragmentIdx) {
       const auto fragmentMomentum = ChangeFrameOfReference(particlesMomentum[fragmentIdx], boostVector);
@@ -91,32 +91,6 @@ FermiBreakUp::FermiBreakUp(std::unique_ptr<SplitCache>&& cache)
 {
 }
 
-std::vector<Particle> FermiBreakUp::BreakItUp(const Particle& particle) const {
-  LOG_TRACE("Breaking up particle: " << particle);
-
-  if (particle.GetExcitationEnergy() < 0.) {
-    LOG_DEBUG("Particle is stable with excitation energy = " << particle.GetExcitationEnergy());
-    return {particle};
-  }
-
-  if (cache_) {
-    auto splitsPtr = cache_->Get(particle.GetNucleiData());
-    if (splitsPtr == nullptr) {
-      LOG_DEBUG("Particle is stable with excitation energy = " << particle.GetExcitationEnergy() / CLHEP::MeV << " MeV");
-      auto splits = GenerateSplits(particle.GetNucleiData());
-      splitsPtr = cache_->Insert(particle.GetNucleiData(), std::move(splits));
-    } else {
-      LOG_DEBUG("Splits taken from cache");
-    }
-
-    return SelectSplit(particle, *splitsPtr);
-  } else {
-    splits_.clear();
-    GenerateSplits(particle.GetNucleiData(), splits_);
-    return SelectSplit(particle, splits_);
-  }
-}
-
 std::vector<Particle> FermiBreakUp::SelectSplit(const Particle& particle, const FragmentSplits& splits) const {
   LOG_TRACE("Selecting Split for " << particle << " from " << splits.size() << " splits");
   if (splits.empty()) {
@@ -131,7 +105,7 @@ std::vector<Particle> FermiBreakUp::SelectSplit(const Particle& particle, const 
     splits.begin(), splits.end(), 
     weights_.begin(),
     [atomicMass=particle.GetAtomicMass(), totalEnergy=particle.GetMomentum().m()](const auto& split) {
-      return DecayWeight(split, atomicMass, totalEnergy);
+      return Splitter::DecayWeight(split, atomicMass, totalEnergy);
     });
 
   if (std::all_of(weights_.begin(), weights_.end(), [](auto weight) { return weight == 0.; })) {
@@ -142,5 +116,31 @@ std::vector<Particle> FermiBreakUp::SelectSplit(const Particle& particle, const 
   const auto& chosenSplit = splits[Randomizer::SampleDistribution(weights_)];
   LOG_DEBUG("From " << splits.size() << " splits chosen split: " << LogSplit(chosenSplit));
 
-  return SplitToParticle(particle, chosenSplit);
+  return SplitToParticles(particle, chosenSplit);
+}
+
+std::vector<Particle> FermiBreakUp::BreakItUp(const Particle& particle) const {
+  LOG_TRACE("Breaking up particle: " << particle);
+
+  if (particle.GetExcitationEnergy() < 0.) {
+    LOG_DEBUG("Particle is stable with excitation energy = " << particle.GetExcitationEnergy());
+    return {particle};
+  }
+
+  if (cache_) {
+    auto splitsPtr = cache_->Get(particle.GetNucleiData());
+    if (splitsPtr == nullptr) {
+      LOG_DEBUG("Particle is stable with excitation energy = " << particle.GetExcitationEnergy() / CLHEP::MeV << " MeV");
+      auto splits = Splitter::GenerateSplits(particle.GetNucleiData());
+      splitsPtr = cache_->Insert(particle.GetNucleiData(), std::move(splits));
+    } else {
+      LOG_DEBUG("Splits taken from cache");
+    }
+
+    return SelectSplit(particle, *splitsPtr);
+  } else {
+    splits_.clear();
+    Splitter::GenerateSplits(particle.GetNucleiData(), splits_);
+    return SelectSplit(particle, splits_);
+  }
 }

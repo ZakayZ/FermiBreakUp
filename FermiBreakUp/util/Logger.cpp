@@ -1,6 +1,6 @@
 #include "Logger.h"
 
-using namespace fermi;
+using namespace fbu;
 
 namespace {
   static const std::string LogLevelNames[static_cast<int>(LogLevel::NONE)] = {

@@ -4,7 +4,7 @@
 
 #include "StableFragment.h"
 
-using namespace fermi;
+using namespace fbu;
 
 void StableFragment::AppendDecayFragments(const LorentzVector& momentum, std::vector<Particle>& fragments) const {
   fragments.emplace_back(

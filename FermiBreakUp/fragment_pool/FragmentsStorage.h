@@ -10,7 +10,7 @@
 #include "util/DataTypes.h"
 #include "fragments/Fragment.h"
 
-namespace fermi {
+namespace fbu {
 
   class FragmentsStorage {
   private:
@@ -59,6 +59,6 @@ namespace fermi {
     std::vector<Container> fragments_;
   };
 
-} // namespace fermi
+} // namespace fbu
 
 #endif // FERMIBREAKUP_FRAGMENT_POOL_FRAGMENTSSTORAGE_H

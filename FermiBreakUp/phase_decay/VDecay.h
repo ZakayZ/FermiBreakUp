@@ -8,7 +8,7 @@
 #include <vector>
 #include "util/DataTypes.h"
 
-namespace fermi {
+namespace fbu {
   class VDecay {
   public:
     virtual std::vector<LorentzVector> CalculateDecay(
@@ -17,6 +17,6 @@ namespace fermi {
 
     virtual ~VDecay() = default;
   };
-} // namespace fermi
+} // namespace fbu
 
 #endif // FERMIBREAKUP_PHASE_DECAY_VDECAY_H

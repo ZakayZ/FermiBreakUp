@@ -8,7 +8,7 @@
 #include "Fragment.h"
 #include "util/nuclei_properties/NucleiProperties.h"
 
-using namespace fermi;
+using namespace fbu;
 
 Fragment::Fragment(
   AtomicMass atomicMass,

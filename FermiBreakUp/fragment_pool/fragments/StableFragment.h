@@ -7,7 +7,7 @@
 
 #include "Fragment.h"
 
-namespace fermi {
+namespace fbu {
 
   class StableFragment : public Fragment {
   public:
@@ -16,6 +16,6 @@ namespace fermi {
     void AppendDecayFragments(const LorentzVector& momentum, std::vector<Particle>& fragments) const override;
   };
 
-} // namespace fermi
+} // namespace fbu
 
 #endif // FERMIBREAKUP_FRAGMENT_POOL_FRAGMENTS_STABLEFRAGMENT_H

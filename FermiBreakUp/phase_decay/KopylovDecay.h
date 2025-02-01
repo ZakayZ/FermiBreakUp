@@ -7,7 +7,7 @@
 
 #include "VDecay.h"
 
-namespace fermi {
+namespace fbu {
 
   class KopylovDecay : public VDecay{
   public:
@@ -16,6 +16,6 @@ namespace fermi {
       const std::vector<FermiFloat>& fragmentsMass) const override;
   };
 
-} // namespace fermi
+} // namespace fbu
 
 #endif // FERMIBREAKUP_PHASE_DECAY_KOPYLOVDECAY_H

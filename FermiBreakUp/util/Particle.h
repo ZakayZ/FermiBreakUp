@@ -7,7 +7,7 @@
 
 #include "DataTypes.h"
 
-namespace fermi {
+namespace fbu {
 
   class Particle {
   public:
@@ -46,10 +46,10 @@ namespace fermi {
     FermiFloat excitationEnergy_ = 0;
   };
 
-} // namespace fermi
+} // namespace fbu
 
 namespace std {
-  ostream& operator<<(ostream&, const ::fermi::Particle&);
+  ostream& operator<<(ostream&, const ::fbu::Particle&);
 } // namespace std
 
 #endif // FERMIBREAKUP_PARTICLE_H

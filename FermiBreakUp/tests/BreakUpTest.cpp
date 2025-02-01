@@ -15,7 +15,7 @@
 #include "util/Randomizer.h"
 #include "util/Logger.h"
 
-using namespace fermi;
+using namespace fbu;
 
 namespace {
   std::array<FermiStr, 3> CacheTypes = {

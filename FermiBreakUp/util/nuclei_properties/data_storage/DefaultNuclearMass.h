@@ -9,7 +9,7 @@
 
 #include "util/DataTypes.h"
 
-namespace fermi {
+namespace fbu {
 
   class DefaultNuclearMass : private std::vector<std::pair<const NucleiData, FermiFloat>> {
   private:
@@ -26,6 +26,6 @@ namespace fermi {
     using Container::cend;
   };
 
-} // fermi
+} // fbu
 
 #endif // FERMIBREAKUP_UTILITIES_NUCLEI_PROPERTIES_DATA_STORAGE_DEFAULTNUCLEARMASS_H

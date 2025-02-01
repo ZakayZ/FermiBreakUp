@@ -15,9 +15,9 @@
 #include "util/IntegerPartition.h"
 #include "util/Logger.h"
 
-#include "Split.h"
+#include "Splitter.h"
 
-using namespace fermi;
+using namespace fbu;
 
 namespace {
   // Kappa = V/V_0 it is used in calculation of Coulomb energy, Kappa is dimensionless
@@ -134,7 +134,7 @@ namespace {
   }
 } // namespace
 
-FermiFloat fermi::DecayWeight(const FragmentVector& split, AtomicMass atomicMass, FermiFloat totalEnergy) {
+FermiFloat Splitter::DecayWeight(const FragmentVector& split, AtomicMass atomicMass, FermiFloat totalEnergy) {
   const auto kineticEnergy = KineticEnergy(split, totalEnergy); // in MeV
 
   // Check that there is enough energy to produce K fragments
@@ -225,13 +225,13 @@ namespace {
   }
 } // namespace
 
-FragmentSplits fermi::GenerateSplits(NucleiData nucleiData) {
+FragmentSplits Splitter::GenerateSplits(NucleiData nucleiData) {
   FragmentSplits splits;
   GenerateSplits(nucleiData, splits);
   return splits;
 }
 
-void fermi::GenerateSplits(NucleiData nucleiData, FragmentSplits& splits) {
+void Splitter::GenerateSplits(NucleiData nucleiData, FragmentSplits& splits) {
   ThrowOnInvalidInputs(nucleiData);
 
   splits.reserve(ExpectedSplitSize);

@@ -11,10 +11,10 @@
 #include "fragments/Fragment.h"
 #include "FragmentsStorage.h"
 
-namespace fermi {
+namespace fbu {
 
   using FragmentPool = Singleton<FragmentsStorage>;
 
-} // namespace fermi
+} // namespace fbu
 
 #endif // FERMIBREAKUP_FRAGMENT_POOL_FRAGMENTPOOL_H

@@ -11,7 +11,7 @@
 
 #include "Particle.h"
 
-using namespace fermi;
+using namespace fbu;
 
 Particle::Particle(AtomicMass atomicMass, ChargeNumber chargeNumber, const LorentzVector& momentum)
   : atomicMass_(atomicMass)

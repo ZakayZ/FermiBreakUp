@@ -14,7 +14,7 @@
 #include "DataTypes.h"
 #include "Logger.h"
 
-namespace fermi {
+namespace fbu {
   template <typename Key, typename Value>
   class LFUCache: public VCache<Key, Value> {
   public:
@@ -86,6 +86,6 @@ namespace fermi {
   private:
     std::optional<std::pair<Key, std::shared_ptr<Value>>> cachedItem_;
   };
-} // namespace fermi
+} // namespace fbu
 
 #endif // FERMIBREAKUP_UTILITIES_CACHE_H

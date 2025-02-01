@@ -20,7 +20,7 @@ using namespace cola;
 
 namespace {
   struct Config {
-    std::optional<std::unique_ptr<fermi::VConfigurations>> Configurations;
+    std::optional<std::unique_ptr<fbu::VConfigurations>> Configurations;
     std::optional<std::string> nucleiCsv;
   };
 }
@@ -30,11 +30,11 @@ cola::FermiConverter* FermiFactory::DoCreate(const std::map<std::string, std::st
   if (auto it = params.find("Configurations"); it != params.end()) {
     const auto& [_, name] = *it;
     if (name == "fast") {
-      config.Configurations = std::unique_ptr<fermi::VConfigurations>(new fermi::FastConfigurations());
+      config.Configurations = std::unique_ptr<fbu::VConfigurations>(new fbu::FastConfigurations());
     } else if (name == "cache") {
-      config.Configurations = std::unique_ptr<fermi::VConfigurations>(new fermi::CachedConfigurations());
+      config.Configurations = std::unique_ptr<fbu::VConfigurations>(new fbu::CachedConfigurations());
     } else if (name == "classic") {
-      config.Configurations = std::unique_ptr<fermi::VConfigurations>(new fermi::Configurations());
+      config.Configurations = std::unique_ptr<fbu::VConfigurations>(new fbu::Configurations());
     } else {
       throw std::runtime_error(R"(only "fast", "cache" and "classic" Configurations are supported)");
     }
@@ -46,12 +46,12 @@ cola::FermiConverter* FermiFactory::DoCreate(const std::map<std::string, std::st
   }
 
   auto Configurations = std::move(config.Configurations).valueOr(
-    std::unique_ptr<fermi::VConfigurations>(new fermi::FastConfigurations())
+    std::unique_ptr<fbu::VConfigurations>(new fbu::FastConfigurations())
   );
-  auto model = std::make_unique<fermi::FermiBreakUp>(std::move(Configurations));
+  auto model = std::make_unique<fbu::FermiBreakUp>(std::move(Configurations));
   if (config.nucleiCsv.hasValue()) {
-    auto storage = fermi::CSVNuclearMass(config.nucleiCsv.value());
-    fermi::NucleiProperties::Reset(new fermi::FastNucleiProperties(storage));
+    auto storage = fbu::CSVNuclearMass(config.nucleiCsv.value());
+    fbu::NucleiProperties::Reset(new fbu::FastNucleiProperties(storage));
   }
 
   return new FermiConverter(std::move(model));

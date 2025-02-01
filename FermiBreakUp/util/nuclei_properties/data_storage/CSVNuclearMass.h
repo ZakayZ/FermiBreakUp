@@ -9,7 +9,7 @@
 
 #include "util/DataTypes.h"
 
-namespace fermi {
+namespace fbu {
 
   class CSVNuclearMass : private std::unordered_map<NucleiData, FermiFloat> {
   private:
@@ -31,6 +31,6 @@ namespace fermi {
     using Container::cend;
   };
 
-} // namespace fermi
+} // namespace fbu
 
 #endif // FERMIBREAKUP_UTILITIES_NUCLEI_PROPERTIES_DATA_STORAGE_CSVNUCLEARMASS_H

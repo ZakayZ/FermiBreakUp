@@ -10,7 +10,7 @@
 #include <memory>
 #include <string>
 
-namespace fermi {
+namespace fbu {
   using FermiInt = int32_t;
 
   using FermiUInt = uint32_t;
@@ -127,35 +127,35 @@ namespace fermi {
     }
   };
 
-} // namespace fermi
+} // namespace fbu
 
 namespace std {
   template <>
-  struct hash<::fermi::NucleiData> {
-    size_t operator()(const ::fermi::NucleiData& key) const
+  struct hash<::fbu::NucleiData> {
+    size_t operator()(const ::fbu::NucleiData& key) const
     {
-      auto mass = ::fermi::FermiInt(key.atomicMass);
-      auto charge = ::fermi::FermiInt(key.chargeNumber);
+      auto mass = ::fbu::FermiInt(key.atomicMass);
+      auto charge = ::fbu::FermiInt(key.chargeNumber);
       return (mass * (mass + 1)) / 2 + charge;
     }
   };
 
-  string to_string(::fermi::AtomicMass mass);
-  string to_string(::fermi::ChargeNumber charge);
+  string to_string(::fbu::AtomicMass mass);
+  string to_string(::fbu::ChargeNumber charge);
 
-  std::ostream& operator<<(std::ostream& out, const ::fermi::AtomicMass& mass);
-  std::istream& operator>>(std::istream& in, ::fermi::AtomicMass& mass);
+  std::ostream& operator<<(std::ostream& out, const ::fbu::AtomicMass& mass);
+  std::istream& operator>>(std::istream& in, ::fbu::AtomicMass& mass);
 
-  std::ostream& operator<<(std::ostream& out, const ::fermi::ChargeNumber& charge);
-  std::istream& operator>>(std::istream& in, ::fermi::ChargeNumber& charge);
+  std::ostream& operator<<(std::ostream& out, const ::fbu::ChargeNumber& charge);
+  std::istream& operator>>(std::istream& in, ::fbu::ChargeNumber& charge);
 }
 
-constexpr fermi::AtomicMass operator ""_m(unsigned long long mass) {
-  return fermi::AtomicMass(mass);
+constexpr fbu::AtomicMass operator ""_m(unsigned long long mass) {
+  return fbu::AtomicMass(mass);
 }
 
-constexpr fermi::ChargeNumber operator ""_c(unsigned long long charge) {
-  return fermi::ChargeNumber(charge);
+constexpr fbu::ChargeNumber operator ""_c(unsigned long long charge) {
+  return fbu::ChargeNumber(charge);
 }
 
 #endif // FERMIBREAKUP_UTILITIES_DATATYPES_H

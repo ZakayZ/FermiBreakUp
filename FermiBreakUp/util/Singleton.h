@@ -7,7 +7,7 @@
 
 #include <memory>
 
-namespace fermi {
+namespace fbu {
   template <typename T>
   class Singleton {
   public:
@@ -64,6 +64,6 @@ namespace fermi {
     static inline std::unique_ptr<T> instance_;
   };
 
-} // namespace fermi
+} // namespace fbu
 
 #endif // FERMIBREAKUP_UTILITIES_SINGLETON_H

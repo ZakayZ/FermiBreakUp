@@ -11,7 +11,7 @@
 #include "util/DataTypes.h"
 #include "util/Particle.h"
 
-namespace fermi {
+namespace fbu {
   class Fragment;
 
   using FragmentVector = std::vector<const Fragment*>;
@@ -53,9 +53,9 @@ namespace fermi {
     FermiFloat excitationEnergy_;
   };
 
-} // namespace fermi
+} // namespace fbu
 
 namespace std {
-  ostream& operator<<(ostream&, const ::fermi::Fragment&);
+  ostream& operator<<(ostream&, const ::fbu::Fragment&);
 } // namespace std
 #endif // FERMIBREAKUP_FRAGMENT_POOL_FRAGMENTS_FRAGMENT_H

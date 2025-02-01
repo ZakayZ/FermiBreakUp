@@ -6,7 +6,7 @@
 
 #include "CSVNuclearMass.h"
 
-using namespace fermi;
+using namespace fbu;
 
 CSVNuclearMass::CSVNuclearMass(
   const FermiStr& csvFilename,

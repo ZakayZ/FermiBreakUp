@@ -4,7 +4,7 @@
 
 #include "IntegerPartition.h"
 
-using namespace fermi;
+using namespace fbu;
 
 IntegerPartition::IntegerPartition(uint32_t number, uint32_t termsCount, uint32_t base)
   : number_(number)

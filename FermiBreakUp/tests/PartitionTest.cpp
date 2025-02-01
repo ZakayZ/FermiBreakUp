@@ -7,7 +7,7 @@
 
 #include "util/IntegerPartition.h"
 
-using namespace fermi;
+using namespace fbu;
 
 size_t factorial(size_t num) {
   size_t fact = 1;

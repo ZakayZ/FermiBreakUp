@@ -6,7 +6,7 @@
 #include "phase_decay/FermiPhaseSpaceDecay.h"
 #include "util/nuclei_properties/NucleiProperties.h"
 
-using namespace fermi;
+using namespace fbu;
 
 UnstableFragment::UnstableFragment(
   AtomicMass atomicMass,

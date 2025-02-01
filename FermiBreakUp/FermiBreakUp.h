@@ -7,10 +7,10 @@
 
 #include <memory>
 
-#include "Split.h"
+#include "Splitter.h"
 #include "util/Particle.h"
 
-namespace fermi {
+namespace fbu {
 
   class FermiBreakUp {
   public:
@@ -25,13 +25,13 @@ namespace fermi {
   private:
     std::vector<Particle> SelectSplit(const Particle& particle, const FragmentSplits& splits) const;
 
-    std::unique_ptr<SplitCache> cache_ = nullptr;
+    mutable std::unique_ptr<SplitCache> cache_ = nullptr;
 
     // improve performance, reusing allocated memory
     mutable std::vector<FermiFloat> weights_;
     mutable FragmentSplits splits_;
   };
 
-} // namespace fermi
+} // namespace fbu
 
 #endif // FERMIBREAKUP_FERMIBREAKUP_H

@@ -11,15 +11,15 @@
 #include "impl/FermiNucleiProperties.h"
 #include "VNucleiProperties.h"
 
-namespace fermi {
+namespace fbu {
 
   // it is possible to use polymorphism here
   // but it is a bottleneck and no virtual call is made
   using NucleiProperties = Singleton<FermiNucleiProperties>;
 
   static_assert(std::is_base_of_v<VNucleiProperties, std::remove_reference_t<decltype(NucleiProperties::Instance())>>,
-              "Incorrect Nuclei fermi class");
+              "Incorrect Nuclei fbu class");
 
-} // namespace fermi
+} // namespace fbu
 
 #endif // FERMIBREAKUP_UTILITIES_NUCLEI_PROPERTIES_NUCLEIPROPERTIES_H

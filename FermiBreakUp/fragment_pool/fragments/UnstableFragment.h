@@ -7,7 +7,7 @@
 
 #include "Fragment.h"
 
-namespace fermi {
+namespace fbu {
 
   class UnstableFragment : public Fragment {
   public:
@@ -70,6 +70,6 @@ namespace fermi {
 
   #undef AddUnstaleFragment
 
-} // namespace fermi
+} // namespace fbu
 
 #endif // FERMIBREAKUP_FRAGMENT_POOL_FRAGMENTS_UNSTABLEFRAGMENT_H

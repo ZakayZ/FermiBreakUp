@@ -14,7 +14,7 @@
 #include "AAMCCFermiBreakUp.h"
 #include "ExcitationHandler.h"
 
-using namespace fermi;
+using namespace fbu;
 
 class ConfigurationsFixture : public ::testing::TestWithParam<VConfigurations*> {
 protected:
@@ -32,8 +32,8 @@ INSTANTIATE_TEST_SUITE_P(
 
 TEST_P(ConfigurationsFixture, MassAndChargeConservation) {
   auto model = ExcitationHandler();
-  auto fermi = std::make_unique<FermiBreakUp>(ConfigurationsFixture::GetParam()->Clone());
-  model.SetFermiBreakUp(std::make_unique<AAMCCFermiBreakUp>(std::move(fermi)));
+  auto fbu = std::make_unique<FermiBreakUp>(ConfigurationsFixture::GetParam()->Clone());
+  model.SetFermiBreakUp(std::make_unique<AAMCCFermiBreakUp>(std::move(fbu)));
   int seed = 5;
   srand(seed);
   size_t tries = 10;
@@ -67,8 +67,8 @@ TEST_P(ConfigurationsFixture, MassAndChargeConservation) {
 // Is doesn't work because of multi-fragmentation model *(
 TEST_P(ConfigurationsFixture, Vector4Conservation) {
   auto model = ExcitationHandler();
-  auto fermi = std::make_unique<FermiBreakUp>(ConfigurationsFixture::GetParam()->Clone());
-  model.SetFermiBreakUp(std::make_unique<AAMCCFermiBreakUp>(std::move(fermi)));
+  auto fbu = std::make_unique<FermiBreakUp>(ConfigurationsFixture::GetParam()->Clone());
+  model.SetFermiBreakUp(std::make_unique<AAMCCFermiBreakUp>(std::move(fbu)));
   int seed = 5;
   srand(seed);
   size_t tries = 10;

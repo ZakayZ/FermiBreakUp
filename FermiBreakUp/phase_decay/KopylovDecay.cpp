@@ -13,7 +13,7 @@
 
 #include "KopylovDecay.h"
 
-using namespace fermi;
+using namespace fbu;
 
 namespace {
   LorentzVector ChangeFrameOfReference(const LorentzVector& vec, const Vector3& boostVector) {

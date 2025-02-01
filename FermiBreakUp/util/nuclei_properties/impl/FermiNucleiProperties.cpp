@@ -9,7 +9,7 @@
 
 #include "FermiNucleiProperties.h"
 
-using namespace fermi;
+using namespace fbu;
 
 namespace {
   FermiFloat WeitzsaeckerBindingEnergy(AtomicMass atomicMass, ChargeNumber chargeNumber) {

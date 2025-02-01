@@ -8,7 +8,7 @@
 #include "util/nuclei_properties/NucleiProperties.h"
 #include "util/nuclei_properties/data_storage/CSVNuclearMass.h"
 
-using namespace fermi;
+using namespace fbu;
 
 TEST(TableTest, DefaultProperties) {
   std::ifstream tableData("./small_nuclei_data.csv");
@@ -18,7 +18,7 @@ TEST(TableTest, DefaultProperties) {
   tableData >> headers;
 
   int idx;
-  fermi::NucleiProperties fermi;
+  NucleiProperties fbu;
   while (tableData >> idx) {
     char s;
     AtomicMass m;
@@ -26,8 +26,8 @@ TEST(TableTest, DefaultProperties) {
     FermiFloat mass;
     tableData >> s >> m >> s >> c >> s >> mass;
 
-    ASSERT_TRUE(fermi->IsStable(m, c));
-    ASSERT_EQ(mass, fermi->GetNuclearMass(m, c));
+    ASSERT_TRUE(fbu->IsStable(m, c));
+    ASSERT_EQ(mass, fbu->GetNuclearMass(m, c));
   }
 }
 
@@ -39,7 +39,7 @@ TEST(TableTest, FileProperties) {
   tableData >> headers;
 
   int idx;
-  fermi::NucleiProperties fermi(fermi::CSVNuclearMass("./small_nuclei_data.csv"));
+  NucleiProperties fbu(CSVNuclearMass("./small_nuclei_data.csv"));
   while (tableData >> idx) {
     char s;
     AtomicMass m;
@@ -47,7 +47,7 @@ TEST(TableTest, FileProperties) {
     FermiFloat mass;
     tableData >> s >> m >> s >> c >> s >> mass;
 
-    ASSERT_TRUE(fermi->IsStable(m, c));
-    ASSERT_EQ(mass, fermi->GetNuclearMass(m, c));
+    ASSERT_TRUE(fbu->IsStable(m, c));
+    ASSERT_EQ(mass, fbu->GetNuclearMass(m, c));
   }
 }

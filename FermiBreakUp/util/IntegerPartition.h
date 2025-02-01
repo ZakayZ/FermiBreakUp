@@ -9,7 +9,7 @@
 #include <cstdint>
 #include <vector>
 
-namespace fermi {
+namespace fbu {
 
   using Partition = std::vector<uint32_t>;
 
@@ -66,6 +66,6 @@ namespace fermi {
     Partition partition_;
   };
 
-} // namespace fermi
+} // namespace fbu
 
 #endif // FERMIBREAKUP_UTILITIES_INTEGERPARTITION_H

@@ -10,7 +10,7 @@
 
 #include "DataTypes.h"
 
-namespace fermi {
+namespace fbu {
 
   class Randomizer {
   private:
@@ -33,6 +33,6 @@ namespace fermi {
     static inline RandomEngine Engine_ = {};
   };
 
-} // namespace fermi
+} // namespace fbu
 
 #endif // FERMIBREAKUP_UTILITIES_RANDOMIZER_H

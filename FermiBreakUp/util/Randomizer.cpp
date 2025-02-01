@@ -11,7 +11,7 @@
 #include "Randomizer.h"
 #include "Logger.h"
 
-using namespace fermi;
+using namespace fbu;
 
 FermiFloat Randomizer::SampleUniform() {
   static std::uniform_real_distribution<FermiFloat> distribution(0., 1.);

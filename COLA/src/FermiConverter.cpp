@@ -10,12 +10,12 @@
 using cola::FermiConverter;
 
 namespace {
-  fermi::Particle ColaToFermi(const cola::Particle& particle) {
+  fbu::Particle ColaToFermi(const cola::Particle& particle) {
     auto [A, Z] = particle.getAZ();
     auto atomicMass = AtomicMass(A);
     auto chargeNumber = ChargeNumber(Z);
 
-    return fermi::Particle(
+    return fbu::Particle(
       atomicMass,
       chargeNumber,
       LorentzVector(
@@ -27,7 +27,7 @@ namespace {
     );
   }
 
-  cola::Particle FermiToCola(const fermi::Particle& particle) {
+  cola::Particle FermiToCola(const fbu::Particle& particle) {
     return cola::Particle{
       .position=cola::LorentzVector{
         .t=0,
@@ -50,7 +50,7 @@ namespace {
   }
 }
 
-FermiConverter::FermiConverter(std::unique_ptr<fermi::FermiBreakUp>&& model) : model_(std::move(model)) {}
+FermiConverter::FermiConverter(std::unique_ptr<fbu::FermiBreakUp>&& model) : model_(std::move(model)) {}
 
 std::unique_ptr<cola::EventData> FermiConverter::operator()(std::unique_ptr<cola::EventData>&& data) {
   cola::EventParticles results;

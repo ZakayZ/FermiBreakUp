@@ -11,7 +11,7 @@
 #include <iostream>
 #include <memory>
 
-namespace fermi {
+namespace fbu {
 
   enum class LogLevel : int {
     TRACE = 0,
@@ -127,6 +127,6 @@ namespace fermi {
       throw std::runtime_error(sstream.str());            \
     }
 
-} // namespace fermi
+} // namespace fbu
 
 #endif // FERMIBREAKUP_UTILITIES_LOGGER_H

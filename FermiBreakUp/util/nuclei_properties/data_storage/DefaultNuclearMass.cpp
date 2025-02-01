@@ -8,7 +8,7 @@
 
 using CLHEP::MeV;
 
-using namespace fermi;
+using namespace fbu;
 
 DefaultNuclearMass::DefaultNuclearMass() {
   #define ADD_NUCLEI(A, Z, MASS) emplace_back(NucleiData{A, Z}, MASS)
