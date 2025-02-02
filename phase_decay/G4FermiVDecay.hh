@@ -27,9 +27,6 @@
 // G4FermiBreakUp alternative de-excitation model
 // by A. Novikov (January 2025)
 //
-//
-// Created by Artem Novikov on 21.02.2023.
-//
 
 #ifndef FERMIBREAKUP_PHASE_DECAY_G4FERMIVDECAY_HH
 #define FERMIBREAKUP_PHASE_DECAY_G4FERMIVDECAY_HH

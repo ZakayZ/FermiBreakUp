@@ -27,9 +27,6 @@
 // G4FermiBreakUp alternative de-excitation model
 // by A. Novikov (January 2025)
 //
-//
-// Created by Artem Novikov on 17.02.2023.
-//
 
 #include "G4FermiSplitter.hh"
 
@@ -58,7 +55,7 @@ constexpr G4FermiFloat R0 = 1.3 * CLHEP::fermi;
 G4FermiFloat CoulombBarrier(const G4FermiFragmentVector& split)
 {
   // Coulomb Barrier (MeV) for given channel with K fragments.
-  static const G4FermiFloat coef =
+  static const G4FermiFloat COEF =
     (3. / 5.) * (CLHEP::elm_coupling / R0) * std::cbrt(1. / (1. + Kappa));
 
   G4FermiUInt atomicMassSum = 0.;
@@ -74,7 +71,7 @@ G4FermiFloat CoulombBarrier(const G4FermiFragmentVector& split)
 
   CoulombEnergy -= std::pow(static_cast<G4FermiFloat>(chargeSum), 2)
                    / std::cbrt(static_cast<G4FermiFloat>(atomicMassSum));
-  return -coef * CoulombEnergy;
+  return -COEF * CoulombEnergy;
 }
 
 G4FermiFloat SpinFactor(const G4FermiFragmentVector& split)
@@ -214,12 +211,12 @@ constexpr size_t ExpectedSplitSize = 100;
 void ThrowOnInvalidInputs(G4FermiNucleiData nucleiData)
 {
   FERMI_ASSERT_MSG(nucleiData.atomicMass > 0_m && nucleiData.chargeNumber >= 0_c,
-             "Non valid arguments A = " << nucleiData.atomicMass
-                                        << " Z = " << nucleiData.chargeNumber);
+                   "Non valid arguments A = " << nucleiData.atomicMass
+                                              << " Z = " << nucleiData.chargeNumber);
 
   FERMI_ASSERT_MSG(G4FermiUInt(nucleiData.chargeNumber) <= G4FermiUInt(nucleiData.atomicMass),
-             "Non physical arguments = " << nucleiData.atomicMass
-                                         << " Z = " << nucleiData.chargeNumber);
+                   "Non physical arguments = " << nucleiData.atomicMass
+                                               << " Z = " << nucleiData.chargeNumber);
 }
 
 G4FermiFragmentSplits PossibleSplits(const G4FermiPartition& massPartition,
@@ -295,12 +292,10 @@ void G4FermiSplitter::GenerateSplits(G4FermiNucleiData nucleiData, G4FermiFragme
     // include null parts)
     for (auto& massPartition : G4FermiIntegerPartition(nucleiData.atomicMass, fragmentCount, 1)) {
       for (auto& chargePartition :
-           G4FermiIntegerPartition(nucleiData.chargeNumber, fragmentCount, 0))
-      {
+           G4FermiIntegerPartition(nucleiData.chargeNumber, fragmentCount, 0)) {
         // Some splits are invalid, some nuclei doesn't exist
         if (auto partitionSplits = PossibleSplits(massPartition, chargePartition);
-            !partitionSplits.empty())
-        {
+            !partitionSplits.empty()) {
           splits.insert(splits.end(), std::make_move_iterator(partitionSplits.begin()),
                         std::make_move_iterator(partitionSplits.end()));
         }

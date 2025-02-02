@@ -27,9 +27,6 @@
 // G4FermiBreakUp alternative de-excitation model
 // by A. Novikov (January 2025)
 //
-//
-// Created by Artem Novikov on 21.02.2023.
-//
 
 #ifndef FERMIBREAKUP_G4FERMIBREAKUP_HH
 #define FERMIBREAKUP_G4FERMIBREAKUP_HH
@@ -38,12 +35,14 @@
 
 #include "util/G4FermiParticle.hh"
 
+#include <G4VFermiBreakUp.hh>
+
 #include <memory>
 
 namespace fbu
 {
 
-class G4FermiBreakUp
+class G4FermiBreakUp : public G4VFermiBreakUp
 {
   public:
     using G4FermiSplitCache = G4FermiVCache<G4FermiNucleiData, G4FermiFragmentSplits>;
@@ -51,6 +50,18 @@ class G4FermiBreakUp
     G4FermiBreakUp() = default;
 
     G4FermiBreakUp(std::unique_ptr<G4FermiSplitCache>&& cache);
+
+    void Initialise() override;
+
+    // check if the Fermi Break Up model can be used 
+    // mass is an effective mass of a fragment
+    G4bool IsApplicable(G4int Z, G4int A, G4double eexc) const override;
+
+    // vector of products is added to the provided vector
+    // if no decay channel is found out for the primary fragment 
+    // then it is added to the results vector
+    // if primary decays then it is deleted 
+    void BreakFragment(G4FragmentVector* results, G4Fragment* theNucleus) override;
 
     std::vector<G4FermiParticle> BreakItUp(const G4FermiParticle& nucleus) const;
 

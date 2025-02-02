@@ -27,9 +27,6 @@
 // G4FermiBreakUp alternative de-excitation model
 // by A. Novikov (January 2025)
 //
-//
-// Created by Artem Novikov on 17.02.2024.
-//
 
 #ifndef FERMIBREAKUP_UTIL_G4FERMISINGLETON_HH
 #define FERMIBREAKUP_UTIL_G4FERMISINGLETON_HH
@@ -58,8 +55,6 @@ class G4FermiSingleton
     }
 
     G4FermiSingleton(T* ptr) { Reset(ptr); }
-
-    ~G4FermiSingleton() = default;
 
     template<typename... Args>
     static void Reset(Args&&... args)

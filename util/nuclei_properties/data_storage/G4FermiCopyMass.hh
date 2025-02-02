@@ -27,29 +27,25 @@
 // G4FermiBreakUp alternative de-excitation model
 // by A. Novikov (January 2025)
 //
-//
-// Created by Artem Novikov on 18.02.2024.
-//
 
-#ifndef FERMIBREAKUP_UTIL_NUCLEI_PROPERTIES_DATA_STORAGE_G4FERMICSVNUCLEARMASS_HH
-#define FERMIBREAKUP_UTIL_NUCLEI_PROPERTIES_DATA_STORAGE_G4FERMICSVNUCLEARMASS_HH
+#ifndef FERMIBREAKUP_UTIL_NUCLEI_PROPERTIES_DATA_STORAGE_G4FERMICOPYMASS_HH
+#define FERMIBREAKUP_UTIL_NUCLEI_PROPERTIES_DATA_STORAGE_G4FERMICOPYMASS_HH
 
 #include "util/G4FermiDataTypes.hh"
 
-#include <unordered_map>
+#include <vector>
 
 namespace fbu
 {
 
-class G4FermiCSVNuclearMass : private std::unordered_map<G4FermiNucleiData, G4FermiFloat>
+class G4FermiCopyMass
+  : private std::vector<std::pair<const G4FermiNucleiData, G4FermiFloat>>
 {
   private:
-    using Container = std::unordered_map<G4FermiNucleiData, G4FermiFloat>;
+    using Container = std::vector<std::pair<const G4FermiNucleiData, G4FermiFloat>>;
 
   public:
-    G4FermiCSVNuclearMass(const G4FermiStr& csvFilename, const G4FermiStr& massNumberName = "A",
-                          const G4FermiStr& chargeNumberName = "Z",
-                          const G4FermiStr& massName = "mass");
+    G4FermiCopyMass();
 
     using Container::begin;
     using Container::cbegin;
@@ -61,4 +57,4 @@ class G4FermiCSVNuclearMass : private std::unordered_map<G4FermiNucleiData, G4Fe
 
 }  // namespace fbu
 
-#endif  // FERMIBREAKUP_UTIL_NUCLEI_PROPERTIES_DATA_STORAGE_G4FERMICSVNUCLEARMASS_HH
+#endif  // FERMIBREAKUP_UTIL_NUCLEI_PROPERTIES_DATA_STORAGE_G4FERMICOPYMASS_HH

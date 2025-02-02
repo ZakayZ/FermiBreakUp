@@ -28,30 +28,21 @@
 // by A. Novikov (January 2025)
 //
 
-#ifndef FERMIBREAKUP_FRAGMENT_POOL_DATA_SOURCE_G4FERMIDEFAULTPOOLSOURCE_HH
-#define FERMIBREAKUP_FRAGMENT_POOL_DATA_SOURCE_G4FERMIDEFAULTPOOLSOURCE_HH
+#include "G4FermiCopyMass.hh"
 
-#include "fragment_pool/fragments/G4FermiFragment.hh"
+#include <G4NucleiProperties.hh>
 
-#include <vector>
+using namespace fbu;
 
-namespace fbu
+G4FermiCopyMass::G4FermiCopyMass()
 {
-
-class G4FermiDefaultPoolSource : private std::vector<const G4FermiFragment*>
-{
-  private:
-    using Container = std::vector<const G4FermiFragment*>;
-
-  public:
-    G4FermiDefaultPoolSource();
-
-    using Container::begin;
-    using Container::cbegin;
-    using Container::cend;
-    using Container::end;
-};
-
-}  // namespace fbu
-
-#endif  // FERMIBREAKUP_FRAGMENT_POOL_DATA_SOURCE_G4FERMIDEFAULTPOOLSOURCE_HH
+  for (auto a = 1; a < MAX_A; ++a) {
+    for (auto z = 0; z <= a; ++z) {
+      if (G4NucleiProperties::IsInStableTable(a, z)) {
+        emplace_back(std::make_pair(G4FermiNucleiData{G4FermiAtomicMass(a), G4FermiChargeNumber(z)},
+                                    G4NucleiProperties::GetNuclearMass(a, z)));
+        std::cout << a << ' ' << z << '\n';
+      }
+    }
+  }
+}

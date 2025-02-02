@@ -27,9 +27,6 @@
 // G4FermiBreakUp alternative de-excitation model
 // by A. Novikov (January 2025)
 //
-//
-// Created by Artem Novikov on 08.03.2023.
-//
 
 #include "util/G4FermiIntegerPartition.hh"
 #include <gtest/gtest.h>

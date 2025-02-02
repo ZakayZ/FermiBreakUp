@@ -27,9 +27,6 @@
 // G4FermiBreakUp alternative de-excitation model
 // by A. Novikov (January 2025)
 //
-//
-// Created by Artem Novikov on 08.03.2023.
-//
 
 #include "util/nuclei_properties/G4FermiNucleiProperties.hh"
 #include "util/nuclei_properties/data_storage/G4FermiCSVNuclearMass.hh"

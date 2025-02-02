@@ -27,9 +27,6 @@
 // G4FermiBreakUp alternative de-excitation model
 // by A. Novikov (January 2025)
 //
-//
-// Created by Artem Novikov on 17.02.2023.
-//
 
 #include "G4FermiParticle.hh"
 
@@ -51,7 +48,7 @@ G4FermiParticle::G4FermiParticle(G4FermiAtomicMass atomicMass, G4FermiChargeNumb
     groundStateMass_(G4FermiNucleiProperties()->GetNuclearMass(atomicMass_, chargeNumber_))
 {
   FERMI_ASSERT_MSG(G4FermiUInt(atomicMass_) >= G4FermiUInt(chargeNumber),
-             "imposible particle: A = " << atomicMass_ << ", Z = " << chargeNumber);
+                   "imposible particle: A = " << atomicMass_ << ", Z = " << chargeNumber);
 
   CalculateExcitationEnergy();
 }
@@ -99,7 +96,8 @@ void G4FermiParticle::CalculateExcitationEnergy()
   excitationEnergy_ = momentum_.mag() - groundStateMass_;
   if (excitationEnergy_ < 0.) {
     if (excitationEnergy_ < -10 * CLHEP::eV) {
-      FERMI_LOG_WARN("Excitation Energy is too negative: " << excitationEnergy_ / CLHEP::MeV << " MeV");
+      FERMI_LOG_WARN("Excitation Energy is too negative: " << excitationEnergy_ / CLHEP::MeV
+                                                           << " MeV");
     }
     excitationEnergy_ = 0.;
   }

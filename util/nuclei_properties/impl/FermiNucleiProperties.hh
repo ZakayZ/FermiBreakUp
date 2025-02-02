@@ -27,9 +27,6 @@
 // G4FermiBreakUp alternative de-excitation model
 // by A. Novikov (January 2025)
 //
-//
-// Created by Artem Novikov on 18.02.2024.
-//
 
 #ifndef FERMIBREAKUP_UTIL_NUCLEI_PROPERTIES_IMPL_FERMINUCLEIPROPERTIES_HH
 #define FERMIBREAKUP_UTIL_NUCLEI_PROPERTIES_IMPL_FERMINUCLEIPROPERTIES_HH
@@ -46,8 +43,8 @@ class FermiNucleiProperties : public G4FermiVNucleiProperties
   public:
     FermiNucleiProperties();
 
-    template<typename data_source>
-    FermiNucleiProperties(const data_source& dataSource);
+    template<typename DataSource>
+    FermiNucleiProperties(const DataSource& dataSource);
 
     template<typename Iter>
     FermiNucleiProperties(Iter begin, Iter end);
@@ -63,8 +60,6 @@ class FermiNucleiProperties : public G4FermiVNucleiProperties
 
     void AddStableNuclei(G4FermiNucleiData nucleiData, G4FermiFloat mass);
 
-    ~FermiNucleiProperties() override = default;
-
   private:
     struct G4FermiMassData
     {
@@ -78,8 +73,8 @@ class FermiNucleiProperties : public G4FermiVNucleiProperties
     mutable std::vector<G4FermiMassData> nucleiMasses_;
 };
 
-template<typename data_source>
-FermiNucleiProperties::FermiNucleiProperties(const data_source& dataSource)
+template<typename DataSource>
+FermiNucleiProperties::FermiNucleiProperties(const DataSource& dataSource)
   : FermiNucleiProperties(dataSource.begin(), dataSource.end())
 {}
 

@@ -27,9 +27,6 @@
 // G4FermiBreakUp alternative de-excitation model
 // by A. Novikov (January 2025)
 //
-//
-// Created by Artem Novikov on 30.01.2024.
-//
 
 #ifndef FERMIBREAKUP_FRAGMENT_POOL_G4FERMIFRAGMENTSSTORAGE_HH
 #define FERMIBREAKUP_FRAGMENT_POOL_G4FERMIFRAGMENTSSTORAGE_HH

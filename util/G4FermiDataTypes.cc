@@ -27,9 +27,6 @@
 // G4FermiBreakUp alternative de-excitation model
 // by A. Novikov (January 2025)
 //
-//
-// Created by Artem Novikov on 07.03.2023.
-//
 
 #include "G4FermiDataTypes.hh"
 

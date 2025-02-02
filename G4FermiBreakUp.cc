@@ -27,20 +27,21 @@
 // G4FermiBreakUp alternative de-excitation model
 // by A. Novikov (January 2025)
 //
-//
-// Created by Artem Novikov on 21.02.2023.
-//
 
 #include "G4FermiBreakUp.hh"
 
 #include "G4FermiSplitter.hh"
 
+#include "fragment_pool/G4FermiFragmentPool.hh"
+#include "fragment_pool/data_source/G4FermiDefaultPoolSource.hh"
 #include "fragment_pool/fragments/G4FermiFragment.hh"
 #include "phase_decay/G4FermiPhaseSpaceDecay.hh"
 #include "util/G4FermiDataTypes.hh"
 #include "util/G4FermiLogger.hh"
 #include "util/G4FermiParticle.hh"
 #include "util/G4FermiRandomizer.hh"
+#include "util/nuclei_properties/G4FermiNucleiProperties.hh"
+#include "util/nuclei_properties/data_storage/G4FermiCopyMass.hh"
 #include <CLHEP/Units/PhysicalConstants.h>
 
 #include <algorithm>
@@ -65,8 +66,8 @@ G4FermiStr LogProducts(const std::vector<G4FermiParticle>& particles)
   return std::move(out).str();
 }
 
-const G4FermiLorentzVector ChangeFrameOfReference(const G4FermiLorentzVector& vec,
-                                                  const G4FermiVector3& boost)
+G4FermiLorentzVector ChangeFrameOfReference(const G4FermiLorentzVector& vec,
+                                            const G4FermiVector3& boost)
 {
   auto copy = vec;
   copy.boost(boost);
@@ -89,8 +90,8 @@ std::vector<G4FermiParticle> SplitToParticles(const G4FermiParticle& sourceParti
   }
   catch (std::exception& e) {
     FERMI_LOG_ERROR(e.what() << " with split weight: "
-                       << G4FermiSplitter::DecayWeight(split, sourceParticle.GetAtomicMass(),
-                                                       sourceParticle.GetMomentum().m()));
+                             << G4FermiSplitter::DecayWeight(split, sourceParticle.GetAtomicMass(),
+                                                             sourceParticle.GetMomentum().m()));
     return {sourceParticle};
   }
 
@@ -169,7 +170,7 @@ std::vector<G4FermiParticle> G4FermiBreakUp::BreakItUp(const G4FermiParticle& pa
     auto splitsPtr = cache_->Get(particle.GetNucleiData());
     if (splitsPtr == nullptr) {
       FERMI_LOG_DEBUG("G4FermiParticle is stable with excitation energy = "
-                << particle.GetExcitationEnergy() / CLHEP::MeV << " MeV");
+                      << particle.GetExcitationEnergy() / CLHEP::MeV << " MeV");
       auto splits = G4FermiSplitter::GenerateSplits(particle.GetNucleiData());
       splitsPtr = cache_->Insert(particle.GetNucleiData(), std::move(splits));
     }
@@ -183,5 +184,33 @@ std::vector<G4FermiParticle> G4FermiBreakUp::BreakItUp(const G4FermiParticle& pa
     splits_.clear();
     G4FermiSplitter::GenerateSplits(particle.GetNucleiData(), splits_);
     return SelectSplit(particle, splits_);
+  }
+}
+
+void G4FermiBreakUp::Initialise()
+{
+  G4FermiNucleiProperties::Reset(G4FermiCopyMass());
+  G4FermiFragmentPool::Reset(G4FermiDefaultPoolSource());
+}
+
+G4bool G4FermiBreakUp::IsApplicable(G4int Z, G4int A, G4double /* eexc */) const
+{
+  return Z < MAX_Z && A < MAX_A;
+}
+
+void G4FermiBreakUp::BreakFragment(G4FragmentVector* results, G4Fragment* theNucleus)
+{
+  FERMI_ASSERT_MSG(theNucleus != nullptr, "G4Fragment is not set in FermiBreakUp");
+  FERMI_ASSERT_MSG(results != nullptr, "Missing result G4FragmentVector in FermiBreakUp");
+
+  const auto particle =
+    G4FermiParticle(G4FermiAtomicMass(theNucleus->GetA_asInt()),
+                    G4FermiChargeNumber(theNucleus->GetZ_asInt()), theNucleus->GetMomentum());
+  const auto fragments = BreakItUp(particle);
+
+  for (const auto& fragment : fragments) {
+    results->emplace_back(new G4Fragment(static_cast<G4int>(fragment.GetAtomicMass()),
+                                         static_cast<G4int>(fragment.GetChargeNumber()),
+                                         fragment.GetMomentum()));
   }
 }

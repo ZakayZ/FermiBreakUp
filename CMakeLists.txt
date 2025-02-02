@@ -15,8 +15,7 @@ set(Util
     util/G4FermiLogger.cc
 
     util/nuclei_properties/impl/FermiNucleiProperties.cc
-
-    util/nuclei_properties/data_storage/G4FermiCSVNuclearMass.cc
+    util/nuclei_properties/data_storage/G4FermiCopyMass.cc
     util/nuclei_properties/data_storage/G4FermiDefaultNuclearMass.cc
 )
 

@@ -27,9 +27,6 @@
 // G4FermiBreakUp alternative de-excitation model
 // by A. Novikov (January 2025)
 //
-//
-// Created by Artem Novikov on 07.02.2023.
-//
 
 #ifndef FERMIBREAKUP_UTIL_G4FERMIDATATYPES_HH
 #define FERMIBREAKUP_UTIL_G4FERMIDATATYPES_HH
@@ -56,6 +53,9 @@ using G4FermiVector3 = G4Vector3D;
 using G4FermiParticleMomentum = G4FermiVector3;
 
 using G4FermiStr = G4String;
+
+static constexpr G4FermiInt MAX_Z = 9;
+static constexpr G4FermiInt MAX_A = 17;
 
 template<typename Key, typename Value>
 class G4FermiVCache

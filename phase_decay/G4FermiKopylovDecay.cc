@@ -27,9 +27,6 @@
 // G4FermiBreakUp alternative de-excitation model
 // by A. Novikov (January 2025)
 //
-//
-// Created by Artem Novikov on 21.02.2023.
-//
 
 #include "G4FermiKopylovDecay.hh"
 
@@ -120,7 +117,7 @@ G4FermiKopylovDecay::CalculateDecay(const G4FermiLorentzVector& totalMomentum,
   auto mass = parentMass;
   auto kineticEnergy = parentMass - totalFragmentsMass;
   FERMI_ASSERT_MSG(kineticEnergy >= 0.,
-             "Kopylov Decay started for impossible split: fragments mass is too large");
+                   "Kopylov Decay started for impossible split: fragments mass is too large");
 
   auto momentumRestLab = G4FermiLorentzVector(0, 0, 0, parentMass);
   for (size_t i = fragmentsMass.size() - 1; i > 0; --i) {
@@ -128,8 +125,9 @@ G4FermiKopylovDecay::CalculateDecay(const G4FermiLorentzVector& totalMomentum,
     kineticEnergy *= i > 1 ? BetaKopylov(i) : 0.;
     const auto restMass = mu + kineticEnergy;
 
-    FERMI_ASSERT_MSG(fragmentsMass[i] + restMass <= mass,
-               "Kopylov Decay: something went wrong, fragments mass is greater than the whole");
+    FERMI_ASSERT_MSG(
+      fragmentsMass[i] + restMass <= mass,
+      "Kopylov Decay: something went wrong, fragments mass is greater than the whole");
     auto [momentumFragmentsCm, momentumRestCm] = TwoBodyDecay(mass, fragmentsMass[i], restMass);
 
     const auto boostVector = momentumRestLab.boostVector();

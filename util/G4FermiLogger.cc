@@ -33,7 +33,7 @@ using namespace fbu;
 
 namespace
 {
-static const std::string LogLevelNames[static_cast<int>(G4FermiLogLevel::NONE)] = {
+static const std::string LOG_LEVEL_NAMES[static_cast<int>(G4FermiLogLevel::NONE)] = {
   "TRACE", "DEBUG", "INFO", "WARN", "ERROR",
 };
 }  // namespace
@@ -43,5 +43,5 @@ void G4FermiStreamLogger::Log(const std::string_view fileName, const int line,
                               const std::string_view msg)
 {
   stream_ << fileName << ':' << line << " in function \"" << funcName << "\"\n"
-          << LogLevelNames[static_cast<int>(level)] << ": " << msg << std::endl;
+          << LOG_LEVEL_NAMES[static_cast<int>(level)] << ": " << msg << std::endl;
 }

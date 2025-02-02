@@ -27,9 +27,6 @@
 // G4FermiBreakUp alternative de-excitation model
 // by A. Novikov (January 2025)
 //
-//
-// Created by Artem Novikov on 18.02.2024.
-//
 
 #include "FermiNucleiProperties.hh"
 
@@ -103,7 +100,7 @@ G4FermiFloat FermiNucleiProperties::GetNuclearMass(G4FermiAtomicMass atomicMass,
                                                    G4FermiChargeNumber chargeNumber) const
 {
   FERMI_ASSERT_MSG(G4FermiUInt(atomicMass) >= G4FermiUInt(chargeNumber),
-             "invalid nuclei A = " << atomicMass << ", Z = " << chargeNumber);
+                   "invalid nuclei A = " << atomicMass << ", Z = " << chargeNumber);
 
   const auto slot = GetSlot(atomicMass, chargeNumber);
   if (slot < nucleiMasses_.size() && nucleiMasses_[slot].isCached) {
@@ -127,7 +124,8 @@ G4FermiFloat FermiNucleiProperties::GetNuclearMass(G4FermiAtomicMass atomicMass,
 bool FermiNucleiProperties::IsStable(G4FermiAtomicMass atomicMass,
                                      G4FermiChargeNumber chargeNumber) const
 {
-  if (FERMI_UNLIKELY(atomicMass < 1_m || chargeNumber < 0_c || G4FermiUInt(chargeNumber) > G4FermiUInt(atomicMass)))
+  if (FERMI_UNLIKELY(atomicMass < 1_m || chargeNumber < 0_c
+                     || G4FermiUInt(chargeNumber) > G4FermiUInt(atomicMass)))
   {
     FERMI_LOG_DEBUG("Unknown particle: A = " << atomicMass << ", Z = " << chargeNumber);
     return false;
@@ -142,7 +140,7 @@ void FermiNucleiProperties::AddStableNuclei(G4FermiAtomicMass atomicMass,
                                             G4FermiChargeNumber chargeNumber, G4FermiFloat mass)
 {
   FERMI_ASSERT_MSG(G4FermiUInt(atomicMass) >= G4FermiUInt(chargeNumber),
-             "invalid particle: A = " << atomicMass << ", Z = " << chargeNumber);
+                   "invalid particle: A = " << atomicMass << ", Z = " << chargeNumber);
 
   const auto slot = GetSlot(atomicMass, chargeNumber);
   if (slot >= nucleiMasses_.size()) {
