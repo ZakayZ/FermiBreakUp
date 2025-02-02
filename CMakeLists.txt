@@ -26,7 +26,7 @@ set(PhaseSpace
 set(FragmentPool
     fragment_pool/G4FermiFragmentsStorage.cc
     fragment_pool/data_source/G4FermiDefaultPoolSource.cc
-    fragment_pool/fragments/G4FermiFragment.cc
+    fragment_pool/fragments/G4FermiPossibleFragment.cc
     fragment_pool/fragments/G4FermiStableFragment.cc
     fragment_pool/fragments/G4FermiUnstableFragment.cc
 )

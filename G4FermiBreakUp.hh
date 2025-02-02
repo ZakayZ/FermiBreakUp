@@ -45,7 +45,7 @@ namespace fbu
 class G4FermiBreakUp : public G4VFermiBreakUp
 {
   public:
-    using G4FermiSplitCache = G4FermiVCache<G4FermiNucleiData, G4FermiFragmentSplits>;
+    using G4FermiSplitCache = G4FermiVCache<G4FermiNucleiData, G4FermiPossibleFragmentSplits>;
 
     G4FermiBreakUp() = default;
 
@@ -67,13 +67,13 @@ class G4FermiBreakUp : public G4VFermiBreakUp
 
   private:
     std::vector<G4FermiParticle> SelectSplit(const G4FermiParticle& particle,
-                                             const G4FermiFragmentSplits& splits) const;
+                                             const G4FermiPossibleFragmentSplits& splits) const;
 
     mutable std::unique_ptr<G4FermiSplitCache> cache_ = nullptr;
 
     // improve performance, reusing allocated memory
     mutable std::vector<G4FermiFloat> weights_;
-    mutable G4FermiFragmentSplits splits_;
+    mutable G4FermiPossibleFragmentSplits splits_;
 };
 
 }  // namespace fbu

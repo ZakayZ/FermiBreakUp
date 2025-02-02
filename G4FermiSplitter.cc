@@ -31,7 +31,7 @@
 #include "G4FermiSplitter.hh"
 
 #include "fragment_pool/G4FermiFragmentPool.hh"
-#include "fragment_pool/fragments/G4FermiFragment.hh"
+#include "fragment_pool/fragments/G4FermiPossibleFragment.hh"
 #include "util/G4FermiDataTypes.hh"
 #include "util/G4FermiIntegerPartition.hh"
 #include "util/G4FermiLogger.hh"
@@ -52,7 +52,7 @@ constexpr G4FermiFloat Kappa = 1.0;
 // Nuclear radius R0 (is a model parameter)
 constexpr G4FermiFloat R0 = 1.3 * CLHEP::fermi;
 
-G4FermiFloat CoulombBarrier(const G4FermiFragmentVector& split)
+G4FermiFloat CoulombBarrier(const G4FermiPossibleFragmentVector& split)
 {
   // Coulomb Barrier (MeV) for given channel with K fragments.
   static const G4FermiFloat COEF =
@@ -74,7 +74,7 @@ G4FermiFloat CoulombBarrier(const G4FermiFragmentVector& split)
   return -COEF * CoulombEnergy;
 }
 
-G4FermiFloat SpinFactor(const G4FermiFragmentVector& split)
+G4FermiFloat SpinFactor(const G4FermiPossibleFragmentVector& split)
 {
   G4FermiFloat factor = 1;
 
@@ -85,7 +85,7 @@ G4FermiFloat SpinFactor(const G4FermiFragmentVector& split)
   return factor;
 }
 
-G4FermiFloat KineticEnergy(const G4FermiFragmentVector& split, G4FermiFloat totalEnergy)
+G4FermiFloat KineticEnergy(const G4FermiPossibleFragmentVector& split, G4FermiFloat totalEnergy)
 {
   auto kineticEnergy = totalEnergy;
   for (const auto fragmentPtr : split) {
@@ -100,7 +100,7 @@ G4FermiFloat KineticEnergy(const G4FermiFragmentVector& split, G4FermiFloat tota
   return kineticEnergy - CoulombBarrier(split);
 }
 
-G4FermiFloat MassFactor(const G4FermiFragmentVector& split)
+G4FermiFloat MassFactor(const G4FermiPossibleFragmentVector& split)
 {
   G4FermiFloat massSum = 0.;
   G4FermiFloat massProduct = 1.;
@@ -123,12 +123,12 @@ inline size_t Factorial(const size_t n)
   return factorial;
 }
 
-G4FermiFloat ConfigurationFactor(const G4FermiFragmentVector& split)
+G4FermiFloat ConfigurationFactor(const G4FermiPossibleFragmentVector& split)
 {
   // get all mass numbers and count repetitions
   std::vector<G4FermiAtomicMass> masses(split.size());
   std::transform(split.begin(), split.end(), masses.begin(),
-                 std::mem_fn(&G4FermiFragment::GetAtomicMass));
+                 std::mem_fn(&G4FermiPossibleFragment::GetAtomicMass));
   std::sort(masses.begin(), masses.end());
 
   // avoid overflow with floats
@@ -173,7 +173,7 @@ G4FermiFloat GammaFactor(size_t fragmentsCount)
 }
 }  // namespace
 
-G4FermiFloat G4FermiSplitter::DecayWeight(const G4FermiFragmentVector& split,
+G4FermiFloat G4FermiSplitter::DecayWeight(const G4FermiPossibleFragmentVector& split,
                                           G4FermiAtomicMass atomicMass, G4FermiFloat totalEnergy)
 {
   const auto kineticEnergy = KineticEnergy(split, totalEnergy);  // in MeV
@@ -219,8 +219,8 @@ void ThrowOnInvalidInputs(G4FermiNucleiData nucleiData)
                                                << " Z = " << nucleiData.chargeNumber);
 }
 
-G4FermiFragmentSplits PossibleSplits(const G4FermiPartition& massPartition,
-                                     const G4FermiPartition& chargePartition)
+G4FermiPossibleFragmentSplits PossibleSplits(const G4FermiPartition& massPartition,
+                                             const G4FermiPartition& chargePartition)
 {
   auto& fragmentPool = G4FermiFragmentPool::Instance();
   const auto fragmentCount = massPartition.size();
@@ -236,7 +236,7 @@ G4FermiFragmentSplits PossibleSplits(const G4FermiPartition& massPartition,
   }
 
   // allocate in advance
-  G4FermiFragmentSplits splits(splitsCount, G4FermiFragmentVector(fragmentCount));
+  G4FermiPossibleFragmentSplits splits(splitsCount, G4FermiPossibleFragmentVector(fragmentCount));
 
   // incrementally build splits
   // !! chosen order matters, because later there we need to remove duplicates
@@ -271,14 +271,15 @@ G4FermiFragmentSplits PossibleSplits(const G4FermiPartition& massPartition,
 }
 }  // namespace
 
-G4FermiFragmentSplits G4FermiSplitter::GenerateSplits(G4FermiNucleiData nucleiData)
+G4FermiPossibleFragmentSplits G4FermiSplitter::GenerateSplits(G4FermiNucleiData nucleiData)
 {
-  G4FermiFragmentSplits splits;
+  G4FermiPossibleFragmentSplits splits;
   GenerateSplits(nucleiData, splits);
   return splits;
 }
 
-void G4FermiSplitter::GenerateSplits(G4FermiNucleiData nucleiData, G4FermiFragmentSplits& splits)
+void G4FermiSplitter::GenerateSplits(G4FermiNucleiData nucleiData,
+                                     G4FermiPossibleFragmentSplits& splits)
 {
   ThrowOnInvalidInputs(nucleiData);
 

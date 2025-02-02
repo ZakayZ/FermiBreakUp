@@ -31,12 +31,12 @@
 #ifndef FERMIBREAKUP_FRAGMENT_POOL_FRAGMENTS_G4FERMIUNSTABLEFRAGMENT_HH
 #define FERMIBREAKUP_FRAGMENT_POOL_FRAGMENTS_G4FERMIUNSTABLEFRAGMENT_HH
 
-#include "G4FermiFragment.hh"
+#include "G4FermiPossibleFragment.hh"
 
 namespace fbu
 {
 
-class G4FermiUnstableFragment : public G4FermiFragment
+class G4FermiUnstableFragment : public G4FermiPossibleFragment
 {
   public:
     G4FermiUnstableFragment(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber,

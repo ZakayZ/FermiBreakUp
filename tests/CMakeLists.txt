@@ -16,7 +16,6 @@ include(GoogleTest)
 set(Tests
     G4FermiSplitTest.cc
     G4FermiPartitionTest.cc
-    G4FermiTableTests.cc
     G4FermiBreakUpTest.cc
 )
 

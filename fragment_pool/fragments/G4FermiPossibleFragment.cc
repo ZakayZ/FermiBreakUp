@@ -28,7 +28,7 @@
 // by A. Novikov (January 2025)
 //
 
-#include "G4FermiFragment.hh"
+#include "G4FermiPossibleFragment.hh"
 
 #include "util/nuclei_properties/G4FermiNucleiProperties.hh"
 #include <CLHEP/Units/PhysicalConstants.h>
@@ -37,8 +37,10 @@
 
 using namespace fbu;
 
-G4FermiFragment::G4FermiFragment(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber,
-                                 G4FermiInt polarization, G4FermiFloat excitationEnergy)
+G4FermiPossibleFragment::G4FermiPossibleFragment(G4FermiAtomicMass atomicMass,
+                                                 G4FermiChargeNumber chargeNumber,
+                                                 G4FermiInt polarization,
+                                                 G4FermiFloat excitationEnergy)
   : atomicMass_(atomicMass),
     chargeNumber_(chargeNumber),
     polarization_(polarization),
@@ -46,44 +48,44 @@ G4FermiFragment::G4FermiFragment(G4FermiAtomicMass atomicMass, G4FermiChargeNumb
 {}
 
 std::vector<G4FermiParticle>
-G4FermiFragment::GetDecayFragments(const G4FermiLorentzVector& momentum) const
+G4FermiPossibleFragment::GetDecayFragments(const G4FermiLorentzVector& momentum) const
 {
   std::vector<G4FermiParticle> result;
   AppendDecayFragments(momentum, result);
   return result;
 }
 
-G4FermiAtomicMass G4FermiFragment::GetAtomicMass() const
+G4FermiAtomicMass G4FermiPossibleFragment::GetAtomicMass() const
 {
   return atomicMass_;
 }
 
-G4FermiChargeNumber G4FermiFragment::GetChargeNumber() const
+G4FermiChargeNumber G4FermiPossibleFragment::GetChargeNumber() const
 {
   return chargeNumber_;
 }
 
-G4FermiInt G4FermiFragment::GetPolarization() const
+G4FermiInt G4FermiPossibleFragment::GetPolarization() const
 {
   return polarization_;
 }
 
-G4FermiFloat G4FermiFragment::GetExcitationEnergy() const
+G4FermiFloat G4FermiPossibleFragment::GetExcitationEnergy() const
 {
   return excitationEnergy_;
 }
 
-G4FermiFloat G4FermiFragment::GetMass() const
+G4FermiFloat G4FermiPossibleFragment::GetMass() const
 {
   return G4FermiNucleiProperties()->GetNuclearMass(atomicMass_, chargeNumber_);
 }
 
-G4FermiFloat G4FermiFragment::GetTotalEnergy() const
+G4FermiFloat G4FermiPossibleFragment::GetTotalEnergy() const
 {
   return GetMass() + GetExcitationEnergy();
 }
 
-std::ostream& std::operator<<(std::ostream& out, const G4FermiFragment& fragment)
+std::ostream& std::operator<<(std::ostream& out, const G4FermiPossibleFragment& fragment)
 {
   const auto oldFlags = out.flags();
   const auto oldUserPrecision = out.precision();

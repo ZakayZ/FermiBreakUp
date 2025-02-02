@@ -28,20 +28,61 @@
 // by A. Novikov (January 2025)
 //
 
-#ifndef FERMIBREAKUP_PHASE_DECAY_G4FERMIPHASESPACEDECAY_HH
-#define FERMIBREAKUP_PHASE_DECAY_G4FERMIPHASESPACEDECAY_HH
+#ifndef FERMIBREAKUP_FRAGMENT_POOL_FRAGMENTS_G4FermiPossibleFragment_HH
+#define FERMIBREAKUP_FRAGMENT_POOL_FRAGMENTS_G4FermiPossibleFragment_HH
 
-#include "G4FermiKopylovDecay.hh"
-#include "G4FermiVDecay.hh"
+#include "util/G4FermiDataTypes.hh"
+#include "util/G4FermiParticle.hh"
+
+#include <ostream>
+#include <vector>
 
 namespace fbu
 {
+class G4FermiPossibleFragment;
 
-using G4FermiPhaseSpaceDecay = G4FermiKopylovDecay;  // or just Decay
+using G4FermiPossibleFragmentVector = std::vector<const G4FermiPossibleFragment*>;
 
-static_assert(std::is_base_of<G4FermiVDecay, G4FermiPhaseSpaceDecay>::value,
-              "Invalid phase sampler");
+class G4FermiPossibleFragment
+{
+  public:
+    G4FermiPossibleFragment(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber,
+                    G4FermiInt polarization, G4FermiFloat excitationEnergy);
+
+    G4FermiPossibleFragment(const G4FermiPossibleFragment&) = delete;
+
+    G4FermiPossibleFragment& operator=(const G4FermiPossibleFragment&) = delete;
+
+    std::vector<G4FermiParticle> GetDecayFragments(const G4FermiLorentzVector& momentum) const;
+
+    virtual void AppendDecayFragments(const G4FermiLorentzVector& momentum,
+                                      std::vector<G4FermiParticle>& particles) const = 0;
+
+    G4FermiAtomicMass GetAtomicMass() const;
+
+    G4FermiChargeNumber GetChargeNumber() const;
+
+    G4FermiInt GetPolarization() const;
+
+    G4FermiFloat GetExcitationEnergy() const;
+
+    G4FermiFloat GetMass() const;
+
+    G4FermiFloat GetTotalEnergy() const;
+
+    virtual ~G4FermiPossibleFragment() = default;
+
+  protected:
+    G4FermiAtomicMass atomicMass_;  // A
+    G4FermiChargeNumber chargeNumber_;  // Z
+    G4FermiInt polarization_;
+    G4FermiFloat excitationEnergy_;
+};
 
 }  // namespace fbu
 
-#endif  // FERMIBREAKUP_PHASE_DECAY_G4FERMIPHASESPACEDECAY_HH
+namespace std
+{
+ostream& operator<<(ostream&, const ::fbu::G4FermiPossibleFragment&);
+}  // namespace std
+#endif  // FERMIBREAKUP_FRAGMENT_POOL_FRAGMENTS_G4FermiPossibleFragment_HH

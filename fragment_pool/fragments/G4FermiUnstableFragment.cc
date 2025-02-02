@@ -30,7 +30,7 @@
 
 #include "G4FermiUnstableFragment.hh"
 
-#include "phase_decay/G4FermiPhaseSpaceDecay.hh"
+#include "phase_decay/G4FermiPhaseDecay.hh"
 #include "util/nuclei_properties/G4FermiNucleiProperties.hh"
 
 using namespace fbu;
@@ -40,7 +40,7 @@ G4FermiUnstableFragment::G4FermiUnstableFragment(G4FermiAtomicMass atomicMass,
                                                  G4FermiInt polarization,
                                                  G4FermiFloat excitationEnergy,
                                                  std::vector<G4FermiNucleiData>&& decayData)
-  : G4FermiFragment(atomicMass, chargeNumber, polarization, excitationEnergy),
+  : G4FermiPossibleFragment(atomicMass, chargeNumber, polarization, excitationEnergy),
     decayData_(std::move(decayData))
 {
   G4FermiNucleiProperties properties;
@@ -54,7 +54,7 @@ G4FermiUnstableFragment::G4FermiUnstableFragment(G4FermiAtomicMass atomicMass,
 void G4FermiUnstableFragment::AppendDecayFragments(const G4FermiLorentzVector& momentum,
                                                    std::vector<G4FermiParticle>& fragments) const
 {
-  G4FermiPhaseSpaceDecay phaseDecay;
+  G4FermiPhaseDecay phaseDecay;
 
   auto fragmentsMomentum = phaseDecay.CalculateDecay(momentum, masses_);
 

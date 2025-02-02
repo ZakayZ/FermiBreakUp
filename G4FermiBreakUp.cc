@@ -34,8 +34,8 @@
 
 #include "fragment_pool/G4FermiFragmentPool.hh"
 #include "fragment_pool/data_source/G4FermiDefaultPoolSource.hh"
-#include "fragment_pool/fragments/G4FermiFragment.hh"
-#include "phase_decay/G4FermiPhaseSpaceDecay.hh"
+#include "fragment_pool/fragments/G4FermiPossibleFragment.hh"
+#include "phase_decay/G4FermiPhaseDecay.hh"
 #include "util/G4FermiDataTypes.hh"
 #include "util/G4FermiLogger.hh"
 #include "util/G4FermiParticle.hh"
@@ -75,15 +75,15 @@ G4FermiLorentzVector ChangeFrameOfReference(const G4FermiLorentzVector& vec,
 }
 
 std::vector<G4FermiParticle> SplitToParticles(const G4FermiParticle& sourceParticle,
-                                              const G4FermiFragmentVector& split)
+                                              const G4FermiPossibleFragmentVector& split)
 {
   FERMI_LOG_TRACE("Converting split to particles");
 
   std::vector<G4FermiFloat> splitMasses(split.size());
   std::transform(split.begin(), split.end(), splitMasses.begin(),
-                 std::mem_fn(&G4FermiFragment::GetTotalEnergy));
+                 std::mem_fn(&G4FermiPossibleFragment::GetTotalEnergy));
 
-  G4FermiPhaseSpaceDecay phaseSampler;
+  G4FermiPhaseDecay phaseSampler;
   std::vector<G4FermiLorentzVector> particlesMomentum;
   try {
     particlesMomentum = phaseSampler.CalculateDecay(sourceParticle.GetMomentum(), splitMasses);
@@ -109,7 +109,7 @@ std::vector<G4FermiParticle> SplitToParticles(const G4FermiParticle& sourceParti
   return particleSplit;
 }
 
-G4FermiStr LogSplit(const G4FermiFragmentVector& split)
+G4FermiStr LogSplit(const G4FermiPossibleFragmentVector& split)
 {
   std::ostringstream out;
 
@@ -127,8 +127,9 @@ G4FermiBreakUp::G4FermiBreakUp(std::unique_ptr<G4FermiSplitCache>&& cache)
   : cache_(std::move(cache))
 {}
 
-std::vector<G4FermiParticle> G4FermiBreakUp::SelectSplit(const G4FermiParticle& particle,
-                                                         const G4FermiFragmentSplits& splits) const
+std::vector<G4FermiParticle>
+G4FermiBreakUp::SelectSplit(const G4FermiParticle& particle,
+                            const G4FermiPossibleFragmentSplits& splits) const
 {
   FERMI_LOG_TRACE("Selecting Split for " << particle << " from " << splits.size() << " splits");
   if (splits.empty()) {

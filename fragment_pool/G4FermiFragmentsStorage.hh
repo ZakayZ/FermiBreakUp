@@ -28,10 +28,10 @@
 // by A. Novikov (January 2025)
 //
 
-#ifndef FERMIBREAKUP_FRAGMENT_POOL_G4FERMIFRAGMENTSSTORAGE_HH
-#define FERMIBREAKUP_FRAGMENT_POOL_G4FERMIFRAGMENTSSTORAGE_HH
+#ifndef FERMIBREAKUP_FRAGMENT_POOL_G4FermiPossibleFragmentSSTORAGE_HH
+#define FERMIBREAKUP_FRAGMENT_POOL_G4FermiPossibleFragmentSSTORAGE_HH
 
-#include "fragments/G4FermiFragment.hh"
+#include "fragments/G4FermiPossibleFragment.hh"
 #include "util/G4FermiDataTypes.hh"
 
 #include <vector>
@@ -42,7 +42,7 @@ namespace fbu
 class G4FermiFragmentsStorage
 {
   private:
-    using Container = std::vector<const G4FermiFragment*>;
+    using Container = std::vector<const G4FermiPossibleFragment*>;
 
   public:
     class G4FermiIteratorRange
@@ -78,7 +78,7 @@ class G4FermiFragmentsStorage
 
     [[nodiscard]] G4FermiIteratorRange GetFragments(G4FermiNucleiData nuclei) const;
 
-    void AddFragment(const G4FermiFragment& fragment);
+    void AddFragment(const G4FermiPossibleFragment& fragment);
 
   private:
     static inline const Container EmptyContainer_ = {};
@@ -88,4 +88,4 @@ class G4FermiFragmentsStorage
 
 }  // namespace fbu
 
-#endif  // FERMIBREAKUP_FRAGMENT_POOL_G4FERMIFRAGMENTSSTORAGE_HH
+#endif  // FERMIBREAKUP_FRAGMENT_POOL_G4FermiPossibleFragmentSSTORAGE_HH

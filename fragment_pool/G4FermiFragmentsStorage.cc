@@ -27,6 +27,9 @@
 // G4FermiBreakUp alternative de-excitation model
 // by A. Novikov (January 2025)
 //
+//
+// Created by Artem Novikov on 30.01.2024.
+//
 
 #include "G4FermiFragmentsStorage.hh"
 
@@ -57,7 +60,7 @@ G4FermiFragmentsStorage::G4FermiFragmentsStorage(const DataSource& dataSource)
 template<typename Iter>
 G4FermiFragmentsStorage::G4FermiFragmentsStorage(Iter begin, Iter end)
 {
-  static_assert(std::is_same_v<typename Iter::value_type, const G4FermiFragment*>,
+  static_assert(std::is_same_v<typename Iter::value_type, const G4FermiPossibleFragment*>,
                 "invalid iterator");
   for (auto it = begin; it != end; ++it) {
     AddFragment(**it);
@@ -106,7 +109,7 @@ G4FermiFragmentsStorage::GetFragments(G4FermiNucleiData nuclei) const
   return GetFragments(nuclei.atomicMass, nuclei.chargeNumber);
 }
 
-void G4FermiFragmentsStorage::AddFragment(const G4FermiFragment& fragment)
+void G4FermiFragmentsStorage::AddFragment(const G4FermiPossibleFragment& fragment)
 {
   const auto slot = GetSlot(fragment.GetAtomicMass(), fragment.GetChargeNumber());
   if (slot >= fragments_.size()) {

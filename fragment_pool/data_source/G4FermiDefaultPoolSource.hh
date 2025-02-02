@@ -31,17 +31,17 @@
 #ifndef FERMIBREAKUP_FRAGMENT_POOL_DATA_SOURCE_G4FERMIDEFAULTPOOLSOURCE_HH
 #define FERMIBREAKUP_FRAGMENT_POOL_DATA_SOURCE_G4FERMIDEFAULTPOOLSOURCE_HH
 
-#include "fragment_pool/fragments/G4FermiFragment.hh"
+#include "fragment_pool/fragments/G4FermiPossibleFragment.hh"
 
 #include <vector>
 
 namespace fbu
 {
 
-class G4FermiDefaultPoolSource : private std::vector<const G4FermiFragment*>
+class G4FermiDefaultPoolSource : private std::vector<const G4FermiPossibleFragment*>
 {
   private:
-    using Container = std::vector<const G4FermiFragment*>;
+    using Container = std::vector<const G4FermiPossibleFragment*>;
 
   public:
     G4FermiDefaultPoolSource();

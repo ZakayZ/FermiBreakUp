@@ -28,12 +28,12 @@
 // by A. Novikov (January 2025)
 //
 
-#ifndef FERMIBREAKUP_FRAGMENT_POOL_G4FERMIFRAGMENTPOOL_HH
-#define FERMIBREAKUP_FRAGMENT_POOL_G4FERMIFRAGMENTPOOL_HH
+#ifndef FERMIBREAKUP_FRAGMENT_POOL_G4FermiPossibleFragmentPOOL_HH
+#define FERMIBREAKUP_FRAGMENT_POOL_G4FermiPossibleFragmentPOOL_HH
 
 #include "G4FermiFragmentsStorage.hh"
 
-#include "fragments/G4FermiFragment.hh"
+#include "fragments/G4FermiPossibleFragment.hh"
 #include "util/G4FermiDataTypes.hh"
 #include "util/G4FermiSingleton.hh"
 
@@ -44,4 +44,4 @@ using G4FermiFragmentPool = G4FermiSingleton<G4FermiFragmentsStorage>;
 
 }  // namespace fbu
 
-#endif  // FERMIBREAKUP_FRAGMENT_POOL_G4FERMIFRAGMENTPOOL_HH
+#endif  // FERMIBREAKUP_FRAGMENT_POOL_G4FermiPossibleFragmentPOOL_HH

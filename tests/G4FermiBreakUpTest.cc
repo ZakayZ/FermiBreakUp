@@ -51,17 +51,17 @@ std::array<G4FermiStr, 3> CacheTypes = {
   "LFU",
 };
 
-std::unique_ptr<G4FermiVCache<G4FermiNucleiData, G4FermiFragmentSplits>>
+std::unique_ptr<G4FermiVCache<G4FermiNucleiData, G4FermiPossibleFragmentSplits>>
 GetCache(const G4FermiStr& type)
 {
   if (type == CacheTypes[0]) {
     return nullptr;
   }
   else if (type == CacheTypes[1]) {
-    return std::make_unique<G4FermiSimpleCache<G4FermiNucleiData, G4FermiFragmentSplits>>();
+    return std::make_unique<G4FermiSimpleCache<G4FermiNucleiData, G4FermiPossibleFragmentSplits>>();
   }
   else if (type == CacheTypes[2]) {
-    return std::make_unique<G4FermiLFUCache<G4FermiNucleiData, G4FermiFragmentSplits>>(10);
+    return std::make_unique<G4FermiLFUCache<G4FermiNucleiData, G4FermiPossibleFragmentSplits>>(10);
   }
   throw std::runtime_error("unknown cache type: " + type);
 }
@@ -76,7 +76,8 @@ G4FermiFloat RelTolerance(G4FermiFloat expected, G4FermiFloat eps, G4FermiFloat 
 float CalculateFragmentCount(
   G4FermiAtomicMass mass, G4FermiChargeNumber charge, const G4FermiVector3& vec,
   G4FermiFloat energyPerNucleon, size_t tests,
-  std::unique_ptr<G4FermiVCache<G4FermiNucleiData, G4FermiFragmentSplits>>&& cache = nullptr)
+  std::unique_ptr<G4FermiVCache<G4FermiNucleiData, G4FermiPossibleFragmentSplits>>&& cache =
+    nullptr)
 {
   auto model = G4FermiBreakUp(std::move(cache));
   const auto energy = energyPerNucleon * G4FermiFloat(mass);

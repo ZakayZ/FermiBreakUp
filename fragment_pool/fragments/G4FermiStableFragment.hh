@@ -31,15 +31,15 @@
 #ifndef FERMIBREAKUP_FRAGMENT_POOL_FRAGMENTS_G4FERMISTABLEFRAGMENT_HH
 #define FERMIBREAKUP_FRAGMENT_POOL_FRAGMENTS_G4FERMISTABLEFRAGMENT_HH
 
-#include "G4FermiFragment.hh"
+#include "G4FermiPossibleFragment.hh"
 
 namespace fbu
 {
 
-class G4FermiStableFragment : public G4FermiFragment
+class G4FermiStableFragment : public G4FermiPossibleFragment
 {
   public:
-    using G4FermiFragment::G4FermiFragment;
+    using G4FermiPossibleFragment::G4FermiPossibleFragment;
 
     void AppendDecayFragments(const G4FermiLorentzVector& momentum,
                               std::vector<G4FermiParticle>& fragments) const override;

@@ -13,7 +13,7 @@ void CalculateFragments(G4FermiAtomicMass mass, G4FermiChargeNumber charge,
                         const std::string& dumpName, G4FermiFloat step = 0.2, size_t tests = 1e4)
 {
   auto model = G4FermiBreakUp(
-    std::make_unique<G4FermiSimpleCache<G4FermiNucleiData, G4FermiFragmentSplits>>());
+    std::make_unique<G4FermiSimpleCache<G4FermiNucleiData, G4FermiPossibleFragmentSplits>>());
   std::vector<G4FermiFloat> energyNucleonValues;
   std::vector<float> avgParts;
   for (G4FermiFloat energyNucleon = 0.; energyNucleon <= 10.; energyNucleon += step) {
@@ -44,7 +44,7 @@ void CalculateMomentum(G4FermiAtomicMass mass, G4FermiChargeNumber charge,
                        const G4FermiVector3& momentum, size_t tests = 1e4)
 {
   auto model = G4FermiBreakUp(
-    std::make_unique<G4FermiSimpleCache<G4FermiNucleiData, G4FermiFragmentSplits>>());
+    std::make_unique<G4FermiSimpleCache<G4FermiNucleiData, G4FermiPossibleFragmentSplits>>());
   std::ofstream out(dumpName);
   auto vec = G4FermiLorentzVector(
     momentum.x(), momentum.y(), momentum.z(),

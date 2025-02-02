@@ -28,61 +28,20 @@
 // by A. Novikov (January 2025)
 //
 
-#ifndef FERMIBREAKUP_FRAGMENT_POOL_FRAGMENTS_G4FERMIFRAGMENT_HH
-#define FERMIBREAKUP_FRAGMENT_POOL_FRAGMENTS_G4FERMIFRAGMENT_HH
+#ifndef FERMIBREAKUP_PHASE_DECAY_G4FermiPhaseDecay_HH
+#define FERMIBREAKUP_PHASE_DECAY_G4FermiPhaseDecay_HH
 
-#include "util/G4FermiDataTypes.hh"
-#include "util/G4FermiParticle.hh"
-
-#include <ostream>
-#include <vector>
+#include "G4FermiKopylovDecay.hh"
+#include "G4FermiVDecay.hh"
 
 namespace fbu
 {
-class G4FermiFragment;
 
-using G4FermiFragmentVector = std::vector<const G4FermiFragment*>;
+using G4FermiPhaseDecay = G4FermiKopylovDecay;  // or just Decay
 
-class G4FermiFragment
-{
-  public:
-    G4FermiFragment(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber,
-                    G4FermiInt polarization, G4FermiFloat excitationEnergy);
-
-    G4FermiFragment(const G4FermiFragment&) = delete;
-
-    G4FermiFragment& operator=(const G4FermiFragment&) = delete;
-
-    std::vector<G4FermiParticle> GetDecayFragments(const G4FermiLorentzVector& momentum) const;
-
-    virtual void AppendDecayFragments(const G4FermiLorentzVector& momentum,
-                                      std::vector<G4FermiParticle>& particles) const = 0;
-
-    G4FermiAtomicMass GetAtomicMass() const;
-
-    G4FermiChargeNumber GetChargeNumber() const;
-
-    G4FermiInt GetPolarization() const;
-
-    G4FermiFloat GetExcitationEnergy() const;
-
-    G4FermiFloat GetMass() const;
-
-    G4FermiFloat GetTotalEnergy() const;
-
-    virtual ~G4FermiFragment() = default;
-
-  protected:
-    G4FermiAtomicMass atomicMass_;  // A
-    G4FermiChargeNumber chargeNumber_;  // Z
-    G4FermiInt polarization_;
-    G4FermiFloat excitationEnergy_;
-};
+static_assert(std::is_base_of<G4FermiVDecay, G4FermiPhaseDecay>::value,
+              "Invalid phase sampler");
 
 }  // namespace fbu
 
-namespace std
-{
-ostream& operator<<(ostream&, const ::fbu::G4FermiFragment&);
-}  // namespace std
-#endif  // FERMIBREAKUP_FRAGMENT_POOL_FRAGMENTS_G4FERMIFRAGMENT_HH
+#endif  // FERMIBREAKUP_PHASE_DECAY_G4FermiPhaseDecay_HH
