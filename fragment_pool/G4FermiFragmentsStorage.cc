@@ -34,6 +34,7 @@
 #include "G4FermiFragmentsStorage.hh"
 
 #include "data_source/G4FermiDefaultPoolSource.hh"
+#include "util/G4FermiLogger.hh"
 
 using namespace fbu;
 
@@ -69,12 +70,12 @@ G4FermiFragmentsStorage::G4FermiFragmentsStorage(Iter begin, Iter end)
 size_t G4FermiFragmentsStorage::Count(G4FermiAtomicMass atomicMass,
                                       G4FermiChargeNumber chargeNumber) const
 {
-  if (G4FermiUInt(atomicMass) < G4FermiUInt(chargeNumber)) {
+  if (FERMI_UNLIKELY(G4FermiUInt(atomicMass) < G4FermiUInt(chargeNumber))) {
     return 0;
   }
 
   const auto slot = GetSlot(atomicMass, chargeNumber);
-  if (slot >= fragments_.size()) {
+  if (FERMI_UNLIKELY(slot >= fragments_.size())) {
     return 0;
   }
 
@@ -90,12 +91,12 @@ G4FermiFragmentsStorage::G4FermiIteratorRange
 G4FermiFragmentsStorage::GetFragments(G4FermiAtomicMass atomicMass,
                                       G4FermiChargeNumber chargeNumber) const
 {
-  if (G4FermiUInt(atomicMass) < G4FermiUInt(chargeNumber)) {
+  if (FERMI_UNLIKELY(G4FermiUInt(atomicMass) < G4FermiUInt(chargeNumber))) {
     return {EmptyContainer_.begin(), EmptyContainer_.end()};
   }
 
   const auto slot = GetSlot(atomicMass, chargeNumber);
-  if (slot >= fragments_.size()) {
+  if (FERMI_UNLIKELY(slot >= fragments_.size())) {
     return {EmptyContainer_.begin(), EmptyContainer_.end()};
   }
 

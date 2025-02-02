@@ -35,12 +35,12 @@
 
 using namespace fbu;
 
-G4FermiStr std::to_string(G4FermiAtomicMass mass)
+std::string std::to_string(G4FermiAtomicMass mass)
 {
   return std::to_string(G4FermiAtomicMass::G4FermiValueType(mass));
 }
 
-G4FermiStr std::to_string(G4FermiChargeNumber charge)
+std::string std::to_string(G4FermiChargeNumber charge)
 {
   return std::to_string(G4FermiChargeNumber::G4FermiValueType(charge));
 }

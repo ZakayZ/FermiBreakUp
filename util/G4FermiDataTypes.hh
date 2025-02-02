@@ -34,9 +34,9 @@
 #ifndef FERMIBREAKUP_UTIL_G4FERMIDATATYPES_HH
 #define FERMIBREAKUP_UTIL_G4FERMIDATATYPES_HH
 
-#include <G4LorentzVector.h>
-#include <G4Vector3D.h>
-#include <G4String.h>
+#include <G4LorentzVector.hh>
+#include <G4Vector3D.hh>
+#include <G4String.hh>
 
 #include <memory>
 #include <string>

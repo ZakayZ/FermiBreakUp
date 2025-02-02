@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic -Werror")
 
-find_package(CLHEP REQUIRED)
+find_package(Geant4 REQUIRED)
 
 set(Util
     util/G4FermiDataTypes.cc
@@ -49,9 +49,9 @@ FILE(CREATE_LINK ${PROJECT_SOURCE_DIR}/data/small_nuclei_data.csv small_nuclei_d
 
 add_library(G4FermiBreakUp ${Sources})
 
-target_link_libraries(G4FermiBreakUp CLHEP::CLHEP)
+target_link_libraries(G4FermiBreakUp ${Geant4_LIBRARIES})
 
 target_include_directories(G4FermiBreakUp PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-    $<INSTALL_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR} ${Geant4_INCLUDE_DIR}>
+    $<INSTALL_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR} ${Geant4_INCLUDE_DIR}>
 )

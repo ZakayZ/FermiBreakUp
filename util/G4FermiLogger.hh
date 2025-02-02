@@ -34,11 +34,12 @@
 #ifndef FERMIBREAKUP_UTIL_G4FERMILOGGER_HH
 #define FERMIBREAKUP_UTIL_G4FERMILOGGER_HH
 
-#include <iostream>
 #include <memory>
 #include <sstream>
 #include <string>
 #include <string_view>
+
+#include <G4ios.hh>
 
 namespace fbu
 {
@@ -115,7 +116,7 @@ class G4FermiLogger
     static G4FermiLogger Default() { return G4FermiLogger(GlobalImpl, GlobalLevel); }
 
     static inline std::shared_ptr<G4FermiILogger> GlobalImpl =
-      std::make_shared<G4FermiStreamLogger>(std::cerr);
+      std::make_shared<G4FermiStreamLogger>(G4cerr);
     static inline G4FermiLogLevel GlobalLevel = G4FermiLogLevel::ERROR;
 
   private:

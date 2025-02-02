@@ -36,6 +36,8 @@
 
 #include <memory>
 
+#include "util/G4FermiLogger.hh"
+
 namespace fbu
 {
 template<typename T>
@@ -44,7 +46,7 @@ class G4FermiSingleton
   public:
     G4FermiSingleton()
     {
-      if (instance_ == nullptr) {
+      if (FERMI_UNLIKELY(instance_ == nullptr)) {
         instance_ = std::make_unique<T>();
       }
     }
@@ -69,10 +71,7 @@ class G4FermiSingleton
 
     static T& Instance()
     {
-      if (instance_ == nullptr) {
-        instance_ = std::make_unique<T>();
-      }
-      return *instance_;
+      return *G4FermiSingleton();
     }
 
     T& operator*() { return *instance_; }

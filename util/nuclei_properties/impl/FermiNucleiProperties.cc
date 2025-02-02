@@ -112,7 +112,7 @@ G4FermiFloat FermiNucleiProperties::GetNuclearMass(G4FermiAtomicMass atomicMass,
 
   FERMI_LOG_DEBUG("Unknown particle: A = " << atomicMass << ", Z = " << chargeNumber);
 
-  if (slot >= nucleiMasses_.size()) {
+  if (FERMI_UNLIKELY(slot >= nucleiMasses_.size())) {
     nucleiMasses_.resize(slot + G4FermiUInt(atomicMass));
   }
 
@@ -127,7 +127,7 @@ G4FermiFloat FermiNucleiProperties::GetNuclearMass(G4FermiAtomicMass atomicMass,
 bool FermiNucleiProperties::IsStable(G4FermiAtomicMass atomicMass,
                                      G4FermiChargeNumber chargeNumber) const
 {
-  if (atomicMass < 1_m || chargeNumber < 0_c || G4FermiUInt(chargeNumber) > G4FermiUInt(atomicMass))
+  if (FERMI_UNLIKELY(atomicMass < 1_m || chargeNumber < 0_c || G4FermiUInt(chargeNumber) > G4FermiUInt(atomicMass)))
   {
     FERMI_LOG_DEBUG("Unknown particle: A = " << atomicMass << ", Z = " << chargeNumber);
     return false;
