@@ -123,21 +123,29 @@ class G4FermiLogger
     G4FermiLogLevel level_;
 };
 
-#define LOG_MSG(logger, level, msg)                                     \
+#define FERMI_LOG_MSG(logger, level, msg)                               \
   if (logger && logger.ShouldLog(level)) {                              \
     std::ostringstream sstream;                                         \
     sstream << msg;                                                     \
     logger.Log(__FILE__, __LINE__, __FUNCTION__, level, sstream.str()); \
   }
 
-#define LOG_TRACE(msg) LOG_MSG(G4FermiLogger::Default(), G4FermiLogLevel::TRACE, msg)
-#define LOG_DEBUG(msg) LOG_MSG(G4FermiLogger::Default(), G4FermiLogLevel::DEBUG, msg)
-#define LOG_INFO(msg) LOG_MSG(G4FermiLogger::Default(), G4FermiLogLevel::INFO, msg)
-#define LOG_WARN(msg) LOG_MSG(G4FermiLogger::Default(), G4FermiLogLevel::WARN, msg)
-#define LOG_ERROR(msg) LOG_MSG(G4FermiLogger::Default(), G4FermiLogLevel::ERROR, msg)
+#define FERMI_LOG_TRACE(msg) FERMI_LOG_MSG(G4FermiLogger::Default(), G4FermiLogLevel::TRACE, msg)
+#define FERMI_LOG_DEBUG(msg) FERMI_LOG_MSG(G4FermiLogger::Default(), G4FermiLogLevel::DEBUG, msg)
+#define FERMI_LOG_INFO(msg) FERMI_LOG_MSG(G4FermiLogger::Default(), G4FermiLogLevel::INFO, msg)
+#define FERMI_LOG_WARN(msg) FERMI_LOG_MSG(G4FermiLogger::Default(), G4FermiLogLevel::WARN, msg)
+#define FERMI_LOG_ERROR(msg) FERMI_LOG_MSG(G4FermiLogger::Default(), G4FermiLogLevel::ERROR, msg)
 
-#define ASSERT_MSG(COND, MSG)                                                                   \
-  if (__builtin_expect(!(COND), false)) {                                                       \
+#if defined(WIN32) || defined(__MINGW32__)
+  #define FERMI_UNLIKELY(x) (x)
+  #define FERMI_LIKELY(x)   (x)
+#else
+  #define FERMI_UNLIKELY(x) __builtin_expect((x), 0)  // gcc/clang extension - not portable
+  #define FERMI_LIKELY(x)   __builtin_expect((x), 1)
+#endif
+
+#define FERMI_ASSERT_MSG(COND, MSG)                                                             \
+  if (FERMI_UNLIKELY(!(COND))) {                                                                \
     std::ostringstream sstream;                                                                 \
     sstream << "assertion failed: \"" << #COND << '\"' << " at " << __FILE__ << ':' << __LINE__ \
             << '\n'                                                                             \

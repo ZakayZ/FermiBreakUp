@@ -102,7 +102,7 @@ FermiNucleiProperties::FermiNucleiProperties() : FermiNucleiProperties(G4FermiDe
 G4FermiFloat FermiNucleiProperties::GetNuclearMass(G4FermiAtomicMass atomicMass,
                                                    G4FermiChargeNumber chargeNumber) const
 {
-  ASSERT_MSG(G4FermiUInt(atomicMass) >= G4FermiUInt(chargeNumber),
+  FERMI_ASSERT_MSG(G4FermiUInt(atomicMass) >= G4FermiUInt(chargeNumber),
              "invalid nuclei A = " << atomicMass << ", Z = " << chargeNumber);
 
   const auto slot = GetSlot(atomicMass, chargeNumber);
@@ -110,7 +110,7 @@ G4FermiFloat FermiNucleiProperties::GetNuclearMass(G4FermiAtomicMass atomicMass,
     return nucleiMasses_[slot].mass;
   }
 
-  LOG_DEBUG("Unknown particle: A = " << atomicMass << ", Z = " << chargeNumber);
+  FERMI_LOG_DEBUG("Unknown particle: A = " << atomicMass << ", Z = " << chargeNumber);
 
   if (slot >= nucleiMasses_.size()) {
     nucleiMasses_.resize(slot + G4FermiUInt(atomicMass));
@@ -129,7 +129,7 @@ bool FermiNucleiProperties::IsStable(G4FermiAtomicMass atomicMass,
 {
   if (atomicMass < 1_m || chargeNumber < 0_c || G4FermiUInt(chargeNumber) > G4FermiUInt(atomicMass))
   {
-    LOG_DEBUG("Unknown particle: A = " << atomicMass << ", Z = " << chargeNumber);
+    FERMI_LOG_DEBUG("Unknown particle: A = " << atomicMass << ", Z = " << chargeNumber);
     return false;
   }
 
@@ -141,7 +141,7 @@ bool FermiNucleiProperties::IsStable(G4FermiAtomicMass atomicMass,
 void FermiNucleiProperties::AddStableNuclei(G4FermiAtomicMass atomicMass,
                                             G4FermiChargeNumber chargeNumber, G4FermiFloat mass)
 {
-  ASSERT_MSG(G4FermiUInt(atomicMass) >= G4FermiUInt(chargeNumber),
+  FERMI_ASSERT_MSG(G4FermiUInt(atomicMass) >= G4FermiUInt(chargeNumber),
              "invalid particle: A = " << atomicMass << ", Z = " << chargeNumber);
 
   const auto slot = GetSlot(atomicMass, chargeNumber);

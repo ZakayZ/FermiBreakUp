@@ -34,26 +34,28 @@
 #ifndef FERMIBREAKUP_UTIL_G4FERMIDATATYPES_HH
 #define FERMIBREAKUP_UTIL_G4FERMIDATATYPES_HH
 
-#include <CLHEP/Vector/LorentzVector.h>
+#include <G4LorentzVector.h>
+#include <G4Vector3D.h>
+#include <G4String.h>
 
 #include <memory>
 #include <string>
 
 namespace fbu
 {
-using G4FermiInt = int32_t;
+using G4FermiInt = G4int;
 
 using G4FermiUInt = uint32_t;
 
-using G4FermiFloat = double;
+using G4FermiFloat = G4double;
 
-using G4FermiLorentzVector = CLHEP::HepLorentzVector;
+using G4FermiLorentzVector = G4LorentzVector;
 
-using G4FermiVector3 = CLHEP::Hep3Vector;
+using G4FermiVector3 = G4Vector3D;
 
 using G4FermiParticleMomentum = G4FermiVector3;
 
-using G4FermiStr = std::string;
+using G4FermiStr = G4String;
 
 template<typename Key, typename Value>
 class G4FermiVCache

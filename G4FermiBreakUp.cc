@@ -76,7 +76,7 @@ const G4FermiLorentzVector ChangeFrameOfReference(const G4FermiLorentzVector& ve
 std::vector<G4FermiParticle> SplitToParticles(const G4FermiParticle& sourceParticle,
                                               const G4FermiFragmentVector& split)
 {
-  LOG_TRACE("Converting split to particles");
+  FERMI_LOG_TRACE("Converting split to particles");
 
   std::vector<G4FermiFloat> splitMasses(split.size());
   std::transform(split.begin(), split.end(), splitMasses.begin(),
@@ -88,7 +88,7 @@ std::vector<G4FermiParticle> SplitToParticles(const G4FermiParticle& sourceParti
     particlesMomentum = phaseSampler.CalculateDecay(sourceParticle.GetMomentum(), splitMasses);
   }
   catch (std::exception& e) {
-    LOG_ERROR(e.what() << " with split weight: "
+    FERMI_LOG_ERROR(e.what() << " with split weight: "
                        << G4FermiSplitter::DecayWeight(split, sourceParticle.GetAtomicMass(),
                                                        sourceParticle.GetMomentum().m()));
     return {sourceParticle};
@@ -104,7 +104,7 @@ std::vector<G4FermiParticle> SplitToParticles(const G4FermiParticle& sourceParti
     split[fragmentIdx]->AppendDecayFragments(fragmentMomentum, particleSplit);
   }
 
-  LOG_DEBUG("Break up products: " << LogProducts(particleSplit));
+  FERMI_LOG_DEBUG("Break up products: " << LogProducts(particleSplit));
   return particleSplit;
 }
 
@@ -129,9 +129,9 @@ G4FermiBreakUp::G4FermiBreakUp(std::unique_ptr<G4FermiSplitCache>&& cache)
 std::vector<G4FermiParticle> G4FermiBreakUp::SelectSplit(const G4FermiParticle& particle,
                                                          const G4FermiFragmentSplits& splits) const
 {
-  LOG_TRACE("Selecting Split for " << particle << " from " << splits.size() << " splits");
+  FERMI_LOG_TRACE("Selecting Split for " << particle << " from " << splits.size() << " splits");
   if (splits.empty()) {
-    LOG_DEBUG("No splits found");
+    FERMI_LOG_DEBUG("No splits found");
     return {particle};
   }
 
@@ -145,22 +145,22 @@ std::vector<G4FermiParticle> G4FermiBreakUp::SelectSplit(const G4FermiParticle& 
                  });
 
   if (std::all_of(weights_.begin(), weights_.end(), [](auto weight) { return weight == 0.; })) {
-    LOG_WARN("Every split has zero weight");
+    FERMI_LOG_WARN("Every split has zero weight");
     return {particle};
   }
 
   const auto& chosenSplit = splits[G4FermiRandomizer::SampleDistribution(weights_)];
-  LOG_DEBUG("From " << splits.size() << " splits chosen split: " << LogSplit(chosenSplit));
+  FERMI_LOG_DEBUG("From " << splits.size() << " splits chosen split: " << LogSplit(chosenSplit));
 
   return SplitToParticles(particle, chosenSplit);
 }
 
 std::vector<G4FermiParticle> G4FermiBreakUp::BreakItUp(const G4FermiParticle& particle) const
 {
-  LOG_TRACE("Breaking up particle: " << particle);
+  FERMI_LOG_TRACE("Breaking up particle: " << particle);
 
   if (particle.GetExcitationEnergy() < 0.) {
-    LOG_DEBUG(
+    FERMI_LOG_DEBUG(
       "G4FermiParticle is stable with excitation energy = " << particle.GetExcitationEnergy());
     return {particle};
   }
@@ -168,13 +168,13 @@ std::vector<G4FermiParticle> G4FermiBreakUp::BreakItUp(const G4FermiParticle& pa
   if (cache_) {
     auto splitsPtr = cache_->Get(particle.GetNucleiData());
     if (splitsPtr == nullptr) {
-      LOG_DEBUG("G4FermiParticle is stable with excitation energy = "
+      FERMI_LOG_DEBUG("G4FermiParticle is stable with excitation energy = "
                 << particle.GetExcitationEnergy() / CLHEP::MeV << " MeV");
       auto splits = G4FermiSplitter::GenerateSplits(particle.GetNucleiData());
       splitsPtr = cache_->Insert(particle.GetNucleiData(), std::move(splits));
     }
     else {
-      LOG_DEBUG("Splits taken from cache");
+      FERMI_LOG_DEBUG("Splits taken from cache");
     }
 
     return SelectSplit(particle, *splitsPtr);

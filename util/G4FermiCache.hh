@@ -51,7 +51,7 @@ class G4FermiLFUCache : public G4FermiVCache<Key, Value>
   public:
     G4FermiLFUCache(size_t maxSize) : frequencyStorage_(), cache_(), maxSize_(maxSize)
     {
-      ASSERT_MSG(maxSize_ > 0, "Cahce size must be positive");
+      FERMI_ASSERT_MSG(maxSize_ > 0, "Cahce size must be positive");
     }
 
     std::shared_ptr<Value> Insert(const Key& key, Value&& value) override

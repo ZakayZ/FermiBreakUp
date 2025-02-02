@@ -83,7 +83,7 @@ std::vector<G4FermiFloat> G4FermiRandomizer::ProbabilityDistribution(size_t poin
 size_t G4FermiRandomizer::SampleDistribution(const std::vector<G4FermiFloat>& weights)
 {
   const auto totalWeight = std::accumulate(weights.begin(), weights.end(), 0.);
-  ASSERT_MSG(totalWeight > 0., "Invalid weights: all values are zero");
+  FERMI_ASSERT_MSG(totalWeight > 0., "Invalid weights: all values are zero");
 
   const auto targetWeight = SampleUniform() * totalWeight;
   G4FermiFloat cummulativeWeight = 0;

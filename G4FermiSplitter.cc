@@ -213,11 +213,11 @@ constexpr size_t ExpectedSplitSize = 100;
 
 void ThrowOnInvalidInputs(G4FermiNucleiData nucleiData)
 {
-  ASSERT_MSG(nucleiData.atomicMass > 0_m && nucleiData.chargeNumber >= 0_c,
+  FERMI_ASSERT_MSG(nucleiData.atomicMass > 0_m && nucleiData.chargeNumber >= 0_c,
              "Non valid arguments A = " << nucleiData.atomicMass
                                         << " Z = " << nucleiData.chargeNumber);
 
-  ASSERT_MSG(G4FermiUInt(nucleiData.chargeNumber) <= G4FermiUInt(nucleiData.atomicMass),
+  FERMI_ASSERT_MSG(G4FermiUInt(nucleiData.chargeNumber) <= G4FermiUInt(nucleiData.atomicMass),
              "Non physical arguments = " << nucleiData.atomicMass
                                          << " Z = " << nucleiData.chargeNumber);
 }

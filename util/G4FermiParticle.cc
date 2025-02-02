@@ -50,7 +50,7 @@ G4FermiParticle::G4FermiParticle(G4FermiAtomicMass atomicMass, G4FermiChargeNumb
     momentum_(momentum),
     groundStateMass_(G4FermiNucleiProperties()->GetNuclearMass(atomicMass_, chargeNumber_))
 {
-  ASSERT_MSG(G4FermiUInt(atomicMass_) >= G4FermiUInt(chargeNumber),
+  FERMI_ASSERT_MSG(G4FermiUInt(atomicMass_) >= G4FermiUInt(chargeNumber),
              "imposible particle: A = " << atomicMass_ << ", Z = " << chargeNumber);
 
   CalculateExcitationEnergy();
@@ -99,7 +99,7 @@ void G4FermiParticle::CalculateExcitationEnergy()
   excitationEnergy_ = momentum_.mag() - groundStateMass_;
   if (excitationEnergy_ < 0.) {
     if (excitationEnergy_ < -10 * CLHEP::eV) {
-      LOG_WARN("Excitation Energy is too negative: " << excitationEnergy_ / CLHEP::MeV << " MeV");
+      FERMI_LOG_WARN("Excitation Energy is too negative: " << excitationEnergy_ / CLHEP::MeV << " MeV");
     }
     excitationEnergy_ = 0.;
   }
