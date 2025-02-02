@@ -34,18 +34,21 @@
 #ifndef FERMIBREAKUP_PHASE_DECAY_G4FERMIVDECAY_HH
 #define FERMIBREAKUP_PHASE_DECAY_G4FERMIVDECAY_HH
 
-#include <vector>
 #include "util/G4FermiDataTypes.hh"
 
-namespace fbu {
-  class G4FermiVDecay {
+#include <vector>
+
+namespace fbu
+{
+class G4FermiVDecay
+{
   public:
-    virtual std::vector<G4FermiLorentzVector> CalculateDecay(
-      const G4FermiLorentzVector& totalMomentum,
-      const std::vector<G4FermiFloat>& fragmentsMass) const = 0;
+    virtual std::vector<G4FermiLorentzVector>
+    CalculateDecay(const G4FermiLorentzVector& totalMomentum,
+                   const std::vector<G4FermiFloat>& fragmentsMass) const = 0;
 
     virtual ~G4FermiVDecay() = default;
-  };
-} // namespace fbu
+};
+}  // namespace fbu
 
-#endif // FERMIBREAKUP_PHASE_DECAY_G4FERMIVDECAY_HH
+#endif  // FERMIBREAKUP_PHASE_DECAY_G4FERMIVDECAY_HH

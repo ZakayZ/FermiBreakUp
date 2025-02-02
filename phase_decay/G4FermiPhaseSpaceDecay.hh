@@ -34,15 +34,17 @@
 #ifndef FERMIBREAKUP_PHASE_DECAY_G4FERMIPHASESPACEDECAY_HH
 #define FERMIBREAKUP_PHASE_DECAY_G4FERMIPHASESPACEDECAY_HH
 
-#include "G4FermiVDecay.hh"
 #include "G4FermiKopylovDecay.hh"
+#include "G4FermiVDecay.hh"
 
-namespace fbu {
+namespace fbu
+{
 
-  using G4FermiPhaseSpaceDecay = G4FermiKopylovDecay; // or just Decay
+using G4FermiPhaseSpaceDecay = G4FermiKopylovDecay;  // or just Decay
 
-  static_assert(std::is_base_of<G4FermiVDecay, G4FermiPhaseSpaceDecay>::value, "Invalid phase sampler");
+static_assert(std::is_base_of<G4FermiVDecay, G4FermiPhaseSpaceDecay>::value,
+              "Invalid phase sampler");
 
-} // namespace fbu
+}  // namespace fbu
 
-#endif // FERMIBREAKUP_PHASE_DECAY_G4FERMIPHASESPACEDECAY_HH
+#endif  // FERMIBREAKUP_PHASE_DECAY_G4FERMIPHASESPACEDECAY_HH

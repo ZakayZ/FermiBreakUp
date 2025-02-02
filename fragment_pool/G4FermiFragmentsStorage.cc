@@ -31,40 +31,44 @@
 // Created by Artem Novikov on 30.01.2024.
 //
 
-#include "data_source/G4FermiDefaultPoolSource.hh"
-
 #include "G4FermiFragmentsStorage.hh"
+
+#include "data_source/G4FermiDefaultPoolSource.hh"
 
 using namespace fbu;
 
-namespace {
-  inline size_t GetSlot(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber) {
-    const auto mass = G4FermiUInt(atomicMass);
-    const auto charge = G4FermiUInt(chargeNumber);
-    return (mass * (mass + 1)) / 2 + charge;
-  }
-} // namespace
+namespace
+{
+inline size_t GetSlot(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber)
+{
+  const auto mass = G4FermiUInt(atomicMass);
+  const auto charge = G4FermiUInt(chargeNumber);
+  return (mass * (mass + 1)) / 2 + charge;
+}
+}  // namespace
 
 G4FermiFragmentsStorage::G4FermiFragmentsStorage()
   : G4FermiFragmentsStorage(G4FermiDefaultPoolSource())
-{
-}
+{}
 
-template <typename DataSource>
+template<typename DataSource>
 G4FermiFragmentsStorage::G4FermiFragmentsStorage(const DataSource& dataSource)
   : G4FermiFragmentsStorage(dataSource.begin(), dataSource.end())
-{
-}
+{}
 
-template <typename Iter>
-G4FermiFragmentsStorage::G4FermiFragmentsStorage(Iter begin, Iter end) {
-  static_assert(std::is_same_v<typename Iter::value_type, const G4FermiFragment*>, "invalid iterator");
+template<typename Iter>
+G4FermiFragmentsStorage::G4FermiFragmentsStorage(Iter begin, Iter end)
+{
+  static_assert(std::is_same_v<typename Iter::value_type, const G4FermiFragment*>,
+                "invalid iterator");
   for (auto it = begin; it != end; ++it) {
     AddFragment(**it);
   }
 }
 
-size_t G4FermiFragmentsStorage::Count(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber) const {
+size_t G4FermiFragmentsStorage::Count(G4FermiAtomicMass atomicMass,
+                                      G4FermiChargeNumber chargeNumber) const
+{
   if (G4FermiUInt(atomicMass) < G4FermiUInt(chargeNumber)) {
     return 0;
   }
@@ -77,11 +81,15 @@ size_t G4FermiFragmentsStorage::Count(G4FermiAtomicMass atomicMass, G4FermiCharg
   return fragments_[slot].size();
 }
 
-size_t G4FermiFragmentsStorage::Count(G4FermiNucleiData nuclei) const {
+size_t G4FermiFragmentsStorage::Count(G4FermiNucleiData nuclei) const
+{
   return Count(nuclei.atomicMass, nuclei.chargeNumber);
 }
 
-G4FermiFragmentsStorage::G4FermiIteratorRange G4FermiFragmentsStorage::GetFragments(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber) const {
+G4FermiFragmentsStorage::G4FermiIteratorRange
+G4FermiFragmentsStorage::GetFragments(G4FermiAtomicMass atomicMass,
+                                      G4FermiChargeNumber chargeNumber) const
+{
   if (G4FermiUInt(atomicMass) < G4FermiUInt(chargeNumber)) {
     return {EmptyContainer_.begin(), EmptyContainer_.end()};
   }
@@ -94,11 +102,14 @@ G4FermiFragmentsStorage::G4FermiIteratorRange G4FermiFragmentsStorage::GetFragme
   return {fragments_[slot].begin(), fragments_[slot].end()};
 }
 
-G4FermiFragmentsStorage::G4FermiIteratorRange G4FermiFragmentsStorage::GetFragments(G4FermiNucleiData nuclei) const {
+G4FermiFragmentsStorage::G4FermiIteratorRange
+G4FermiFragmentsStorage::GetFragments(G4FermiNucleiData nuclei) const
+{
   return GetFragments(nuclei.atomicMass, nuclei.chargeNumber);
 }
 
-void G4FermiFragmentsStorage::AddFragment(const G4FermiFragment& fragment) {
+void G4FermiFragmentsStorage::AddFragment(const G4FermiFragment& fragment)
+{
   const auto slot = GetSlot(fragment.GetAtomicMass(), fragment.GetChargeNumber());
   if (slot >= fragments_.size()) {
     fragments_.resize(slot + 1);

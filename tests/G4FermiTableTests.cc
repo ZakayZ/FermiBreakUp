@@ -31,15 +31,16 @@
 // Created by Artem Novikov on 08.03.2023.
 //
 
-#include <gtest/gtest.h>
-#include <fstream>
-
 #include "util/nuclei_properties/G4FermiNucleiProperties.hh"
 #include "util/nuclei_properties/data_storage/G4FermiCSVNuclearMass.hh"
+#include <gtest/gtest.h>
+
+#include <fstream>
 
 using namespace fbu;
 
-TEST(TableTest, DefaultProperties) {
+TEST(TableTest, DefaultProperties)
+{
   std::ifstream tableData("./small_nuclei_data.csv");
   ASSERT_TRUE(tableData.is_open());
 
@@ -60,7 +61,8 @@ TEST(TableTest, DefaultProperties) {
   }
 }
 
-TEST(TableTest, FileProperties) {
+TEST(TableTest, FileProperties)
+{
   std::ifstream tableData("./small_nuclei_data.csv");
   ASSERT_TRUE(tableData.is_open());
 

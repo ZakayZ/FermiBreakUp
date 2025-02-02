@@ -34,16 +34,17 @@
 #ifndef FERMIBREAKUP_FRAGMENT_POOL_G4FERMIFRAGMENTPOOL_HH
 #define FERMIBREAKUP_FRAGMENT_POOL_G4FERMIFRAGMENTPOOL_HH
 
+#include "G4FermiFragmentsStorage.hh"
+
+#include "fragments/G4FermiFragment.hh"
 #include "util/G4FermiDataTypes.hh"
 #include "util/G4FermiSingleton.hh"
 
-#include "fragments/G4FermiFragment.hh"
-#include "G4FermiFragmentsStorage.hh"
+namespace fbu
+{
 
-namespace fbu {
+using G4FermiFragmentPool = G4FermiSingleton<G4FermiFragmentsStorage>;
 
-  using G4FermiFragmentPool = G4FermiSingleton<G4FermiFragmentsStorage>;
+}  // namespace fbu
 
-} // namespace fbu
-
-#endif // FERMIBREAKUP_FRAGMENT_POOL_G4FERMIFRAGMENTPOOL_HH
+#endif  // FERMIBREAKUP_FRAGMENT_POOL_G4FERMIFRAGMENTPOOL_HH

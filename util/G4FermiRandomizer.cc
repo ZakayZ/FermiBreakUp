@@ -31,44 +31,48 @@
 // Created by Artem Novikov on 19.02.2023.
 //
 
+#include "G4FermiRandomizer.hh"
+
+#include "G4FermiLogger.hh"
+
+#include <CLHEP/Units/PhysicalConstants.h>
+
 #include <algorithm>
 #include <numeric>
 #include <random>
 
-#include <CLHEP/Units/PhysicalConstants.h>
-
-#include "G4FermiRandomizer.hh"
-#include "G4FermiLogger.hh"
-
 using namespace fbu;
 
-G4FermiFloat G4FermiRandomizer::SampleUniform() {
+G4FermiFloat G4FermiRandomizer::SampleUniform()
+{
   static std::uniform_real_distribution<G4FermiFloat> distribution(0., 1.);
   return distribution(Engine_);
 }
 
-G4FermiFloat G4FermiRandomizer::SampleNormal(G4FermiFloat mean, G4FermiFloat deviation) {
+G4FermiFloat G4FermiRandomizer::SampleNormal(G4FermiFloat mean, G4FermiFloat deviation)
+{
   static std::normal_distribution<G4FermiFloat> distribution(0., 1.);
   return mean + distribution(Engine_) * deviation;
 }
 
-G4FermiParticleMomentum G4FermiRandomizer::IsotropicVector(G4FermiFloat magnitude) {
+G4FermiParticleMomentum G4FermiRandomizer::IsotropicVector(G4FermiFloat magnitude)
+{
   const auto cos = 1.0 - 2.0 * SampleUniform();
   const auto sin = std::sqrt(1.0 - std::pow(cos, 2));
   const auto phi = CLHEP::twopi * SampleUniform();
 
-  return G4FermiParticleMomentum(
-    magnitude * std::cos(phi) * sin,
-    magnitude * std::sin(phi) * sin,
-    magnitude * cos);
+  return G4FermiParticleMomentum(magnitude * std::cos(phi) * sin, magnitude * std::sin(phi) * sin,
+                                 magnitude * cos);
 }
 
-std::vector<G4FermiFloat> G4FermiRandomizer::ProbabilityDistribution(size_t pointCount) {
+std::vector<G4FermiFloat> G4FermiRandomizer::ProbabilityDistribution(size_t pointCount)
+{
   // Sample uniform random numbers in increasing order
   std::vector<G4FermiFloat> probabilityDistribution(pointCount);
 
   probabilityDistribution.front() = 0.;
-  std::generate_n(probabilityDistribution.begin(), pointCount - 2, G4FermiRandomizer::SampleUniform);
+  std::generate_n(probabilityDistribution.begin(), pointCount - 2,
+                  G4FermiRandomizer::SampleUniform);
   probabilityDistribution.back() = 1.;
 
   std::sort(probabilityDistribution.begin(), probabilityDistribution.end());
@@ -76,7 +80,8 @@ std::vector<G4FermiFloat> G4FermiRandomizer::ProbabilityDistribution(size_t poin
   return probabilityDistribution;
 }
 
-size_t G4FermiRandomizer::SampleDistribution(const std::vector<G4FermiFloat>& weights) {
+size_t G4FermiRandomizer::SampleDistribution(const std::vector<G4FermiFloat>& weights)
+{
   const auto totalWeight = std::accumulate(weights.begin(), weights.end(), 0.);
   ASSERT_MSG(totalWeight > 0., "Invalid weights: all values are zero");
 
@@ -93,6 +98,7 @@ size_t G4FermiRandomizer::SampleDistribution(const std::vector<G4FermiFloat>& we
   return weights.size() - 1;
 }
 
-void G4FermiRandomizer::SetSeed(G4FermiRandomEngine::result_type seed) {
+void G4FermiRandomizer::SetSeed(G4FermiRandomEngine::result_type seed)
+{
   Engine_.seed(seed);
 }

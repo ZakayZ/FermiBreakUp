@@ -34,24 +34,23 @@
 #ifndef FERMIBREAKUP_FRAGMENT_POOL_FRAGMENTS_G4FERMIFRAGMENT_HH
 #define FERMIBREAKUP_FRAGMENT_POOL_FRAGMENTS_G4FERMIFRAGMENT_HH
 
-#include <ostream>
-#include <vector>
-
 #include "util/G4FermiDataTypes.hh"
 #include "util/G4FermiParticle.hh"
 
-namespace fbu {
-  class G4FermiFragment;
+#include <ostream>
+#include <vector>
 
-  using G4FermiFragmentVector = std::vector<const G4FermiFragment*>;
+namespace fbu
+{
+class G4FermiFragment;
 
-  class G4FermiFragment {
+using G4FermiFragmentVector = std::vector<const G4FermiFragment*>;
+
+class G4FermiFragment
+{
   public:
-    G4FermiFragment(
-      G4FermiAtomicMass atomicMass,
-      G4FermiChargeNumber chargeNumber,
-      G4FermiInt polarization,
-      G4FermiFloat excitationEnergy);
+    G4FermiFragment(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber,
+                    G4FermiInt polarization, G4FermiFloat excitationEnergy);
 
     G4FermiFragment(const G4FermiFragment&) = delete;
 
@@ -59,7 +58,8 @@ namespace fbu {
 
     std::vector<G4FermiParticle> GetDecayFragments(const G4FermiLorentzVector& momentum) const;
 
-    virtual void AppendDecayFragments(const G4FermiLorentzVector& momentum, std::vector<G4FermiParticle>& particles) const = 0;
+    virtual void AppendDecayFragments(const G4FermiLorentzVector& momentum,
+                                      std::vector<G4FermiParticle>& particles) const = 0;
 
     G4FermiAtomicMass GetAtomicMass() const;
 
@@ -77,14 +77,15 @@ namespace fbu {
 
   protected:
     G4FermiAtomicMass atomicMass_;  // A
-    G4FermiChargeNumber chargeNumber_; // Z
+    G4FermiChargeNumber chargeNumber_;  // Z
     G4FermiInt polarization_;
     G4FermiFloat excitationEnergy_;
-  };
+};
 
-} // namespace fbu
+}  // namespace fbu
 
-namespace std {
-  ostream& operator<<(ostream&, const ::fbu::G4FermiFragment&);
-} // namespace std
-#endif // FERMIBREAKUP_FRAGMENT_POOL_FRAGMENTS_G4FERMIFRAGMENT_HH
+namespace std
+{
+ostream& operator<<(ostream&, const ::fbu::G4FermiFragment&);
+}  // namespace std
+#endif  // FERMIBREAKUP_FRAGMENT_POOL_FRAGMENTS_G4FERMIFRAGMENT_HH

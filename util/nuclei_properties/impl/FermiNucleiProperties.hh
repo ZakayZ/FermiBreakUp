@@ -34,58 +34,66 @@
 #ifndef FERMIBREAKUP_UTIL_NUCLEI_PROPERTIES_IMPL_FERMINUCLEIPROPERTIES_HH
 #define FERMIBREAKUP_UTIL_NUCLEI_PROPERTIES_IMPL_FERMINUCLEIPROPERTIES_HH
 
-#include <vector>
-
 #include "util/G4FermiDataTypes.hh"
 #include "util/nuclei_properties/G4FermiVNucleiProperties.hh"
 
-namespace fbu {
-  class FermiNucleiProperties : public G4FermiVNucleiProperties {
+#include <vector>
+
+namespace fbu
+{
+class FermiNucleiProperties : public G4FermiVNucleiProperties
+{
   public:
     FermiNucleiProperties();
 
-    template <typename data_source>
+    template<typename data_source>
     FermiNucleiProperties(const data_source& dataSource);
 
-    template <typename Iter>
+    template<typename Iter>
     FermiNucleiProperties(Iter begin, Iter end);
 
-    [[nodiscard]] G4FermiFloat GetNuclearMass(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber) const override;
+    [[nodiscard]] G4FermiFloat GetNuclearMass(G4FermiAtomicMass atomicMass,
+                                              G4FermiChargeNumber chargeNumber) const override;
 
-    [[nodiscard]] bool IsStable(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber) const override;
+    [[nodiscard]] bool IsStable(G4FermiAtomicMass atomicMass,
+                                G4FermiChargeNumber chargeNumber) const override;
 
-    void AddStableNuclei(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber, G4FermiFloat mass);
+    void AddStableNuclei(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber,
+                         G4FermiFloat mass);
 
     void AddStableNuclei(G4FermiNucleiData nucleiData, G4FermiFloat mass);
 
-    ~FermiNucleiProperties() = default;
+    ~FermiNucleiProperties() override = default;
 
   private:
-    struct G4FermiMassData {
-      G4FermiFloat mass;
+    struct G4FermiMassData
+    {
+        G4FermiFloat mass;
 
-      bool isStable = false; // value was added via AddMass, it is considered stable
+        bool isStable = false;  // value was added via AddMass, it is considered stable
 
-      bool isCached = false; // value has been calculated earlier
+        bool isCached = false;  // value has been calculated earlier
     };
 
     mutable std::vector<G4FermiMassData> nucleiMasses_;
-  };
+};
 
-  template <typename data_source>
-  FermiNucleiProperties::FermiNucleiProperties(const data_source& dataSource)
-    : FermiNucleiProperties(dataSource.begin(), dataSource.end())
-  {
+template<typename data_source>
+FermiNucleiProperties::FermiNucleiProperties(const data_source& dataSource)
+  : FermiNucleiProperties(dataSource.begin(), dataSource.end())
+{}
+
+template<typename Iter>
+FermiNucleiProperties::FermiNucleiProperties(Iter begin, Iter end)
+{
+  static_assert(
+    std::is_same_v<typename Iter::value_type, std::pair<const G4FermiNucleiData, G4FermiFloat>>,
+    "invalid iterator");
+  for (auto it = begin; it != end; ++it) {
+    AddStableNuclei(it->first, it->second);
   }
+}
 
-  template <typename Iter>
-  FermiNucleiProperties::FermiNucleiProperties(Iter begin, Iter end) {
-    static_assert(std::is_same_v<typename Iter::value_type, std::pair<const G4FermiNucleiData, G4FermiFloat>>, "invalid iterator");
-    for (auto it = begin; it != end; ++it) {
-      AddStableNuclei(it->first, it->second);
-    }
-  }
+}  // namespace fbu
 
-} // namespace fbu
-
-#endif // FERMIBREAKUP_UTIL_NUCLEI_PROPERTIES_IMPL_FERMINUCLEIPROPERTIES_HH
+#endif  // FERMIBREAKUP_UTIL_NUCLEI_PROPERTIES_IMPL_FERMINUCLEIPROPERTIES_HH

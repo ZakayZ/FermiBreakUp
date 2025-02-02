@@ -34,32 +34,31 @@
 #ifndef FERMIBREAKUP_UTIL_NUCLEI_PROPERTIES_DATA_STORAGE_G4FERMICSVNUCLEARMASS_HH
 #define FERMIBREAKUP_UTIL_NUCLEI_PROPERTIES_DATA_STORAGE_G4FERMICSVNUCLEARMASS_HH
 
-#include <unordered_map>
-
 #include "util/G4FermiDataTypes.hh"
 
-namespace fbu {
+#include <unordered_map>
 
-  class G4FermiCSVNuclearMass : private std::unordered_map<G4FermiNucleiData, G4FermiFloat> {
+namespace fbu
+{
+
+class G4FermiCSVNuclearMass : private std::unordered_map<G4FermiNucleiData, G4FermiFloat>
+{
   private:
     using Container = std::unordered_map<G4FermiNucleiData, G4FermiFloat>;
 
   public:
-    G4FermiCSVNuclearMass(
-      const G4FermiStr& csvFilename,
-      const G4FermiStr& massNumberName = "A",
-      const G4FermiStr& chargeNumberName = "Z",
-      const G4FermiStr& massName = "mass"
-    );
+    G4FermiCSVNuclearMass(const G4FermiStr& csvFilename, const G4FermiStr& massNumberName = "A",
+                          const G4FermiStr& chargeNumberName = "Z",
+                          const G4FermiStr& massName = "mass");
 
-    using Container::iterator;
-    using Container::const_iterator;
     using Container::begin;
     using Container::cbegin;
-    using Container::end;
     using Container::cend;
-  };
+    using Container::const_iterator;
+    using Container::end;
+    using Container::iterator;
+};
 
-} // namespace fbu
+}  // namespace fbu
 
-#endif // FERMIBREAKUP_UTIL_NUCLEI_PROPERTIES_DATA_STORAGE_G4FERMICSVNUCLEARMASS_HH
+#endif  // FERMIBREAKUP_UTIL_NUCLEI_PROPERTIES_DATA_STORAGE_G4FERMICSVNUCLEARMASS_HH

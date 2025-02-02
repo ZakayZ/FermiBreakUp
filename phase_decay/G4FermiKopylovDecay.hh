@@ -36,15 +36,17 @@
 
 #include "G4FermiVDecay.hh"
 
-namespace fbu {
+namespace fbu
+{
 
-  class G4FermiKopylovDecay : public G4FermiVDecay{
+class G4FermiKopylovDecay : public G4FermiVDecay
+{
   public:
-    std::vector<G4FermiLorentzVector> CalculateDecay(
-      const G4FermiLorentzVector& totalMomentum,
-      const std::vector<G4FermiFloat>& fragmentsMass) const override;
-  };
+    std::vector<G4FermiLorentzVector>
+    CalculateDecay(const G4FermiLorentzVector& totalMomentum,
+                   const std::vector<G4FermiFloat>& fragmentsMass) const override;
+};
 
-} // namespace fbu
+}  // namespace fbu
 
-#endif // FERMIBREAKUP_PHASE_DECAY_G4FERMIKOPYLOVDECAY_HH
+#endif  // FERMIBREAKUP_PHASE_DECAY_G4FERMIKOPYLOVDECAY_HH

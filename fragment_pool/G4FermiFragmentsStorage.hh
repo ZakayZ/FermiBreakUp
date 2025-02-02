@@ -34,49 +34,50 @@
 #ifndef FERMIBREAKUP_FRAGMENT_POOL_G4FERMIFRAGMENTSSTORAGE_HH
 #define FERMIBREAKUP_FRAGMENT_POOL_G4FERMIFRAGMENTSSTORAGE_HH
 
+#include "fragments/G4FermiFragment.hh"
+#include "util/G4FermiDataTypes.hh"
+
 #include <vector>
 
-#include "util/G4FermiDataTypes.hh"
-#include "fragments/G4FermiFragment.hh"
+namespace fbu
+{
 
-namespace fbu {
-
-  class G4FermiFragmentsStorage {
+class G4FermiFragmentsStorage
+{
   private:
     using Container = std::vector<const G4FermiFragment*>;
 
   public:
-    class G4FermiIteratorRange {
-    public:
-      using const_iterator = Container::const_iterator;
+    class G4FermiIteratorRange
+    {
+      public:
+        using const_iterator = Container::const_iterator;
 
-      G4FermiIteratorRange(const_iterator begin, const_iterator end)
-        : begin_(begin)
-        , end_(end)
-      {
-      }
+        G4FermiIteratorRange(const_iterator begin, const_iterator end) : begin_(begin), end_(end) {}
 
-      const_iterator begin() const { return begin_; }
-      const_iterator end() const { return end_; }
+        const_iterator begin() const { return begin_; }
+        const_iterator end() const { return end_; }
 
-    private:
-      const_iterator begin_;
-      const_iterator end_;
+      private:
+        const_iterator begin_;
+        const_iterator end_;
     };
 
     G4FermiFragmentsStorage();
 
-    template <typename DataSource>
+    template<typename DataSource>
     G4FermiFragmentsStorage(const DataSource& dataSource);
 
-    template <typename Iter>
+    template<typename Iter>
     G4FermiFragmentsStorage(Iter begin, Iter end);
 
-    [[nodiscard]] size_t Count(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber) const;
+    [[nodiscard]] size_t Count(G4FermiAtomicMass atomicMass,
+                               G4FermiChargeNumber chargeNumber) const;
 
     [[nodiscard]] size_t Count(G4FermiNucleiData nuclei) const;
 
-    [[nodiscard]] G4FermiIteratorRange GetFragments(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber) const;
+    [[nodiscard]] G4FermiIteratorRange GetFragments(G4FermiAtomicMass atomicMass,
+                                                    G4FermiChargeNumber chargeNumber) const;
 
     [[nodiscard]] G4FermiIteratorRange GetFragments(G4FermiNucleiData nuclei) const;
 
@@ -86,8 +87,8 @@ namespace fbu {
     static inline const Container EmptyContainer_ = {};
 
     std::vector<Container> fragments_;
-  };
+};
 
-} // namespace fbu
+}  // namespace fbu
 
-#endif // FERMIBREAKUP_FRAGMENT_POOL_G4FERMIFRAGMENTSSTORAGE_HH
+#endif  // FERMIBREAKUP_FRAGMENT_POOL_G4FERMIFRAGMENTSSTORAGE_HH

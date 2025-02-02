@@ -31,14 +31,15 @@
 // Created by Artem Novikov on 08.03.2023.
 //
 
-#include <gtest/gtest.h>
-#include <numeric>
-
 #include "util/G4FermiIntegerPartition.hh"
+#include <gtest/gtest.h>
+
+#include <numeric>
 
 using namespace fbu;
 
-size_t factorial(size_t num) {
+size_t factorial(size_t num)
+{
   size_t fact = 1;
   for (size_t i = 2; i <= num; ++i) {
     fact *= i;
@@ -46,11 +47,13 @@ size_t factorial(size_t num) {
   return fact;
 }
 
-size_t Cnk(size_t n, size_t k) {
+size_t Cnk(size_t n, size_t k)
+{
   return factorial(n) / factorial(k) / factorial(n - k);
 }
 
-TEST(PartitionTests, SmallOnePadding) {
+TEST(PartitionTests, SmallOnePadding)
+{
   constexpr size_t partitionNumber = 6;
   constexpr size_t partitionParts = 3;
 
@@ -69,7 +72,8 @@ TEST(PartitionTests, SmallOnePadding) {
   ASSERT_EQ(partitionCounter, Cnk(partitionNumber - 1, partitionParts - 1));
 }
 
-TEST(PartitionTests, BigOnePadding) {
+TEST(PartitionTests, BigOnePadding)
+{
   const size_t partitionNumber = 20;
   const size_t partitionParts = 7;
 
@@ -88,7 +92,8 @@ TEST(PartitionTests, BigOnePadding) {
   ASSERT_EQ(partitionCounter, Cnk(partitionNumber - 1, partitionParts - 1));
 }
 
-TEST(PartitionTests, SmallZeroPadding) {
+TEST(PartitionTests, SmallZeroPadding)
+{
   constexpr size_t partitionNumber = 7;
   constexpr size_t partitionParts = 3;
 
@@ -107,7 +112,8 @@ TEST(PartitionTests, SmallZeroPadding) {
   ASSERT_EQ(partitionCounter, Cnk(partitionNumber + partitionParts - 1, partitionParts - 1));
 }
 
-TEST(PartitionTests, BigZeroPadding) {
+TEST(PartitionTests, BigZeroPadding)
+{
   constexpr size_t partitionNumber = 16;
   constexpr size_t partitionParts = 4;
 

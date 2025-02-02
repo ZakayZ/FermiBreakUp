@@ -39,30 +39,33 @@
 #include <memory>
 #include <string>
 
-namespace fbu {
-  using G4FermiInt = int32_t;
+namespace fbu
+{
+using G4FermiInt = int32_t;
 
-  using G4FermiUInt = uint32_t;
+using G4FermiUInt = uint32_t;
 
-  using G4FermiFloat = double;
+using G4FermiFloat = double;
 
-  using G4FermiLorentzVector = CLHEP::HepLorentzVector;
+using G4FermiLorentzVector = CLHEP::HepLorentzVector;
 
-  using G4FermiVector3 = CLHEP::Hep3Vector;
+using G4FermiVector3 = CLHEP::Hep3Vector;
 
-  using G4FermiParticleMomentum = G4FermiVector3;
+using G4FermiParticleMomentum = G4FermiVector3;
 
-  using G4FermiStr = std::string;
+using G4FermiStr = std::string;
 
-  template <typename Key, typename Value>
-  class G4FermiVCache {
+template<typename Key, typename Value>
+class G4FermiVCache
+{
   public:
     virtual std::shared_ptr<Value> Insert(const Key& key, Value&& value) = 0;
     virtual std::shared_ptr<Value> Get(const Key& key) = 0;
     virtual ~G4FermiVCache() = default;
-  };
+};
 
-  class G4FermiAtomicMass {
+class G4FermiAtomicMass
+{
   public:
     using G4FermiValueType = G4FermiUInt;
 
@@ -98,9 +101,10 @@ namespace fbu {
 
   private:
     G4FermiValueType mass_;
-  };
+};
 
-  class G4FermiChargeNumber {
+class G4FermiChargeNumber
+{
   public:
     using G4FermiValueType = G4FermiUInt;
 
@@ -136,55 +140,63 @@ namespace fbu {
 
   private:
     G4FermiValueType charge_;
-  };
+};
 
-  struct G4FermiNucleiData {
+struct G4FermiNucleiData
+{
     G4FermiAtomicMass atomicMass;
     G4FermiChargeNumber chargeNumber;
 
-    bool operator<(const G4FermiNucleiData& other) const {
+    bool operator<(const G4FermiNucleiData& other) const
+    {
       return atomicMass < other.atomicMass
-          || (atomicMass == other.atomicMass && chargeNumber < other.chargeNumber);
+             || (atomicMass == other.atomicMass && chargeNumber < other.chargeNumber);
     }
 
-    bool operator==(const G4FermiNucleiData& other) const {
+    bool operator==(const G4FermiNucleiData& other) const
+    {
       return atomicMass == other.atomicMass && chargeNumber == other.chargeNumber;
     }
 
-    bool operator!=(const G4FermiNucleiData& other) const {
+    bool operator!=(const G4FermiNucleiData& other) const
+    {
       return atomicMass != other.atomicMass || chargeNumber != other.chargeNumber;
     }
-  };
+};
 
-} // namespace fbu
+}  // namespace fbu
 
-namespace std {
-  template <>
-  struct hash<::fbu::G4FermiNucleiData> {
+namespace std
+{
+template<>
+struct hash<::fbu::G4FermiNucleiData>
+{
     size_t operator()(const ::fbu::G4FermiNucleiData& key) const
     {
       auto mass = ::fbu::G4FermiInt(key.atomicMass);
       auto charge = ::fbu::G4FermiInt(key.chargeNumber);
       return (mass * (mass + 1)) / 2 + charge;
     }
-  };
+};
 
-  string to_string(::fbu::G4FermiAtomicMass mass);
-  string to_string(::fbu::G4FermiChargeNumber charge);
+string to_string(::fbu::G4FermiAtomicMass mass);
+string to_string(::fbu::G4FermiChargeNumber charge);
 
-  std::ostream& operator<<(std::ostream& out, const ::fbu::G4FermiAtomicMass& mass);
-  std::istream& operator>>(std::istream& in, ::fbu::G4FermiAtomicMass& mass);
+std::ostream& operator<<(std::ostream& out, const ::fbu::G4FermiAtomicMass& mass);
+std::istream& operator>>(std::istream& in, ::fbu::G4FermiAtomicMass& mass);
 
-  std::ostream& operator<<(std::ostream& out, const ::fbu::G4FermiChargeNumber& charge);
-  std::istream& operator>>(std::istream& in, ::fbu::G4FermiChargeNumber& charge);
-}
+std::ostream& operator<<(std::ostream& out, const ::fbu::G4FermiChargeNumber& charge);
+std::istream& operator>>(std::istream& in, ::fbu::G4FermiChargeNumber& charge);
+}  // namespace std
 
-constexpr fbu::G4FermiAtomicMass operator ""_m(unsigned long long mass) {
+constexpr fbu::G4FermiAtomicMass operator""_m(unsigned long long mass)
+{
   return fbu::G4FermiAtomicMass(mass);
 }
 
-constexpr fbu::G4FermiChargeNumber operator ""_c(unsigned long long charge) {
+constexpr fbu::G4FermiChargeNumber operator""_c(unsigned long long charge)
+{
   return fbu::G4FermiChargeNumber(charge);
 }
 
-#endif // FERMIBREAKUP_UTIL_G4FERMIDATATYPES_HH
+#endif  // FERMIBREAKUP_UTIL_G4FERMIDATATYPES_HH

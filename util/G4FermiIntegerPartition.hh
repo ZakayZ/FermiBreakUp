@@ -38,11 +38,13 @@
 #include <cstdint>
 #include <vector>
 
-namespace fbu {
+namespace fbu
+{
 
-  using G4FermiPartition = std::vector<uint32_t>;
+using G4FermiPartition = std::vector<uint32_t>;
 
-  class G4FermiIntegerPartition {
+class G4FermiIntegerPartition
+{
   public:
     class Iterator;
 
@@ -56,9 +58,10 @@ namespace fbu {
     uint32_t number_;
     uint32_t termsCount_;
     uint32_t base_;
-  };
+};
 
-  class G4FermiIntegerPartition::Iterator {
+class G4FermiIntegerPartition::Iterator
+{
   public:
     friend class G4FermiIntegerPartition;
 
@@ -93,8 +96,8 @@ namespace fbu {
     void NextPartition();
 
     G4FermiPartition partition_;
-  };
+};
 
-} // namespace fbu
+}  // namespace fbu
 
-#endif // FERMIBREAKUP_UTIL_G4FERMIINTEGERPARTITION_HH
+#endif  // FERMIBREAKUP_UTIL_G4FERMIINTEGERPARTITION_HH

@@ -36,9 +36,11 @@
 
 #include "G4FermiDataTypes.hh"
 
-namespace fbu {
+namespace fbu
+{
 
-  class G4FermiParticle {
+class G4FermiParticle
+{
   public:
     G4FermiParticle() = delete;
 
@@ -48,7 +50,8 @@ namespace fbu {
     G4FermiParticle& operator=(const G4FermiParticle&) = default;
     G4FermiParticle& operator=(G4FermiParticle&&) = default;
 
-    G4FermiParticle(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber, const G4FermiLorentzVector& momentum);
+    G4FermiParticle(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber,
+                    const G4FermiLorentzVector& momentum);
 
     G4FermiNucleiData GetNucleiData() const;
 
@@ -73,12 +76,13 @@ namespace fbu {
 
     G4FermiFloat groundStateMass_ = 0;
     G4FermiFloat excitationEnergy_ = 0;
-  };
+};
 
-} // namespace fbu
+}  // namespace fbu
 
-namespace std {
-  ostream& operator<<(ostream&, const ::fbu::G4FermiParticle&);
-} // namespace std
+namespace std
+{
+ostream& operator<<(ostream&, const ::fbu::G4FermiParticle&);
+}  // namespace std
 
-#endif // FERMIBREAKUP_UTIL_G4FERMIPARTICLE_HH
+#endif  // FERMIBREAKUP_UTIL_G4FERMIPARTICLE_HH

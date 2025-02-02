@@ -19,13 +19,11 @@ performance-trivially-destructible, \
 readability-delete-null-pointer, \
 readability-duplicate-include, \
 readability-string-compare"
-WarningsAsErrors: ''
+WarningsAsErrors: '*'
 HeaderFilterRegex: ''
 FormatStyle: file
 CheckOptions:
-
 - key:             modernize-use-auto.RemoveStars
   value:           'true'
 - key:             performance-faster-string-find.StringLikeClasses
   value:           'G4String;::std::basic_string;::std::basic_string_view'
-...

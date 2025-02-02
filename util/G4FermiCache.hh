@@ -34,28 +34,28 @@
 #ifndef FERMIBREAKUP_UTIL_G4FERMICACHE_HH
 #define FERMIBREAKUP_UTIL_G4FERMICACHE_HH
 
-#include <cassert>
-#include <memory>
-#include <unordered_map>
-#include <map>
-#include <optional>
-
 #include "G4FermiDataTypes.hh"
 #include "G4FermiLogger.hh"
 
-namespace fbu {
-  template <typename Key, typename Value>
-  class G4FermiLFUCache: public G4FermiVCache<Key, Value> {
+#include <cassert>
+#include <map>
+#include <memory>
+#include <optional>
+#include <unordered_map>
+
+namespace fbu
+{
+template<typename Key, typename Value>
+class G4FermiLFUCache : public G4FermiVCache<Key, Value>
+{
   public:
-    G4FermiLFUCache(size_t maxSize)
-      : frequencyStorage_()
-      , cache_()
-      , maxSize_(maxSize)
+    G4FermiLFUCache(size_t maxSize) : frequencyStorage_(), cache_(), maxSize_(maxSize)
     {
       ASSERT_MSG(maxSize_ > 0, "Cahce size must be positive");
     }
 
-    std::shared_ptr<Value> Insert(const Key& key, Value&& value) override {
+    std::shared_ptr<Value> Insert(const Key& key, Value&& value) override
+    {
       if (auto it = cache_.find(key); it != cache_.end()) {
         frequencyStorage_.erase(it->second.second);
         it->second.second = frequencyStorage_.insert({1, key});
@@ -69,11 +69,13 @@ namespace fbu {
       }
 
       auto it = frequencyStorage_.insert({1, key});
-      auto [insertedIt, _] = cache_.emplace(key, std::make_pair(std::make_shared<Value>(std::move(value)), it));
+      auto [insertedIt, _] =
+        cache_.emplace(key, std::make_pair(std::make_shared<Value>(std::move(value)), it));
       return insertedIt->second.first;
     }
 
-    std::shared_ptr<Value> Get(const Key& key) override {
+    std::shared_ptr<Value> Get(const Key& key) override
+    {
       if (auto it = cache_.find(key); it != cache_.end()) {
         auto& freqIter = it->second.second;
         const auto newCount = freqIter->first + 1;
@@ -92,19 +94,22 @@ namespace fbu {
     G4FermiFrequencyStorage frequencyStorage_;
     std::unordered_map<Key, std::pair<std::shared_ptr<Value>, G4FermiFrequencyIter>> cache_;
     std::size_t maxSize_;
-  };
+};
 
-  template <typename Key, typename Value>
-  class G4FermiSimpleCache: public G4FermiVCache<Key, Value> {
+template<typename Key, typename Value>
+class G4FermiSimpleCache : public G4FermiVCache<Key, Value>
+{
   public:
     G4FermiSimpleCache() = default;
 
-    std::shared_ptr<Value> Insert(const Key& key, Value&& value) override {
+    std::shared_ptr<Value> Insert(const Key& key, Value&& value) override
+    {
       cachedItem_ = {key, std::make_shared<Value>(std::move(value))};
       return cachedItem_->second;
     }
 
-    std::shared_ptr<Value> Get(const Key& key) override {
+    std::shared_ptr<Value> Get(const Key& key) override
+    {
       if (cachedItem_.has_value() && cachedItem_->first == key) {
         return cachedItem_->second;
       }
@@ -114,7 +119,7 @@ namespace fbu {
 
   private:
     std::optional<std::pair<Key, std::shared_ptr<Value>>> cachedItem_;
-  };
-} // namespace fbu
+};
+}  // namespace fbu
 
-#endif // FERMIBREAKUP_UTIL_G4FERMICACHE_HH
+#endif  // FERMIBREAKUP_UTIL_G4FERMICACHE_HH

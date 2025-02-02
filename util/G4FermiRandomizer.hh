@@ -34,14 +34,16 @@
 #ifndef FERMIBREAKUP_UTIL_G4FERMIRANDOMIZER_HH
 #define FERMIBREAKUP_UTIL_G4FERMIRANDOMIZER_HH
 
+#include "G4FermiDataTypes.hh"
+
 #include <random>
 #include <vector>
 
-#include "G4FermiDataTypes.hh"
+namespace fbu
+{
 
-namespace fbu {
-
-  class G4FermiRandomizer {
+class G4FermiRandomizer
+{
   private:
     using G4FermiRandomEngine = std::mt19937;
 
@@ -60,8 +62,8 @@ namespace fbu {
 
   private:
     static inline G4FermiRandomEngine Engine_ = {};
-  };
+};
 
-} // namespace fbu
+}  // namespace fbu
 
-#endif // FERMIBREAKUP_UTIL_G4FERMIRANDOMIZER_HH
+#endif  // FERMIBREAKUP_UTIL_G4FERMIRANDOMIZER_HH

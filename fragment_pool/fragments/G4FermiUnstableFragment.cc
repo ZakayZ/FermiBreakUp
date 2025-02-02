@@ -32,29 +32,31 @@
 //
 
 #include "G4FermiUnstableFragment.hh"
+
 #include "phase_decay/G4FermiPhaseSpaceDecay.hh"
 #include "util/nuclei_properties/G4FermiNucleiProperties.hh"
 
 using namespace fbu;
 
-G4FermiUnstableFragment::G4FermiUnstableFragment(
-  G4FermiAtomicMass atomicMass,
-  G4FermiChargeNumber chargeNumber,
-  G4FermiInt polarization,
-  G4FermiFloat excitationEnergy,
-  std::vector<G4FermiNucleiData>&& decayData
-)
-  : G4FermiFragment(atomicMass, chargeNumber, polarization, excitationEnergy)
-  , decayData_(std::move(decayData))
+G4FermiUnstableFragment::G4FermiUnstableFragment(G4FermiAtomicMass atomicMass,
+                                                 G4FermiChargeNumber chargeNumber,
+                                                 G4FermiInt polarization,
+                                                 G4FermiFloat excitationEnergy,
+                                                 std::vector<G4FermiNucleiData>&& decayData)
+  : G4FermiFragment(atomicMass, chargeNumber, polarization, excitationEnergy),
+    decayData_(std::move(decayData))
 {
   G4FermiNucleiProperties properties;
   masses_.reserve(decayData_.size());
   for (const auto& decayFragment : decayData_) {
-    masses_.emplace_back(properties->GetNuclearMass(decayFragment.atomicMass, decayFragment.chargeNumber));
+    masses_.emplace_back(
+      properties->GetNuclearMass(decayFragment.atomicMass, decayFragment.chargeNumber));
   }
 }
 
-void G4FermiUnstableFragment::AppendDecayFragments(const G4FermiLorentzVector& momentum, std::vector<G4FermiParticle>& fragments) const {
+void G4FermiUnstableFragment::AppendDecayFragments(const G4FermiLorentzVector& momentum,
+                                                   std::vector<G4FermiParticle>& fragments) const
+{
   G4FermiPhaseSpaceDecay phaseDecay;
 
   auto fragmentsMomentum = phaseDecay.CalculateDecay(momentum, masses_);
@@ -62,9 +64,7 @@ void G4FermiUnstableFragment::AppendDecayFragments(const G4FermiLorentzVector& m
   const auto boostVector = momentum.boostVector();
 
   for (size_t i = 0; i < decayData_.size(); ++i) {
-    fragments.emplace_back(
-      decayData_[i].atomicMass,
-      decayData_[i].chargeNumber,
-      fragmentsMomentum[i].boost(boostVector));
+    fragments.emplace_back(decayData_[i].atomicMass, decayData_[i].chargeNumber,
+                           fragmentsMomentum[i].boost(boostVector));
   }
 }

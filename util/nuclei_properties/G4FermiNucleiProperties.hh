@@ -34,21 +34,24 @@
 #ifndef FERMIBREAKUP_UTIL_NUCLEI_PROPERTIES_G4FERMINUCLEIPROPERTIES_HH
 #define FERMIBREAKUP_UTIL_NUCLEI_PROPERTIES_G4FERMINUCLEIPROPERTIES_HH
 
+#include "G4FermiVNucleiProperties.hh"
+
+#include "impl/FermiNucleiProperties.hh"
 #include "util/G4FermiDataTypes.hh"
 #include "util/G4FermiSingleton.hh"
 
-#include "impl/FermiNucleiProperties.hh"
-#include "G4FermiVNucleiProperties.hh"
+namespace fbu
+{
 
-namespace fbu {
+// it is possible to use polymorphism here
+// but it is a bottleneck and no virtual call is made
+using G4FermiNucleiProperties = G4FermiSingleton<FermiNucleiProperties>;
 
-  // it is possible to use polymorphism here
-  // but it is a bottleneck and no virtual call is made
-  using G4FermiNucleiProperties = G4FermiSingleton<FermiNucleiProperties>;
+static_assert(
+  std::is_base_of_v<G4FermiVNucleiProperties,
+                    std::remove_reference_t<decltype(G4FermiNucleiProperties::Instance())>>,
+  "Incorrect Nuclei fbu class");
 
-  static_assert(std::is_base_of_v<G4FermiVNucleiProperties, std::remove_reference_t<decltype(G4FermiNucleiProperties::Instance())>>,
-              "Incorrect Nuclei fbu class");
+}  // namespace fbu
 
-} // namespace fbu
-
-#endif // FERMIBREAKUP_UTIL_NUCLEI_PROPERTIES_G4FERMINUCLEIPROPERTIES_HH
+#endif  // FERMIBREAKUP_UTIL_NUCLEI_PROPERTIES_G4FERMINUCLEIPROPERTIES_HH

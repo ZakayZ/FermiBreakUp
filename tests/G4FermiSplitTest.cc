@@ -31,19 +31,20 @@
 // Created by Artem Novikov on 19.03.2023.
 //
 
-#include <exception>
-#include <numeric>
+#include "G4FermiSplitter.hh"
+
 #include "util/G4FermiDataTypes.hh"
+#include <CLHEP/Units/PhysicalConstants.h>
 #include <gtest/gtest.h>
 
-#include <CLHEP/Units/PhysicalConstants.h>
-
-#include "G4FermiSplitter.hh"
+#include <exception>
+#include <numeric>
 
 using namespace fbu;
 
-TEST(SplitTest, NoDuplicates) {
-  G4FermiFragmentSplits splits; // speeds up test
+TEST(SplitTest, NoDuplicates)
+{
+  G4FermiFragmentSplits splits;  // speeds up test
   for (G4FermiUInt a = 1; a < 18; ++a) {
     for (G4FermiUInt z = 0; z <= a; ++z) {
       const auto mass = G4FermiAtomicMass(a);
@@ -57,8 +58,7 @@ TEST(SplitTest, NoDuplicates) {
       for (size_t i = 0; i < splits.size(); ++i) {
         for (size_t j = i + 1; j < splits.size(); ++j) {
           ASSERT_NE(splits[i], splits[j])
-              << "Some of splits the same for A = "
-              << mass << ", Z = " << charge;
+            << "Some of splits the same for A = " << mass << ", Z = " << charge;
         }
       }
     }

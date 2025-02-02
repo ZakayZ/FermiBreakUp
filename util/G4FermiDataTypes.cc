@@ -35,32 +35,38 @@
 
 using namespace fbu;
 
-G4FermiStr std::to_string(G4FermiAtomicMass mass) {
+G4FermiStr std::to_string(G4FermiAtomicMass mass)
+{
   return std::to_string(G4FermiAtomicMass::G4FermiValueType(mass));
 }
 
-G4FermiStr std::to_string(G4FermiChargeNumber charge) {
+G4FermiStr std::to_string(G4FermiChargeNumber charge)
+{
   return std::to_string(G4FermiChargeNumber::G4FermiValueType(charge));
 }
 
-std::ostream& std::operator<<(std::ostream& out, const G4FermiAtomicMass& mass) {
+std::ostream& std::operator<<(std::ostream& out, const G4FermiAtomicMass& mass)
+{
   out << G4FermiAtomicMass::G4FermiValueType(mass);
   return out;
 }
 
-std::istream& std::operator>>(std::istream& in, G4FermiAtomicMass& mass) {
+std::istream& std::operator>>(std::istream& in, G4FermiAtomicMass& mass)
+{
   G4FermiAtomicMass::G4FermiValueType val;
   in >> val;
   mass = G4FermiAtomicMass(val);
   return in;
 }
 
-std::ostream& std::operator<<(std::ostream& out, const G4FermiChargeNumber& charge) {
+std::ostream& std::operator<<(std::ostream& out, const G4FermiChargeNumber& charge)
+{
   out << G4FermiChargeNumber::G4FermiValueType(charge);
   return out;
 }
 
-std::istream& std::operator>>(std::istream& in, G4FermiChargeNumber& charge) {
+std::istream& std::operator>>(std::istream& in, G4FermiChargeNumber& charge)
+{
   G4FermiChargeNumber::G4FermiValueType val;
   in >> val;
   charge = G4FermiChargeNumber(val);

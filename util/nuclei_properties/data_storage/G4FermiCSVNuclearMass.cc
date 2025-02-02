@@ -31,17 +31,16 @@
 // Created by Artem Novikov on 18.02.2024.
 //
 
-#include <fstream>
-
 #include "G4FermiCSVNuclearMass.hh"
+
+#include <fstream>
 
 using namespace fbu;
 
-G4FermiCSVNuclearMass::G4FermiCSVNuclearMass(
-  const G4FermiStr& csvFilename,
-  const G4FermiStr& massNumberName,
-  const G4FermiStr& chargeNumberName,
-  const G4FermiStr& massName)
+G4FermiCSVNuclearMass::G4FermiCSVNuclearMass(const G4FermiStr& csvFilename,
+                                             const G4FermiStr& massNumberName,
+                                             const G4FermiStr& chargeNumberName,
+                                             const G4FermiStr& massName)
 {
   std::ifstream in(csvFilename);
 

@@ -37,21 +37,26 @@
 #include "fragment_pool/fragments/G4FermiFragment.hh"
 #include "util/G4FermiDataTypes.hh"
 
-namespace fbu {
-  using G4FermiFragmentSplits = std::vector<G4FermiFragmentVector>;
+namespace fbu
+{
+using G4FermiFragmentSplits = std::vector<G4FermiFragmentVector>;
 
-  class G4FermiSplitter {
+class G4FermiSplitter
+{
   public:
-    static G4FermiFloat DecayWeight(const G4FermiFragmentVector& split, G4FermiAtomicMass atomicMass, G4FermiFloat totalEnergy);
+    static G4FermiFloat DecayWeight(const G4FermiFragmentVector& split,
+                                    G4FermiAtomicMass atomicMass, G4FermiFloat totalEnergy);
 
-    static G4FermiFloat SplitFactor(const G4FermiFragmentVector& split, G4FermiAtomicMass atomicMass);
+    static G4FermiFloat SplitFactor(const G4FermiFragmentVector& split,
+                                    G4FermiAtomicMass atomicMass);
 
     static G4FermiFloat KineticFactor(const G4FermiFragmentVector& split, G4FermiFloat totalEnergy);
 
-    static void GenerateSplits(G4FermiNucleiData nucleiData, std::vector<G4FermiFragmentVector>& splits);
+    static void GenerateSplits(G4FermiNucleiData nucleiData,
+                               std::vector<G4FermiFragmentVector>& splits);
 
     static std::vector<G4FermiFragmentVector> GenerateSplits(G4FermiNucleiData nucleiData);
-  };
-} // namespace fbu
+};
+}  // namespace fbu
 
-#endif // FERMIBREAKUP_G4FERMISPLITTER_HH
+#endif  // FERMIBREAKUP_G4FERMISPLITTER_HH

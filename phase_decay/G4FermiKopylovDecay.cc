@@ -31,66 +31,66 @@
 // Created by Artem Novikov on 21.02.2023.
 //
 
-#include <exception>
-#include <numeric>
-#include <functional>
+#include "G4FermiKopylovDecay.hh"
 
+#include "util/G4FermiLogger.hh"
+#include "util/G4FermiRandomizer.hh"
 #include <CLHEP/Random/RandGamma.h>
 
-#include "util/G4FermiRandomizer.hh"
-#include "util/G4FermiLogger.hh"
-
-#include "G4FermiKopylovDecay.hh"
+#include <exception>
+#include <functional>
+#include <numeric>
 
 using namespace fbu;
 
-namespace {
-  G4FermiLorentzVector ChangeFrameOfReference(const G4FermiLorentzVector& vec, const G4FermiVector3& boostVector) {
-    auto copy = vec;
-    copy.boost(boostVector);
-    return copy;
-  }
+namespace
+{
+G4FermiLorentzVector ChangeFrameOfReference(const G4FermiLorentzVector& vec,
+                                            const G4FermiVector3& boostVector)
+{
+  auto copy = vec;
+  copy.boost(boostVector);
+  return copy;
+}
 
-  G4FermiFloat BetaKopylov(size_t k) {
-    constexpr G4FermiFloat beta = 1.5;
+G4FermiFloat BetaKopylov(size_t k)
+{
+  constexpr G4FermiFloat beta = 1.5;
 
-    // Notice that alpha > beta always
-    const G4FermiFloat alpha = 1.5 * static_cast<G4FermiFloat>(k - 1);
-    const G4FermiFloat y1 = CLHEP::RandGamma::shoot(alpha, 1);
-    const G4FermiFloat y2 = CLHEP::RandGamma::shoot(beta, 1);
+  // Notice that alpha > beta always
+  const G4FermiFloat alpha = 1.5 * static_cast<G4FermiFloat>(k - 1);
+  const G4FermiFloat y1 = CLHEP::RandGamma::shoot(alpha, 1);
+  const G4FermiFloat y2 = CLHEP::RandGamma::shoot(beta, 1);
 
-    return y1 / (y1 + y2);
-  }
+  return y1 / (y1 + y2);
+}
 
-  G4FermiFloat TwoBodyMomentum2(G4FermiFloat totalEnergy, G4FermiFloat mass1, G4FermiFloat mass2) {
-    ASSERT_MSG(totalEnergy > mass1 + mass2, "totalEnergy is less than fragments mass");
+G4FermiFloat TwoBodyMomentum2(G4FermiFloat totalEnergy, G4FermiFloat mass1, G4FermiFloat mass2)
+{
+  ASSERT_MSG(totalEnergy > mass1 + mass2, "totalEnergy is less than fragments mass");
 
-    return (totalEnergy + mass1 + mass2)
-        * (totalEnergy + mass1 - mass2)
-        * (totalEnergy - mass1 + mass2)
-        * (totalEnergy - mass1 - mass2)
-        / (4.0 * std::pow(totalEnergy, 2));
-  }
+  return (totalEnergy + mass1 + mass2) * (totalEnergy + mass1 - mass2)
+         * (totalEnergy - mass1 + mass2) * (totalEnergy - mass1 - mass2)
+         / (4.0 * std::pow(totalEnergy, 2));
+}
 
-  std::pair<G4FermiLorentzVector, G4FermiLorentzVector> TwoBodyDecay(
-    G4FermiFloat totalEnergy,
-    G4FermiFloat mass1,
-    G4FermiFloat mass2)
-  {
-    const auto mag2 = TwoBodyMomentum2(totalEnergy, mass1, mass2);
-    const auto momentum = G4FermiRandomizer::IsotropicVector(std::sqrt(mag2));
+std::pair<G4FermiLorentzVector, G4FermiLorentzVector>
+TwoBodyDecay(G4FermiFloat totalEnergy, G4FermiFloat mass1, G4FermiFloat mass2)
+{
+  const auto mag2 = TwoBodyMomentum2(totalEnergy, mass1, mass2);
+  const auto momentum = G4FermiRandomizer::IsotropicVector(std::sqrt(mag2));
 
-    return {
-      G4FermiLorentzVector(momentum, std::sqrt(mag2 + std::pow(mass1, 2))),
-      G4FermiLorentzVector(-momentum, std::sqrt(mag2 + std::pow(mass2, 2))),
-    };
-  }
+  return {
+    G4FermiLorentzVector(momentum, std::sqrt(mag2 + std::pow(mass1, 2))),
+    G4FermiLorentzVector(-momentum, std::sqrt(mag2 + std::pow(mass2, 2))),
+  };
+}
 
-} // namespace
+}  // namespace
 
-std::vector<G4FermiLorentzVector> G4FermiKopylovDecay::CalculateDecay(
-  const G4FermiLorentzVector& totalMomentum,
-  const std::vector<G4FermiFloat>& fragmentsMass) const
+std::vector<G4FermiLorentzVector>
+G4FermiKopylovDecay::CalculateDecay(const G4FermiLorentzVector& totalMomentum,
+                                    const std::vector<G4FermiFloat>& fragmentsMass) const
 {
   LOG_TRACE("Kopylov Decay called");
   ASSERT_MSG(fragmentsMass.size() > 0, "Kopylov Decay called for empty split");
@@ -106,7 +106,8 @@ std::vector<G4FermiLorentzVector> G4FermiKopylovDecay::CalculateDecay(
   // 2 bodies case is faster
   if (fragmentsMass.size() == 2) {
     LOG_DEBUG("Decay for 2 fragments");
-    std::tie(result[0], result[1]) = TwoBodyDecay(totalMomentum.m(), fragmentsMass[0], fragmentsMass[1]);
+    std::tie(result[0], result[1]) =
+      TwoBodyDecay(totalMomentum.m(), fragmentsMass[0], fragmentsMass[1]);
     return result;
   }
 

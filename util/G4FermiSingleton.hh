@@ -36,63 +36,57 @@
 
 #include <memory>
 
-namespace fbu {
-  template <typename T>
-  class G4FermiSingleton {
+namespace fbu
+{
+template<typename T>
+class G4FermiSingleton
+{
   public:
-    G4FermiSingleton() {
+    G4FermiSingleton()
+    {
       if (instance_ == nullptr) {
         instance_ = std::make_unique<T>();
       }
     }
 
-    template <typename... Args>
-    G4FermiSingleton(Args&& ... args) {
+    template<typename... Args>
+    G4FermiSingleton(Args&&... args)
+    {
       Reset(std::forward<Args>(args)...);
     }
 
-    G4FermiSingleton(T* ptr) {
-      Reset(ptr);
-    }
+    G4FermiSingleton(T* ptr) { Reset(ptr); }
 
     ~G4FermiSingleton() = default;
 
-    template <typename... Args>
-    static void Reset(Args&& ... args) {
+    template<typename... Args>
+    static void Reset(Args&&... args)
+    {
       instance_ = std::make_unique<T>(std::forward<Args>(args)...);
     }
 
-    static void Reset(T* ptr) {
-      instance_.reset(ptr);
-    }
+    static void Reset(T* ptr) { instance_.reset(ptr); }
 
-    static T& Instance() {
+    static T& Instance()
+    {
       if (instance_ == nullptr) {
         instance_ = std::make_unique<T>();
       }
       return *instance_;
     }
 
-    T& operator*() {
-      return *instance_;
-    }
+    T& operator*() { return *instance_; }
 
-    const T& operator*() const {
-      return *instance_;
-    }
+    const T& operator*() const { return *instance_; }
 
-    T* operator->() {
-      return instance_.get();
-    }
+    T* operator->() { return instance_.get(); }
 
-    const T& operator->() const {
-      return *instance_;
-    }
+    const T& operator->() const { return *instance_; }
 
   private:
     static inline std::unique_ptr<T> instance_;
-  };
+};
 
-} // namespace fbu
+}  // namespace fbu
 
-#endif // FERMIBREAKUP_UTIL_G4FERMISINGLETON_HH
+#endif  // FERMIBREAKUP_UTIL_G4FERMISINGLETON_HH

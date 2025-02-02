@@ -34,27 +34,30 @@
 #ifndef FERMIBREAKUP_UTIL_NUCLEI_PROPERTIES_DATA_STORAGE_G4FERMIDEFAULTNUCLEARMASS_HH
 #define FERMIBREAKUP_UTIL_NUCLEI_PROPERTIES_DATA_STORAGE_G4FERMIDEFAULTNUCLEARMASS_HH
 
-#include <vector>
-
 #include "util/G4FermiDataTypes.hh"
 
-namespace fbu {
+#include <vector>
 
-  class G4FermiDefaultNuclearMass : private std::vector<std::pair<const G4FermiNucleiData, G4FermiFloat>> {
+namespace fbu
+{
+
+class G4FermiDefaultNuclearMass
+  : private std::vector<std::pair<const G4FermiNucleiData, G4FermiFloat>>
+{
   private:
     using Container = std::vector<std::pair<const G4FermiNucleiData, G4FermiFloat>>;
 
   public:
     G4FermiDefaultNuclearMass();
 
-    using Container::iterator;
-    using Container::const_iterator;
     using Container::begin;
     using Container::cbegin;
-    using Container::end;
     using Container::cend;
-  };
+    using Container::const_iterator;
+    using Container::end;
+    using Container::iterator;
+};
 
-} // fbu
+}  // namespace fbu
 
-#endif // FERMIBREAKUP_UTIL_NUCLEI_PROPERTIES_DATA_STORAGE_G4FERMIDEFAULTNUCLEARMASS_HH
+#endif  // FERMIBREAKUP_UTIL_NUCLEI_PROPERTIES_DATA_STORAGE_G4FERMIDEFAULTNUCLEARMASS_HH

@@ -36,69 +36,60 @@
 
 #include "G4FermiFragment.hh"
 
-namespace fbu {
+namespace fbu
+{
 
-  class G4FermiUnstableFragment : public G4FermiFragment {
+class G4FermiUnstableFragment : public G4FermiFragment
+{
   public:
-    G4FermiUnstableFragment(
-      G4FermiAtomicMass atomicMass,
-      G4FermiChargeNumber chargeNumber,
-      G4FermiInt polarization,
-      G4FermiFloat excitationEnergy,
-      std::vector<G4FermiNucleiData>&& decayData);
+    G4FermiUnstableFragment(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber,
+                            G4FermiInt polarization, G4FermiFloat excitationEnergy,
+                            std::vector<G4FermiNucleiData>&& decayData);
 
-    void AppendDecayFragments(
-      const G4FermiLorentzVector& momentum,
-      std::vector<G4FermiParticle>& particles) const override;
+    void AppendDecayFragments(const G4FermiLorentzVector& momentum,
+                              std::vector<G4FermiParticle>& particles) const override;
 
   private:
     std::vector<G4FermiNucleiData> decayData_;
     std::vector<G4FermiFloat> masses_;
-  };
+};
 
-  #define AddUnstaleFragment(NAME, FRAGMENTS) \
-    inline G4FermiUnstableFragment NAME(             \
-        G4FermiAtomicMass atomicMass,                \
-        G4FermiChargeNumber chargeNumber,            \
-        G4FermiInt polarization,                \
-        G4FermiFloat excitationEnergy)          \
-    {                                         \
-      return G4FermiUnstableFragment(                \
-        atomicMass,                           \
-        chargeNumber,                         \
-        polarization,                         \
-        excitationEnergy,                     \
-        FRAGMENTS                             \
-      );                                      \
-    }
+#define AddUnstaleFragment(NAME, FRAGMENTS)                                                      \
+  inline G4FermiUnstableFragment NAME(G4FermiAtomicMass atomicMass,                              \
+                                      G4FermiChargeNumber chargeNumber, G4FermiInt polarization, \
+                                      G4FermiFloat excitationEnergy)                             \
+  {                                                                                              \
+    return G4FermiUnstableFragment(atomicMass, chargeNumber, polarization, excitationEnergy,     \
+                                   FRAGMENTS);                                                   \
+  }
 
-  // He5 ----> alpha + neutron
-  AddUnstaleFragment(He5Fragment, std::vector<G4FermiNucleiData>({
-    G4FermiNucleiData{4_m, 2_c},
-    G4FermiNucleiData{1_m, 0_c},
-  }));
+// He5 ----> alpha + neutron
+AddUnstaleFragment(He5Fragment, std::vector<G4FermiNucleiData>({
+                                  G4FermiNucleiData{4_m, 2_c},
+                                  G4FermiNucleiData{1_m, 0_c},
+                                }));
 
-  // B9 ----> alpha + alpha + proton
-  AddUnstaleFragment(B9Fragment, std::vector<G4FermiNucleiData>({
-    G4FermiNucleiData{4_m, 2_c},
-    G4FermiNucleiData{4_m, 2_c},
-    G4FermiNucleiData{1_m, 1_c},
-  }));
+// B9 ----> alpha + alpha + proton
+AddUnstaleFragment(B9Fragment, std::vector<G4FermiNucleiData>({
+                                 G4FermiNucleiData{4_m, 2_c},
+                                 G4FermiNucleiData{4_m, 2_c},
+                                 G4FermiNucleiData{1_m, 1_c},
+                               }));
 
-  // Be8 ----> alpha + alpha
-  AddUnstaleFragment(Be8Fragment, std::vector<G4FermiNucleiData>({
-    G4FermiNucleiData{4_m, 2_c},
-    G4FermiNucleiData{4_m, 2_c},
-  }));
+// Be8 ----> alpha + alpha
+AddUnstaleFragment(Be8Fragment, std::vector<G4FermiNucleiData>({
+                                  G4FermiNucleiData{4_m, 2_c},
+                                  G4FermiNucleiData{4_m, 2_c},
+                                }));
 
-  // Li5 ----> alpha + proton
-  AddUnstaleFragment(Li5Fragment, std::vector<G4FermiNucleiData>({
-    G4FermiNucleiData{4_m, 2_c},
-    G4FermiNucleiData{1_m, 1_c},
-  }));
+// Li5 ----> alpha + proton
+AddUnstaleFragment(Li5Fragment, std::vector<G4FermiNucleiData>({
+                                  G4FermiNucleiData{4_m, 2_c},
+                                  G4FermiNucleiData{1_m, 1_c},
+                                }));
 
-  #undef AddUnstaleFragment
+#undef AddUnstaleFragment
 
-} // namespace fbu
+}  // namespace fbu
 
-#endif // FERMIBREAKUP_FRAGMENT_POOL_FRAGMENTS_G4FERMIUNSTABLEFRAGMENT_HH
+#endif  // FERMIBREAKUP_FRAGMENT_POOL_FRAGMENTS_G4FERMIUNSTABLEFRAGMENT_HH

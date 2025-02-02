@@ -34,14 +34,17 @@
 #ifndef FERMIBREAKUP_G4FERMIBREAKUP_HH
 #define FERMIBREAKUP_G4FERMIBREAKUP_HH
 
-#include <memory>
-
 #include "G4FermiSplitter.hh"
+
 #include "util/G4FermiParticle.hh"
 
-namespace fbu {
+#include <memory>
 
-  class G4FermiBreakUp {
+namespace fbu
+{
+
+class G4FermiBreakUp
+{
   public:
     using G4FermiSplitCache = G4FermiVCache<G4FermiNucleiData, G4FermiFragmentSplits>;
 
@@ -52,15 +55,16 @@ namespace fbu {
     std::vector<G4FermiParticle> BreakItUp(const G4FermiParticle& nucleus) const;
 
   private:
-    std::vector<G4FermiParticle> SelectSplit(const G4FermiParticle& particle, const G4FermiFragmentSplits& splits) const;
+    std::vector<G4FermiParticle> SelectSplit(const G4FermiParticle& particle,
+                                             const G4FermiFragmentSplits& splits) const;
 
     mutable std::unique_ptr<G4FermiSplitCache> cache_ = nullptr;
 
     // improve performance, reusing allocated memory
     mutable std::vector<G4FermiFloat> weights_;
     mutable G4FermiFragmentSplits splits_;
-  };
+};
 
-} // namespace fbu
+}  // namespace fbu
 
-#endif // FERMIBREAKUP_G4FERMIBREAKUP_HH
+#endif  // FERMIBREAKUP_G4FERMIBREAKUP_HH

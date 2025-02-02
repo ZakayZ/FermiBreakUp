@@ -35,8 +35,8 @@
 
 using namespace fbu;
 
-void G4FermiStableFragment::AppendDecayFragments(const G4FermiLorentzVector& momentum, std::vector<G4FermiParticle>& fragments) const {
-  fragments.emplace_back(
-    G4FermiParticle(GetAtomicMass(), GetChargeNumber(), momentum)
-  );
+void G4FermiStableFragment::AppendDecayFragments(const G4FermiLorentzVector& momentum,
+                                                 std::vector<G4FermiParticle>& fragments) const
+{
+  fragments.emplace_back(G4FermiParticle(GetAtomicMass(), GetChargeNumber(), momentum));
 }

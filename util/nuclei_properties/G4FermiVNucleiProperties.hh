@@ -36,17 +36,20 @@
 
 #include "util/G4FermiDataTypes.hh"
 
-namespace fbu {
+namespace fbu
+{
 
-  class G4FermiVNucleiProperties {
+class G4FermiVNucleiProperties
+{
   public:
-    virtual G4FermiFloat GetNuclearMass(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber) const = 0;
+    virtual G4FermiFloat GetNuclearMass(G4FermiAtomicMass atomicMass,
+                                        G4FermiChargeNumber chargeNumber) const = 0;
 
     virtual bool IsStable(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber) const = 0;
 
     virtual ~G4FermiVNucleiProperties() = default;
-  };
+};
 
-} // namespace fbu
+}  // namespace fbu
 
-#endif // FERMIBREAKUP_UTIL_NUCLEI_PROPERTIES_G4FERMIVNUCLEIPROPERTIES_HH
+#endif  // FERMIBREAKUP_UTIL_NUCLEI_PROPERTIES_G4FERMIVNUCLEIPROPERTIES_HH
