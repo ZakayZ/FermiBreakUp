@@ -28,36 +28,73 @@
 // by A. Novikov (January 2025)
 //
 
-#include "G4FermiDataTypes.hh"
-#include "G4FermiSplitter.hh"
+#ifndef G4FERMIINTEGERPARTITION_HH
+#define G4FERMIINTEGERPARTITION_HH
 
-#include <CLHEP/Units/PhysicalConstants.h>
-#include <gtest/gtest.h>
+#include <cstddef>
+#include <cstdint>
+#include <vector>
 
-#include <exception>
-#include <numeric>
-
-using namespace fbu;
-
-TEST(SplitTest, NoDuplicates)
+namespace fbu
 {
-  G4FermiPossibleFragmentSplits splits;  // speeds up test
-  for (G4FermiUInt a = 1; a < 18; ++a) {
-    for (G4FermiUInt z = 0; z <= a; ++z) {
-      const auto mass = G4FermiAtomicMass(a);
-      const auto charge = G4FermiChargeNumber(z);
-      splits.clear();
-      G4FermiSplitter::GenerateSplits({mass, charge}, splits);
 
-      for (auto& split : splits) {
-        std::sort(split.begin(), split.end());
-      }
-      for (size_t i = 0; i < splits.size(); ++i) {
-        for (size_t j = i + 1; j < splits.size(); ++j) {
-          ASSERT_NE(splits[i], splits[j])
-            << "Some of splits the same for A = " << mass << ", Z = " << charge;
-        }
-      }
-    }
-  }
-}
+using G4FermiPartition = std::vector<uint32_t>;
+
+class G4FermiIntegerPartition
+{
+  public:
+    class Iterator;
+
+    Iterator begin() const;
+
+    Iterator end() const;
+
+    G4FermiIntegerPartition(uint32_t number, uint32_t termsCount, uint32_t base = 1);
+
+  private:
+    uint32_t number_;
+    uint32_t termsCount_;
+    uint32_t base_;
+};
+
+class G4FermiIntegerPartition::Iterator
+{
+  public:
+    friend class G4FermiIntegerPartition;
+
+    using difference_type = int64_t;
+    using value_type = G4FermiPartition;
+    using reference = const G4FermiPartition&;
+    using pointer = const G4FermiPartition*;
+    using iterator_category = std::forward_iterator_tag;
+
+    Iterator(const Iterator&) = default;
+
+    Iterator& operator=(const Iterator&) = default;
+
+    pointer operator->() const;
+
+    reference operator*() const;
+
+    Iterator& operator++();
+
+    Iterator operator++(int);
+
+    bool operator==(const Iterator& other) const;
+
+    bool operator!=(const Iterator& other) const;
+
+  private:
+    // represents end partition
+    Iterator() = default;
+
+    Iterator(uint32_t number, uint32_t termsCount, uint32_t base);
+
+    void NextPartition();
+
+    G4FermiPartition partition_;
+};
+
+}  // namespace fbu
+
+#endif  // G4FERMIINTEGERPARTITION_HH

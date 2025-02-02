@@ -28,36 +28,39 @@
 // by A. Novikov (January 2025)
 //
 
+#ifndef G4FERMIRANDOMIZER_HH
+#define G4FERMIRANDOMIZER_HH
+
 #include "G4FermiDataTypes.hh"
-#include "G4FermiSplitter.hh"
 
-#include <CLHEP/Units/PhysicalConstants.h>
-#include <gtest/gtest.h>
+#include <random>
+#include <vector>
 
-#include <exception>
-#include <numeric>
-
-using namespace fbu;
-
-TEST(SplitTest, NoDuplicates)
+namespace fbu
 {
-  G4FermiPossibleFragmentSplits splits;  // speeds up test
-  for (G4FermiUInt a = 1; a < 18; ++a) {
-    for (G4FermiUInt z = 0; z <= a; ++z) {
-      const auto mass = G4FermiAtomicMass(a);
-      const auto charge = G4FermiChargeNumber(z);
-      splits.clear();
-      G4FermiSplitter::GenerateSplits({mass, charge}, splits);
 
-      for (auto& split : splits) {
-        std::sort(split.begin(), split.end());
-      }
-      for (size_t i = 0; i < splits.size(); ++i) {
-        for (size_t j = i + 1; j < splits.size(); ++j) {
-          ASSERT_NE(splits[i], splits[j])
-            << "Some of splits the same for A = " << mass << ", Z = " << charge;
-        }
-      }
-    }
-  }
-}
+class G4FermiRandomizer
+{
+  private:
+    using G4FermiRandomEngine = std::mt19937;
+
+  public:
+    static G4FermiFloat SampleUniform();
+
+    static G4FermiFloat SampleNormal(G4FermiFloat mean = 0, G4FermiFloat deviation = 1);
+
+    static G4FermiParticleMomentum IsotropicVector(G4FermiFloat magnitude = 1);
+
+    static std::vector<G4FermiFloat> ProbabilityDistribution(size_t pointCount);
+
+    static size_t SampleDistribution(const std::vector<G4FermiFloat>& weights);
+
+    static void SetSeed(G4FermiRandomEngine::result_type seed);
+
+  private:
+    static inline G4FermiRandomEngine Engine_ = {};
+};
+
+}  // namespace fbu
+
+#endif  // G4FERMIRANDOMIZER_HH

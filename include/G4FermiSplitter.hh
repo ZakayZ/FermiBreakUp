@@ -28,36 +28,32 @@
 // by A. Novikov (January 2025)
 //
 
+#ifndef G4FERMISPLITTER_HH
+#define G4FERMISPLITTER_HH
+
+#include "G4FermiPossibleFragment.hh"
 #include "G4FermiDataTypes.hh"
-#include "G4FermiSplitter.hh"
 
-#include <CLHEP/Units/PhysicalConstants.h>
-#include <gtest/gtest.h>
-
-#include <exception>
-#include <numeric>
-
-using namespace fbu;
-
-TEST(SplitTest, NoDuplicates)
+namespace fbu
 {
-  G4FermiPossibleFragmentSplits splits;  // speeds up test
-  for (G4FermiUInt a = 1; a < 18; ++a) {
-    for (G4FermiUInt z = 0; z <= a; ++z) {
-      const auto mass = G4FermiAtomicMass(a);
-      const auto charge = G4FermiChargeNumber(z);
-      splits.clear();
-      G4FermiSplitter::GenerateSplits({mass, charge}, splits);
+using G4FermiPossibleFragmentSplits = std::vector<G4FermiPossibleFragmentVector>;
 
-      for (auto& split : splits) {
-        std::sort(split.begin(), split.end());
-      }
-      for (size_t i = 0; i < splits.size(); ++i) {
-        for (size_t j = i + 1; j < splits.size(); ++j) {
-          ASSERT_NE(splits[i], splits[j])
-            << "Some of splits the same for A = " << mass << ", Z = " << charge;
-        }
-      }
-    }
-  }
-}
+class G4FermiSplitter
+{
+  public:
+    static G4FermiFloat DecayWeight(const G4FermiPossibleFragmentVector& split,
+                                    G4FermiAtomicMass atomicMass, G4FermiFloat totalEnergy);
+
+    static G4FermiFloat SplitFactor(const G4FermiPossibleFragmentVector& split,
+                                    G4FermiAtomicMass atomicMass);
+
+    static G4FermiFloat KineticFactor(const G4FermiPossibleFragmentVector& split, G4FermiFloat totalEnergy);
+
+    static void GenerateSplits(G4FermiNucleiData nucleiData,
+                               std::vector<G4FermiPossibleFragmentVector>& splits);
+
+    static std::vector<G4FermiPossibleFragmentVector> GenerateSplits(G4FermiNucleiData nucleiData);
+};
+}  // namespace fbu
+
+#endif  // G4FERMISPLITTER_HH

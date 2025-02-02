@@ -28,36 +28,59 @@
 // by A. Novikov (January 2025)
 //
 
-#include "G4FermiDataTypes.hh"
-#include "G4FermiSplitter.hh"
+#ifndef G4FERMISINGLETON_HH
+#define G4FERMISINGLETON_HH
 
-#include <CLHEP/Units/PhysicalConstants.h>
-#include <gtest/gtest.h>
+#include <memory>
 
-#include <exception>
-#include <numeric>
+#include "G4FermiLogger.hh"
 
-using namespace fbu;
-
-TEST(SplitTest, NoDuplicates)
+namespace fbu
 {
-  G4FermiPossibleFragmentSplits splits;  // speeds up test
-  for (G4FermiUInt a = 1; a < 18; ++a) {
-    for (G4FermiUInt z = 0; z <= a; ++z) {
-      const auto mass = G4FermiAtomicMass(a);
-      const auto charge = G4FermiChargeNumber(z);
-      splits.clear();
-      G4FermiSplitter::GenerateSplits({mass, charge}, splits);
-
-      for (auto& split : splits) {
-        std::sort(split.begin(), split.end());
-      }
-      for (size_t i = 0; i < splits.size(); ++i) {
-        for (size_t j = i + 1; j < splits.size(); ++j) {
-          ASSERT_NE(splits[i], splits[j])
-            << "Some of splits the same for A = " << mass << ", Z = " << charge;
-        }
+template<typename T>
+class G4FermiSingleton
+{
+  public:
+    G4FermiSingleton()
+    {
+      if (FERMI_UNLIKELY(instance_ == nullptr)) {
+        instance_ = std::make_unique<T>();
       }
     }
-  }
-}
+
+    template<typename... Args>
+    G4FermiSingleton(Args&&... args)
+    {
+      Reset(std::forward<Args>(args)...);
+    }
+
+    G4FermiSingleton(T* ptr) { Reset(ptr); }
+
+    template<typename... Args>
+    static void Reset(Args&&... args)
+    {
+      instance_ = std::make_unique<T>(std::forward<Args>(args)...);
+    }
+
+    static void Reset(T* ptr) { instance_.reset(ptr); }
+
+    static T& Instance()
+    {
+      return *G4FermiSingleton();
+    }
+
+    T& operator*() { return *instance_; }
+
+    const T& operator*() const { return *instance_; }
+
+    T* operator->() { return instance_.get(); }
+
+    const T& operator->() const { return *instance_; }
+
+  private:
+    static inline std::unique_ptr<T> instance_;
+};
+
+}  // namespace fbu
+
+#endif  // G4FERMISINGLETON_HH

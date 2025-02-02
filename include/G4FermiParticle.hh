@@ -28,36 +28,58 @@
 // by A. Novikov (January 2025)
 //
 
+#ifndef G4FERMIPARTICLE_HH
+#define G4FERMIPARTICLE_HH
+
 #include "G4FermiDataTypes.hh"
-#include "G4FermiSplitter.hh"
 
-#include <CLHEP/Units/PhysicalConstants.h>
-#include <gtest/gtest.h>
-
-#include <exception>
-#include <numeric>
-
-using namespace fbu;
-
-TEST(SplitTest, NoDuplicates)
+namespace fbu
 {
-  G4FermiPossibleFragmentSplits splits;  // speeds up test
-  for (G4FermiUInt a = 1; a < 18; ++a) {
-    for (G4FermiUInt z = 0; z <= a; ++z) {
-      const auto mass = G4FermiAtomicMass(a);
-      const auto charge = G4FermiChargeNumber(z);
-      splits.clear();
-      G4FermiSplitter::GenerateSplits({mass, charge}, splits);
 
-      for (auto& split : splits) {
-        std::sort(split.begin(), split.end());
-      }
-      for (size_t i = 0; i < splits.size(); ++i) {
-        for (size_t j = i + 1; j < splits.size(); ++j) {
-          ASSERT_NE(splits[i], splits[j])
-            << "Some of splits the same for A = " << mass << ", Z = " << charge;
-        }
-      }
-    }
-  }
-}
+class G4FermiParticle
+{
+  public:
+    G4FermiParticle() = delete;
+
+    G4FermiParticle(const G4FermiParticle&) = default;
+    G4FermiParticle(G4FermiParticle&&) = default;
+
+    G4FermiParticle& operator=(const G4FermiParticle&) = default;
+    G4FermiParticle& operator=(G4FermiParticle&&) = default;
+
+    G4FermiParticle(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber,
+                    const G4FermiLorentzVector& momentum);
+
+    G4FermiNucleiData GetNucleiData() const;
+
+    G4FermiAtomicMass GetAtomicMass() const;
+
+    G4FermiChargeNumber GetChargeNumber() const;
+
+    const G4FermiLorentzVector& GetMomentum() const;
+
+    G4FermiFloat GetExcitationEnergy() const;
+
+    G4FermiFloat GetGroundStateMass() const;
+
+    bool IsStable() const;
+
+  private:
+    void CalculateExcitationEnergy();
+
+    G4FermiAtomicMass atomicMass_;
+    G4FermiChargeNumber chargeNumber_;
+    G4FermiLorentzVector momentum_;
+
+    G4FermiFloat groundStateMass_ = 0;
+    G4FermiFloat excitationEnergy_ = 0;
+};
+
+}  // namespace fbu
+
+namespace std
+{
+ostream& operator<<(ostream&, const ::fbu::G4FermiParticle&);
+}  // namespace std
+
+#endif  // G4FERMIPARTICLE_HH

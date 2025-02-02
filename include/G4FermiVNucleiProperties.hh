@@ -28,36 +28,25 @@
 // by A. Novikov (January 2025)
 //
 
+#ifndef G4FERMIVNUCLEIPROPERTIES_HH
+#define G4FERMIVNUCLEIPROPERTIES_HH
+
 #include "G4FermiDataTypes.hh"
-#include "G4FermiSplitter.hh"
 
-#include <CLHEP/Units/PhysicalConstants.h>
-#include <gtest/gtest.h>
-
-#include <exception>
-#include <numeric>
-
-using namespace fbu;
-
-TEST(SplitTest, NoDuplicates)
+namespace fbu
 {
-  G4FermiPossibleFragmentSplits splits;  // speeds up test
-  for (G4FermiUInt a = 1; a < 18; ++a) {
-    for (G4FermiUInt z = 0; z <= a; ++z) {
-      const auto mass = G4FermiAtomicMass(a);
-      const auto charge = G4FermiChargeNumber(z);
-      splits.clear();
-      G4FermiSplitter::GenerateSplits({mass, charge}, splits);
 
-      for (auto& split : splits) {
-        std::sort(split.begin(), split.end());
-      }
-      for (size_t i = 0; i < splits.size(); ++i) {
-        for (size_t j = i + 1; j < splits.size(); ++j) {
-          ASSERT_NE(splits[i], splits[j])
-            << "Some of splits the same for A = " << mass << ", Z = " << charge;
-        }
-      }
-    }
-  }
-}
+class G4FermiVNucleiProperties
+{
+  public:
+    virtual G4FermiFloat GetNuclearMass(G4FermiAtomicMass atomicMass,
+                                        G4FermiChargeNumber chargeNumber) const = 0;
+
+    virtual bool IsStable(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber) const = 0;
+
+    virtual ~G4FermiVNucleiProperties() = default;
+};
+
+}  // namespace fbu
+
+#endif  // G4FERMIVNUCLEIPROPERTIES_HH

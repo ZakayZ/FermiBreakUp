@@ -28,36 +28,33 @@
 // by A. Novikov (January 2025)
 //
 
+#ifndef G4FERMIDEFAULTNUCLEARMASS_HH
+#define G4FERMIDEFAULTNUCLEARMASS_HH
+
 #include "G4FermiDataTypes.hh"
-#include "G4FermiSplitter.hh"
 
-#include <CLHEP/Units/PhysicalConstants.h>
-#include <gtest/gtest.h>
+#include <vector>
 
-#include <exception>
-#include <numeric>
-
-using namespace fbu;
-
-TEST(SplitTest, NoDuplicates)
+namespace fbu
 {
-  G4FermiPossibleFragmentSplits splits;  // speeds up test
-  for (G4FermiUInt a = 1; a < 18; ++a) {
-    for (G4FermiUInt z = 0; z <= a; ++z) {
-      const auto mass = G4FermiAtomicMass(a);
-      const auto charge = G4FermiChargeNumber(z);
-      splits.clear();
-      G4FermiSplitter::GenerateSplits({mass, charge}, splits);
 
-      for (auto& split : splits) {
-        std::sort(split.begin(), split.end());
-      }
-      for (size_t i = 0; i < splits.size(); ++i) {
-        for (size_t j = i + 1; j < splits.size(); ++j) {
-          ASSERT_NE(splits[i], splits[j])
-            << "Some of splits the same for A = " << mass << ", Z = " << charge;
-        }
-      }
-    }
-  }
-}
+class G4FermiDefaultNuclearMass
+  : private std::vector<std::pair<const G4FermiNucleiData, G4FermiFloat>>
+{
+  private:
+    using Container = std::vector<std::pair<const G4FermiNucleiData, G4FermiFloat>>;
+
+  public:
+    G4FermiDefaultNuclearMass();
+
+    using Container::begin;
+    using Container::cbegin;
+    using Container::cend;
+    using Container::const_iterator;
+    using Container::end;
+    using Container::iterator;
+};
+
+}  // namespace fbu
+
+#endif  // G4FERMIDEFAULTNUCLEARMASS_HH

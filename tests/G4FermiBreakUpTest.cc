@@ -30,11 +30,12 @@
 
 #include "G4FermiBreakUp.hh"
 
-#include "util/G4FermiCache.hh"
-#include "util/G4FermiDataTypes.hh"
-#include "util/G4FermiLogger.hh"
-#include "util/G4FermiRandomizer.hh"
-#include "util/nuclei_properties/G4FermiNucleiProperties.hh"
+#include "G4FermiCache.hh"
+#include "G4FermiDataTypes.hh"
+#include "G4FermiLogger.hh"
+#include "G4FermiNucleiProperties.hh"
+#include "G4FermiRandomizer.hh"
+
 #include <CLHEP/Units/PhysicalConstants.h>
 #include <gtest/gtest.h>
 

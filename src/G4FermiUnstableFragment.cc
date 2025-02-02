@@ -28,36 +28,40 @@
 // by A. Novikov (January 2025)
 //
 
-#include "G4FermiDataTypes.hh"
-#include "G4FermiSplitter.hh"
+#include "G4FermiUnstableFragment.hh"
 
-#include <CLHEP/Units/PhysicalConstants.h>
-#include <gtest/gtest.h>
-
-#include <exception>
-#include <numeric>
+#include "G4FermiNucleiProperties.hh"
+#include "G4FermiPhaseDecay.hh"
 
 using namespace fbu;
 
-TEST(SplitTest, NoDuplicates)
+G4FermiUnstableFragment::G4FermiUnstableFragment(G4FermiAtomicMass atomicMass,
+                                                 G4FermiChargeNumber chargeNumber,
+                                                 G4FermiInt polarization,
+                                                 G4FermiFloat excitationEnergy,
+                                                 std::vector<G4FermiNucleiData>&& decayData)
+  : G4FermiPossibleFragment(atomicMass, chargeNumber, polarization, excitationEnergy),
+    decayData_(std::move(decayData))
 {
-  G4FermiPossibleFragmentSplits splits;  // speeds up test
-  for (G4FermiUInt a = 1; a < 18; ++a) {
-    for (G4FermiUInt z = 0; z <= a; ++z) {
-      const auto mass = G4FermiAtomicMass(a);
-      const auto charge = G4FermiChargeNumber(z);
-      splits.clear();
-      G4FermiSplitter::GenerateSplits({mass, charge}, splits);
+  G4FermiNucleiProperties properties;
+  masses_.reserve(decayData_.size());
+  for (const auto& decayFragment : decayData_) {
+    masses_.emplace_back(
+      properties->GetNuclearMass(decayFragment.atomicMass, decayFragment.chargeNumber));
+  }
+}
 
-      for (auto& split : splits) {
-        std::sort(split.begin(), split.end());
-      }
-      for (size_t i = 0; i < splits.size(); ++i) {
-        for (size_t j = i + 1; j < splits.size(); ++j) {
-          ASSERT_NE(splits[i], splits[j])
-            << "Some of splits the same for A = " << mass << ", Z = " << charge;
-        }
-      }
-    }
+void G4FermiUnstableFragment::AppendDecayFragments(const G4FermiLorentzVector& momentum,
+                                                   std::vector<G4FermiParticle>& fragments) const
+{
+  G4FermiPhaseDecay phaseDecay;
+
+  auto fragmentsMomentum = phaseDecay.CalculateDecay(momentum, masses_);
+
+  const auto boostVector = momentum.boostVector();
+
+  for (size_t i = 0; i < decayData_.size(); ++i) {
+    fragments.emplace_back(decayData_[i].atomicMass, decayData_[i].chargeNumber,
+                           fragmentsMomentum[i].boost(boostVector));
   }
 }

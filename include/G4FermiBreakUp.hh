@@ -28,36 +28,54 @@
 // by A. Novikov (January 2025)
 //
 
-#include "G4FermiDataTypes.hh"
+#ifndef G4FERMIBREAKUP_HH
+#define G4FERMIBREAKUP_HH
+
 #include "G4FermiSplitter.hh"
 
-#include <CLHEP/Units/PhysicalConstants.h>
-#include <gtest/gtest.h>
+#include "G4FermiParticle.hh"
 
-#include <exception>
-#include <numeric>
+#include <G4VFermiBreakUp.hh>
 
-using namespace fbu;
+#include <memory>
 
-TEST(SplitTest, NoDuplicates)
+namespace fbu
 {
-  G4FermiPossibleFragmentSplits splits;  // speeds up test
-  for (G4FermiUInt a = 1; a < 18; ++a) {
-    for (G4FermiUInt z = 0; z <= a; ++z) {
-      const auto mass = G4FermiAtomicMass(a);
-      const auto charge = G4FermiChargeNumber(z);
-      splits.clear();
-      G4FermiSplitter::GenerateSplits({mass, charge}, splits);
 
-      for (auto& split : splits) {
-        std::sort(split.begin(), split.end());
-      }
-      for (size_t i = 0; i < splits.size(); ++i) {
-        for (size_t j = i + 1; j < splits.size(); ++j) {
-          ASSERT_NE(splits[i], splits[j])
-            << "Some of splits the same for A = " << mass << ", Z = " << charge;
-        }
-      }
-    }
-  }
-}
+class G4FermiBreakUp : public G4VFermiBreakUp
+{
+  public:
+    using G4FermiSplitCache = G4FermiVCache<G4FermiNucleiData, G4FermiPossibleFragmentSplits>;
+
+    G4FermiBreakUp() = default;
+
+    G4FermiBreakUp(std::unique_ptr<G4FermiSplitCache>&& cache);
+
+    void Initialise() override;
+
+    // check if the Fermi Break Up model can be used 
+    // mass is an effective mass of a fragment
+    G4bool IsApplicable(G4int Z, G4int A, G4double eexc) const override;
+
+    // vector of products is added to the provided vector
+    // if no decay channel is found out for the primary fragment 
+    // then it is added to the results vector
+    // if primary decays then it is deleted 
+    void BreakFragment(G4FragmentVector* results, G4Fragment* theNucleus) override;
+
+    std::vector<G4FermiParticle> BreakItUp(const G4FermiParticle& nucleus) const;
+
+  private:
+    std::vector<G4FermiParticle> SelectSplit(const G4FermiParticle& particle,
+                                             const G4FermiPossibleFragmentSplits& splits) const;
+
+    mutable std::unique_ptr<G4FermiSplitCache> cache_ = nullptr;
+
+    // improve performance, reusing allocated memory
+    mutable std::vector<G4FermiFloat> weights_;
+    mutable G4FermiPossibleFragmentSplits splits_;
+};
+
+}  // namespace fbu
+
+#endif  // G4FERMIBREAKUP_HH

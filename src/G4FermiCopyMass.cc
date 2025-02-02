@@ -28,35 +28,19 @@
 // by A. Novikov (January 2025)
 //
 
-#include "G4FermiDataTypes.hh"
-#include "G4FermiSplitter.hh"
+#include "G4FermiCopyMass.hh"
 
-#include <CLHEP/Units/PhysicalConstants.h>
-#include <gtest/gtest.h>
-
-#include <exception>
-#include <numeric>
+#include <G4NucleiProperties.hh>
 
 using namespace fbu;
 
-TEST(SplitTest, NoDuplicates)
+G4FermiCopyMass::G4FermiCopyMass()
 {
-  G4FermiPossibleFragmentSplits splits;  // speeds up test
-  for (G4FermiUInt a = 1; a < 18; ++a) {
-    for (G4FermiUInt z = 0; z <= a; ++z) {
-      const auto mass = G4FermiAtomicMass(a);
-      const auto charge = G4FermiChargeNumber(z);
-      splits.clear();
-      G4FermiSplitter::GenerateSplits({mass, charge}, splits);
-
-      for (auto& split : splits) {
-        std::sort(split.begin(), split.end());
-      }
-      for (size_t i = 0; i < splits.size(); ++i) {
-        for (size_t j = i + 1; j < splits.size(); ++j) {
-          ASSERT_NE(splits[i], splits[j])
-            << "Some of splits the same for A = " << mass << ", Z = " << charge;
-        }
+  for (auto a = 1; a < MAX_A; ++a) {
+    for (auto z = 0; z <= a; ++z) {
+      if (G4NucleiProperties::IsInStableTable(a, z)) {
+        emplace_back(std::make_pair(G4FermiNucleiData{G4FermiAtomicMass(a), G4FermiChargeNumber(z)},
+                                    G4NucleiProperties::GetNuclearMass(a, z)));
       }
     }
   }

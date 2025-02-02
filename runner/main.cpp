@@ -1,7 +1,7 @@
 #include "G4FermiBreakUp.hh"
 
-#include "util/G4FermiCache.hh"
-#include "util/nuclei_properties/G4FermiNucleiProperties.hh"
+#include "G4FermiCache.hh"
+#include "G4FermiNucleiProperties.hh"
 #include <CLHEP/Units/PhysicalConstants.h>
 
 #include <fstream>
@@ -65,11 +65,8 @@ void CalculateMomentum(G4FermiAtomicMass mass, G4FermiChargeNumber charge,
   std::cout << dumpName << ": done\n";
 }
 
-#include "util/nuclei_properties/data_storage/G4FermiCopyMass.hh"
-
 int main()
 {
-  G4FermiNucleiProperties::Reset(G4FermiCopyMass());
   CalculateMomentum(12_m, 6_c, "../Results/stat.data", 12 * 10 * CLHEP::GeV, {0, 0, 0});
   CalculateMomentum(12_m, 6_c, "../Results/mov_x.data", 12 * 5 * CLHEP::MeV,
                     {12 * 10 * CLHEP::GeV, 0, 0});

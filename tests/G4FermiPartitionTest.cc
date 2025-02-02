@@ -28,7 +28,8 @@
 // by A. Novikov (January 2025)
 //
 
-#include "util/G4FermiIntegerPartition.hh"
+#include "G4FermiIntegerPartition.hh"
+
 #include <gtest/gtest.h>
 
 #include <numeric>

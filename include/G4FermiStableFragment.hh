@@ -28,36 +28,23 @@
 // by A. Novikov (January 2025)
 //
 
-#include "G4FermiDataTypes.hh"
-#include "G4FermiSplitter.hh"
+#ifndef G4FERMISTABLEFRAGMENT_HH
+#define G4FERMISTABLEFRAGMENT_HH
 
-#include <CLHEP/Units/PhysicalConstants.h>
-#include <gtest/gtest.h>
+#include "G4FermiPossibleFragment.hh"
 
-#include <exception>
-#include <numeric>
-
-using namespace fbu;
-
-TEST(SplitTest, NoDuplicates)
+namespace fbu
 {
-  G4FermiPossibleFragmentSplits splits;  // speeds up test
-  for (G4FermiUInt a = 1; a < 18; ++a) {
-    for (G4FermiUInt z = 0; z <= a; ++z) {
-      const auto mass = G4FermiAtomicMass(a);
-      const auto charge = G4FermiChargeNumber(z);
-      splits.clear();
-      G4FermiSplitter::GenerateSplits({mass, charge}, splits);
 
-      for (auto& split : splits) {
-        std::sort(split.begin(), split.end());
-      }
-      for (size_t i = 0; i < splits.size(); ++i) {
-        for (size_t j = i + 1; j < splits.size(); ++j) {
-          ASSERT_NE(splits[i], splits[j])
-            << "Some of splits the same for A = " << mass << ", Z = " << charge;
-        }
-      }
-    }
-  }
-}
+class G4FermiStableFragment : public G4FermiPossibleFragment
+{
+  public:
+    using G4FermiPossibleFragment::G4FermiPossibleFragment;
+
+    void AppendDecayFragments(const G4FermiLorentzVector& momentum,
+                              std::vector<G4FermiParticle>& fragments) const override;
+};
+
+}  // namespace fbu
+
+#endif  // G4FERMISTABLEFRAGMENT_HH

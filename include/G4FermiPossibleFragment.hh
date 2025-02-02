@@ -28,36 +28,61 @@
 // by A. Novikov (January 2025)
 //
 
+#ifndef G4FERMIPOSSIBLEFRAGMENT_HH
+#define G4FERMIPOSSIBLEFRAGMENT_HH
+
 #include "G4FermiDataTypes.hh"
-#include "G4FermiSplitter.hh"
+#include "G4FermiParticle.hh"
 
-#include <CLHEP/Units/PhysicalConstants.h>
-#include <gtest/gtest.h>
+#include <ostream>
+#include <vector>
 
-#include <exception>
-#include <numeric>
-
-using namespace fbu;
-
-TEST(SplitTest, NoDuplicates)
+namespace fbu
 {
-  G4FermiPossibleFragmentSplits splits;  // speeds up test
-  for (G4FermiUInt a = 1; a < 18; ++a) {
-    for (G4FermiUInt z = 0; z <= a; ++z) {
-      const auto mass = G4FermiAtomicMass(a);
-      const auto charge = G4FermiChargeNumber(z);
-      splits.clear();
-      G4FermiSplitter::GenerateSplits({mass, charge}, splits);
+class G4FermiPossibleFragment;
 
-      for (auto& split : splits) {
-        std::sort(split.begin(), split.end());
-      }
-      for (size_t i = 0; i < splits.size(); ++i) {
-        for (size_t j = i + 1; j < splits.size(); ++j) {
-          ASSERT_NE(splits[i], splits[j])
-            << "Some of splits the same for A = " << mass << ", Z = " << charge;
-        }
-      }
-    }
-  }
-}
+using G4FermiPossibleFragmentVector = std::vector<const G4FermiPossibleFragment*>;
+
+class G4FermiPossibleFragment
+{
+  public:
+    G4FermiPossibleFragment(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber,
+                    G4FermiInt polarization, G4FermiFloat excitationEnergy);
+
+    G4FermiPossibleFragment(const G4FermiPossibleFragment&) = delete;
+
+    G4FermiPossibleFragment& operator=(const G4FermiPossibleFragment&) = delete;
+
+    std::vector<G4FermiParticle> GetDecayFragments(const G4FermiLorentzVector& momentum) const;
+
+    virtual void AppendDecayFragments(const G4FermiLorentzVector& momentum,
+                                      std::vector<G4FermiParticle>& particles) const = 0;
+
+    G4FermiAtomicMass GetAtomicMass() const;
+
+    G4FermiChargeNumber GetChargeNumber() const;
+
+    G4FermiInt GetPolarization() const;
+
+    G4FermiFloat GetExcitationEnergy() const;
+
+    G4FermiFloat GetMass() const;
+
+    G4FermiFloat GetTotalEnergy() const;
+
+    virtual ~G4FermiPossibleFragment() = default;
+
+  protected:
+    G4FermiAtomicMass atomicMass_;  // A
+    G4FermiChargeNumber chargeNumber_;  // Z
+    G4FermiInt polarization_;
+    G4FermiFloat excitationEnergy_;
+};
+
+}  // namespace fbu
+
+namespace std
+{
+ostream& operator<<(ostream&, const ::fbu::G4FermiPossibleFragment&);
+}  // namespace std
+#endif  // G4FERMIPOSSIBLEFRAGMENT_HH
