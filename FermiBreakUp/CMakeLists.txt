@@ -1,13 +1,11 @@
 cmake_minimum_required(VERSION 3.16)
-project(FermiBreakUp)
+project(FermiBreakUp VERSION 1.0.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic -Werror")
-
 find_package(CLHEP REQUIRED)
 
-set(util
+set(UTIL
     util/DataTypes.cpp
     util/IntegerPartition.cpp
     util/Particle.cpp
@@ -20,11 +18,11 @@ set(util
     util/nuclei_properties/data_storage/DefaultNuclearMass.cpp
 )
 
-set(PhaseSpace
+set(PHASE_SPACE
     phase_decay/KopylovDecay.cpp
 )
 
-set(fragment_pool
+set(FRAGMENT_POOL
     fragment_pool/FragmentsStorage.cpp
     fragment_pool/data_source/DefaultPoolSource.cpp
     fragment_pool/fragments/Fragment.cpp
@@ -32,17 +30,17 @@ set(fragment_pool
     fragment_pool/fragments/UnstableFragment.cpp
 )
 
-set(FermiBreakUpModel
+set(FERMI_BREAK_UP_MODEL
     Splitter.cpp
     FermiBreakUp.cpp
 )
 
-set(Sources ${FermiBreakUpModel} ${fragment_pool} ${util} ${PhaseSpace})
+set(SOURCES ${FERMI_BREAK_UP_MODEL} ${FRAGMENT_POOL} ${UTIL} ${PHASE_SPACE})
 
 # default config
 FILE(CREATE_LINK ${PROJECT_SOURCE_DIR}/data/small_nuclei_data.csv small_nuclei_data.csv)
 
-add_library(FermiBreakUp ${Sources})
+add_library(FermiBreakUp ${SOURCES})
 
 target_link_libraries(FermiBreakUp CLHEP::CLHEP)
 
@@ -51,43 +49,55 @@ target_include_directories(FermiBreakUp PUBLIC
     $<INSTALL_INTERFACE:${PROJECT_SOURCE_DIR}/>
 )
 
-# include(CMakePackageConfigHelpers)
-# configure_package_config_file( 
-#     "${PROJECT_SOURCE_DIR}/Config.cmake.in" 
-#     "${CMAKE_CURRENT_BINARY_DIR}/FermiBreakUpConfig.cmake"
-#     INSTALL_DESTINATION lib/cmake/FermiBreakUp
-# )
+target_compile_options(FermiBreakUp PRIVATE -Wall -Wextra -Wpedantic -Werror)
+set_property(TARGET FermiBreakUp PROPERTY CXX_STANDARD 17)
+set_property(TARGET FermiBreakUp PROPERTY CXX_STANDARD_REQUIRED On)
 
-# write_basic_package_version_file(
-#     ${CMAKE_CURRENT_BINARY_DIR}/FermiBreakUpConfigVersion.cmake
-#     VERSION 1.0.0
-#     COMPATIBILITY SameMajorVersion
-# )
+target_include_directories(FermiBreakUp PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/>
+    $<INSTALL_INTERFACE:>
+)
 
-# install(
-#     TARGETS FermiBreakUp
-#     EXPORT FermiBreakUpExport
-#     LIBRARY DESTINATION lib/FermiBreakUp
-#     PUBLIC_HEADER DESTINATION include/FermiBreakUp
-#     INCLUDES DESTINATION include/FermiBreakUp
-# )
+# Install the library and headers
+install(TARGETS FermiBreakUp
+    EXPORT FermiBreakUpTargets
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+    RUNTIME DESTINATION bin
+    INCLUDES DESTINATION include
+)
 
-# # Install includes
-# install(
-#     DIRECTORY ./
-#     DESTINATION include/FermiBreakUp
-#     FILES_MATCHING
-#         PATTERN "*.h"
-#         PATTERN "build/*" EXCLUDE
-# )
+install(
+    DIRECTORY ./
+    DESTINATION include
+    FILES_MATCHING
+        PATTERN "*.h"
+        PATTERN "build/*" EXCLUDE
+)
 
-# install(EXPORT FermiBreakUpExport
-#         DESTINATION lib/cmake/FermiBreakUp
-# )
+# Generate and install the package configuration file
+include(CMakePackageConfigHelpers)
+configure_package_config_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
+    ${CMAKE_CURRENT_BINARY_DIR}/FermiBreakUpConfig.cmake
+    INSTALL_DESTINATION lib/cmake/FermiBreakUp
+)
 
-# ### Install Config and ConfigVersion files
-# install(
-#     FILES "${CMAKE_CURRENT_BINARY_DIR}/FermiBreakUpConfig.cmake"
-#           "${CMAKE_CURRENT_BINARY_DIR}/FermiBreakUpConfigVersion.cmake"
-#     DESTINATION lib/cmake/FermiBreakUp
-# )
+write_basic_package_version_file(
+    ${CMAKE_CURRENT_BINARY_DIR}/FermiBreakUpConfigVersion.cmake
+    VERSION ${FermiBreakUp_VERSION}
+    COMPATIBILITY AnyNewerVersion
+)
+
+install(FILES
+    ${CMAKE_CURRENT_BINARY_DIR}/FermiBreakUpConfig.cmake
+    ${CMAKE_CURRENT_BINARY_DIR}/FermiBreakUpConfigVersion.cmake
+    DESTINATION lib/cmake/FermiBreakUp
+)
+
+# Export the targets
+install(EXPORT FermiBreakUpTargets
+    FILE FermiBreakUpTargets.cmake
+    # NAMESPACE fbu::
+    DESTINATION lib/cmake/FermiBreakUp
+)
