@@ -5,17 +5,17 @@
 #include <algorithm>
 #include <sstream>
 
-#include "Splitter.h"
-#include "util/DataTypes.h"
 #include <CLHEP/Units/PhysicalConstants.h>
 
-#include "fragment_pool/fragments/Fragment.h"
-#include "phase_decay/FermiPhaseSpaceDecay.h"
-#include "util/Logger.h"
-#include "util/Particle.h"
-#include "util/Randomizer.h"
+#include "FermiBreakUp/fragment_pool/fragments/Fragment.h"
+#include "FermiBreakUp/phase_decay/FermiPhaseSpaceDecay.h"
+#include "FermiBreakUp/util/DataTypes.h"
+#include "FermiBreakUp/util/Logger.h"
+#include "FermiBreakUp/util/Particle.h"
+#include "FermiBreakUp/util/Randomizer.h"
 
 #include "FermiBreakUp.h"
+#include "Splitter.h"
 
 using namespace fbu;
 

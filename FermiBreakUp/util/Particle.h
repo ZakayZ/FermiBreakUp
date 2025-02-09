@@ -8,7 +8,6 @@
 #include "DataTypes.h"
 
 namespace fbu {
-
   class Particle {
   public:
     Particle() = delete;
@@ -45,7 +44,6 @@ namespace fbu {
     FermiFloat groundStateMass_ = 0;
     FermiFloat excitationEnergy_ = 0;
   };
-
 } // namespace fbu
 
 namespace std {

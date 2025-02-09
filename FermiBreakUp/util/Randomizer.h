@@ -11,7 +11,6 @@
 #include "DataTypes.h"
 
 namespace fbu {
-
   class Randomizer {
   private:
     using RandomEngine = std::mt19937;
@@ -32,7 +31,6 @@ namespace fbu {
   private:
     static inline RandomEngine Engine_ = {};
   };
-
 } // namespace fbu
 
 #endif // FERMIBREAKUP_UTILITIES_RANDOMIZER_H

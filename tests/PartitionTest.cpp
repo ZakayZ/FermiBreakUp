@@ -5,11 +5,11 @@
 #include <gtest/gtest.h>
 #include <numeric>
 
-#include "util/IntegerPartition.h"
+#include "FermiBreakUp/util/IntegerPartition.h"
 
 using namespace fbu;
 
-size_t factorial(size_t num) {
+size_t Factorial(size_t num) {
   size_t fact = 1;
   for (size_t i = 2; i <= num; ++i) {
     fact *= i;
@@ -18,7 +18,7 @@ size_t factorial(size_t num) {
 }
 
 size_t Cnk(size_t n, size_t k) {
-  return factorial(n) / factorial(k) / factorial(n - k);
+  return Factorial(n) / Factorial(k) / Factorial(n - k);
 }
 
 TEST(PartitionTests, SmallOnePadding) {

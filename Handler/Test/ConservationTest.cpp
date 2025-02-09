@@ -5,16 +5,15 @@
 #include <gtest/gtest.h>
 #include <memory>
 
-#include "util/Randomizer.h"
-#include "configurations/Configurations.h"
-#include "configurations/CachedConfigurations.h"
-#include "configurations/FastConfigurations.h"
+#include "FermiBreakUp/util/Randomizer.h"
+#include "FermiBreakUp/configurations/Configurations.h"
+#include "FermiBreakUp/configurations/CachedConfigurations.h"
+#include "FermiBreakUp/configurations/FastConfigurations.h"
 #include "FermiBreakUp.h"
 
 #include "AAMCCFermiBreakUp.h"
 #include "ExcitationHandler.h"
 
-using namespace fbu;
 
 class ConfigurationsFixture : public ::testing::TestWithParam<VConfigurations*> {
 protected:

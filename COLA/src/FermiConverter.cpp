@@ -3,7 +3,7 @@
 //
 
 #include <FermiBreakUp.h>
-#include <util/nuclei_properties/NucleiProperties.h>
+#include <nuclei_properties/NucleiProperties.h>
 
 #include "FermiConverter.h"
 

@@ -7,8 +7,8 @@
 
 #include <vector>
 
-#include "util/DataTypes.h"
-#include "util/nuclei_properties/VNucleiProperties.h"
+#include "FermiBreakUp/util/DataTypes.h"
+#include "FermiBreakUp/nuclei_properties/VNucleiProperties.h"
 
 namespace fbu {
   class FermiNucleiProperties : public VNucleiProperties {
@@ -16,10 +16,18 @@ namespace fbu {
     FermiNucleiProperties();
 
     template <typename DataSource>
-    FermiNucleiProperties(const DataSource& dataSource);
+    FermiNucleiProperties(const DataSource& dataSource)
+      : FermiNucleiProperties(dataSource.begin(), dataSource.end())
+    {
+    }
 
     template <typename Iter>
-    FermiNucleiProperties(Iter begin, Iter end);
+    FermiNucleiProperties(Iter begin, Iter end) {
+      static_assert(std::is_same_v<typename Iter::value_type, std::pair<const NucleiData, FermiFloat>>, "invalid iterator");
+      for (auto it = begin; it != end; ++it) {
+        AddStableNuclei(it->first, it->second);
+      }
+    }
 
     [[nodiscard]] FermiFloat GetNuclearMass(AtomicMass atomicMass, ChargeNumber chargeNumber) const override;
 
@@ -42,21 +50,6 @@ namespace fbu {
 
     mutable std::vector<MassData> nucleiMasses_;
   };
-
-  template <typename DataSource>
-  FermiNucleiProperties::FermiNucleiProperties(const DataSource& dataSource)
-    : FermiNucleiProperties(dataSource.begin(), dataSource.end())
-  {
-  }
-
-  template <typename Iter>
-  FermiNucleiProperties::FermiNucleiProperties(Iter begin, Iter end) {
-    static_assert(std::is_same_v<typename Iter::value_type, std::pair<const NucleiData, FermiFloat>>, "invalid iterator");
-    for (auto it = begin; it != end; ++it) {
-      AddStableNuclei(it->first, it->second);
-    }
-  }
-
 } // namespace fbu
 
 #endif // FERMIBREAKUP_UTILITIES_NUCLEI_PROPERTIES_IMPL_FermiNucleiProperties_H

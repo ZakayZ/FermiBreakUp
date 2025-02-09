@@ -4,8 +4,8 @@
 
 #include <CLHEP/Units/PhysicalConstants.h>
 
-#include "util/nuclei_properties/data_storage/DefaultNuclearMass.h"
-#include "util/Logger.h"
+#include "FermiBreakUp/nuclei_properties/data_storage/DefaultNuclearMass.h"
+#include "FermiBreakUp/util/Logger.h"
 
 #include "FermiNucleiProperties.h"
 

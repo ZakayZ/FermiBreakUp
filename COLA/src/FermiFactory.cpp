@@ -10,8 +10,8 @@
 #include <configurations/FastConfigurations.h>
 #include <configurations/Configurations.h>
 #include <FermiBreakUp.h>
-#include <util/nuclei_properties/data_storage/CSVNuclearMass.h>
-#include <util/nuclei_properties/NucleiProperties.h>
+#include <nuclei_properties/data_storage/CSVNuclearMass.h>
+#include <nuclei_properties/NucleiProperties.h>
 
 #include "FermiFactory.h"
 #include "FermiConverter.h"

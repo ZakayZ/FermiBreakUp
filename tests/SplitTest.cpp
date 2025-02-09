@@ -2,14 +2,11 @@
 // Created by Artem Novikov on 19.03.2023.
 //
 
-#include <exception>
-#include <numeric>
-#include "util/DataTypes.h"
 #include <gtest/gtest.h>
 
 #include <CLHEP/Units/PhysicalConstants.h>
 
-#include "Splitter.h"
+#include "FermiBreakUp/Splitter.h"
 
 using namespace fbu;
 

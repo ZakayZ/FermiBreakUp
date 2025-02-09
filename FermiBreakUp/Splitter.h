@@ -5,8 +5,8 @@
 #ifndef FERMIBREAKUP_SPLIT_H
 #define FERMIBREAKUP_SPLIT_H
 
-#include "fragment_pool/fragments/Fragment.h"
-#include "util/DataTypes.h"
+#include "FermiBreakUp/fragment_pool/fragments/Fragment.h"
+#include "FermiBreakUp/util/DataTypes.h"
 
 namespace fbu {
   using FragmentSplits = std::vector<FragmentVector>;

@@ -12,7 +12,6 @@
 #include <memory>
 
 namespace fbu {
-
   enum class LogLevel : int {
     TRACE = 0,
     DEBUG = 1,
@@ -104,19 +103,20 @@ namespace fbu {
     std::shared_ptr<ILogger> impl_;
     LogLevel level_;
   };
+} // namespace fbu
 
-  #define FERMI_LOG_MSG(logger, level, msg)                               \
-    if (logger && logger.ShouldLog(level)) {                              \
-      std::ostringstream sstream;                                         \
-      sstream << msg;                                                     \
-      logger.Log(__FILE__, __LINE__, __FUNCTION__, level, sstream.str()); \
-    } 
+#define FERMI_LOG_MSG(logger, level, msg)                               \
+  if (logger && logger.ShouldLog(level)) {                              \
+    std::ostringstream sstream;                                         \
+    sstream << msg;                                                     \
+    logger.Log(__FILE__, __LINE__, __FUNCTION__, level, sstream.str()); \
+  } 
 
-  #define FERMI_LOG_TRACE(msg) FERMI_LOG_MSG(Logger::Default(), LogLevel::TRACE, msg)
-  #define FERMI_LOG_DEBUG(msg) FERMI_LOG_MSG(Logger::Default(), LogLevel::DEBUG, msg)
-  #define FERMI_LOG_INFO(msg) FERMI_LOG_MSG(Logger::Default(), LogLevel::INFO, msg)
-  #define FERMI_LOG_WARN(msg) FERMI_LOG_MSG(Logger::Default(), LogLevel::WARN, msg)
-  #define FERMI_LOG_ERROR(msg) FERMI_LOG_MSG(Logger::Default(), LogLevel::ERROR, msg)
+#define FERMI_LOG_TRACE(msg) FERMI_LOG_MSG(Logger::Default(), LogLevel::TRACE, msg)
+#define FERMI_LOG_DEBUG(msg) FERMI_LOG_MSG(Logger::Default(), LogLevel::DEBUG, msg)
+#define FERMI_LOG_INFO(msg) FERMI_LOG_MSG(Logger::Default(), LogLevel::INFO, msg)
+#define FERMI_LOG_WARN(msg) FERMI_LOG_MSG(Logger::Default(), LogLevel::WARN, msg)
+#define FERMI_LOG_ERROR(msg) FERMI_LOG_MSG(Logger::Default(), LogLevel::ERROR, msg)
 
 #if defined(WIN32) || defined(__MINGW32__)
   #define FERMI_UNLIKELY(x) (x)
@@ -126,15 +126,13 @@ namespace fbu {
   #define FERMI_LIKELY(x)   __builtin_expect((x), true)
 #endif
 
-  #define FERMI_ASSERT_MSG(COND, MSG)                     \
-    if (FERMI_UNLIKELY(!(COND))) {                        \
-      std::ostringstream sstream;                         \
-      sstream << "assertion failed: \"" << #COND << '\"'  \
-              << " at " << __FILE__ << ':' << __LINE__    \
-              << '\n' << MSG;                             \
-      throw std::runtime_error(sstream.str());            \
-    }
-
-} // namespace fbu
+#define FERMI_ASSERT_MSG(COND, MSG)                     \
+  if (FERMI_UNLIKELY(!(COND))) {                        \
+    std::ostringstream sstream;                         \
+    sstream << "assertion failed: \"" << #COND << '\"'  \
+            << " at " << __FILE__ << ':' << __LINE__    \
+            << '\n' << MSG;                             \
+    throw std::runtime_error(sstream.str());            \
+  }
 
 #endif // FERMIBREAKUP_UTILITIES_LOGGER_H

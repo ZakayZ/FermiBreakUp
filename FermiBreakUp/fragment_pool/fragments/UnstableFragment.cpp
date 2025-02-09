@@ -2,9 +2,10 @@
 // Created by Artem Novikov on 17.02.2023.
 //
 
+#include "FermiBreakUp/nuclei_properties/NucleiProperties.h"
+#include "FermiBreakUp/phase_decay/FermiPhaseSpaceDecay.h"
+
 #include "UnstableFragment.h"
-#include "phase_decay/FermiPhaseSpaceDecay.h"
-#include "util/nuclei_properties/NucleiProperties.h"
 
 using namespace fbu;
 

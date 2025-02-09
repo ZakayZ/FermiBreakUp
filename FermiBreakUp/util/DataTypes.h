@@ -126,7 +126,6 @@ namespace fbu {
       return atomicMass != other.atomicMass || chargeNumber != other.chargeNumber;
     }
   };
-
 } // namespace fbu
 
 namespace std {

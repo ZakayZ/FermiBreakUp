@@ -3,7 +3,6 @@
 #include <COLA.hh>
 #include <memory>
 
-namespace fbu {
   class FermiBreakUp;
 }
 

@@ -2,8 +2,8 @@
 // Created by Artem Novikov on 30.01.2024.
 //
 
-#include "util/Logger.h"
-#include "data_source/DefaultPoolSource.h"
+#include "FermiBreakUp/fragment_pool/data_source/DefaultPoolSource.h"
+#include "FermiBreakUp/util/Logger.h"
 
 #include "FragmentsStorage.h"
 

@@ -3,10 +3,12 @@
 //
 
 #include <iomanip>
+
 #include <CLHEP/Units/PhysicalConstants.h>
 
+#include "FermiBreakUp/nuclei_properties/NucleiProperties.h"
+
 #include "Fragment.h"
-#include "util/nuclei_properties/NucleiProperties.h"
 
 using namespace fbu;
 

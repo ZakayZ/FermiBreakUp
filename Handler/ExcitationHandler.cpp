@@ -29,7 +29,6 @@
 #include "AAMCCFermiBreakUp.h"
 #include "ExcitationHandler.h"
 
-using namespace fbu;
 
 namespace {
   constexpr size_t EvaporationIterationThreshold = 1e3;

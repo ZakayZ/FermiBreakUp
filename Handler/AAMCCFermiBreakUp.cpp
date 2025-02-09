@@ -6,7 +6,6 @@
 #include "AAMCCFermiBreakUp.h"
 #include "FermiBreakUp.h"
 
-using namespace fbu;
 
 AAMCCFermiBreakUp::AAMCCFermiBreakUp(FermiBreakUp&& model) : fermiModel_(std::move(model)) {}
 

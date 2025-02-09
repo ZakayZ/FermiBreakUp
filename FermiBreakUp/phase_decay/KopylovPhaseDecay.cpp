@@ -8,10 +8,10 @@
 
 #include <CLHEP/Random/RandGamma.h>
 
-#include "util/Randomizer.h"
-#include "util/Logger.h"
+#include "FermiBreakUp/util/Randomizer.h"
+#include "FermiBreakUp/util/Logger.h"
 
-#include "KopylovDecay.h"
+#include "KopylovPhaseDecay.h"
 
 using namespace fbu;
 
@@ -59,7 +59,7 @@ namespace {
 
 } // namespace
 
-std::vector<LorentzVector> KopylovDecay::CalculateDecay(
+std::vector<LorentzVector> KopylovPhaseDecay::CalculateDecay(
   const LorentzVector& totalMomentum,
   const std::vector<FermiFloat>& fragmentsMass) const
 {

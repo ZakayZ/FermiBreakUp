@@ -7,10 +7,9 @@
 
 #include <unordered_map>
 
-#include "util/DataTypes.h"
+#include "FermiBreakUp/util/DataTypes.h"
 
 namespace fbu {
-
   class CSVNuclearMass : private std::unordered_map<NucleiData, FermiFloat> {
   private:
     using Container = std::unordered_map<NucleiData, FermiFloat>;
@@ -30,7 +29,6 @@ namespace fbu {
     using Container::end;
     using Container::cend;
   };
-
 } // namespace fbu
 
 #endif // FERMIBREAKUP_UTILITIES_NUCLEI_PROPERTIES_DATA_STORAGE_CSVNUCLEARMASS_H

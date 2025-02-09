@@ -7,10 +7,9 @@
 
 #include <vector>
 
-#include "fragment_pool/fragments/Fragment.h"
+#include "FermiBreakUp/fragment_pool/fragments/Fragment.h"
 
 namespace fbu {
-
   class DefaultPoolSource : private std::vector<const Fragment*> {
   private:
     using Container = std::vector<const Fragment*>;
@@ -23,7 +22,6 @@ namespace fbu {
     using Container::end;
     using Container::cend;
   };
-
 } // namespace fbu
 
 #endif // FERMIBREAKUP_FRAGMENT_POOL_DATA_SOURCE_DEFAULTPOOLSOURCE_H

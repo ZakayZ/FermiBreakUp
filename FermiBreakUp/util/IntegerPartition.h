@@ -10,7 +10,6 @@
 #include <vector>
 
 namespace fbu {
-
   using Partition = std::vector<uint32_t>;
 
   class IntegerPartition {
@@ -65,7 +64,6 @@ namespace fbu {
 
     Partition partition_;
   };
-
 } // namespace fbu
 
 #endif // FERMIBREAKUP_UTILITIES_INTEGERPARTITION_H

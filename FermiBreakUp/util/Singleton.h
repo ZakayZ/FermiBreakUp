@@ -7,7 +7,7 @@
 
 #include <memory>
 
-#include "util/Logger.h"
+#include "Logger.h"
 
 namespace fbu {
   template <typename T>
@@ -65,7 +65,6 @@ namespace fbu {
   private:
     static inline std::unique_ptr<T> instance_;
   };
-
 } // namespace fbu
 
 #endif // FERMIBREAKUP_UTILITIES_SINGLETON_H

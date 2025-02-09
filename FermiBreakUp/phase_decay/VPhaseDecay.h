@@ -2,21 +2,21 @@
 // Created by Artem Novikov on 21.02.2023.
 //
 
-#ifndef FERMIBREAKUP_PHASE_DECAY_VDECAY_H
-#define FERMIBREAKUP_PHASE_DECAY_VDECAY_H
+#ifndef FERMIBREAKUP_PHASE_DECAY_VPHASEDECAY_H
+#define FERMIBREAKUP_PHASE_DECAY_VPHASEDECAY_H
 
 #include <vector>
-#include "util/DataTypes.h"
+#include "FermiBreakUp/util/DataTypes.h"
 
 namespace fbu {
-  class VDecay {
+  class VPhaseDecay {
   public:
     virtual std::vector<LorentzVector> CalculateDecay(
       const LorentzVector& totalMomentum,
       const std::vector<FermiFloat>& fragmentsMass) const = 0;
 
-    virtual ~VDecay() = default;
+    virtual ~VPhaseDecay() = default;
   };
 } // namespace fbu
 
-#endif // FERMIBREAKUP_PHASE_DECAY_VDECAY_H
+#endif // FERMIBREAKUP_PHASE_DECAY_VPHASEDECAY_H

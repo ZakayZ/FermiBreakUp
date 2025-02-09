@@ -2,18 +2,17 @@
 // Created by Artem Novikov on 19.03.2023.
 //
 
-#include <exception>
 #include <numeric>
 #include <gtest/gtest.h>
 
 #include <CLHEP/Units/PhysicalConstants.h>
 
-#include "util/Cache.h"
-#include "util/DataTypes.h"
-#include "FermiBreakUp.h"
-#include "util/nuclei_properties/NucleiProperties.h"
-#include "util/Randomizer.h"
-#include "util/Logger.h"
+#include "FermiBreakUp/util/Cache.h"
+#include "FermiBreakUp/util/DataTypes.h"
+#include "FermiBreakUp/FermiBreakUp.h"
+#include "FermiBreakUp/nuclei_properties/NucleiProperties.h"
+#include "FermiBreakUp/util/Randomizer.h"
+#include "FermiBreakUp/util/Logger.h"
 
 using namespace fbu;
 

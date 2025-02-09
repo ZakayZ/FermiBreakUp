@@ -7,11 +7,10 @@
 
 #include <vector>
 
-#include "util/DataTypes.h"
-#include "fragments/Fragment.h"
+#include "FermiBreakUp/fragment_pool/fragments/Fragment.h"
+#include "FermiBreakUp/util/DataTypes.h"
 
 namespace fbu {
-
   class FragmentsStorage {
   private:
     using Container = std::vector<const Fragment*>;
@@ -38,10 +37,18 @@ namespace fbu {
     FragmentsStorage();
 
     template <typename DataSource>
-    FragmentsStorage(const DataSource& dataSource);
+    FragmentsStorage(const DataSource& dataSource)
+      : FragmentsStorage(dataSource.begin(), dataSource.end())
+    {
+    }
 
     template <typename Iter>
-    FragmentsStorage(Iter begin, Iter end);
+    FragmentsStorage(Iter begin, Iter end) {
+      static_assert(std::is_same_v<typename Iter::value_type, const Fragment*>, "invalid iterator");
+      for (auto it = begin; it != end; ++it) {
+        AddFragment(**it);
+      }
+    }
 
     [[nodiscard]] size_t Count(AtomicMass atomicMass, ChargeNumber chargeNumber) const;
 
@@ -58,20 +65,6 @@ namespace fbu {
 
     std::vector<Container> fragments_;
   };
-
-template <typename DataSource>
-FragmentsStorage::FragmentsStorage(const DataSource& dataSource)
-  : FragmentsStorage(dataSource.begin(), dataSource.end())
-{
-}
-
-template <typename Iter>
-FragmentsStorage::FragmentsStorage(Iter begin, Iter end) {
-  static_assert(std::is_same_v<typename Iter::value_type, const Fragment*>, "invalid iterator");
-  for (auto it = begin; it != end; ++it) {
-    AddFragment(**it);
-  }
-}
 } // namespace fbu
 
 #endif // FERMIBREAKUP_FRAGMENT_POOL_FRAGMENTSSTORAGE_H

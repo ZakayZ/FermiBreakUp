@@ -7,7 +7,6 @@
 #include "DefaultNuclearMass.h"
 
 using CLHEP::MeV;
-
 using namespace fbu;
 
 DefaultNuclearMass::DefaultNuclearMass() {

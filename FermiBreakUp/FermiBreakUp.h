@@ -8,10 +8,9 @@
 #include <memory>
 
 #include "Splitter.h"
-#include "util/Particle.h"
+#include "FermiBreakUp/util/Particle.h"
 
 namespace fbu {
-
   class FermiBreakUp {
   public:
     using SplitCache = VCache<NucleiData, FragmentSplits>;
@@ -31,7 +30,6 @@ namespace fbu {
     mutable std::vector<FermiFloat> weights_;
     mutable FragmentSplits splits_;
   };
-
 } // namespace fbu
 
 #endif // FERMIBREAKUP_FERMIBREAKUP_H
