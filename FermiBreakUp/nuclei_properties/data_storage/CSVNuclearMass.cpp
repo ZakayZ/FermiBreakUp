@@ -27,23 +27,23 @@ CSVNuclearMass::CSVNuclearMass(
   line += ',';
   int32_t columnIdx = 0;
   uint32_t start = 0;
-  size_t comma = line.find(',', start);
-  while (comma != FermiStr::npos) {
-    if (line.substr(start, comma - start) == massNumberName) {
+  size_t commaPos = line.find(',', start);
+  while (commaPos != FermiStr::npos) {
+    if (line.substr(start, commaPos - start) == massNumberName) {
       massNumberIdx = columnIdx;
     }
 
-    if (line.substr(start, comma - start) == chargeNumberName) {
+    if (line.substr(start, commaPos - start) == chargeNumberName) {
       chargeNumberIdx = columnIdx;
     }
 
-    if (line.substr(start, comma - start) == massName) {
+    if (line.substr(start, commaPos - start) == massName) {
       massIdx = columnIdx;
     }
 
     ++columnIdx;
-    start = comma + 1;
-    comma = line.find(',', start);
+    start = commaPos + 1;
+    commaPos = line.find(',', start);
   }
   int32_t columnsCount = columnIdx;
 
@@ -61,28 +61,24 @@ CSVNuclearMass::CSVNuclearMass(
 
   AtomicMass m = 0_m;
   ChargeNumber c = 0_c;
-  FermiFloat mass;
+  FermiFloat mass = 0.;
   while (in >> line) {
     line += ',';
     columnIdx = 0;
     start = 0;
-    comma = line.find(',', start);
-    while (comma != FermiStr::npos) {
+    commaPos = line.find(',', start);
+    while (commaPos != FermiStr::npos) {
       if (columnIdx == massNumberIdx) {
-        m = AtomicMass(std::stoi(line.substr(start, comma - start)));
-      }
-
-      if (columnIdx == chargeNumberIdx) {
-        c = ChargeNumber(std::stoi(line.substr(start, comma - start)));
-      }
-
-      if (columnIdx == massIdx) {
-        mass = FermiFloat(std::stod(line.substr(start, comma - start)));
+        m = AtomicMass(std::stoi(line.substr(start, commaPos - start)));
+      } else if (columnIdx == chargeNumberIdx) {
+        c = ChargeNumber(std::stoi(line.substr(start, commaPos - start)));
+      } else if (columnIdx == massIdx) {
+        mass = FermiFloat(std::stod(line.substr(start, commaPos - start)));
       }
 
       ++columnIdx;
-      start = comma + 1;
-      comma = line.find(',', start);
+      start = commaPos + 1;
+      commaPos = line.find(',', start);
     }
 
     if (columnsCount != columnIdx) {

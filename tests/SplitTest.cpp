@@ -2,6 +2,8 @@
 // Created by Artem Novikov on 19.03.2023.
 //
 
+#include <algorithm>
+
 #include <gtest/gtest.h>
 
 #include <CLHEP/Units/PhysicalConstants.h>

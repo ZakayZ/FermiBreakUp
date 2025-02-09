@@ -3,6 +3,7 @@
 //
 
 #include <numeric>
+
 #include <gtest/gtest.h>
 
 #include <CLHEP/Units/PhysicalConstants.h>

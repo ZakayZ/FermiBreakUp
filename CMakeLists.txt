@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 project(FermiBreakUp VERSION 1.0.0 LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 17)
-
 find_package(CLHEP REQUIRED)
 
 set(UTIL
@@ -48,7 +46,7 @@ add_library(FermiBreakUp ${SOURCES})
 
 target_link_libraries(FermiBreakUp PUBLIC CLHEP::CLHEP)
 
-target_compile_options(FermiBreakUp PRIVATE -Wall -Wextra -Wpedantic -Werror)
+target_compile_options(FermiBreakUp PRIVATE -Wall -Werror -Wfloat-conversion -Wextra -Wpedantic)
 set_property(TARGET FermiBreakUp PROPERTY CXX_STANDARD 17)
 set_property(TARGET FermiBreakUp PROPERTY CXX_STANDARD_REQUIRED On)
 

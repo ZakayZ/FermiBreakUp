@@ -3,8 +3,9 @@
 //
 
 #include <algorithm>
+#include <functional>
 #include <iterator>
-#include <numeric>
+#include <cmath>
 
 #include <CLHEP/Units/PhysicalConstants.h>
 

@@ -46,7 +46,7 @@ jobs:
       run: |
         mkdir "${{ github.workspace }}/build_clhep" && cd "${{ github.workspace }}/build_clhep"
         cmake "${{ github.workspace }}/clhep"
-        cmake --build .
+        cmake --build . -j $(nproc)
         sudo cmake --install .
 
     - name: Configure CMake
@@ -58,7 +58,7 @@ jobs:
         -S "${{ github.workspace }}/tests"
 
     - name: Build
-      run: cmake --build ${{ steps.strings.outputs.build-output-dir }}
+      run: cmake --build ${{ steps.strings.outputs.build-output-dir }} -j $(nproc)
 
     - name: Test
       working-directory: ${{ steps.strings.outputs.build-output-dir }}

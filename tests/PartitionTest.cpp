@@ -2,8 +2,10 @@
 // Created by Artem Novikov on 08.03.2023.
 //
 
-#include <gtest/gtest.h>
+#include <algorithm>
 #include <numeric>
+
+#include <gtest/gtest.h>
 
 #include "FermiBreakUp/util/IntegerPartition.h"
 
