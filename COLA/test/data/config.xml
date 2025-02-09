@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<program>
-    <generator name="generator"/>
-    <converter name="converter"/>
-    <writer name="writer"/>
-</program>

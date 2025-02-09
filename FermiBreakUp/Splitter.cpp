@@ -23,7 +23,7 @@ namespace {
   constexpr FermiFloat Kappa = 1.0;
 
   // Nuclear radius R0 (is a model parameter)
-  constexpr FermiFloat R0 = 1.3 * CLHEP::fermi;
+  static const FermiFloat R0 = 1.3 * CLHEP::fermi;
 
   FermiFloat CoulombBarrier(const FragmentVector& split) {
     // Coulomb Barrier (MeV) for given channel with K fragments.

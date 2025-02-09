@@ -9,9 +9,9 @@
 #include "KopylovPhaseDecay.h"
 
 namespace fbu {
-    using FermiPhaseSpaceDecay = KopylovPhaseDecay; // or just Decay
+  using FermiPhaseSpaceDecay = KopylovPhaseDecay; // or just Decay
 
-    static_assert(std::is_base_of<VPhaseDecay, FermiPhaseSpaceDecay>::value, "Invalid phase sampler");
+  static_assert(std::is_base_of<VPhaseDecay, FermiPhaseSpaceDecay>::value, "Invalid phase sampler");
 } // namespace fbu
 
 #endif // FERMIBREAKUP_PHASE_DECAY_FERMIPHASESPACEDECAY_H

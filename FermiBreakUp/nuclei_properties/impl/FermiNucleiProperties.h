@@ -29,9 +29,9 @@ namespace fbu {
       }
     }
 
-    [[nodiscard]] FermiFloat GetNuclearMass(AtomicMass atomicMass, ChargeNumber chargeNumber) const override;
+    FermiFloat GetNuclearMass(AtomicMass atomicMass, ChargeNumber chargeNumber) const override;
 
-    [[nodiscard]] bool IsStable(AtomicMass atomicMass, ChargeNumber chargeNumber) const override;
+    bool IsStable(AtomicMass atomicMass, ChargeNumber chargeNumber) const override;
 
     void AddStableNuclei(AtomicMass atomicMass, ChargeNumber chargeNumber, FermiFloat mass);
 

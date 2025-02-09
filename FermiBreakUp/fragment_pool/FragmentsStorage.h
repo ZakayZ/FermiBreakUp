@@ -50,13 +50,13 @@ namespace fbu {
       }
     }
 
-    [[nodiscard]] size_t Count(AtomicMass atomicMass, ChargeNumber chargeNumber) const;
+    size_t Count(AtomicMass atomicMass, ChargeNumber chargeNumber) const;
 
-    [[nodiscard]] size_t Count(NucleiData nuclei) const;
+    size_t Count(NucleiData nuclei) const;
 
-    [[nodiscard]] IteratorRange GetFragments(AtomicMass atomicMass, ChargeNumber chargeNumber) const;
+    IteratorRange GetFragments(AtomicMass atomicMass, ChargeNumber chargeNumber) const;
 
-    [[nodiscard]] IteratorRange GetFragments(NucleiData nuclei) const;
+    IteratorRange GetFragments(NucleiData nuclei) const;
 
     void AddFragment(const Fragment& fragment);
 

@@ -1,7 +1,0 @@
-@PACKAGE_INIT@
-
-find_package(COLA REQUIRED) # COLA requirement
-find_package(CLHEP REQUIRED)
-
-include(@CMAKE_INSTALL_PREFIX@/lib/cmake/G4HandlerModule/G4HandlerModuleExport.cmake)
-#set_and_check(...), etc.

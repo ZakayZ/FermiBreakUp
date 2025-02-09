@@ -12,46 +12,46 @@
 #include "FermiBreakUp/util/Particle.h"
 
 namespace fbu {
-class Fragment;
+  class Fragment;
 
-using FragmentVector = std::vector<const Fragment*>;
+  using FragmentVector = std::vector<const Fragment*>;
 
-class Fragment {
-public:
-  Fragment(
-    AtomicMass atomicMass,
-    ChargeNumber chargeNumber,
-    FermiInt polarization,
-    FermiFloat excitationEnergy);
+  class Fragment {
+  public:
+    Fragment(
+      AtomicMass atomicMass,
+      ChargeNumber chargeNumber,
+      FermiInt polarization,
+      FermiFloat excitationEnergy);
 
-  Fragment(const Fragment&) = delete;
+    Fragment(const Fragment&) = delete;
 
-  Fragment& operator=(const Fragment&) = delete;
+    Fragment& operator=(const Fragment&) = delete;
 
-  std::vector<Particle> GetDecayFragments(const LorentzVector& momentum) const;
+    std::vector<Particle> GetDecayFragments(const LorentzVector& momentum) const;
 
-  virtual void AppendDecayFragments(const LorentzVector& momentum, std::vector<Particle>& particles) const = 0;
+    virtual void AppendDecayFragments(const LorentzVector& momentum, std::vector<Particle>& particles) const = 0;
 
-  AtomicMass GetAtomicMass() const;
+    AtomicMass GetAtomicMass() const;
 
-  ChargeNumber GetChargeNumber() const;
+    ChargeNumber GetChargeNumber() const;
 
-  FermiInt GetPolarization() const;
+    FermiInt GetPolarization() const;
 
-  FermiFloat GetExcitationEnergy() const;
+    FermiFloat GetExcitationEnergy() const;
 
-  FermiFloat GetMass() const;
+    FermiFloat GetMass() const;
 
-  FermiFloat GetTotalEnergy() const;
+    FermiFloat GetTotalEnergy() const;
 
-  virtual ~Fragment() = default;
+    virtual ~Fragment() = default;
 
-protected:
-  AtomicMass atomicMass_;  // A
-  ChargeNumber chargeNumber_; // Z
-  FermiInt polarization_;
-  FermiFloat excitationEnergy_;
-};
+  protected:
+    AtomicMass atomicMass_;  // A
+    ChargeNumber chargeNumber_; // Z
+    FermiInt polarization_;
+    FermiFloat excitationEnergy_;
+  };
 } // namespace fbu
 
 namespace std {

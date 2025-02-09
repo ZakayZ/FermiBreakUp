@@ -8,7 +8,7 @@ set(LibPath ${CMAKE_CURRENT_SOURCE_DIR}/..)
 add_subdirectory(${LibPath} ${CMAKE_BINARY_DIR}/FermiBreakUp)
 
 # default config
-FILE(CREATE_LINK ${PROJECT_SOURCE_DIR}/data/small_nuclei_data.csv small_nuclei_data.csv)
+FILE(CREATE_LINK ${PROJECT_SOURCE_DIR}/data/small_nuclei_data.csv ${CMAKE_BINARY_DIR}/small_nuclei_data.csv)
 
 enable_testing()
 
@@ -26,17 +26,19 @@ endif()
 include(GoogleTest)
 
 set(Tests
-        SplitTest.cpp
-        PartitionTest.cpp
-        TableTests.cpp
-        BreakUpTest.cpp
+    SplitTest.cpp
+    PartitionTest.cpp
+    TableTests.cpp
+    BreakUpTest.cpp
 )
 
 add_executable(FermiTest ${Tests})
 
 target_link_libraries(FermiTest FermiBreakUp)
-target_link_libraries(FermiTest GTest::GTest GTest::Main)
-
-target_include_directories(FermiTest PUBLIC ${LibPath})
+if (TARGET GTest::GTest)
+    target_link_libraries(FermiTest GTest::GTest GTest::Main)
+elseif (TARGET gtest)
+    target_link_libraries(FermiTest gtest gtest_main)
+endif()
 
 gtest_discover_tests(FermiTest)
