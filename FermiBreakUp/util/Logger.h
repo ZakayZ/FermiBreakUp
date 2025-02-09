@@ -105,21 +105,29 @@ namespace fbu {
     LogLevel level_;
   };
 
-  #define LOG_MSG(logger, level, msg)                                     \
+  #define FERMI_LOG_MSG(logger, level, msg)                               \
     if (logger && logger.ShouldLog(level)) {                              \
       std::ostringstream sstream;                                         \
       sstream << msg;                                                     \
       logger.Log(__FILE__, __LINE__, __FUNCTION__, level, sstream.str()); \
     } 
 
-  #define LOG_TRACE(msg) LOG_MSG(Logger::Default(), LogLevel::TRACE, msg)
-  #define LOG_DEBUG(msg) LOG_MSG(Logger::Default(), LogLevel::DEBUG, msg)
-  #define LOG_INFO(msg) LOG_MSG(Logger::Default(), LogLevel::INFO, msg)
-  #define LOG_WARN(msg) LOG_MSG(Logger::Default(), LogLevel::WARN, msg)
-  #define LOG_ERROR(msg) LOG_MSG(Logger::Default(), LogLevel::ERROR, msg)
+  #define FERMI_LOG_TRACE(msg) FERMI_LOG_MSG(Logger::Default(), LogLevel::TRACE, msg)
+  #define FERMI_LOG_DEBUG(msg) FERMI_LOG_MSG(Logger::Default(), LogLevel::DEBUG, msg)
+  #define FERMI_LOG_INFO(msg) FERMI_LOG_MSG(Logger::Default(), LogLevel::INFO, msg)
+  #define FERMI_LOG_WARN(msg) FERMI_LOG_MSG(Logger::Default(), LogLevel::WARN, msg)
+  #define FERMI_LOG_ERROR(msg) FERMI_LOG_MSG(Logger::Default(), LogLevel::ERROR, msg)
 
-  #define ASSERT_MSG(COND, MSG)                           \
-    if (__builtin_expect(!(COND), false)) {               \
+#if defined(WIN32) || defined(__MINGW32__)
+  #define FERMI_UNLIKELY(x) (x)
+  #define FERMI_LIKELY(x)   (x)
+#else
+  #define FERMI_UNLIKELY(x) __builtin_expect((x), false)
+  #define FERMI_LIKELY(x)   __builtin_expect((x), true)
+#endif
+
+  #define FERMI_ASSERT_MSG(COND, MSG)                     \
+    if (FERMI_UNLIKELY(!(COND))) {                        \
       std::ostringstream sstream;                         \
       sstream << "assertion failed: \"" << #COND << '\"'  \
               << " at " << __FILE__ << ':' << __LINE__    \

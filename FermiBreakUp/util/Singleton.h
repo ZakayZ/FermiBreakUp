@@ -7,12 +7,14 @@
 
 #include <memory>
 
+#include "util/Logger.h"
+
 namespace fbu {
   template <typename T>
   class Singleton {
   public:
     Singleton() {
-      if (instance_ == nullptr) {
+      if (FERMI_UNLIKELY(instance_ == nullptr)) {
         instance_ = std::make_unique<T>();
       }
     }
@@ -38,7 +40,7 @@ namespace fbu {
     }
 
     static T& Instance() {
-      if (instance_ == nullptr) {
+      if (FERMI_UNLIKELY(instance_ == nullptr)) {
         instance_ = std::make_unique<T>();
       }
       return *instance_;

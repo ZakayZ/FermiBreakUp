@@ -15,8 +15,8 @@ namespace fbu {
   public:
     FermiNucleiProperties();
 
-    template <typename data_source>
-    FermiNucleiProperties(const data_source& dataSource);
+    template <typename DataSource>
+    FermiNucleiProperties(const DataSource& dataSource);
 
     template <typename Iter>
     FermiNucleiProperties(Iter begin, Iter end);
@@ -43,8 +43,8 @@ namespace fbu {
     mutable std::vector<MassData> nucleiMasses_;
   };
 
-  template <typename data_source>
-  FermiNucleiProperties::FermiNucleiProperties(const data_source& dataSource)
+  template <typename DataSource>
+  FermiNucleiProperties::FermiNucleiProperties(const DataSource& dataSource)
     : FermiNucleiProperties(dataSource.begin(), dataSource.end())
   {
   }

@@ -38,3 +38,4 @@ OldFermiBreakUp
 *build*
 .cache
 Results/
+.DS_Store

@@ -49,7 +49,7 @@ std::vector<FermiFloat> Randomizer::ProbabilityDistribution(size_t pointCount) {
 
 size_t Randomizer::SampleDistribution(const std::vector<FermiFloat>& weights) {
   const auto totalWeight = std::accumulate(weights.begin(), weights.end(), 0.);
-  ASSERT_MSG(totalWeight > 0., "Invalid weights: all values are zero");
+  FERMI_ASSERT_MSG(totalWeight > 0., "Invalid weights: all values are zero");
 
   const auto targetWeight = SampleUniform() * totalWeight;
   FermiFloat cummulativeWeight = 0;

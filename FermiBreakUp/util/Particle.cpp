@@ -19,7 +19,7 @@ Particle::Particle(AtomicMass atomicMass, ChargeNumber chargeNumber, const Loren
   , momentum_(momentum)
   , groundStateMass_(NucleiProperties()->GetNuclearMass(atomicMass_, chargeNumber_))
 {
-  ASSERT_MSG(FermiUInt(atomicMass_) >= FermiUInt(chargeNumber),
+  FERMI_ASSERT_MSG(FermiUInt(atomicMass_) >= FermiUInt(chargeNumber),
              "imposible particle: A = " << atomicMass_ << ", Z = " << chargeNumber);
 
   CalculateExcitationEnergy();
@@ -59,8 +59,8 @@ bool Particle::IsStable() const {
 void Particle::CalculateExcitationEnergy() {
   excitationEnergy_ = momentum_.mag() - groundStateMass_;
   if (excitationEnergy_ < 0.) {
-    if (excitationEnergy_ < -10 * CLHEP::eV) {
-      LOG_WARN("Excitation Energy is too negative: " << excitationEnergy_ / CLHEP::MeV << " MeV");
+    if (FERMI_UNLIKELY(excitationEnergy_ < -10 * CLHEP::eV)) {
+      FERMI_LOG_WARN("Excitation Energy is too negative: " << excitationEnergy_ / CLHEP::MeV << " MeV");
     }
     excitationEnergy_ = 0.;
   }

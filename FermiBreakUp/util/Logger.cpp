@@ -3,7 +3,7 @@
 using namespace fbu;
 
 namespace {
-  static const std::string LogLevelNames[static_cast<int>(LogLevel::NONE)] = {
+  static const std::array<std::string, static_cast<int>(LogLevel::NONE)> LOG_LEVEL_NAMES = {
     "TRACE",
     "DEBUG",
     "INFO",
@@ -20,5 +20,5 @@ void StreamLogger::Log(
   const std::string_view msg)
 {
   stream_ << fileName << ':' << line << " in function \"" << funcName << "\"\n"
-          << LogLevelNames[static_cast<int>(level)] << ": " << msg << std::endl;
+          << LOG_LEVEL_NAMES[static_cast<int>(level)] << ": " << msg << std::endl;
 }

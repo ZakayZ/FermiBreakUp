@@ -67,7 +67,7 @@ void IntegerPartition::Iterator::NextPartition() {
       --partition_.front();
       ++(*partitionLast);
 
-      auto newValue = *partitionLast;
+      const auto newValue = *partitionLast;
       std::fill(std::next(partition_.begin()), partitionLast, newValue);
       partition_.front() += accumulated - newValue * (std::distance(partition_.begin(), partitionLast) - 1);
       return;

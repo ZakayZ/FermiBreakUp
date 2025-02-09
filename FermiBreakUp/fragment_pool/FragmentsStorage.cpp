@@ -2,6 +2,7 @@
 // Created by Artem Novikov on 30.01.2024.
 //
 
+#include "util/Logger.h"
 #include "data_source/DefaultPoolSource.h"
 
 #include "FragmentsStorage.h"
@@ -21,27 +22,13 @@ FragmentsStorage::FragmentsStorage()
 {
 }
 
-template <typename DataSource>
-FragmentsStorage::FragmentsStorage(const DataSource& dataSource)
-  : FragmentsStorage(dataSource.begin(), dataSource.end())
-{
-}
-
-template <typename Iter>
-FragmentsStorage::FragmentsStorage(Iter begin, Iter end) {
-  static_assert(std::is_same_v<typename Iter::value_type, const Fragment*>, "invalid iterator");
-  for (auto it = begin; it != end; ++it) {
-    AddFragment(**it);
-  }
-}
-
 size_t FragmentsStorage::Count(AtomicMass atomicMass, ChargeNumber chargeNumber) const {
-  if (FermiUInt(atomicMass) < FermiUInt(chargeNumber)) {
+  if (FERMI_UNLIKELY(FermiUInt(atomicMass) < FermiUInt(chargeNumber))) {
     return 0;
   }
 
   const auto slot = GetSlot(atomicMass, chargeNumber);
-  if (slot >= fragments_.size()) {
+  if (FERMI_UNLIKELY(slot >= fragments_.size())) {
     return 0;
   }
 
@@ -53,7 +40,7 @@ size_t FragmentsStorage::Count(NucleiData nuclei) const {
 }
 
 FragmentsStorage::IteratorRange FragmentsStorage::GetFragments(AtomicMass atomicMass, ChargeNumber chargeNumber) const {
-  if (FermiUInt(atomicMass) < FermiUInt(chargeNumber)) {
+  if (FERMI_UNLIKELY(FermiUInt(atomicMass) < FermiUInt(chargeNumber))) {
     return {EmptyContainer_.begin(), EmptyContainer_.end()};
   }
 

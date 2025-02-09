@@ -28,7 +28,7 @@ namespace {
 
   FermiFloat CoulombBarrier(const FragmentVector& split) {
     // Coulomb Barrier (MeV) for given channel with K fragments.
-    static const FermiFloat coef = (3. / 5.) * (CLHEP::elm_coupling / R0) * std::cbrt(1. / (1. + Kappa));
+    static const FermiFloat COEF = (3. / 5.) * (CLHEP::elm_coupling / R0) * std::cbrt(1. / (1. + Kappa));
 
     FermiUInt atomicMassSum = 0.;
     FermiUInt chargeSum = 0.;
@@ -43,7 +43,7 @@ namespace {
 
     CoulombEnergy -= std::pow(static_cast<FermiFloat>(chargeSum), 2)
                      / std::cbrt(static_cast<FermiFloat>(atomicMassSum));
-    return -coef * CoulombEnergy;
+    return -COEF * CoulombEnergy;
   }
 
   FermiFloat SpinFactor(const FragmentVector& split) {
@@ -167,11 +167,11 @@ namespace {
   constexpr size_t ExpectedSplitSize = 100;
 
   void ThrowOnInvalidInputs(NucleiData nucleiData) {
-    ASSERT_MSG(nucleiData.atomicMass > 0_m && nucleiData.chargeNumber >= 0_c,
+    FERMI_ASSERT_MSG(nucleiData.atomicMass > 0_m && nucleiData.chargeNumber >= 0_c,
                "Non valid arguments A = " << nucleiData.atomicMass
                << " Z = " << nucleiData.chargeNumber);
 
-    ASSERT_MSG(FermiUInt(nucleiData.chargeNumber) <= FermiUInt(nucleiData.atomicMass),
+    FERMI_ASSERT_MSG(FermiUInt(nucleiData.chargeNumber) <= FermiUInt(nucleiData.atomicMass),
                "Non physical arguments = " << nucleiData.atomicMass
                << " Z = " << nucleiData.chargeNumber);
   }
