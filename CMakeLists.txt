@@ -26,14 +26,14 @@ set(PhaseSpace
 set(FragmentPool
     src/G4FermiFragmentsStorage.cc
     src/G4FermiDefaultPoolSource.cc
-    src/G4FermiPossibleFragment.cc
+    src/G4FermiVFragment.cc
     src/G4FermiStableFragment.cc
     src/G4FermiUnstableFragment.cc
 )
 
 set(FermiBreakUpModel
-    G4FermiSplitter.cc
-    G4FermiBreakUp.cc
+    src/G4FermiSplitter.cc
+    src/G4FermiBreakUpAN.cc
 )
 
 set(Sources 

@@ -24,27 +24,22 @@
 // ********************************************************************
 //
 //
-// G4FermiBreakUp alternative de-excitation model
+// G4FermiBreakUpAN alternative de-excitation model
 // by A. Novikov (January 2025)
 //
 
 #ifndef G4FERMISTABLEFRAGMENT_HH
 #define G4FERMISTABLEFRAGMENT_HH
 
-#include "G4FermiPossibleFragment.hh"
+#include "G4FermiVFragment.hh"
 
-namespace fbu
-{
-
-class G4FermiStableFragment : public G4FermiPossibleFragment
+class G4FermiStableFragment : public G4FermiVFragment
 {
   public:
-    using G4FermiPossibleFragment::G4FermiPossibleFragment;
+    using G4FermiVFragment::G4FermiVFragment;
 
     void AppendDecayFragments(const G4FermiLorentzVector& momentum,
                               std::vector<G4FermiParticle>& fragments) const override;
 };
-
-}  // namespace fbu
 
 #endif  // G4FERMISTABLEFRAGMENT_HH

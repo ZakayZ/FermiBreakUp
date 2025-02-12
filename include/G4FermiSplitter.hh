@@ -24,36 +24,33 @@
 // ********************************************************************
 //
 //
-// G4FermiBreakUp alternative de-excitation model
+// G4FermiBreakUpAN alternative de-excitation model
 // by A. Novikov (January 2025)
 //
 
 #ifndef G4FERMISPLITTER_HH
 #define G4FERMISPLITTER_HH
 
-#include "G4FermiPossibleFragment.hh"
 #include "G4FermiDataTypes.hh"
+#include "G4FermiVFragment.hh"
 
-namespace fbu
-{
-using G4FermiPossibleFragmentSplits = std::vector<G4FermiPossibleFragmentVector>;
+using G4FermiFragmentSplits = std::vector<G4FermiFragmentVector>;
 
 class G4FermiSplitter
 {
   public:
-    static G4FermiFloat DecayWeight(const G4FermiPossibleFragmentVector& split,
+    static G4FermiFloat DecayWeight(const G4FermiFragmentVector& split,
                                     G4FermiAtomicMass atomicMass, G4FermiFloat totalEnergy);
 
-    static G4FermiFloat SplitFactor(const G4FermiPossibleFragmentVector& split,
+    static G4FermiFloat SplitFactor(const G4FermiFragmentVector& split,
                                     G4FermiAtomicMass atomicMass);
 
-    static G4FermiFloat KineticFactor(const G4FermiPossibleFragmentVector& split, G4FermiFloat totalEnergy);
+    static G4FermiFloat KineticFactor(const G4FermiFragmentVector& split, G4FermiFloat totalEnergy);
 
     static void GenerateSplits(G4FermiNucleiData nucleiData,
-                               std::vector<G4FermiPossibleFragmentVector>& splits);
+                               std::vector<G4FermiFragmentVector>& splits);
 
-    static std::vector<G4FermiPossibleFragmentVector> GenerateSplits(G4FermiNucleiData nucleiData);
+    static std::vector<G4FermiFragmentVector> GenerateSplits(G4FermiNucleiData nucleiData);
 };
-}  // namespace fbu
 
 #endif  // G4FERMISPLITTER_HH

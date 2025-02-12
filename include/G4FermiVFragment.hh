@@ -24,28 +24,62 @@
 // ********************************************************************
 //
 //
-// G4FermiBreakUp alternative de-excitation model
+// G4FermiBreakUpAN alternative de-excitation model
 // by A. Novikov (January 2025)
 //
 
-#ifndef G4FERMIVDECAY_HH
-#define G4FERMIVDECAY_HH
+#ifndef G4FERMIVFRAGMENT_HH
+#define G4FERMIVFRAGMENT_HH
 
 #include "G4FermiDataTypes.hh"
+#include "G4FermiParticle.hh"
 
+#include <ostream>
 #include <vector>
 
-namespace fbu
-{
-class G4FermiVDecay
+class G4FermiVFragment;
+
+using G4FermiFragmentVector = std::vector<const G4FermiVFragment*>;
+
+class G4FermiVFragment
 {
   public:
-    virtual std::vector<G4FermiLorentzVector>
-    CalculateDecay(const G4FermiLorentzVector& totalMomentum,
-                   const std::vector<G4FermiFloat>& fragmentsMass) const = 0;
+    G4FermiVFragment(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber,
+                     G4FermiInt polarization, G4FermiFloat excitationEnergy);
 
-    virtual ~G4FermiVDecay() = default;
+    G4FermiVFragment(const G4FermiVFragment&) = delete;
+
+    G4FermiVFragment& operator=(const G4FermiVFragment&) = delete;
+
+    std::vector<G4FermiParticle> GetDecayFragments(const G4FermiLorentzVector& momentum) const;
+
+    virtual void AppendDecayFragments(const G4FermiLorentzVector& momentum,
+                                      std::vector<G4FermiParticle>& particles) const = 0;
+
+    G4FermiAtomicMass GetAtomicMass() const;
+
+    G4FermiChargeNumber GetChargeNumber() const;
+
+    G4FermiInt GetPolarization() const;
+
+    G4FermiFloat GetExcitationEnergy() const;
+
+    G4FermiFloat GetMass() const;
+
+    G4FermiFloat GetTotalEnergy() const;
+
+    virtual ~G4FermiVFragment() = default;
+
+  protected:
+    G4FermiAtomicMass atomicMass_;  // A
+    G4FermiChargeNumber chargeNumber_;  // Z
+    G4FermiInt polarization_;
+    G4FermiFloat excitationEnergy_;
 };
-}  // namespace fbu
 
-#endif  // G4FERMIVDECAY_HH
+namespace std
+{
+ostream& operator<<(ostream&, const G4FermiVFragment&);
+}  // namespace std
+
+#endif  // G4FERMIVFRAGMENT_HH

@@ -24,25 +24,22 @@
 // ********************************************************************
 //
 //
-// G4FermiBreakUp alternative de-excitation model
+// G4FermiBreakUpAN alternative de-excitation model
 // by A. Novikov (January 2025)
 //
 
 #ifndef G4FERMIFRAGMENTSSTORAGE_HH
 #define G4FERMIFRAGMENTSSTORAGE_HH
 
-#include "G4FermiPossibleFragment.hh"
 #include "G4FermiDataTypes.hh"
+#include "G4FermiVFragment.hh"
 
 #include <vector>
-
-namespace fbu
-{
 
 class G4FermiFragmentsStorage
 {
   private:
-    using Container = std::vector<const G4FermiPossibleFragment*>;
+    using Container = std::vector<const G4FermiVFragment*>;
 
   public:
     class G4FermiIteratorRange
@@ -78,7 +75,7 @@ class G4FermiFragmentsStorage
 
     [[nodiscard]] G4FermiIteratorRange GetFragments(G4FermiNucleiData nuclei) const;
 
-    void AddFragment(const G4FermiPossibleFragment& fragment);
+    void AddFragment(const G4FermiVFragment& fragment);
 
   private:
     static inline const Container EmptyContainer_ = {};
@@ -94,13 +91,11 @@ G4FermiFragmentsStorage::G4FermiFragmentsStorage(const DataSource& dataSource)
 template<typename Iter>
 G4FermiFragmentsStorage::G4FermiFragmentsStorage(Iter begin, Iter end)
 {
-  static_assert(std::is_same_v<typename Iter::value_type, const G4FermiPossibleFragment*>,
+  static_assert(std::is_same_v<typename Iter::value_type, const G4FermiVFragment*>,
                 "invalid iterator");
   for (auto it = begin; it != end; ++it) {
     AddFragment(**it);
   }
 }
-
-}  // namespace fbu
 
 #endif  // G4FERMIFRAGMENTSSTORAGE_HH

@@ -24,65 +24,52 @@
 // ********************************************************************
 //
 //
-// G4FermiBreakUp alternative de-excitation model
+// G4FermiBreakUpAN alternative de-excitation model
 // by A. Novikov (January 2025)
 //
 
-#ifndef G4FERMIPOSSIBLEFRAGMENT_HH
-#define G4FERMIPOSSIBLEFRAGMENT_HH
+#ifndef G4FERMIBREAKUP_HH
+#define G4FERMIBREAKUP_HH
 
-#include "G4FermiDataTypes.hh"
 #include "G4FermiParticle.hh"
+#include "G4FermiSplitter.hh"
 
-#include <ostream>
-#include <vector>
+#include <G4VFermiBreakUp.hh>
 
-namespace fbu
-{
-class G4FermiPossibleFragment;
+#include <memory>
 
-using G4FermiPossibleFragmentVector = std::vector<const G4FermiPossibleFragment*>;
-
-class G4FermiPossibleFragment
+class G4FermiBreakUpAN : public G4VFermiBreakUp
 {
   public:
-    G4FermiPossibleFragment(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber,
-                    G4FermiInt polarization, G4FermiFloat excitationEnergy);
+    using G4FermiSplitCache = G4FermiVCache<G4FermiNucleiData, G4FermiFragmentSplits>;
 
-    G4FermiPossibleFragment(const G4FermiPossibleFragment&) = delete;
+    G4FermiBreakUpAN();
 
-    G4FermiPossibleFragment& operator=(const G4FermiPossibleFragment&) = delete;
+    G4FermiBreakUpAN(std::unique_ptr<G4FermiSplitCache>&& cache);
 
-    std::vector<G4FermiParticle> GetDecayFragments(const G4FermiLorentzVector& momentum) const;
+    void Initialise() override;
 
-    virtual void AppendDecayFragments(const G4FermiLorentzVector& momentum,
-                                      std::vector<G4FermiParticle>& particles) const = 0;
+    // check if the Fermi Break Up model can be used
+    // mass is an effective mass of a fragment
+    G4bool IsApplicable(G4int Z, G4int A, G4double eexc) const override;
 
-    G4FermiAtomicMass GetAtomicMass() const;
+    // vector of products is added to the provided vector
+    // if no decay channel is found out for the primary fragment
+    // then it is added to the results vector
+    // if primary decays then it is deleted
+    void BreakFragment(G4FragmentVector* results, G4Fragment* theNucleus) override;
 
-    G4FermiChargeNumber GetChargeNumber() const;
+    std::vector<G4FermiParticle> BreakItUp(const G4FermiParticle& nucleus) const;
 
-    G4FermiInt GetPolarization() const;
+  private:
+    std::vector<G4FermiParticle> SelectSplit(const G4FermiParticle& particle,
+                                             const G4FermiFragmentSplits& splits) const;
 
-    G4FermiFloat GetExcitationEnergy() const;
+    mutable std::unique_ptr<G4FermiSplitCache> cache_ = nullptr;
 
-    G4FermiFloat GetMass() const;
-
-    G4FermiFloat GetTotalEnergy() const;
-
-    virtual ~G4FermiPossibleFragment() = default;
-
-  protected:
-    G4FermiAtomicMass atomicMass_;  // A
-    G4FermiChargeNumber chargeNumber_;  // Z
-    G4FermiInt polarization_;
-    G4FermiFloat excitationEnergy_;
+    // improve performance, reusing allocated memory
+    mutable std::vector<G4FermiFloat> weights_;
+    mutable G4FermiFragmentSplits splits_;
 };
 
-}  // namespace fbu
-
-namespace std
-{
-ostream& operator<<(ostream&, const ::fbu::G4FermiPossibleFragment&);
-}  // namespace std
-#endif  // G4FERMIPOSSIBLEFRAGMENT_HH
+#endif  // G4FERMIBREAKUP_HH

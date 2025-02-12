@@ -24,26 +24,21 @@
 // ********************************************************************
 //
 //
-// G4FermiBreakUp alternative de-excitation model
+// G4FermiBreakUpAN alternative de-excitation model
 // by A. Novikov (January 2025)
 //
 
 #ifndef G4FERMIKOPYLOVDECAY_HH
 #define G4FERMIKOPYLOVDECAY_HH
 
-#include "G4FermiVDecay.hh"
+#include "G4FermiVPhaseDecay.hh"
 
-namespace fbu
-{
-
-class G4FermiKopylovDecay : public G4FermiVDecay
+class G4FermiKopylovDecay : public G4FermiVPhaseDecay
 {
   public:
     std::vector<G4FermiLorentzVector>
     CalculateDecay(const G4FermiLorentzVector& totalMomentum,
                    const std::vector<G4FermiFloat>& fragmentsMass) const override;
 };
-
-}  // namespace fbu
 
 #endif  // G4FERMIKOPYLOVDECAY_HH

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// G4FermiBreakUp alternative de-excitation model
+// G4FermiBreakUpAN alternative de-excitation model
 // by A. Novikov (January 2025)
 //
 
@@ -34,9 +34,6 @@
 #include <cstddef>
 #include <cstdint>
 #include <vector>
-
-namespace fbu
-{
 
 using G4FermiPartition = std::vector<uint32_t>;
 
@@ -94,7 +91,5 @@ class G4FermiIntegerPartition::Iterator
 
     G4FermiPartition partition_;
 };
-
-}  // namespace fbu
 
 #endif  // G4FERMIINTEGERPARTITION_HH

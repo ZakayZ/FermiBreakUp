@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// G4FermiBreakUp alternative de-excitation model
+// G4FermiBreakUpAN alternative de-excitation model
 // by A. Novikov (January 2025)
 //
 
@@ -35,9 +35,6 @@
 
 #include <random>
 #include <vector>
-
-namespace fbu
-{
 
 class G4FermiRandomizer
 {
@@ -60,7 +57,5 @@ class G4FermiRandomizer
   private:
     static inline G4FermiRandomEngine Engine_ = {};
 };
-
-}  // namespace fbu
 
 #endif  // G4FERMIRANDOMIZER_HH

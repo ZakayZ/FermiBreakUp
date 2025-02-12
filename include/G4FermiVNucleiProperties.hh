@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// G4FermiBreakUp alternative de-excitation model
+// G4FermiBreakUpAN alternative de-excitation model
 // by A. Novikov (January 2025)
 //
 
@@ -32,9 +32,6 @@
 #define G4FERMIVNUCLEIPROPERTIES_HH
 
 #include "G4FermiDataTypes.hh"
-
-namespace fbu
-{
 
 class G4FermiVNucleiProperties
 {
@@ -46,7 +43,5 @@ class G4FermiVNucleiProperties
 
     virtual ~G4FermiVNucleiProperties() = default;
 };
-
-}  // namespace fbu
 
 #endif  // G4FERMIVNUCLEIPROPERTIES_HH

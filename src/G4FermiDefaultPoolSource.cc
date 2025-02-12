@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// G4FermiBreakUp alternative de-excitation model
+// G4FermiBreakUpAN alternative de-excitation model
 // by A. Novikov (January 2025)
 //
 
@@ -37,8 +37,6 @@
 
 using CLHEP::MeV;
 
-using namespace fbu;
-
 G4FermiDefaultPoolSource::G4FermiDefaultPoolSource()
 {
 #define FERMI_CONCAT(x, y) x##y
@@ -50,7 +48,7 @@ G4FermiDefaultPoolSource::G4FermiDefaultPoolSource()
 
 // automatic unique names are added
 #define FERMI_ADD_FRAGMENT(VALUE) \
-  FERMI_ADD_FRAGMENT_IMPL(FERMI_INSTANTIATE_MACRO(G4FermiPossibleFragment, __COUNTER__), VALUE)
+  FERMI_ADD_FRAGMENT_IMPL(FERMI_INSTANTIATE_MACRO(G4FermiVFragment, __COUNTER__), VALUE)
 
   FERMI_ADD_FRAGMENT(G4FermiStableFragment(1_m, 0_c, 2, 0.00 * MeV));
   FERMI_ADD_FRAGMENT(G4FermiStableFragment(1_m, 1_c, 2, 0.00 * MeV));

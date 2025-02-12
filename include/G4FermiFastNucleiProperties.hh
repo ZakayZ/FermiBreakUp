@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// G4FermiBreakUp alternative de-excitation model
+// G4FermiBreakUpAN alternative de-excitation model
 // by A. Novikov (January 2025)
 //
 
@@ -36,8 +36,6 @@
 
 #include <vector>
 
-namespace fbu
-{
 class G4FermiFastNucleiProperties : public G4FermiVNucleiProperties
 {
   public:
@@ -88,7 +86,5 @@ G4FermiFastNucleiProperties::G4FermiFastNucleiProperties(Iter begin, Iter end)
     AddStableNuclei(it->first, it->second);
   }
 }
-
-}  // namespace fbu
 
 #endif  // G4FERMIFASTNUCLEIPROPERTIES_HH

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// G4FermiBreakUp alternative de-excitation model
+// G4FermiBreakUpAN alternative de-excitation model
 // by A. Novikov (January 2025)
 //
 //
@@ -35,8 +35,6 @@
 
 #include "G4FermiDefaultPoolSource.hh"
 #include "G4FermiLogger.hh"
-
-using namespace fbu;
 
 namespace
 {
@@ -94,7 +92,7 @@ G4FermiFragmentsStorage::GetFragments(G4FermiNucleiData nuclei) const
   return GetFragments(nuclei.atomicMass, nuclei.chargeNumber);
 }
 
-void G4FermiFragmentsStorage::AddFragment(const G4FermiPossibleFragment& fragment)
+void G4FermiFragmentsStorage::AddFragment(const G4FermiVFragment& fragment)
 {
   const auto slot = GetSlot(fragment.GetAtomicMass(), fragment.GetChargeNumber());
   if (slot >= fragments_.size()) {

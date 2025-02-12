@@ -24,12 +24,13 @@
 // ********************************************************************
 //
 //
-// G4FermiBreakUp alternative de-excitation model
+// G4FermiBreakUpAN alternative de-excitation model
 // by A. Novikov (January 2025)
 //
 
-#include "G4FermiBreakUp.hh"
+#include "G4FermiBreakUpAN.hh"
 
+#include "G4FermiCache.hh"
 #include "G4FermiCopyMass.hh"
 #include "G4FermiDataTypes.hh"
 #include "G4FermiDefaultPoolSource.hh"
@@ -38,16 +39,14 @@
 #include "G4FermiNucleiProperties.hh"
 #include "G4FermiParticle.hh"
 #include "G4FermiPhaseDecay.hh"
-#include "G4FermiPossibleFragment.hh"
 #include "G4FermiRandomizer.hh"
 #include "G4FermiSplitter.hh"
+#include "G4FermiVFragment.hh"
 
 #include <CLHEP/Units/PhysicalConstants.h>
 
 #include <algorithm>
 #include <sstream>
-
-using namespace fbu;
 
 namespace
 {
@@ -75,13 +74,13 @@ G4FermiLorentzVector ChangeFrameOfReference(const G4FermiLorentzVector& vec,
 }
 
 std::vector<G4FermiParticle> SplitToParticles(const G4FermiParticle& sourceParticle,
-                                              const G4FermiPossibleFragmentVector& split)
+                                              const G4FermiFragmentVector& split)
 {
   FERMI_LOG_TRACE("Converting split to particles");
 
   std::vector<G4FermiFloat> splitMasses(split.size());
   std::transform(split.begin(), split.end(), splitMasses.begin(),
-                 std::mem_fn(&G4FermiPossibleFragment::GetTotalEnergy));
+                 std::mem_fn(&G4FermiVFragment::GetTotalEnergy));
 
   G4FermiPhaseDecay phaseSampler;
   std::vector<G4FermiLorentzVector> particlesMomentum;
@@ -109,7 +108,7 @@ std::vector<G4FermiParticle> SplitToParticles(const G4FermiParticle& sourceParti
   return particleSplit;
 }
 
-G4FermiStr LogSplit(const G4FermiPossibleFragmentVector& split)
+G4FermiStr LogSplit(const G4FermiFragmentVector& split)
 {
   std::ostringstream out;
 
@@ -123,13 +122,18 @@ G4FermiStr LogSplit(const G4FermiPossibleFragmentVector& split)
 }
 }  // namespace
 
-G4FermiBreakUp::G4FermiBreakUp(std::unique_ptr<G4FermiSplitCache>&& cache)
+G4FermiBreakUpAN::G4FermiBreakUpAN()
+  : G4FermiBreakUpAN(
+    std::make_unique<G4FermiLFUCache<G4FermiNucleiData, G4FermiFragmentSplits>>(MAX_A * MAX_A))
+{}
+
+G4FermiBreakUpAN::G4FermiBreakUpAN(std::unique_ptr<G4FermiSplitCache>&& cache)
   : cache_(std::move(cache))
 {}
 
 std::vector<G4FermiParticle>
-G4FermiBreakUp::SelectSplit(const G4FermiParticle& particle,
-                            const G4FermiPossibleFragmentSplits& splits) const
+G4FermiBreakUpAN::SelectSplit(const G4FermiParticle& particle,
+                              const G4FermiFragmentSplits& splits) const
 {
   FERMI_LOG_TRACE("Selecting Split for " << particle << " from " << splits.size() << " splits");
   if (splits.empty()) {
@@ -157,7 +161,7 @@ G4FermiBreakUp::SelectSplit(const G4FermiParticle& particle,
   return SplitToParticles(particle, chosenSplit);
 }
 
-std::vector<G4FermiParticle> G4FermiBreakUp::BreakItUp(const G4FermiParticle& particle) const
+std::vector<G4FermiParticle> G4FermiBreakUpAN::BreakItUp(const G4FermiParticle& particle) const
 {
   FERMI_LOG_TRACE("Breaking up particle: " << particle);
 
@@ -188,18 +192,18 @@ std::vector<G4FermiParticle> G4FermiBreakUp::BreakItUp(const G4FermiParticle& pa
   }
 }
 
-void G4FermiBreakUp::Initialise()
+void G4FermiBreakUpAN::Initialise()
 {
   G4FermiNucleiProperties::Reset(G4FermiCopyMass());
   G4FermiFragmentPool::Reset(G4FermiDefaultPoolSource());
 }
 
-G4bool G4FermiBreakUp::IsApplicable(G4int Z, G4int A, G4double /* eexc */) const
+G4bool G4FermiBreakUpAN::IsApplicable(G4int Z, G4int A, G4double /* eexc */) const
 {
   return Z < MAX_Z && A < MAX_A;
 }
 
-void G4FermiBreakUp::BreakFragment(G4FragmentVector* results, G4Fragment* theNucleus)
+void G4FermiBreakUpAN::BreakFragment(G4FragmentVector* results, G4Fragment* theNucleus)
 {
   FERMI_ASSERT_MSG(theNucleus != nullptr, "G4Fragment is not set in FermiBreakUp");
   FERMI_ASSERT_MSG(results != nullptr, "Missing result G4FragmentVector in FermiBreakUp");

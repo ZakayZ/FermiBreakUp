@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// G4FermiBreakUp alternative de-excitation model
+// G4FermiBreakUpAN alternative de-excitation model
 // by A. Novikov (January 2025)
 //
 
@@ -35,11 +35,7 @@
 
 #include <vector>
 
-namespace fbu
-{
-
-class G4FermiCopyMass
-  : private std::vector<std::pair<const G4FermiNucleiData, G4FermiFloat>>
+class G4FermiCopyMass : private std::vector<std::pair<const G4FermiNucleiData, G4FermiFloat>>
 {
   private:
     using Container = std::vector<std::pair<const G4FermiNucleiData, G4FermiFloat>>;
@@ -54,7 +50,5 @@ class G4FermiCopyMass
     using Container::end;
     using Container::iterator;
 };
-
-}  // namespace fbu
 
 #endif  // G4FERMICOPYMASS_HH

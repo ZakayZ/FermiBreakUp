@@ -24,24 +24,18 @@
 // ********************************************************************
 //
 //
-// G4FermiBreakUp alternative de-excitation model
+// G4FermiBreakUpAN alternative de-excitation model
 // by A. Novikov (January 2025)
 //
 
 #ifndef G4FERMIFRAGMENTPOOL_HH
 #define G4FERMIFRAGMENTPOOL_HH
 
-#include "G4FermiFragmentsStorage.hh"
-
-#include "G4FermiPossibleFragment.hh"
 #include "G4FermiDataTypes.hh"
+#include "G4FermiFragmentsStorage.hh"
 #include "G4FermiSingleton.hh"
-
-namespace fbu
-{
+#include "G4FermiVFragment.hh"
 
 using G4FermiFragmentPool = G4FermiSingleton<G4FermiFragmentsStorage>;
-
-}  // namespace fbu
 
 #endif  // G4FERMIFRAGMENTPOOL_HH

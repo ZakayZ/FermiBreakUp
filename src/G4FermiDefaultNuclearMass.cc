@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// G4FermiBreakUp alternative de-excitation model
+// G4FermiBreakUpAN alternative de-excitation model
 // by A. Novikov (January 2025)
 //
 
@@ -33,8 +33,6 @@
 #include <CLHEP/Units/PhysicalConstants.h>
 
 using CLHEP::MeV;
-
-using namespace fbu;
 
 G4FermiDefaultNuclearMass::G4FermiDefaultNuclearMass()
 {

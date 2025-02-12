@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// G4FermiBreakUp alternative de-excitation model
+// G4FermiBreakUpAN alternative de-excitation model
 // by A. Novikov (January 2025)
 //
 
@@ -32,14 +32,12 @@
 #define G4FERMIDATATYPES_HH
 
 #include <G4LorentzVector.hh>
-#include <G4Vector3D.hh>
 #include <G4String.hh>
+#include <G4Vector3D.hh>
 
 #include <memory>
 #include <string>
 
-namespace fbu
-{
 using G4FermiInt = G4int;
 
 using G4FermiUInt = uint32_t;
@@ -166,39 +164,37 @@ struct G4FermiNucleiData
     }
 };
 
-}  // namespace fbu
-
 namespace std
 {
 template<>
-struct hash<::fbu::G4FermiNucleiData>
+struct hash<G4FermiNucleiData>
 {
-    size_t operator()(const ::fbu::G4FermiNucleiData& key) const
+    size_t operator()(const G4FermiNucleiData& key) const
     {
-      auto mass = ::fbu::G4FermiInt(key.atomicMass);
-      auto charge = ::fbu::G4FermiInt(key.chargeNumber);
+      auto mass = G4FermiInt(key.atomicMass);
+      auto charge = G4FermiInt(key.chargeNumber);
       return (mass * (mass + 1)) / 2 + charge;
     }
 };
 
-string to_string(::fbu::G4FermiAtomicMass mass);
-string to_string(::fbu::G4FermiChargeNumber charge);
+string to_string(G4FermiAtomicMass mass);
+string to_string(G4FermiChargeNumber charge);
 
-std::ostream& operator<<(std::ostream& out, const ::fbu::G4FermiAtomicMass& mass);
-std::istream& operator>>(std::istream& in, ::fbu::G4FermiAtomicMass& mass);
+std::ostream& operator<<(std::ostream& out, const G4FermiAtomicMass& mass);
+std::istream& operator>>(std::istream& in, G4FermiAtomicMass& mass);
 
-std::ostream& operator<<(std::ostream& out, const ::fbu::G4FermiChargeNumber& charge);
-std::istream& operator>>(std::istream& in, ::fbu::G4FermiChargeNumber& charge);
+std::ostream& operator<<(std::ostream& out, const G4FermiChargeNumber& charge);
+std::istream& operator>>(std::istream& in, G4FermiChargeNumber& charge);
 }  // namespace std
 
-constexpr fbu::G4FermiAtomicMass operator""_m(unsigned long long mass)
+constexpr G4FermiAtomicMass operator""_m(unsigned long long mass)
 {
-  return fbu::G4FermiAtomicMass(mass);
+  return G4FermiAtomicMass(mass);
 }
 
-constexpr fbu::G4FermiChargeNumber operator""_c(unsigned long long charge)
+constexpr G4FermiChargeNumber operator""_c(unsigned long long charge)
 {
-  return fbu::G4FermiChargeNumber(charge);
+  return G4FermiChargeNumber(charge);
 }
 
 #endif  // G4FERMIDATATYPES_HH

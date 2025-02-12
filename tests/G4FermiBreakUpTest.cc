@@ -24,11 +24,11 @@
 // ********************************************************************
 //
 //
-// G4FermiBreakUp alternative de-excitation model
+// G4FermiBreakUpAN alternative de-excitation model
 // by A. Novikov (January 2025)
 //
 
-#include "G4FermiBreakUp.hh"
+#include "G4FermiBreakUpAN.hh"
 
 #include "G4FermiCache.hh"
 #include "G4FermiDataTypes.hh"
@@ -42,8 +42,6 @@
 #include <exception>
 #include <numeric>
 
-using namespace fbu;
-
 namespace
 {
 std::array<G4FermiStr, 3> CacheTypes = {
@@ -52,17 +50,17 @@ std::array<G4FermiStr, 3> CacheTypes = {
   "LFU",
 };
 
-std::unique_ptr<G4FermiVCache<G4FermiNucleiData, G4FermiPossibleFragmentSplits>>
+std::unique_ptr<G4FermiVCache<G4FermiNucleiData, G4FermiFragmentSplits>>
 GetCache(const G4FermiStr& type)
 {
   if (type == CacheTypes[0]) {
     return nullptr;
   }
   else if (type == CacheTypes[1]) {
-    return std::make_unique<G4FermiSimpleCache<G4FermiNucleiData, G4FermiPossibleFragmentSplits>>();
+    return std::make_unique<G4FermiSimpleCache<G4FermiNucleiData, G4FermiFragmentSplits>>();
   }
   else if (type == CacheTypes[2]) {
-    return std::make_unique<G4FermiLFUCache<G4FermiNucleiData, G4FermiPossibleFragmentSplits>>(10);
+    return std::make_unique<G4FermiLFUCache<G4FermiNucleiData, G4FermiFragmentSplits>>(10);
   }
   throw std::runtime_error("unknown cache type: " + type);
 }
@@ -77,10 +75,10 @@ G4FermiFloat RelTolerance(G4FermiFloat expected, G4FermiFloat eps, G4FermiFloat 
 float CalculateFragmentCount(
   G4FermiAtomicMass mass, G4FermiChargeNumber charge, const G4FermiVector3& vec,
   G4FermiFloat energyPerNucleon, size_t tests,
-  std::unique_ptr<G4FermiVCache<G4FermiNucleiData, G4FermiPossibleFragmentSplits>>&& cache =
+  std::unique_ptr<G4FermiVCache<G4FermiNucleiData, G4FermiFragmentSplits>>&& cache =
     nullptr)
 {
-  auto model = G4FermiBreakUp(std::move(cache));
+  auto model = G4FermiBreakUpAN(std::move(cache));
   const auto energy = energyPerNucleon * G4FermiFloat(mass);
   const auto totalEnergy = std::sqrt(
     std::pow(G4FermiNucleiProperties()->GetNuclearMass(mass, charge) + energy, 2) + vec.mag2());
@@ -196,7 +194,7 @@ TEST_P(G4FermiConfigurationsFixture, UnstableNuclei)
 TEST_P(G4FermiConfigurationsFixture, MomentumConservation)
 {
   G4FermiLogger::GlobalLevel = G4FermiLogLevel::WARN;
-  auto model = G4FermiBreakUp(GetCache(G4FermiConfigurationsFixture::GetParam()));
+  auto model = G4FermiBreakUpAN(GetCache(G4FermiConfigurationsFixture::GetParam()));
   constexpr int SEED = 5;
   srand(SEED);
   constexpr int TRIES = 500;
@@ -231,7 +229,7 @@ TEST_P(G4FermiConfigurationsFixture, MomentumConservation)
 TEST_P(G4FermiConfigurationsFixture, BaryonAndChargeConservation)
 {
   G4FermiLogger::GlobalLevel = G4FermiLogLevel::ERROR;
-  auto model = G4FermiBreakUp(GetCache(G4FermiConfigurationsFixture::GetParam()));
+  auto model = G4FermiBreakUpAN(GetCache(G4FermiConfigurationsFixture::GetParam()));
   int SEED = 5;
   srand(SEED);
   int TRIES = 500;

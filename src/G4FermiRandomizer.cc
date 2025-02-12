@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// G4FermiBreakUp alternative de-excitation model
+// G4FermiBreakUpAN alternative de-excitation model
 // by A. Novikov (January 2025)
 //
 
@@ -37,8 +37,6 @@
 #include <algorithm>
 #include <numeric>
 #include <random>
-
-using namespace fbu;
 
 G4FermiFloat G4FermiRandomizer::SampleUniform()
 {

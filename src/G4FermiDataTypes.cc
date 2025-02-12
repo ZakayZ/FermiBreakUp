@@ -24,13 +24,11 @@
 // ********************************************************************
 //
 //
-// G4FermiBreakUp alternative de-excitation model
+// G4FermiBreakUpAN alternative de-excitation model
 // by A. Novikov (January 2025)
 //
 
 #include "G4FermiDataTypes.hh"
-
-using namespace fbu;
 
 std::string std::to_string(G4FermiAtomicMass mass)
 {

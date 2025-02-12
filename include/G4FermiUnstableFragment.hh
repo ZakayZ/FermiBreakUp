@@ -24,19 +24,16 @@
 // ********************************************************************
 //
 //
-// G4FermiBreakUp alternative de-excitation model
+// G4FermiBreakUpAN alternative de-excitation model
 // by A. Novikov (January 2025)
 //
 
 #ifndef G4FERMIUNSTABLEFRAGMENT_HH
 #define G4FERMIUNSTABLEFRAGMENT_HH
 
-#include "G4FermiPossibleFragment.hh"
+#include "G4FermiVFragment.hh"
 
-namespace fbu
-{
-
-class G4FermiUnstableFragment : public G4FermiPossibleFragment
+class G4FermiUnstableFragment : public G4FermiVFragment
 {
   public:
     G4FermiUnstableFragment(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber,
@@ -51,7 +48,7 @@ class G4FermiUnstableFragment : public G4FermiPossibleFragment
     std::vector<G4FermiFloat> masses_;
 };
 
-#define FERMI_ADD_UNSTABLE_FRAGMENT(NAME, FRAGMENTS)                                                      \
+#define FERMI_ADD_UNSTABLE_FRAGMENT(NAME, FRAGMENTS)                                             \
   inline G4FermiUnstableFragment NAME(G4FermiAtomicMass atomicMass,                              \
                                       G4FermiChargeNumber chargeNumber, G4FermiInt polarization, \
                                       G4FermiFloat excitationEnergy)                             \
@@ -62,31 +59,29 @@ class G4FermiUnstableFragment : public G4FermiPossibleFragment
 
 // He5 ----> alpha + neutron
 FERMI_ADD_UNSTABLE_FRAGMENT(He5Fragment, std::vector<G4FermiNucleiData>({
-                                  G4FermiNucleiData{4_m, 2_c},
-                                  G4FermiNucleiData{1_m, 0_c},
-                                }));
+                                           G4FermiNucleiData{4_m, 2_c},
+                                           G4FermiNucleiData{1_m, 0_c},
+                                         }));
 
 // B9 ----> alpha + alpha + proton
 FERMI_ADD_UNSTABLE_FRAGMENT(B9Fragment, std::vector<G4FermiNucleiData>({
-                                 G4FermiNucleiData{4_m, 2_c},
-                                 G4FermiNucleiData{4_m, 2_c},
-                                 G4FermiNucleiData{1_m, 1_c},
-                               }));
+                                          G4FermiNucleiData{4_m, 2_c},
+                                          G4FermiNucleiData{4_m, 2_c},
+                                          G4FermiNucleiData{1_m, 1_c},
+                                        }));
 
 // Be8 ----> alpha + alpha
 FERMI_ADD_UNSTABLE_FRAGMENT(Be8Fragment, std::vector<G4FermiNucleiData>({
-                                  G4FermiNucleiData{4_m, 2_c},
-                                  G4FermiNucleiData{4_m, 2_c},
-                                }));
+                                           G4FermiNucleiData{4_m, 2_c},
+                                           G4FermiNucleiData{4_m, 2_c},
+                                         }));
 
 // Li5 ----> alpha + proton
 FERMI_ADD_UNSTABLE_FRAGMENT(Li5Fragment, std::vector<G4FermiNucleiData>({
-                                  G4FermiNucleiData{4_m, 2_c},
-                                  G4FermiNucleiData{1_m, 1_c},
-                                }));
+                                           G4FermiNucleiData{4_m, 2_c},
+                                           G4FermiNucleiData{1_m, 1_c},
+                                         }));
 
 #undef FERMI_ADD_UNSTABLE_FRAGMENT
-
-}  // namespace fbu
 
 #endif  // G4FERMIUNSTABLEFRAGMENT_HH

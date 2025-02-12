@@ -24,12 +24,10 @@
 // ********************************************************************
 //
 //
-// G4FermiBreakUp alternative de-excitation model
+// G4FermiBreakUpAN alternative de-excitation model
 // by A. Novikov (January 2025)
 //
 #include "G4FermiLogger.hh"
-
-using namespace fbu;
 
 namespace
 {

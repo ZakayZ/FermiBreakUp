@@ -24,22 +24,19 @@
 // ********************************************************************
 //
 //
-// G4FermiBreakUp alternative de-excitation model
+// G4FermiBreakUpAN alternative de-excitation model
 // by A. Novikov (January 2025)
 //
 
 #ifndef G4FERMILOGGER_HH
 #define G4FERMILOGGER_HH
 
+#include <G4ios.hh>
+
 #include <memory>
 #include <sstream>
 #include <string>
 #include <string_view>
-
-#include <G4ios.hh>
-
-namespace fbu
-{
 
 enum class G4FermiLogLevel : int
 {
@@ -135,11 +132,11 @@ class G4FermiLogger
 #define FERMI_LOG_ERROR(msg) FERMI_LOG_MSG(G4FermiLogger::Default(), G4FermiLogLevel::ERROR, msg)
 
 #if defined(WIN32) || defined(__MINGW32__)
-  #define FERMI_UNLIKELY(x) (x)
-  #define FERMI_LIKELY(x)   (x)
+#  define FERMI_UNLIKELY(x) (x)
+#  define FERMI_LIKELY(x) (x)
 #else
-  #define FERMI_UNLIKELY(x) __builtin_expect((x), 0)  // gcc/clang extension - not portable
-  #define FERMI_LIKELY(x)   __builtin_expect((x), 1)
+#  define FERMI_UNLIKELY(x) __builtin_expect((x), 0)  // gcc/clang extension - not portable
+#  define FERMI_LIKELY(x) __builtin_expect((x), 1)
 #endif
 
 #define FERMI_ASSERT_MSG(COND, MSG)                                                             \
@@ -150,7 +147,5 @@ class G4FermiLogger
             << MSG;                                                                             \
     throw std::runtime_error(sstream.str());                                                    \
   }
-
-}  // namespace fbu
 
 #endif  // G4FERMILOGGER_HH

@@ -24,13 +24,11 @@
 // ********************************************************************
 //
 //
-// G4FermiBreakUp alternative de-excitation model
+// G4FermiBreakUpAN alternative de-excitation model
 // by A. Novikov (January 2025)
 //
 
 #include "G4FermiIntegerPartition.hh"
-
-using namespace fbu;
 
 G4FermiIntegerPartition::G4FermiIntegerPartition(uint32_t number, uint32_t termsCount,
                                                  uint32_t base)

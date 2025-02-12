@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// G4FermiBreakUp alternative de-excitation model
+// G4FermiBreakUpAN alternative de-excitation model
 // by A. Novikov (January 2025)
 //
 
@@ -32,9 +32,6 @@
 #define G4FERMIPARTICLE_HH
 
 #include "G4FermiDataTypes.hh"
-
-namespace fbu
-{
 
 class G4FermiParticle
 {
@@ -75,11 +72,9 @@ class G4FermiParticle
     G4FermiFloat excitationEnergy_ = 0;
 };
 
-}  // namespace fbu
-
 namespace std
 {
-ostream& operator<<(ostream&, const ::fbu::G4FermiParticle&);
+ostream& operator<<(ostream&, const G4FermiParticle&);
 }  // namespace std
 
 #endif  // G4FERMIPARTICLE_HH

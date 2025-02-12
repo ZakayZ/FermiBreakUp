@@ -24,24 +24,21 @@
 // ********************************************************************
 //
 //
-// G4FermiBreakUp alternative de-excitation model
+// G4FermiBreakUpAN alternative de-excitation model
 // by A. Novikov (January 2025)
 //
 
 #ifndef G4FERMIDEFAULTPOOLSOURCE_HH
 #define G4FERMIDEFAULTPOOLSOURCE_HH
 
-#include "G4FermiPossibleFragment.hh"
+#include "G4FermiVFragment.hh"
 
 #include <vector>
 
-namespace fbu
-{
-
-class G4FermiDefaultPoolSource : private std::vector<const G4FermiPossibleFragment*>
+class G4FermiDefaultPoolSource : private std::vector<const G4FermiVFragment*>
 {
   private:
-    using Container = std::vector<const G4FermiPossibleFragment*>;
+    using Container = std::vector<const G4FermiVFragment*>;
 
   public:
     G4FermiDefaultPoolSource();
@@ -51,7 +48,5 @@ class G4FermiDefaultPoolSource : private std::vector<const G4FermiPossibleFragme
     using Container::cend;
     using Container::end;
 };
-
-}  // namespace fbu
 
 #endif  // G4FERMIDEFAULTPOOLSOURCE_HH

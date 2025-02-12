@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// G4FermiBreakUp alternative de-excitation model
+// G4FermiBreakUpAN alternative de-excitation model
 // by A. Novikov (January 2025)
 //
 
@@ -33,14 +33,12 @@
 #include "G4FermiNucleiProperties.hh"
 #include "G4FermiPhaseDecay.hh"
 
-using namespace fbu;
-
 G4FermiUnstableFragment::G4FermiUnstableFragment(G4FermiAtomicMass atomicMass,
                                                  G4FermiChargeNumber chargeNumber,
                                                  G4FermiInt polarization,
                                                  G4FermiFloat excitationEnergy,
                                                  std::vector<G4FermiNucleiData>&& decayData)
-  : G4FermiPossibleFragment(atomicMass, chargeNumber, polarization, excitationEnergy),
+  : G4FermiVFragment(atomicMass, chargeNumber, polarization, excitationEnergy),
     decayData_(std::move(decayData))
 {
   G4FermiNucleiProperties properties;

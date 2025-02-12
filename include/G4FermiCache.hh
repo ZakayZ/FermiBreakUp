@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// G4FermiBreakUp alternative de-excitation model
+// G4FermiBreakUpAN alternative de-excitation model
 // by A. Novikov (January 2025)
 //
 
@@ -40,8 +40,6 @@
 #include <optional>
 #include <unordered_map>
 
-namespace fbu
-{
 template<typename Key, typename Value>
 class G4FermiLFUCache : public G4FermiVCache<Key, Value>
 {
@@ -117,6 +115,5 @@ class G4FermiSimpleCache : public G4FermiVCache<Key, Value>
   private:
     std::optional<std::pair<Key, std::shared_ptr<Value>>> cachedItem_;
 };
-}  // namespace fbu
 
 #endif  // G4FERMICACHE_HH

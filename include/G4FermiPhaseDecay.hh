@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// G4FermiBreakUp alternative de-excitation model
+// G4FermiBreakUpAN alternative de-excitation model
 // by A. Novikov (January 2025)
 //
 
@@ -32,16 +32,11 @@
 #define G4FERMIPHASEDECAY_HH
 
 #include "G4FermiKopylovDecay.hh"
-#include "G4FermiVDecay.hh"
+#include "G4FermiVPhaseDecay.hh"
 
-namespace fbu
-{
+using G4FermiPhaseDecay = G4FermiKopylovDecay;
 
-using G4FermiPhaseDecay = G4FermiKopylovDecay;  // or just Decay
-
-static_assert(std::is_base_of<G4FermiVDecay, G4FermiPhaseDecay>::value,
+static_assert(std::is_base_of<G4FermiVPhaseDecay, G4FermiPhaseDecay>::value,
               "Invalid phase sampler");
-
-}  // namespace fbu
 
 #endif  // G4FERMIPHASEDECAY_HH

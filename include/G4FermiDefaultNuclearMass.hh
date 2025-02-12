@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// G4FermiBreakUp alternative de-excitation model
+// G4FermiBreakUpAN alternative de-excitation model
 // by A. Novikov (January 2025)
 //
 
@@ -34,9 +34,6 @@
 #include "G4FermiDataTypes.hh"
 
 #include <vector>
-
-namespace fbu
-{
 
 class G4FermiDefaultNuclearMass
   : private std::vector<std::pair<const G4FermiNucleiData, G4FermiFloat>>
@@ -54,7 +51,5 @@ class G4FermiDefaultNuclearMass
     using Container::end;
     using Container::iterator;
 };
-
-}  // namespace fbu
 
 #endif  // G4FERMIDEFAULTNUCLEARMASS_HH

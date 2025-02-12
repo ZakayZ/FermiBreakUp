@@ -24,19 +24,17 @@
 // ********************************************************************
 //
 //
-// G4FermiBreakUp alternative de-excitation model
+// G4FermiBreakUpAN alternative de-excitation model
 // by A. Novikov (January 2025)
 //
 
 #ifndef G4FERMISINGLETON_HH
 #define G4FERMISINGLETON_HH
 
-#include <memory>
-
 #include "G4FermiLogger.hh"
 
-namespace fbu
-{
+#include <memory>
+
 template<typename T>
 class G4FermiSingleton
 {
@@ -64,10 +62,7 @@ class G4FermiSingleton
 
     static void Reset(T* ptr) { instance_.reset(ptr); }
 
-    static T& Instance()
-    {
-      return *G4FermiSingleton();
-    }
+    static T& Instance() { return *G4FermiSingleton(); }
 
     T& operator*() { return *instance_; }
 
@@ -80,7 +75,5 @@ class G4FermiSingleton
   private:
     static inline std::unique_ptr<T> instance_;
 };
-
-}  // namespace fbu
 
 #endif  // G4FERMISINGLETON_HH

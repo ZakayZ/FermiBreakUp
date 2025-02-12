@@ -24,21 +24,17 @@
 // ********************************************************************
 //
 //
-// G4FermiBreakUp alternative de-excitation model
+// G4FermiBreakUpAN alternative de-excitation model
 // by A. Novikov (January 2025)
 //
 
 #ifndef G4FERMINUCLEIPROPERTIES_HH
 #define G4FERMINUCLEIPROPERTIES_HH
 
-#include "G4FermiVNucleiProperties.hh"
-
-#include "G4FermiFastNucleiProperties.hh"
 #include "G4FermiDataTypes.hh"
+#include "G4FermiFastNucleiProperties.hh"
 #include "G4FermiSingleton.hh"
-
-namespace fbu
-{
+#include "G4FermiVNucleiProperties.hh"
 
 // it is possible to use polymorphism here
 // but it is a bottleneck and no virtual call is made
@@ -47,8 +43,6 @@ using G4FermiNucleiProperties = G4FermiSingleton<G4FermiFastNucleiProperties>;
 static_assert(
   std::is_base_of_v<G4FermiVNucleiProperties,
                     std::remove_reference_t<decltype(G4FermiNucleiProperties::Instance())>>,
-  "Incorrect Nuclei fbu class");
-
-}  // namespace fbu
+  "Incorrect Nuclei Properties class");
 
 #endif  // G4FERMINUCLEIPROPERTIES_HH

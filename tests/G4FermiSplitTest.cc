@@ -37,11 +37,9 @@
 #include <exception>
 #include <numeric>
 
-using namespace fbu;
-
 TEST(SplitTest, NoDuplicates)
 {
-  G4FermiPossibleFragmentSplits splits;  // speeds up test
+  G4FermiFragmentSplits splits;  // speeds up test
   for (G4FermiUInt a = 1; a < 18; ++a) {
     for (G4FermiUInt z = 0; z <= a; ++z) {
       const auto mass = G4FermiAtomicMass(a);
