@@ -39,3 +39,4 @@ OldFermiBreakUp
 .cache
 Results/
 build/
+.vscode/

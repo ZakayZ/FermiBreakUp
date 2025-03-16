@@ -47,8 +47,6 @@ class G4FermiParticle
     G4FermiParticle(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber,
                     const G4FermiLorentzVector& momentum);
 
-    G4FermiNucleiData GetNucleiData() const;
-
     G4FermiAtomicMass GetAtomicMass() const;
 
     G4FermiChargeNumber GetChargeNumber() const;
@@ -59,7 +57,7 @@ class G4FermiParticle
 
     G4FermiFloat GetGroundStateMass() const;
 
-    bool IsStable() const;
+    G4bool IsStable() const;
 
   private:
     void CalculateExcitationEnergy();

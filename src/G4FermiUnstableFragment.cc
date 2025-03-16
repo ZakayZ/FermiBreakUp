@@ -58,7 +58,7 @@ void G4FermiUnstableFragment::AppendDecayFragments(const G4FermiLorentzVector& m
 
   const auto boostVector = momentum.boostVector();
 
-  for (size_t i = 0; i < decayData_.size(); ++i) {
+  for (std::size_t i = 0; i < decayData_.size(); ++i) {
     fragments.emplace_back(decayData_[i].atomicMass, decayData_[i].chargeNumber,
                            fragmentsMomentum[i].boost(boostVector));
   }

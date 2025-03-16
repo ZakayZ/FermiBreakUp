@@ -32,10 +32,75 @@
 #define G4FERMIFRAGMENTPOOL_HH
 
 #include "G4FermiDataTypes.hh"
-#include "G4FermiFragmentsStorage.hh"
-#include "G4FermiSingleton.hh"
 #include "G4FermiVFragment.hh"
 
+class G4FermiFragmentsStorage;
+
 using G4FermiFragmentPool = G4FermiSingleton<G4FermiFragmentsStorage>;
+
+class G4FermiFragmentsStorage
+{
+  private:
+    using Container = std::vector<const G4FermiVFragment*>;
+
+  public:
+    class G4FermiIteratorRange
+    {
+      public:
+        using const_iterator = Container::const_iterator;
+
+        G4FermiIteratorRange(const_iterator begin, const_iterator end) : begin_(begin), end_(end) {}
+
+        const_iterator begin() const { return begin_; }
+        const_iterator end() const { return end_; }
+
+      private:
+        const_iterator begin_;
+        const_iterator end_;
+    };
+
+    G4FermiFragmentsStorage();
+
+    template<typename DataSource>
+    G4FermiFragmentsStorage(const DataSource& dataSource);
+
+    template<typename Iter>
+    G4FermiFragmentsStorage(Iter begin, Iter end);
+
+    std::size_t Count(G4FermiAtomicMass atomicMass,
+                      G4FermiChargeNumber chargeNumber) const;
+
+    std::size_t Count(G4FermiNucleiData nuclei) const {
+      return Count(nuclei.atomicMass, nuclei.chargeNumber);
+    }
+
+    G4FermiIteratorRange GetFragments(G4FermiAtomicMass atomicMass,
+                                      G4FermiChargeNumber chargeNumber) const;
+
+    G4FermiIteratorRange GetFragments(G4FermiNucleiData nuclei) const {
+      return GetFragments(nuclei.atomicMass, nuclei.chargeNumber);
+    }
+
+    void AddFragment(const G4FermiVFragment& fragment);
+
+  private:
+    static inline const Container EmptyContainer_ = {};
+
+    std::vector<Container> fragments_;
+};
+
+template<typename DataSource>
+G4FermiFragmentsStorage::G4FermiFragmentsStorage(const DataSource& dataSource)
+  : G4FermiFragmentsStorage(dataSource.begin(), dataSource.end())
+{}
+
+template<typename Iter>
+G4FermiFragmentsStorage::G4FermiFragmentsStorage(Iter begin, Iter end)
+{
+  static_assert(std::is_same_v<typename Iter::value_type, const G4FermiVFragment*>, "invalid iterator");
+  for (auto it = begin; it != end; ++it) {
+    AddFragment(**it);
+  }
+}
 
 #endif  // G4FERMIFRAGMENTPOOL_HH

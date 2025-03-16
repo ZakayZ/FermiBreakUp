@@ -1,6 +1,6 @@
 #include "G4FermiBreakUpAN.hh"
+#include "G4FermiLogger.hh"
 
-#include "G4FermiCache.hh"
 #include "G4FermiNucleiProperties.hh"
 #include <CLHEP/Units/PhysicalConstants.h>
 
@@ -8,16 +8,17 @@
 #include <iostream>
 
 void CalculateFragments(G4FermiAtomicMass mass, G4FermiChargeNumber charge,
-                        const std::string& dumpName, G4FermiFloat step = 0.2, size_t tests = 1e4)
+                        const std::string& dumpName, G4FermiFloat step = 0.2, std::size_t tests = 1e4)
 {
-  auto model = G4FermiBreakUpAN(
-    std::make_unique<G4FermiSimpleCache<G4FermiNucleiData, G4FermiFragmentSplits>>());
+  auto model = G4FermiBreakUpAN();
+  model.Initialise();
+
   std::vector<G4FermiFloat> energyNucleonValues;
   std::vector<float> avgParts;
   for (G4FermiFloat energyNucleon = 0.; energyNucleon <= 10.; energyNucleon += step) {
-    size_t partsCounter = 0;
+    std::size_t partsCounter = 0;
     auto additionalEnergy = energyNucleon * G4FermiFloat(mass);
-    for (size_t i = 0; i < tests; ++i) {
+    for (std::size_t i = 0; i < tests; ++i) {
       auto vec = G4FermiLorentzVector(
         0, 0, 0, G4FermiNucleiProperties()->GetNuclearMass(mass, charge) + additionalEnergy);
       auto particles = model.BreakItUp(G4FermiParticle(mass, charge, vec));
@@ -30,7 +31,7 @@ void CalculateFragments(G4FermiAtomicMass mass, G4FermiChargeNumber charge,
   std::ofstream out(dumpName);
 
   out << "energy,avg_count\n";
-  for (size_t i = 0; i < avgParts.size(); ++i) {
+  for (std::size_t i = 0; i < avgParts.size(); ++i) {
     out << energyNucleonValues[i] << ',' << avgParts[i] << '\n';
   }
 
@@ -39,10 +40,11 @@ void CalculateFragments(G4FermiAtomicMass mass, G4FermiChargeNumber charge,
 
 void CalculateMomentum(G4FermiAtomicMass mass, G4FermiChargeNumber charge,
                        const std::string& dumpName, G4FermiFloat energy,
-                       const G4FermiVector3& momentum, size_t tests = 1e4)
+                       const G4FermiVector3& momentum, std::size_t tests = 1e4)
 {
-  auto model = G4FermiBreakUpAN(
-    std::make_unique<G4FermiSimpleCache<G4FermiNucleiData, G4FermiFragmentSplits>>());
+  auto model = G4FermiBreakUpAN();
+  model.Initialise();
+
   std::ofstream out(dumpName);
   auto vec = G4FermiLorentzVector(
     momentum.x(), momentum.y(), momentum.z(),
@@ -50,7 +52,7 @@ void CalculateMomentum(G4FermiAtomicMass mass, G4FermiChargeNumber charge,
               + momentum.mag2()));
   out << vec / mass << '\n';
   std::vector<G4FermiFloat> xComponent, yComponent, zComponent, magnitude;
-  for (size_t i = 0; i < tests; ++i) {
+  for (std::size_t i = 0; i < tests; ++i) {
     auto particles = model.BreakItUp(G4FermiParticle(mass, charge, vec));
     auto sum = G4FermiLorentzVector();
     for (const auto& particle : particles) {
@@ -65,6 +67,7 @@ void CalculateMomentum(G4FermiAtomicMass mass, G4FermiChargeNumber charge,
 
 int main()
 {
+  // G4FermiLogger::GlobalLevel = G4FermiLogLevel::TRACE;
   CalculateMomentum(12_m, 6_c, "../Results/stat.data", 12 * 10 * CLHEP::GeV, {0, 0, 0});
   CalculateMomentum(12_m, 6_c, "../Results/mov_x.data", 12 * 5 * CLHEP::MeV,
                     {12 * 10 * CLHEP::GeV, 0, 0});

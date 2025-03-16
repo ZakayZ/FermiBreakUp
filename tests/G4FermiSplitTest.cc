@@ -30,6 +30,7 @@
 
 #include "G4FermiDataTypes.hh"
 #include "G4FermiSplitter.hh"
+#include "G4FermiVFragment.hh"
 
 #include <CLHEP/Units/PhysicalConstants.h>
 #include <gtest/gtest.h>
@@ -39,7 +40,7 @@
 
 TEST(SplitTest, NoDuplicates)
 {
-  G4FermiFragmentSplits splits;  // speeds up test
+  std::vector<G4FermiFragmentVector> splits;  // speeds up test
   for (G4FermiUInt a = 1; a < 18; ++a) {
     for (G4FermiUInt z = 0; z <= a; ++z) {
       const auto mass = G4FermiAtomicMass(a);
@@ -50,8 +51,8 @@ TEST(SplitTest, NoDuplicates)
       for (auto& split : splits) {
         std::sort(split.begin(), split.end());
       }
-      for (size_t i = 0; i < splits.size(); ++i) {
-        for (size_t j = i + 1; j < splits.size(); ++j) {
+      for (std::size_t i = 0; i < splits.size(); ++i) {
+        for (std::size_t j = i + 1; j < splits.size(); ++j) {
           ASSERT_NE(splits[i], splits[j])
             << "Some of splits the same for A = " << mass << ", Z = " << charge;
         }

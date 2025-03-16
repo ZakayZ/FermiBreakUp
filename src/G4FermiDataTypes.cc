@@ -30,6 +30,15 @@
 
 #include "G4FermiDataTypes.hh"
 
+G4FermiVector3 SampleIsotropicVector(G4FermiFloat magnitude) {
+  const auto cos = 1.0 - 2.0 * G4RandFlat::shoot();
+  const auto sin = std::sqrt(1.0 - std::pow(cos, 2));
+  const auto phi = twopi * G4RandFlat::shoot();
+
+  return G4FermiParticleMomentum(magnitude * std::cos(phi) * sin, magnitude * std::sin(phi) * sin,
+                                 magnitude * cos);
+}
+
 std::string std::to_string(G4FermiAtomicMass mass)
 {
   return std::to_string(G4FermiAtomicMass::G4FermiValueType(mass));

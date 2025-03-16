@@ -27,21 +27,66 @@
 // G4FermiBreakUpAN alternative de-excitation model
 // by A. Novikov (January 2025)
 //
+//
+// Created by Artem Novikov on 30.01.2024.
+//
 
-#ifndef G4FERMIVNUCLEIPROPERTIES_HH
-#define G4FERMIVNUCLEIPROPERTIES_HH
+#include "G4FermiFragmentsStorage.hh"
 
 #include "G4FermiDataTypes.hh"
+#include "G4FermiDefaultPoolSource.hh"
+#include "G4FermiLogger.hh"
 
-class G4FermiVNucleiProperties
+namespace
 {
-  public:
-    virtual G4FermiFloat GetNuclearMass(G4FermiAtomicMass atomicMass,
-                                        G4FermiChargeNumber chargeNumber) const = 0;
+std::size_t GetSlot(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber)
+{
+  const auto mass = G4FermiUInt(atomicMass);
+  const auto charge = G4FermiUInt(chargeNumber);
+  return (mass * (mass + 1)) / 2 + charge;
+}
+}  // namespace
 
-    virtual bool IsStable(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber) const = 0;
+G4FermiFragmentsStorage::G4FermiFragmentsStorage()
+  : G4FermiFragmentsStorage(G4FermiDefaultPoolSource())
+{}
 
-    virtual ~G4FermiVNucleiProperties() = default;
-};
+std::size_t G4FermiFragmentsStorage::Count(G4FermiAtomicMass atomicMass,
+                                      G4FermiChargeNumber chargeNumber) const
+{
+  if (unlikely(G4FermiUInt(atomicMass) < G4FermiUInt(chargeNumber))) {
+    return 0;
+  }
 
-#endif  // G4FERMIVNUCLEIPROPERTIES_HH
+  const auto slot = GetSlot(atomicMass, chargeNumber);
+  if (unlikely(slot >= fragments_.size())) {
+    return 0;
+  }
+
+  return fragments_[slot].size();
+}
+
+G4FermiFragmentsStorage::G4FermiIteratorRange
+G4FermiFragmentsStorage::GetFragments(G4FermiAtomicMass atomicMass,
+                                      G4FermiChargeNumber chargeNumber) const
+{
+  if (unlikely(G4FermiUInt(atomicMass) < G4FermiUInt(chargeNumber))) {
+    return {EmptyContainer_.begin(), EmptyContainer_.end()};
+  }
+
+  const auto slot = GetSlot(atomicMass, chargeNumber);
+  if (unlikely(slot >= fragments_.size())) {
+    return {EmptyContainer_.begin(), EmptyContainer_.end()};
+  }
+
+  return {fragments_[slot].begin(), fragments_[slot].end()};
+}
+
+void G4FermiFragmentsStorage::AddFragment(const G4FermiVFragment& fragment)
+{
+  const auto slot = GetSlot(fragment.GetAtomicMass(), fragment.GetChargeNumber());
+  if (slot >= fragments_.size()) {
+    fragments_.resize(slot + G4FermiUInt(fragment.GetAtomicMass()));
+  }
+  fragments_[slot].push_back(&fragment);
+}

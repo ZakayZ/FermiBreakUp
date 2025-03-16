@@ -28,17 +28,18 @@
 // by A. Novikov (January 2025)
 //
 
-#include "G4FermiFastNucleiProperties.hh"
+#include "G4FermiNucleiProperties.hh"
 
 #include "G4FermiDefaultNuclearMass.hh"
 #include "G4FermiLogger.hh"
 
 #include <CLHEP/Units/PhysicalConstants.h>
+#include <G4NucleiProperties.hh>
 
 namespace
 {
 G4FermiFloat WeitzsaeckerBindingEnergy(G4FermiAtomicMass atomicMass,
-                                       G4FermiChargeNumber chargeNumber)
+  G4FermiChargeNumber chargeNumber)
 {
   // Weitzsaecker's Mass formula
   const auto nucleiParity = (G4FermiInt(atomicMass) - G4FermiInt(chargeNumber)) % 2;  // pairing
@@ -66,9 +67,9 @@ G4FermiFloat EstimateAtomicWeight(G4FermiAtomicMass atomicMass, G4FermiChargeNum
   constexpr G4FermiFloat neutronMassExcess = 8.07132;
 
   return G4FermiFloat(G4FermiInt(atomicMass) - G4FermiInt(chargeNumber)) * neutronMassExcess
-         + G4FermiFloat(chargeNumber) * hydrogenMassExcess
-         - WeitzsaeckerBindingEnergy(atomicMass, chargeNumber)
-         + G4FermiFloat(atomicMass) * CLHEP::amu_c2;
+          + G4FermiFloat(chargeNumber) * hydrogenMassExcess
+          - WeitzsaeckerBindingEnergy(atomicMass, chargeNumber)
+          + G4FermiFloat(atomicMass) * CLHEP::amu_c2;
 }
 
 G4FermiFloat EstimateNuclearMass(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber)
@@ -78,13 +79,13 @@ G4FermiFloat EstimateNuclearMass(G4FermiAtomicMass atomicMass, G4FermiChargeNumb
   // atomic mass is converted to nuclear mass according formula in AME03
   mass -= G4FermiFloat(chargeNumber) * CLHEP::electron_mass_c2;
   mass += (14.4381 * std::pow(G4FermiFloat(chargeNumber), 2.39)
-           + 1.55468e-6 * std::pow(G4FermiFloat(chargeNumber), 5.35))
+            + 1.55468e-6 * std::pow(G4FermiFloat(chargeNumber), 5.35))
           * CLHEP::eV;
 
   return mass;
 }
 
-inline size_t GetSlot(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber)
+std::size_t GetSlot(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber)
 {
   const auto mass = G4FermiUInt(atomicMass);
   const auto charge = G4FermiUInt(chargeNumber);
@@ -107,24 +108,13 @@ G4FermiFloat G4FermiFastNucleiProperties::GetNuclearMass(G4FermiAtomicMass atomi
     return nucleiMasses_[slot].mass;
   }
 
-  FERMI_LOG_DEBUG("Unknown particle: A = " << atomicMass << ", Z = " << chargeNumber);
-
-  if (FERMI_UNLIKELY(slot >= nucleiMasses_.size())) {
-    nucleiMasses_.resize(slot + G4FermiUInt(atomicMass));
-  }
-
-  nucleiMasses_[slot] = G4FermiMassData{
-    EstimateNuclearMass(atomicMass, chargeNumber),  // mass
-    false,  // isStable
-    true,  // isCached
-  };
-  return nucleiMasses_[slot].mass;
+  return EstimateNuclearMass(atomicMass, chargeNumber); // G4NucleiProperties::GetNuclearMass(G4int(atomicMass), G4int(chargeNumber));
 }
 
-bool G4FermiFastNucleiProperties::IsStable(G4FermiAtomicMass atomicMass,
+G4bool G4FermiFastNucleiProperties::IsStable(G4FermiAtomicMass atomicMass,
                                            G4FermiChargeNumber chargeNumber) const
 {
-  if (FERMI_UNLIKELY(atomicMass < 1_m || chargeNumber < 0_c
+  if (unlikely(atomicMass < 1_m || chargeNumber < 0_c
                      || G4FermiUInt(chargeNumber) > G4FermiUInt(atomicMass)))
   {
     FERMI_LOG_DEBUG("Unknown particle: A = " << atomicMass << ", Z = " << chargeNumber);
@@ -136,13 +126,11 @@ bool G4FermiFastNucleiProperties::IsStable(G4FermiAtomicMass atomicMass,
   return slot < nucleiMasses_.size() && nucleiMasses_[slot].isStable;
 }
 
-void G4FermiFastNucleiProperties::AddStableNuclei(G4FermiAtomicMass atomicMass,
-                                                  G4FermiChargeNumber chargeNumber,
-                                                  G4FermiFloat mass)
+void G4FermiFastNucleiProperties::InsertNuclei(G4FermiAtomicMass atomicMass,
+                                               G4FermiChargeNumber chargeNumber,
+                                               G4FermiFloat mass,
+                                               G4bool isStable)
 {
-  FERMI_ASSERT_MSG(G4FermiUInt(atomicMass) >= G4FermiUInt(chargeNumber),
-                   "invalid particle: A = " << atomicMass << ", Z = " << chargeNumber);
-
   const auto slot = GetSlot(atomicMass, chargeNumber);
   if (slot >= nucleiMasses_.size()) {
     nucleiMasses_.resize(slot + G4FermiUInt(atomicMass));
@@ -150,12 +138,7 @@ void G4FermiFastNucleiProperties::AddStableNuclei(G4FermiAtomicMass atomicMass,
 
   nucleiMasses_[slot] = G4FermiMassData{
     mass,  // mass
-    true,  // isStable
+    isStable,  // isStable
     true,  // isCached
   };
-}
-
-void G4FermiFastNucleiProperties::AddStableNuclei(G4FermiNucleiData nucleiData, G4FermiFloat mass)
-{
-  return AddStableNuclei(nucleiData.atomicMass, nucleiData.chargeNumber, mass);
 }

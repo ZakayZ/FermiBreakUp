@@ -31,6 +31,7 @@
 #ifndef G4FERMIBREAKUP_HH
 #define G4FERMIBREAKUP_HH
 
+#include "G4FermiDataTypes.hh"
 #include "G4FermiParticle.hh"
 #include "G4FermiSplitter.hh"
 
@@ -40,12 +41,24 @@
 
 class G4FermiBreakUpAN : public G4VFermiBreakUp
 {
+  private:
+    class PossibleSplits {
+      private:
+        using NucleiSplits = std::vector<G4FermiFragmentVector>;
+
+      public:
+        PossibleSplits(const G4FermiAtomicMass maxAtomicMass);
+
+        const NucleiSplits& GetSplits(const G4FermiAtomicMass atomicMass, const G4FermiChargeNumber chargeNumber) const;
+
+        void InsertSplits(const G4FermiAtomicMass atomicMass, const G4FermiChargeNumber chargeNumber, NucleiSplits&& splits);
+
+      private:
+        std::vector<NucleiSplits> splits_;
+    };
+
   public:
-    using G4FermiSplitCache = G4FermiVCache<G4FermiNucleiData, G4FermiFragmentSplits>;
-
     G4FermiBreakUpAN();
-
-    G4FermiBreakUpAN(std::unique_ptr<G4FermiSplitCache>&& cache);
 
     void Initialise() override;
 
@@ -63,13 +76,13 @@ class G4FermiBreakUpAN : public G4VFermiBreakUp
 
   private:
     std::vector<G4FermiParticle> SelectSplit(const G4FermiParticle& particle,
-                                             const G4FermiFragmentSplits& splits) const;
-
-    mutable std::unique_ptr<G4FermiSplitCache> cache_ = nullptr;
+                                             const std::vector<G4FermiFragmentVector>& splits) const;
 
     // improve performance, reusing allocated memory
     mutable std::vector<G4FermiFloat> weights_;
-    mutable G4FermiFragmentSplits splits_;
+    PossibleSplits splits_;
+
+    G4int secID_;
 };
 
 #endif  // G4FERMIBREAKUP_HH

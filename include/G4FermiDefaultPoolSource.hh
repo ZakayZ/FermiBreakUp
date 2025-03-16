@@ -33,7 +33,7 @@
 
 #include "G4FermiVFragment.hh"
 
-#include <vector>
+#include <globals.hh>
 
 class G4FermiDefaultPoolSource : private std::vector<const G4FermiVFragment*>
 {

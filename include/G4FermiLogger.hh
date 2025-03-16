@@ -31,14 +31,14 @@
 #ifndef G4FERMILOGGER_HH
 #define G4FERMILOGGER_HH
 
+#include <G4qss_misc.hh>
 #include <G4ios.hh>
+#include <globals.hh>
 
 #include <memory>
-#include <sstream>
-#include <string>
 #include <string_view>
 
-enum class G4FermiLogLevel : int
+enum class G4FermiLogLevel : G4int
 {
   TRACE = 0,
   DEBUG = 1,
@@ -51,7 +51,7 @@ enum class G4FermiLogLevel : int
 class G4FermiILogger
 {
   public:
-    virtual void Log(const std::string_view fileName, const int line,
+    virtual void Log(const std::string_view fileName, const G4int line,
                      const std::string_view funcName, const G4FermiLogLevel level,
                      const std::string_view msg) = 0;
 
@@ -63,7 +63,7 @@ class G4FermiStreamLogger : public G4FermiILogger
   public:
     G4FermiStreamLogger(std::ostream& stream) : stream_(stream) {}
 
-    void Log(const std::string_view fileName, const int line, const std::string_view funcName,
+    void Log(const std::string_view fileName, const G4int line, const std::string_view funcName,
              const G4FermiLogLevel level, const std::string_view msg) override;
 
   private:
@@ -89,12 +89,12 @@ class G4FermiLogger
 
     G4FermiLogger& operator=(const G4FermiLogger& other) = default;
 
-    bool ShouldLog(const G4FermiLogLevel level) const
+    G4bool ShouldLog(const G4FermiLogLevel level) const
     {
-      return static_cast<int>(level) >= static_cast<int>(level_);
+      return static_cast<G4int>(level) >= static_cast<G4int>(level_);
     }
 
-    void Log(const std::string_view fileName, const int line, const std::string_view funcName,
+    void Log(const std::string_view fileName, const G4int line, const std::string_view funcName,
              const G4FermiLogLevel level, const std::string_view msg)
     {
       impl_->Log(fileName, line, funcName, level, msg);
@@ -105,7 +105,7 @@ class G4FermiLogger
       return G4FermiLogger(impl_, level);
     }
 
-    operator bool() const { return impl_ != nullptr; }
+    operator G4bool() const { return impl_ != nullptr; }
 
     static G4FermiLogger Default() { return G4FermiLogger(GlobalImpl, GlobalLevel); }
 
@@ -131,16 +131,8 @@ class G4FermiLogger
 #define FERMI_LOG_WARN(msg) FERMI_LOG_MSG(G4FermiLogger::Default(), G4FermiLogLevel::WARN, msg)
 #define FERMI_LOG_ERROR(msg) FERMI_LOG_MSG(G4FermiLogger::Default(), G4FermiLogLevel::ERROR, msg)
 
-#if defined(WIN32) || defined(__MINGW32__)
-#  define FERMI_UNLIKELY(x) (x)
-#  define FERMI_LIKELY(x) (x)
-#else
-#  define FERMI_UNLIKELY(x) __builtin_expect((x), 0)  // gcc/clang extension - not portable
-#  define FERMI_LIKELY(x) __builtin_expect((x), 1)
-#endif
-
 #define FERMI_ASSERT_MSG(COND, MSG)                                                             \
-  if (FERMI_UNLIKELY(!(COND))) {                                                                \
+  if (unlikely(!(COND))) {                                                                      \
     std::ostringstream sstream;                                                                 \
     sstream << "assertion failed: \"" << #COND << '\"' << " at " << __FILE__ << ':' << __LINE__ \
             << '\n'                                                                             \

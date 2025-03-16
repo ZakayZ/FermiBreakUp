@@ -50,14 +50,6 @@ G4FermiParticle::G4FermiParticle(G4FermiAtomicMass atomicMass, G4FermiChargeNumb
   CalculateExcitationEnergy();
 }
 
-G4FermiNucleiData G4FermiParticle::GetNucleiData() const
-{
-  return {
-    atomicMass_,
-    chargeNumber_,
-  };
-}
-
 G4FermiAtomicMass G4FermiParticle::GetAtomicMass() const
 {
   return atomicMass_;
@@ -83,7 +75,7 @@ G4FermiFloat G4FermiParticle::GetGroundStateMass() const
   return groundStateMass_;
 }
 
-bool G4FermiParticle::IsStable() const
+G4bool G4FermiParticle::IsStable() const
 {
   return excitationEnergy_ <= 0.;
 }
@@ -94,7 +86,7 @@ void G4FermiParticle::CalculateExcitationEnergy()
   if (excitationEnergy_ < 0.) {
     if (excitationEnergy_ < -10 * CLHEP::eV) {
       FERMI_LOG_WARN("Excitation Energy is too negative: " << excitationEnergy_ / CLHEP::MeV
-                                                           << " MeV");
+                                                           << " MeV for " << *this);
     }
     excitationEnergy_ = 0.;
   }

@@ -32,17 +32,55 @@
 #define G4FERMINUCLEIPROPERTIES_HH
 
 #include "G4FermiDataTypes.hh"
-#include "G4FermiFastNucleiProperties.hh"
-#include "G4FermiSingleton.hh"
-#include "G4FermiVNucleiProperties.hh"
 
-// it is possible to use polymorphism here
-// but it is a bottleneck and no virtual call is made
+class G4FermiFastNucleiProperties
+{
+  public:
+    G4FermiFastNucleiProperties();
+
+    template<typename DataSource>
+    G4FermiFastNucleiProperties(const DataSource& dataSource);
+
+    template<typename Iter>
+    G4FermiFastNucleiProperties(Iter begin, Iter end);
+
+    G4FermiFloat GetNuclearMass(G4FermiAtomicMass atomicMass,
+                                G4FermiChargeNumber chargeNumber) const;
+
+    G4bool IsStable(G4FermiAtomicMass atomicMass,
+                    G4FermiChargeNumber chargeNumber) const;
+
+    void InsertNuclei(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber,
+                      G4FermiFloat mass, G4bool isStable = true);
+
+  private:
+    struct G4FermiMassData
+    {
+        G4FermiFloat mass;
+
+        G4bool isStable = false;  // is nuclei stable
+
+        G4bool isCached = false;  // value has been inserted earlier
+    };
+
+    mutable std::vector<G4FermiMassData> nucleiMasses_;
+};
+
 using G4FermiNucleiProperties = G4FermiSingleton<G4FermiFastNucleiProperties>;
 
-static_assert(
-  std::is_base_of_v<G4FermiVNucleiProperties,
-                    std::remove_reference_t<decltype(G4FermiNucleiProperties::Instance())>>,
-  "Incorrect Nuclei Properties class");
+template<typename DataSource>
+G4FermiFastNucleiProperties::G4FermiFastNucleiProperties(const DataSource& dataSource)
+  : G4FermiFastNucleiProperties(dataSource.begin(), dataSource.end())
+{}
+
+template<typename Iter>
+G4FermiFastNucleiProperties::G4FermiFastNucleiProperties(Iter begin, Iter end)
+{
+  static_assert(
+    std::is_same_v<typename Iter::value_type, std::pair<const G4FermiNucleiData, G4FermiFloat>>, "invalid iterator");
+  for (auto it = begin; it != end; ++it) {
+    InsertNuclei(it->first.atomicMass, it->first.chargeNumber, it->second);
+  }
+}
 
 #endif  // G4FERMINUCLEIPROPERTIES_HH

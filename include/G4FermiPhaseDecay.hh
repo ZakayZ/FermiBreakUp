@@ -31,12 +31,24 @@
 #ifndef G4FERMIPHASEDECAY_HH
 #define G4FERMIPHASEDECAY_HH
 
-#include "G4FermiKopylovDecay.hh"
-#include "G4FermiVPhaseDecay.hh"
+#include "G4HadPhaseSpaceKopylov.hh"
 
-using G4FermiPhaseDecay = G4FermiKopylovDecay;
+class G4FermiPhaseDecay {
+  public:
+    std::vector<G4FermiLorentzVector>
+    CalculateDecay(const G4FermiLorentzVector& totalMomentum,
+                    const std::vector<G4FermiFloat>& fragmentsMass) const
+    {
+      std::vector<G4FermiLorentzVector> results;
+      KopylovDecay().Generate(totalMomentum.m(), fragmentsMass, results);
+      return results;
+    }
 
-static_assert(std::is_base_of<G4FermiVPhaseDecay, G4FermiPhaseDecay>::value,
-              "Invalid phase sampler");
+  private:
+    static G4HadPhaseSpaceKopylov& KopylovDecay() {
+      static G4HadPhaseSpaceKopylov phaseDecay;
+      return phaseDecay;
+    }
+};
 
 #endif  // G4FERMIPHASEDECAY_HH

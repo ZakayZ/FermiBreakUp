@@ -30,11 +30,9 @@
 
 #include "G4FermiBreakUpAN.hh"
 
-#include "G4FermiCache.hh"
 #include "G4FermiDataTypes.hh"
 #include "G4FermiLogger.hh"
 #include "G4FermiNucleiProperties.hh"
-#include "G4FermiRandomizer.hh"
 
 #include <CLHEP/Units/PhysicalConstants.h>
 #include <gtest/gtest.h>
@@ -44,27 +42,6 @@
 
 namespace
 {
-std::array<G4FermiStr, 3> CacheTypes = {
-  "NONE",
-  "LAST",
-  "LFU",
-};
-
-std::unique_ptr<G4FermiVCache<G4FermiNucleiData, G4FermiFragmentSplits>>
-GetCache(const G4FermiStr& type)
-{
-  if (type == CacheTypes[0]) {
-    return nullptr;
-  }
-  else if (type == CacheTypes[1]) {
-    return std::make_unique<G4FermiSimpleCache<G4FermiNucleiData, G4FermiFragmentSplits>>();
-  }
-  else if (type == CacheTypes[2]) {
-    return std::make_unique<G4FermiLFUCache<G4FermiNucleiData, G4FermiFragmentSplits>>(10);
-  }
-  throw std::runtime_error("unknown cache type: " + type);
-}
-
 G4FermiFloat RelTolerance(G4FermiFloat expected, G4FermiFloat eps, G4FermiFloat abs = 1e-5)
 {
   auto relTol = eps * std::abs(expected);
@@ -74,19 +51,18 @@ G4FermiFloat RelTolerance(G4FermiFloat expected, G4FermiFloat eps, G4FermiFloat 
 
 float CalculateFragmentCount(
   G4FermiAtomicMass mass, G4FermiChargeNumber charge, const G4FermiVector3& vec,
-  G4FermiFloat energyPerNucleon, size_t tests,
-  std::unique_ptr<G4FermiVCache<G4FermiNucleiData, G4FermiFragmentSplits>>&& cache =
-    nullptr)
+  G4FermiFloat energyPerNucleon, std::size_t tests)
 {
-  auto model = G4FermiBreakUpAN(std::move(cache));
+  auto model = G4FermiBreakUpAN();
+  model.Initialise();
   const auto energy = energyPerNucleon * G4FermiFloat(mass);
   const auto totalEnergy = std::sqrt(
     std::pow(G4FermiNucleiProperties()->GetNuclearMass(mass, charge) + energy, 2) + vec.mag2());
   const auto mom = G4FermiLorentzVector(vec, totalEnergy);
   const auto particle = G4FermiParticle(mass, charge, mom);
 
-  size_t partsCounter = 0;
-  for (size_t i = 0; i < tests; ++i) {
+  std::size_t partsCounter = 0;
+  for (std::size_t i = 0; i < tests; ++i) {
     const auto particles = model.BreakItUp(particle);
     partsCounter += particles.size();
   }
@@ -100,115 +76,97 @@ class G4FermiConfigurationsFixture : public ::testing::TestWithParam<G4FermiStr>
     G4FermiStr type;
 };
 
-INSTANTIATE_TEST_SUITE_P(FermiBreakUpTests, G4FermiConfigurationsFixture,
-                         ::testing::Values(CacheTypes[0], CacheTypes[1], CacheTypes[2]));
-
-TEST_P(G4FermiConfigurationsFixture, CarbonDecay)
+TEST(G4FermiConfigurationsFixture, CarbonDecay)
 {
   G4FermiLogger::GlobalLevel = G4FermiLogLevel::ERROR;
-  constexpr size_t RUNS = 1e3;
+  constexpr std::size_t RUNS = 1e3;
 
   // Carbons shouldn't break up [0, 0.7]
   ASSERT_NEAR(1,
-              CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 0 * CLHEP::MeV, RUNS,
-                                     GetCache(G4FermiConfigurationsFixture::GetParam())),
+              CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 0 * CLHEP::MeV, RUNS),
               0.01);
   ASSERT_NEAR(1,
-              CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 0.25 * CLHEP::MeV, RUNS,
-                                     GetCache(G4FermiConfigurationsFixture::GetParam())),
+              CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 0.25 * CLHEP::MeV, RUNS),
               0.01);
   ASSERT_NEAR(1,
-              CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 0.5 * CLHEP::MeV, RUNS,
-                                     GetCache(G4FermiConfigurationsFixture::GetParam())),
+              CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 0.5 * CLHEP::MeV, RUNS),
               0.01);
   ASSERT_NEAR(1,
-              CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 0.7 * CLHEP::MeV, RUNS,
-                                     GetCache(G4FermiConfigurationsFixture::GetParam())),
+              CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 0.7 * CLHEP::MeV, RUNS),
               0.01);
 
   // Carbons should break into 3 parts [1, 1.4]
   ASSERT_NEAR(3,
-              CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 1 * CLHEP::MeV, RUNS,
-                                     GetCache(G4FermiConfigurationsFixture::GetParam())),
+              CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 1 * CLHEP::MeV, RUNS),
               0.01);
   ASSERT_NEAR(3,
-              CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 1.25 * CLHEP::MeV, RUNS,
-                                     GetCache(G4FermiConfigurationsFixture::GetParam())),
+              CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 1.25 * CLHEP::MeV, RUNS),
               0.01);
   ASSERT_NEAR(3,
-              CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 1.4 * CLHEP::MeV, RUNS,
-                                     GetCache(G4FermiConfigurationsFixture::GetParam())),
+              CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 1.4 * CLHEP::MeV, RUNS),
               0.01);
 
   // Carbons should break into less than 3 parts [1.5, 3.5]
-  ASSERT_LE(CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 1.5 * CLHEP::MeV, RUNS,
-                                   GetCache(G4FermiConfigurationsFixture::GetParam())),
+  ASSERT_LE(CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 1.5 * CLHEP::MeV, RUNS),
             3);
-  ASSERT_LE(CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 2 * CLHEP::MeV, RUNS,
-                                   GetCache(G4FermiConfigurationsFixture::GetParam())),
+  ASSERT_LE(CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 2 * CLHEP::MeV, RUNS),
             3);
-  ASSERT_LE(CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 3 * CLHEP::MeV, RUNS,
-                                   GetCache(G4FermiConfigurationsFixture::GetParam())),
+  ASSERT_LE(CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 3 * CLHEP::MeV, RUNS),
             3);
-  ASSERT_LE(CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 3.5 * CLHEP::MeV, RUNS,
-                                   GetCache(G4FermiConfigurationsFixture::GetParam())),
+  ASSERT_LE(CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 3.5 * CLHEP::MeV, RUNS),
             3);
 
   // Carbons should break into more than 3 parts [5, ...]
-  ASSERT_GE(CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 5 * CLHEP::MeV, RUNS,
-                                   GetCache(G4FermiConfigurationsFixture::GetParam())),
+  ASSERT_GE(CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 5 * CLHEP::MeV, RUNS),
             3);
-  ASSERT_GE(CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 7 * CLHEP::MeV, RUNS,
-                                   GetCache(G4FermiConfigurationsFixture::GetParam())),
+  ASSERT_GE(CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 7 * CLHEP::MeV, RUNS),
             3);
-  ASSERT_GE(CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 9 * CLHEP::MeV, RUNS,
-                                   GetCache(G4FermiConfigurationsFixture::GetParam())),
+  ASSERT_GE(CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 9 * CLHEP::MeV, RUNS),
             3);
-  ASSERT_GE(CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 20 * CLHEP::MeV, RUNS,
-                                   GetCache(G4FermiConfigurationsFixture::GetParam())),
+  ASSERT_GE(CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 20 * CLHEP::MeV, RUNS),
             3);
 }
 
-TEST_P(G4FermiConfigurationsFixture, UnstableNuclei)
+TEST(G4FermiConfigurationsFixture, UnstableNuclei)
 {
   G4FermiLogger::GlobalLevel = G4FermiLogLevel::ERROR;
-  constexpr size_t RUNS = 1e3;
+  constexpr std::size_t RUNS = 1e3;
 
   // protons should break up
   for (int i = 2; i <= 16; ++i) {
     ASSERT_NEAR(i,
                 CalculateFragmentCount(G4FermiAtomicMass(i), G4FermiChargeNumber(i), {0, 0, 0}, 0,
-                                       RUNS, GetCache(G4FermiConfigurationsFixture::GetParam())),
+                                       RUNS),
                 0.01);
   }
 
   // neutron should break up
   for (int i = 2; i <= 16; ++i) {
     ASSERT_NEAR(i,
-                CalculateFragmentCount(G4FermiAtomicMass(i), 0_c, {0, 0, 0}, 0, RUNS,
-                                       GetCache(G4FermiConfigurationsFixture::GetParam())),
+                CalculateFragmentCount(G4FermiAtomicMass(i), 0_c, {0, 0, 0}, 0, RUNS),
                 0.01);
   }
 }
 
-TEST_P(G4FermiConfigurationsFixture, MomentumConservation)
+TEST(G4FermiConfigurationsFixture, MomentumConservation)
 {
   G4FermiLogger::GlobalLevel = G4FermiLogLevel::WARN;
-  auto model = G4FermiBreakUpAN(GetCache(G4FermiConfigurationsFixture::GetParam()));
+  auto model = G4FermiBreakUpAN();
+  model.Initialise();
   constexpr int SEED = 5;
   srand(SEED);
   constexpr int TRIES = 500;
-  constexpr size_t RUNS = 1e3;
+  constexpr std::size_t RUNS = 1e3;
   for (int t = 0; t < TRIES; ++t) {
     const auto mass = G4FermiAtomicMass(rand() % 16 + 1);
     const auto charge = G4FermiChargeNumber(rand() % (int(mass) + 1));
     const auto energy = G4FermiFloat((rand() % 1000) * CLHEP::MeV * G4FermiFloat(mass));
-    const auto vec = G4FermiRandomizer::IsotropicVector() * (rand() % 1000) * CLHEP::MeV;
+    const auto vec = SampleIsotropicVector((rand() % 1000) * CLHEP::MeV);
     const auto totalEnergy = std::sqrt(
       std::pow(G4FermiNucleiProperties()->GetNuclearMass(mass, charge) + energy, 2) + vec.mag2());
     const auto mom = G4FermiLorentzVector(vec, totalEnergy);
     const auto particle = G4FermiParticle(mass, charge, mom);
-    for (size_t i = 0; i < RUNS; ++i) {
+    for (std::size_t i = 0; i < RUNS; ++i) {
       const auto particles = model.BreakItUp(particle);
 
       auto sum =
@@ -226,24 +184,25 @@ TEST_P(G4FermiConfigurationsFixture, MomentumConservation)
   }
 }
 
-TEST_P(G4FermiConfigurationsFixture, BaryonAndChargeConservation)
+TEST(G4FermiConfigurationsFixture, BaryonAndChargeConservation)
 {
   G4FermiLogger::GlobalLevel = G4FermiLogLevel::ERROR;
-  auto model = G4FermiBreakUpAN(GetCache(G4FermiConfigurationsFixture::GetParam()));
+  auto model = G4FermiBreakUpAN();
+  model.Initialise();
   int SEED = 5;
   srand(SEED);
   int TRIES = 500;
-  size_t RUNS = 1e3;
+  std::size_t RUNS = 1e3;
   for (int t = 0; t < TRIES; ++t) {
     const auto mass = G4FermiAtomicMass(rand() % 16 + 1);
     const auto charge = G4FermiChargeNumber(rand() % (int(mass) + 1));
     const auto energy = G4FermiFloat((rand() % 1000) * CLHEP::MeV * G4FermiFloat(mass));
-    const auto vec = G4FermiRandomizer::IsotropicVector() * (rand() % 1000) * CLHEP::MeV;
+    const auto vec = SampleIsotropicVector((rand() % 1000) * CLHEP::MeV);
     const auto totalEnergy = std::sqrt(
       std::pow(G4FermiNucleiProperties()->GetNuclearMass(mass, charge) + energy, 2) + vec.mag2());
     const auto mom = G4FermiLorentzVector(vec, totalEnergy);
     const auto particle = G4FermiParticle(mass, charge, mom);
-    for (size_t i = 0; i < RUNS; ++i) {
+    for (std::size_t i = 0; i < RUNS; ++i) {
       const auto particles = model.BreakItUp(particle);
 
       auto fragmentsMassSum = G4FermiAtomicMass(0);

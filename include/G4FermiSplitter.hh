@@ -34,8 +34,6 @@
 #include "G4FermiDataTypes.hh"
 #include "G4FermiVFragment.hh"
 
-using G4FermiFragmentSplits = std::vector<G4FermiFragmentVector>;
-
 class G4FermiSplitter
 {
   public:

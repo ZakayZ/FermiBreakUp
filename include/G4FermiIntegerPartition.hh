@@ -31,11 +31,9 @@
 #ifndef G4FERMIINTEGERPARTITION_HH
 #define G4FERMIINTEGERPARTITION_HH
 
-#include <cstddef>
-#include <cstdint>
-#include <vector>
+#include <globals.hh>
 
-using G4FermiPartition = std::vector<uint32_t>;
+using G4FermiPartition = std::vector<std::uint32_t>;
 
 class G4FermiIntegerPartition
 {
@@ -46,12 +44,12 @@ class G4FermiIntegerPartition
 
     Iterator end() const;
 
-    G4FermiIntegerPartition(uint32_t number, uint32_t termsCount, uint32_t base = 1);
+    G4FermiIntegerPartition(std::uint32_t number, std::uint32_t termsCount, std::uint32_t base = 1);
 
   private:
-    uint32_t number_;
-    uint32_t termsCount_;
-    uint32_t base_;
+    std::uint32_t number_;
+    std::uint32_t termsCount_;
+    std::uint32_t base_;
 };
 
 class G4FermiIntegerPartition::Iterator
@@ -59,7 +57,7 @@ class G4FermiIntegerPartition::Iterator
   public:
     friend class G4FermiIntegerPartition;
 
-    using difference_type = int64_t;
+    using difference_type = std::int64_t;
     using value_type = G4FermiPartition;
     using reference = const G4FermiPartition&;
     using pointer = const G4FermiPartition*;
@@ -77,15 +75,15 @@ class G4FermiIntegerPartition::Iterator
 
     Iterator operator++(int);
 
-    bool operator==(const Iterator& other) const;
+    G4bool operator==(const Iterator& other) const;
 
-    bool operator!=(const Iterator& other) const;
+    G4bool operator!=(const Iterator& other) const;
 
   private:
     // represents end partition
     Iterator() = default;
 
-    Iterator(uint32_t number, uint32_t termsCount, uint32_t base);
+    Iterator(std::uint32_t number, std::uint32_t termsCount, std::uint32_t base);
 
     void NextPartition();
 

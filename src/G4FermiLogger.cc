@@ -36,10 +36,10 @@ static const std::string LOG_LEVEL_NAMES[static_cast<int>(G4FermiLogLevel::NONE)
 };
 }  // namespace
 
-void G4FermiStreamLogger::Log(const std::string_view fileName, const int line,
+void G4FermiStreamLogger::Log(const std::string_view fileName, const G4int line,
                               const std::string_view funcName, const G4FermiLogLevel level,
                               const std::string_view msg)
 {
   stream_ << fileName << ':' << line << " in function \"" << funcName << "\"\n"
-          << LOG_LEVEL_NAMES[static_cast<int>(level)] << ": " << msg << std::endl;
+          << LOG_LEVEL_NAMES[static_cast<G4int>(level)] << ": " << msg << std::endl;
 }

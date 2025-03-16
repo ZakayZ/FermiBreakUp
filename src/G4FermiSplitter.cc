@@ -113,7 +113,7 @@ G4FermiFloat MassFactor(const G4FermiFragmentVector& split)
   return massFactor;
 }
 
-inline size_t Factorial(const size_t n)
+std::size_t Factorial(const std::size_t n)
 {
   G4FermiUInt factorial = 1;
   for (G4FermiUInt i = 2; i <= n; ++i) {
@@ -134,8 +134,8 @@ G4FermiFloat ConfigurationFactor(const G4FermiFragmentVector& split)
   // TODO: optimize with ints maybe
   G4FermiFloat factor = 1;
 
-  size_t repeatCount = 1;  // we skip first, so start with 1
-  for (size_t i = 1; i < masses.size(); ++i) {
+  std::size_t repeatCount = 1;  // we skip first, so start with 1
+  for (std::size_t i = 1; i < masses.size(); ++i) {
     if (masses[i] != masses[i - 1]) {
       factor *= static_cast<G4FermiFloat>(Factorial(repeatCount));
       repeatCount = 0;
@@ -147,7 +147,7 @@ G4FermiFloat ConfigurationFactor(const G4FermiFragmentVector& split)
   return factor;
 }
 
-G4FermiFloat ConstFactor(G4FermiAtomicMass atomicMass, size_t fragmentsCount)
+G4FermiFloat ConstFactor(G4FermiAtomicMass atomicMass, std::size_t fragmentsCount)
 {
   static const G4FermiFloat COEF =
     std::pow(R0 / CLHEP::hbarc, 3) * Kappa * std::sqrt(2.0 / CLHEP::pi) / 3.0;
@@ -155,7 +155,7 @@ G4FermiFloat ConstFactor(G4FermiAtomicMass atomicMass, size_t fragmentsCount)
   return std::pow(COEF * static_cast<G4FermiFloat>(atomicMass), fragmentsCount - 1);
 }
 
-G4FermiFloat GammaFactor(size_t fragmentsCount)
+G4FermiFloat GammaFactor(std::size_t fragmentsCount)
 {
   G4FermiFloat gamma = 1.0;
   G4FermiFloat arg = 3.0 * static_cast<G4FermiFloat>(fragmentsCount - 1) / 2.0 - 1.0;
@@ -205,7 +205,7 @@ G4FermiFloat G4FermiSplitter::DecayWeight(const G4FermiFragmentVector& split,
 
 namespace
 {
-constexpr size_t ExpectedSplitSize = 100;
+constexpr std::size_t ExpectedSplitSize = 100;
 
 void ThrowOnInvalidInputs(G4FermiNucleiData nucleiData)
 {
@@ -218,15 +218,15 @@ void ThrowOnInvalidInputs(G4FermiNucleiData nucleiData)
                                                << " Z = " << nucleiData.chargeNumber);
 }
 
-G4FermiFragmentSplits PossibleSplits(const G4FermiPartition& massPartition,
+std::vector<G4FermiFragmentVector> PossibleSplits(const G4FermiPartition& massPartition,
                                      const G4FermiPartition& chargePartition)
 {
   auto& fragmentPool = G4FermiFragmentPool::Instance();
   const auto fragmentCount = massPartition.size();
 
   // count all possible splits due to multiplicity of fragments
-  size_t splitsCount = 1;
-  for (size_t fragmentIdx = 0; fragmentIdx < fragmentCount; ++fragmentIdx) {
+  std::size_t splitsCount = 1;
+  for (std::size_t fragmentIdx = 0; fragmentIdx < fragmentCount; ++fragmentIdx) {
     splitsCount *= fragmentPool.Count(G4FermiAtomicMass(massPartition[fragmentIdx]),
                                       G4FermiChargeNumber(chargePartition[fragmentIdx]));
     if (splitsCount == 0) {
@@ -235,22 +235,22 @@ G4FermiFragmentSplits PossibleSplits(const G4FermiPartition& massPartition,
   }
 
   // allocate in advance
-  G4FermiFragmentSplits splits(splitsCount, G4FermiFragmentVector(fragmentCount));
+  std::vector<G4FermiFragmentVector> splits(splitsCount, G4FermiFragmentVector(fragmentCount));
 
   // incrementally build splits
   // !! chosen order matters, because later there we need to remove duplicates
-  size_t groupSize = splitsCount;
-  for (size_t fragmentIdx = 0; fragmentIdx < fragmentCount; ++fragmentIdx) {
+  std::size_t groupSize = splitsCount;
+  for (std::size_t fragmentIdx = 0; fragmentIdx < fragmentCount; ++fragmentIdx) {
     const auto fragmentRange =
       fragmentPool.GetFragments(G4FermiAtomicMass(massPartition[fragmentIdx]),
                                 G4FermiChargeNumber(chargePartition[fragmentIdx]));
     // no remainder here!
-    const size_t multiplicity = std::distance(fragmentRange.begin(), fragmentRange.end());
+    const std::size_t multiplicity = std::distance(fragmentRange.begin(), fragmentRange.end());
     groupSize /= multiplicity;
 
-    for (size_t offset = 0; offset < splitsCount;) {
+    for (std::size_t offset = 0; offset < splitsCount;) {
       for (const auto fragmentPtr : fragmentRange) {
-        for (size_t pos = 0; pos < groupSize; ++pos) {
+        for (std::size_t pos = 0; pos < groupSize; ++pos) {
           splits[offset + pos][fragmentIdx] = fragmentPtr;
         }
         offset += groupSize;
@@ -270,14 +270,14 @@ G4FermiFragmentSplits PossibleSplits(const G4FermiPartition& massPartition,
 }
 }  // namespace
 
-G4FermiFragmentSplits G4FermiSplitter::GenerateSplits(G4FermiNucleiData nucleiData)
+std::vector<G4FermiFragmentVector> G4FermiSplitter::GenerateSplits(G4FermiNucleiData nucleiData)
 {
-  G4FermiFragmentSplits splits;
+  std::vector<G4FermiFragmentVector> splits;
   GenerateSplits(nucleiData, splits);
   return splits;
 }
 
-void G4FermiSplitter::GenerateSplits(G4FermiNucleiData nucleiData, G4FermiFragmentSplits& splits)
+void G4FermiSplitter::GenerateSplits(G4FermiNucleiData nucleiData, std::vector<G4FermiFragmentVector>& splits)
 {
   ThrowOnInvalidInputs(nucleiData);
 

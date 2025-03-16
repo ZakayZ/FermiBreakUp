@@ -34,13 +34,14 @@
 #include <G4LorentzVector.hh>
 #include <G4String.hh>
 #include <G4Vector3D.hh>
-
-#include <memory>
-#include <string>
+#include <globals.hh>
+#include <Randomize.hh>
+#include <G4qss_misc.hh>
+#include <G4PhysicalConstants.hh>
 
 using G4FermiInt = G4int;
 
-using G4FermiUInt = uint32_t;
+using G4FermiUInt = std::uint32_t;
 
 using G4FermiFloat = G4double;
 
@@ -55,14 +56,48 @@ using G4FermiStr = G4String;
 static constexpr G4FermiInt MAX_Z = 9;
 static constexpr G4FermiInt MAX_A = 17;
 
-template<typename Key, typename Value>
-class G4FermiVCache
+template<typename T>
+class G4FermiSingleton
 {
   public:
-    virtual std::shared_ptr<Value> Insert(const Key& key, Value&& value) = 0;
-    virtual std::shared_ptr<Value> Get(const Key& key) = 0;
-    virtual ~G4FermiVCache() = default;
+    G4FermiSingleton()
+    {
+      if (unlikely(instance_ == nullptr)) {
+        instance_ = std::make_unique<T>();
+      }
+    }
+
+    template<typename... Args>
+    G4FermiSingleton(Args&&... args)
+    {
+      Reset(std::forward<Args>(args)...);
+    }
+
+    G4FermiSingleton(T* ptr) { Reset(ptr); }
+
+    template<typename... Args>
+    static void Reset(Args&&... args)
+    {
+      instance_ = std::make_unique<T>(std::forward<Args>(args)...);
+    }
+
+    static void Reset(T* ptr) { instance_.reset(ptr); }
+
+    static T& Instance() { return *G4FermiSingleton(); }
+
+    T& operator*() { return *instance_; }
+
+    const T& operator*() const { return *instance_; }
+
+    T* operator->() { return instance_.get(); }
+
+    const T& operator->() const { return *instance_; }
+
+  private:
+    static inline std::unique_ptr<T> instance_;
 };
+
+G4FermiVector3 SampleIsotropicVector(G4FermiFloat magnitude);
 
 class G4FermiAtomicMass
 {
@@ -87,17 +122,17 @@ class G4FermiAtomicMass
 
     constexpr operator G4FermiFloat() const { return mass_; }
 
-    bool operator<(const G4FermiAtomicMass& other) const { return mass_ < other.mass_; }
+    G4bool operator<(const G4FermiAtomicMass& other) const { return mass_ < other.mass_; }
 
-    bool operator>(const G4FermiAtomicMass& other) const { return mass_ > other.mass_; }
+    G4bool operator>(const G4FermiAtomicMass& other) const { return mass_ > other.mass_; }
 
-    bool operator<=(const G4FermiAtomicMass& other) const { return mass_ <= other.mass_; }
+    G4bool operator<=(const G4FermiAtomicMass& other) const { return mass_ <= other.mass_; }
 
-    bool operator>=(const G4FermiAtomicMass& other) const { return mass_ >= other.mass_; }
+    G4bool operator>=(const G4FermiAtomicMass& other) const { return mass_ >= other.mass_; }
 
-    bool operator==(const G4FermiAtomicMass& other) const { return mass_ == other.mass_; }
+    G4bool operator==(const G4FermiAtomicMass& other) const { return mass_ == other.mass_; }
 
-    bool operator!=(const G4FermiAtomicMass& other) const { return mass_ != other.mass_; }
+    G4bool operator!=(const G4FermiAtomicMass& other) const { return mass_ != other.mass_; }
 
   private:
     G4FermiValueType mass_;
@@ -126,17 +161,17 @@ class G4FermiChargeNumber
 
     constexpr operator G4FermiFloat() const { return charge_; }
 
-    bool operator<(const G4FermiChargeNumber& other) const { return charge_ < other.charge_; }
+    G4bool operator<(const G4FermiChargeNumber& other) const { return charge_ < other.charge_; }
 
-    bool operator>(const G4FermiChargeNumber& other) const { return charge_ > other.charge_; }
+    G4bool operator>(const G4FermiChargeNumber& other) const { return charge_ > other.charge_; }
 
-    bool operator<=(const G4FermiChargeNumber& other) const { return charge_ <= other.charge_; }
+    G4bool operator<=(const G4FermiChargeNumber& other) const { return charge_ <= other.charge_; }
 
-    bool operator>=(const G4FermiChargeNumber& other) const { return charge_ >= other.charge_; }
+    G4bool operator>=(const G4FermiChargeNumber& other) const { return charge_ >= other.charge_; }
 
-    bool operator==(const G4FermiChargeNumber& other) const { return charge_ == other.charge_; }
+    G4bool operator==(const G4FermiChargeNumber& other) const { return charge_ == other.charge_; }
 
-    bool operator!=(const G4FermiChargeNumber& other) const { return charge_ != other.charge_; }
+    G4bool operator!=(const G4FermiChargeNumber& other) const { return charge_ != other.charge_; }
 
   private:
     G4FermiValueType charge_;
@@ -147,18 +182,18 @@ struct G4FermiNucleiData
     G4FermiAtomicMass atomicMass;
     G4FermiChargeNumber chargeNumber;
 
-    bool operator<(const G4FermiNucleiData& other) const
+    G4bool operator<(const G4FermiNucleiData& other) const
     {
       return atomicMass < other.atomicMass
              || (atomicMass == other.atomicMass && chargeNumber < other.chargeNumber);
     }
 
-    bool operator==(const G4FermiNucleiData& other) const
+    G4bool operator==(const G4FermiNucleiData& other) const
     {
       return atomicMass == other.atomicMass && chargeNumber == other.chargeNumber;
     }
 
-    bool operator!=(const G4FermiNucleiData& other) const
+    G4bool operator!=(const G4FermiNucleiData& other) const
     {
       return atomicMass != other.atomicMass || chargeNumber != other.chargeNumber;
     }
@@ -169,7 +204,7 @@ namespace std
 template<>
 struct hash<G4FermiNucleiData>
 {
-    size_t operator()(const G4FermiNucleiData& key) const
+    std::size_t operator()(const G4FermiNucleiData& key) const
     {
       auto mass = G4FermiInt(key.atomicMass);
       auto charge = G4FermiInt(key.chargeNumber);

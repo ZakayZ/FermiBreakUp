@@ -11,20 +11,13 @@ set(Util
     src/G4FermiDataTypes.cc
     src/G4FermiIntegerPartition.cc
     src/G4FermiParticle.cc
-    src/G4FermiRandomizer.cc
     src/G4FermiLogger.cc
 
-    src/G4FermiFastNucleiProperties.cc
-    src/G4FermiCopyMass.cc
-    src/G4FermiDefaultNuclearMass.cc
-)
-
-set(PhaseSpace
-    src/G4FermiKopylovDecay.cc
+    src/G4FermiNucleiProperties.cc
 )
 
 set(FragmentPool
-    src/G4FermiFragmentsStorage.cc
+    src/G4FermiFragmentsPool.cc
     src/G4FermiDefaultPoolSource.cc
     src/G4FermiVFragment.cc
     src/G4FermiStableFragment.cc
@@ -40,7 +33,6 @@ set(Sources
     ${FermiBreakUpModel}
     ${FragmentPool}
     ${Util}
-    ${PhaseSpace}
 )
 
 add_library(G4FermiBreakUp ${Sources})
