@@ -1,8 +1,9 @@
 #include "G4FermiBreakUpAN.hh"
 #include "G4FermiLogger.hh"
-
 #include "G4FermiNucleiProperties.hh"
-#include <CLHEP/Units/PhysicalConstants.h>
+
+#include <G4PhysicalConstants.hh>
+#include <G4BaryonConstructor.hh>
 
 #include <fstream>
 #include <iostream>
@@ -67,6 +68,12 @@ void CalculateMomentum(G4FermiAtomicMass mass, G4FermiChargeNumber charge,
 
 int main()
 {
+  // prepare geant4 tables
+  {
+    G4BaryonConstructor pCBar;
+    pCBar.ConstructParticle();
+  }
+
   // G4FermiLogger::GlobalLevel = G4FermiLogLevel::TRACE;
   CalculateMomentum(12_m, 6_c, "../Results/stat.data", 12 * 10 * CLHEP::GeV, {0, 0, 0});
   CalculateMomentum(12_m, 6_c, "../Results/mov_x.data", 12 * 5 * CLHEP::MeV,

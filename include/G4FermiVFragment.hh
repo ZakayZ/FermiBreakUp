@@ -34,8 +34,7 @@
 #include "G4FermiDataTypes.hh"
 #include "G4FermiParticle.hh"
 
-#include <ostream>
-#include <vector>
+#include <globals.hh>
 
 class G4FermiVFragment;
 
@@ -50,6 +49,8 @@ class G4FermiVFragment
     G4FermiVFragment(const G4FermiVFragment&) = delete;
 
     G4FermiVFragment& operator=(const G4FermiVFragment&) = delete;
+
+    void Initialize();
 
     std::vector<G4FermiParticle> GetDecayFragments(const G4FermiLorentzVector& momentum) const;
 
@@ -71,9 +72,13 @@ class G4FermiVFragment
     virtual ~G4FermiVFragment() = default;
 
   protected:
+    virtual void DoInitialize() = 0;
+
     G4FermiAtomicMass atomicMass_;  // A
     G4FermiChargeNumber chargeNumber_;  // Z
     G4FermiInt polarization_;
+
+    G4FermiFloat groudStateMass_;
     G4FermiFloat excitationEnergy_;
 };
 

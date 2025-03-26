@@ -47,6 +47,9 @@ class G4FermiBreakUpAN : public G4VFermiBreakUp
         using NucleiSplits = std::vector<G4FermiFragmentVector>;
 
       public:
+        PossibleSplits() = default;
+        PossibleSplits& operator=(PossibleSplits&&) noexcept = default;
+
         PossibleSplits(const G4FermiAtomicMass maxAtomicMass);
 
         const NucleiSplits& GetSplits(const G4FermiAtomicMass atomicMass, const G4FermiChargeNumber chargeNumber) const;

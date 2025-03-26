@@ -32,7 +32,7 @@
 #include "G4FermiSplitter.hh"
 #include "G4FermiVFragment.hh"
 
-#include <CLHEP/Units/PhysicalConstants.h>
+#include <G4PhysicalConstants.hh>
 #include <gtest/gtest.h>
 
 #include <exception>

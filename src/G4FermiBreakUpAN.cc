@@ -31,7 +31,6 @@
 #include "G4FermiBreakUpAN.hh"
 
 #include "G4FermiDataTypes.hh"
-#include "G4FermiDefaultPoolSource.hh"
 #include "G4FermiFragmentPool.hh"
 #include "G4FermiLogger.hh"
 #include "G4FermiNucleiProperties.hh"
@@ -210,18 +209,22 @@ std::vector<G4FermiParticle> G4FermiBreakUpAN::BreakItUp(const G4FermiParticle& 
 
 void G4FermiBreakUpAN::Initialise()
 {
-  G4FermiNucleiProperties::Reset({});
-  G4FermiFragmentPool::Reset(G4FermiDefaultPoolSource());
+  G4FermiNucleiProperties::Reset();
+  // order is important here, we use G4FermiNucleiProperties in Pool!
+  {
+    auto pool = G4FermiFragmentStorage::DefaultPoolSource();
+    pool.Initialize();
+    G4FermiFragmentPool::Reset(pool);
+  }
 
+  // order is important here, we use G4FermiNucleiProperties in Pool!
+  splits_ = PossibleSplits();
   for (auto a = 1; a < MAX_A; ++a) {
     for (auto z = 0; z <= a; ++z) {
       const auto atomicMass = G4FermiAtomicMass(a);
       const auto chargeNumber = G4FermiChargeNumber(z);
 
       splits_.InsertSplits(atomicMass, chargeNumber, G4FermiSplitter::GenerateSplits({atomicMass, chargeNumber}));
-      if (G4NucleiProperties::IsInStableTable(a, z)) {
-        G4FermiNucleiProperties::Instance().InsertNuclei(atomicMass, chargeNumber, G4NucleiProperties::GetNuclearMass(a, z));
-      }
     }
   }
 }

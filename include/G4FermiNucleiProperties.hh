@@ -33,6 +33,10 @@
 
 #include "G4FermiDataTypes.hh"
 
+class G4FermiFastNucleiProperties;
+
+using G4FermiNucleiProperties = G4FermiSingleton<G4FermiFastNucleiProperties>;
+
 class G4FermiFastNucleiProperties
 {
   public:
@@ -65,8 +69,6 @@ class G4FermiFastNucleiProperties
 
     mutable std::vector<G4FermiMassData> nucleiMasses_;
 };
-
-using G4FermiNucleiProperties = G4FermiSingleton<G4FermiFastNucleiProperties>;
 
 template<typename DataSource>
 G4FermiFastNucleiProperties::G4FermiFastNucleiProperties(const DataSource& dataSource)

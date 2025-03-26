@@ -34,22 +34,39 @@
 #include "G4FermiDataTypes.hh"
 #include "G4FermiVFragment.hh"
 
-class G4FermiFragmentsStorage;
+#include <globals.hh>
 
-using G4FermiFragmentPool = G4FermiSingleton<G4FermiFragmentsStorage>;
+class G4FermiFragmentStorage;
 
-class G4FermiFragmentsStorage
+using G4FermiFragmentPool = G4FermiSingleton<G4FermiFragmentStorage>;
+
+class G4FermiFragmentStorage
 {
   private:
     using Container = std::vector<const G4FermiVFragment*>;
 
   public:
-    class G4FermiIteratorRange
+    class DefaultPoolSource : private std::vector<G4FermiVFragment*>
+    {
+      private:
+        using PoolContainer = std::vector<G4FermiVFragment*>;
+      public:
+        DefaultPoolSource();
+
+        void Initialize();
+    
+        using PoolContainer::begin;
+        using PoolContainer::cbegin;
+        using PoolContainer::cend;
+        using PoolContainer::end;
+    };
+
+    class IteratorRange
     {
       public:
         using const_iterator = Container::const_iterator;
 
-        G4FermiIteratorRange(const_iterator begin, const_iterator end) : begin_(begin), end_(end) {}
+        IteratorRange(const_iterator begin, const_iterator end) : begin_(begin), end_(end) {}
 
         const_iterator begin() const { return begin_; }
         const_iterator end() const { return end_; }
@@ -59,13 +76,13 @@ class G4FermiFragmentsStorage
         const_iterator end_;
     };
 
-    G4FermiFragmentsStorage();
+    G4FermiFragmentStorage();
 
     template<typename DataSource>
-    G4FermiFragmentsStorage(const DataSource& dataSource);
+    G4FermiFragmentStorage(const DataSource& dataSource);
 
     template<typename Iter>
-    G4FermiFragmentsStorage(Iter begin, Iter end);
+    G4FermiFragmentStorage(Iter begin, Iter end);
 
     std::size_t Count(G4FermiAtomicMass atomicMass,
                       G4FermiChargeNumber chargeNumber) const;
@@ -74,10 +91,10 @@ class G4FermiFragmentsStorage
       return Count(nuclei.atomicMass, nuclei.chargeNumber);
     }
 
-    G4FermiIteratorRange GetFragments(G4FermiAtomicMass atomicMass,
+    IteratorRange GetFragments(G4FermiAtomicMass atomicMass,
                                       G4FermiChargeNumber chargeNumber) const;
 
-    G4FermiIteratorRange GetFragments(G4FermiNucleiData nuclei) const {
+    IteratorRange GetFragments(G4FermiNucleiData nuclei) const {
       return GetFragments(nuclei.atomicMass, nuclei.chargeNumber);
     }
 
@@ -90,14 +107,14 @@ class G4FermiFragmentsStorage
 };
 
 template<typename DataSource>
-G4FermiFragmentsStorage::G4FermiFragmentsStorage(const DataSource& dataSource)
-  : G4FermiFragmentsStorage(dataSource.begin(), dataSource.end())
+G4FermiFragmentStorage::G4FermiFragmentStorage(const DataSource& dataSource)
+  : G4FermiFragmentStorage(dataSource.cbegin(), dataSource.cend())
 {}
 
 template<typename Iter>
-G4FermiFragmentsStorage::G4FermiFragmentsStorage(Iter begin, Iter end)
+G4FermiFragmentStorage::G4FermiFragmentStorage(Iter begin, Iter end)
 {
-  static_assert(std::is_same_v<typename Iter::value_type, const G4FermiVFragment*>, "invalid iterator");
+  static_assert(std::is_same_v<std::remove_const_t<typename Iter::value_type>, G4FermiVFragment*>, "invalid iterator");
   for (auto it = begin; it != end; ++it) {
     AddFragment(**it);
   }

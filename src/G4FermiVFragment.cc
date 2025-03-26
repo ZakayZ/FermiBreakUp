@@ -32,7 +32,7 @@
 
 #include "G4FermiNucleiProperties.hh"
 
-#include <CLHEP/Units/PhysicalConstants.h>
+#include <G4PhysicalConstants.hh>
 
 #include <iomanip>
 
@@ -43,6 +43,11 @@ G4FermiVFragment::G4FermiVFragment(G4FermiAtomicMass atomicMass, G4FermiChargeNu
     polarization_(polarization),
     excitationEnergy_(excitationEnergy)
 {}
+
+void G4FermiVFragment::Initialize() {
+  groudStateMass_ = G4FermiNucleiProperties()->GetNuclearMass(atomicMass_, chargeNumber_);
+  DoInitialize();
+}
 
 std::vector<G4FermiParticle>
 G4FermiVFragment::GetDecayFragments(const G4FermiLorentzVector& momentum) const
@@ -74,7 +79,7 @@ G4FermiFloat G4FermiVFragment::GetExcitationEnergy() const
 
 G4FermiFloat G4FermiVFragment::GetMass() const
 {
-  return G4FermiNucleiProperties()->GetNuclearMass(atomicMass_, chargeNumber_);
+  return groudStateMass_; 
 }
 
 G4FermiFloat G4FermiVFragment::GetTotalEnergy() const

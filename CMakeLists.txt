@@ -17,8 +17,7 @@ set(Util
 )
 
 set(FragmentPool
-    src/G4FermiFragmentsPool.cc
-    src/G4FermiDefaultPoolSource.cc
+    src/G4FermiFragmentPool.cc
     src/G4FermiVFragment.cc
     src/G4FermiStableFragment.cc
     src/G4FermiUnstableFragment.cc

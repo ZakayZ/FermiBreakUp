@@ -34,7 +34,7 @@
 #include "G4FermiLogger.hh"
 #include "G4FermiNucleiProperties.hh"
 
-#include <CLHEP/Units/PhysicalConstants.h>
+#include <G4PhysicalConstants.hh>
 
 #include <iomanip>
 

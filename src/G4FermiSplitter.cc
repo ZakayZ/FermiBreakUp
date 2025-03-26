@@ -36,7 +36,7 @@
 #include "G4FermiLogger.hh"
 #include "G4FermiVFragment.hh"
 
-#include <CLHEP/Units/PhysicalConstants.h>
+#include <G4PhysicalConstants.hh>
 
 #include <algorithm>
 #include <iterator>

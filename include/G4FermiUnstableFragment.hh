@@ -44,10 +44,11 @@ class G4FermiUnstableFragment : public G4FermiVFragment
                               std::vector<G4FermiParticle>& particles) const override;
 
   private:
+    void DoInitialize() override;
+
     std::vector<G4FermiNucleiData> decayData_;
 
-    // reuse for 
-    mutable std::vector<G4FermiFloat> masses_;
+    std::vector<G4FermiFloat> masses_;
 };
 
 #define FERMI_ADD_UNSTABLE_FRAGMENT(NAME, FRAGMENTS)                                             \
