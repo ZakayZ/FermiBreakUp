@@ -41,12 +41,7 @@ G4FermiUnstableFragment::G4FermiUnstableFragment(G4FermiAtomicMass atomicMass,
   : G4FermiVFragment(atomicMass, chargeNumber, polarization, excitationEnergy),
     decayData_(std::move(decayData))
 {
-  G4FermiNucleiProperties properties;
   masses_.reserve(decayData_.size());
-  for (const auto& decayFragment : decayData_) {
-    masses_.emplace_back(
-      properties->GetNuclearMass(decayFragment.atomicMass, decayFragment.chargeNumber));
-  }
 }
 
 void G4FermiUnstableFragment::AppendDecayFragments(const G4FermiLorentzVector& momentum,
@@ -54,7 +49,12 @@ void G4FermiUnstableFragment::AppendDecayFragments(const G4FermiLorentzVector& m
 {
   G4FermiPhaseDecay phaseDecay;
 
+  for (const auto& decayFragment : decayData_) {
+    masses_.emplace_back(
+      G4FermiNucleiProperties::Instance().GetNuclearMass(decayFragment.atomicMass, decayFragment.chargeNumber));
+  }
   auto fragmentsMomentum = phaseDecay.CalculateDecay(momentum, masses_);
+  masses_.clear();
 
   const auto boostVector = momentum.boostVector();
 

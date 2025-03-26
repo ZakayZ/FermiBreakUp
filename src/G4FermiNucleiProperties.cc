@@ -117,7 +117,6 @@ G4bool G4FermiFastNucleiProperties::IsStable(G4FermiAtomicMass atomicMass,
   if (unlikely(atomicMass < 1_m || chargeNumber < 0_c
                      || G4FermiUInt(chargeNumber) > G4FermiUInt(atomicMass)))
   {
-    FERMI_LOG_DEBUG("Unknown particle: A = " << atomicMass << ", Z = " << chargeNumber);
     return false;
   }
 

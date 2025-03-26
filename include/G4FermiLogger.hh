@@ -118,11 +118,11 @@ class G4FermiLogger
     G4FermiLogLevel level_;
 };
 
-#define FERMI_LOG_MSG(logger, level, msg)                               \
-  if (logger && logger.ShouldLog(level)) {                              \
-    std::ostringstream sstream;                                         \
-    sstream << msg;                                                     \
-    logger.Log(__FILE__, __LINE__, __FUNCTION__, level, sstream.str()); \
+#define FERMI_LOG_MSG(logger, level, msg)                                        \
+  if (logger && logger.ShouldLog(level)) { \
+    std::ostringstream sstream;                                                  \
+    sstream << msg;                                                              \
+    logger.Log(__FILE__, __LINE__, __FUNCTION__, level, sstream.str());          \
   }
 
 #define FERMI_LOG_TRACE(msg) FERMI_LOG_MSG(G4FermiLogger::Default(), G4FermiLogLevel::TRACE, msg)
@@ -130,14 +130,5 @@ class G4FermiLogger
 #define FERMI_LOG_INFO(msg) FERMI_LOG_MSG(G4FermiLogger::Default(), G4FermiLogLevel::INFO, msg)
 #define FERMI_LOG_WARN(msg) FERMI_LOG_MSG(G4FermiLogger::Default(), G4FermiLogLevel::WARN, msg)
 #define FERMI_LOG_ERROR(msg) FERMI_LOG_MSG(G4FermiLogger::Default(), G4FermiLogLevel::ERROR, msg)
-
-#define FERMI_ASSERT_MSG(COND, MSG)                                                             \
-  if (unlikely(!(COND))) {                                                                      \
-    std::ostringstream sstream;                                                                 \
-    sstream << "assertion failed: \"" << #COND << '\"' << " at " << __FILE__ << ':' << __LINE__ \
-            << '\n'                                                                             \
-            << MSG;                                                                             \
-    throw std::runtime_error(sstream.str());                                                    \
-  }
 
 #endif  // G4FERMILOGGER_HH

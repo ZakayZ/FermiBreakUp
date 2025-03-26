@@ -232,4 +232,13 @@ constexpr G4FermiChargeNumber operator""_c(unsigned long long charge)
   return G4FermiChargeNumber(charge);
 }
 
+#define FERMI_ASSERT_MSG(COND, MSG)                                                             \
+  if (unlikely(!(COND))) {                                                                      \
+    std::ostringstream sstream;                                                                 \
+    sstream << "assertion failed: \"" << #COND << '\"' << " at " << __FILE__ << ':' << __LINE__ \
+            << '\n'                                                                             \
+            << MSG;                                                                             \
+    throw std::runtime_error(sstream.str());                                                    \
+  }
+
 #endif  // G4FERMIDATATYPES_HH

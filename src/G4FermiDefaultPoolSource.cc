@@ -56,8 +56,8 @@ G4FermiDefaultPoolSource::G4FermiDefaultPoolSource()
   FERMI_ADD_FRAGMENT(G4FermiStableFragment(3_m, 1_c, 2, 0.00 * MeV));
   FERMI_ADD_FRAGMENT(G4FermiStableFragment(3_m, 2_c, 2, 0.00 * MeV));
   FERMI_ADD_FRAGMENT(G4FermiStableFragment(4_m, 2_c, 1, 0.00 * MeV));
-  FERMI_ADD_FRAGMENT(He5Fragment(5_m, 2_c, 4, 16.76 * MeV));
-  FERMI_ADD_FRAGMENT(Li5Fragment(5_m, 3_c, 4, 16.66 * MeV));
+  FERMI_ADD_FRAGMENT(He5Fragment(5_m, 2_c, 4, 0.00 * MeV));
+  FERMI_ADD_FRAGMENT(Li5Fragment(5_m, 3_c, 4, 0.00 * MeV));
   FERMI_ADD_FRAGMENT(G4FermiStableFragment(6_m, 2_c, 1, 0.00 * MeV));
   FERMI_ADD_FRAGMENT(G4FermiStableFragment(6_m, 3_c, 3, 0.00 * MeV));
 

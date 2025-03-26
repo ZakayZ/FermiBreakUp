@@ -214,7 +214,7 @@ void G4FermiBreakUpAN::Initialise()
   G4FermiFragmentPool::Reset(G4FermiDefaultPoolSource());
 
   for (auto a = 1; a < MAX_A; ++a) {
-    for (auto z = 0; z < a; ++z) {
+    for (auto z = 0; z <= a; ++z) {
       const auto atomicMass = G4FermiAtomicMass(a);
       const auto chargeNumber = G4FermiChargeNumber(z);
 

@@ -55,18 +55,15 @@ class G4FermiParticle
 
     G4FermiFloat GetExcitationEnergy() const;
 
-    G4FermiFloat GetGroundStateMass() const;
-
     G4bool IsStable() const;
 
   private:
-    void CalculateExcitationEnergy();
+    void RecalculateExcitationEnergy();
 
     G4FermiAtomicMass atomicMass_;
     G4FermiChargeNumber chargeNumber_;
     G4FermiLorentzVector momentum_;
 
-    G4FermiFloat groundStateMass_ = 0;
     G4FermiFloat excitationEnergy_ = 0;
 };
 

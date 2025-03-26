@@ -30,6 +30,7 @@
 
 #include "G4FermiParticle.hh"
 
+#include "G4FermiDataTypes.hh"
 #include "G4FermiLogger.hh"
 #include "G4FermiNucleiProperties.hh"
 
@@ -41,13 +42,12 @@ G4FermiParticle::G4FermiParticle(G4FermiAtomicMass atomicMass, G4FermiChargeNumb
                                  const G4FermiLorentzVector& momentum)
   : atomicMass_(atomicMass),
     chargeNumber_(chargeNumber),
-    momentum_(momentum),
-    groundStateMass_(G4FermiNucleiProperties()->GetNuclearMass(atomicMass_, chargeNumber_))
+    momentum_(momentum)
 {
   FERMI_ASSERT_MSG(G4FermiUInt(atomicMass_) >= G4FermiUInt(chargeNumber),
                    "imposible particle: A = " << atomicMass_ << ", Z = " << chargeNumber);
 
-  CalculateExcitationEnergy();
+  RecalculateExcitationEnergy();
 }
 
 G4FermiAtomicMass G4FermiParticle::GetAtomicMass() const
@@ -70,19 +70,14 @@ G4FermiFloat G4FermiParticle::GetExcitationEnergy() const
   return excitationEnergy_;
 }
 
-G4FermiFloat G4FermiParticle::GetGroundStateMass() const
-{
-  return groundStateMass_;
-}
-
 G4bool G4FermiParticle::IsStable() const
 {
   return excitationEnergy_ <= 0.;
 }
 
-void G4FermiParticle::CalculateExcitationEnergy()
+void G4FermiParticle::RecalculateExcitationEnergy()
 {
-  excitationEnergy_ = momentum_.mag() - groundStateMass_;
+  excitationEnergy_ = momentum_.mag() - G4FermiNucleiProperties::Instance().GetNuclearMass(atomicMass_, chargeNumber_);
   if (excitationEnergy_ < 0.) {
     if (excitationEnergy_ < -10 * CLHEP::eV) {
       FERMI_LOG_WARN("Excitation Energy is too negative: " << excitationEnergy_ / CLHEP::MeV
