@@ -46,11 +46,12 @@ class G4FermiFragmentPool
     {
       private:
         using PoolContainer = std::vector<G4FermiVFragment*>;
+
       public:
         DefaultPoolSource();
 
         void Initialize();
-    
+
         using PoolContainer::begin;
         using PoolContainer::cbegin;
         using PoolContainer::cend;
@@ -72,29 +73,34 @@ class G4FermiFragmentPool
         const_iterator end_;
     };
 
-    std::size_t Count(G4FermiAtomicMass atomicMass,
-                      G4FermiChargeNumber chargeNumber) const;
+    std::size_t Count(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber) const;
 
-    std::size_t Count(G4FermiNucleiData nuclei) const {
+    std::size_t Count(G4FermiNucleiData nuclei) const
+    {
       return Count(nuclei.atomicMass, nuclei.chargeNumber);
     }
 
     IteratorRange GetFragments(G4FermiAtomicMass atomicMass,
-                                      G4FermiChargeNumber chargeNumber) const;
+                               G4FermiChargeNumber chargeNumber) const;
 
-    IteratorRange GetFragments(G4FermiNucleiData nuclei) const {
+    IteratorRange GetFragments(G4FermiNucleiData nuclei) const
+    {
       return GetFragments(nuclei.atomicMass, nuclei.chargeNumber);
     }
 
     template<typename DataSource>
-    void Initialize(const DataSource& dataSource) {
+    void Initialize(const DataSource& dataSource)
+    {
       Initialize(dataSource.begin(), dataSource.end());
     }
 
     template<typename Iter>
-    void Initialize(Iter begin, Iter end) {
+    void Initialize(Iter begin, Iter end)
+    {
       fragments_.clear();
-      static_assert(std::is_same_v<std::remove_const_t<typename Iter::value_type>, G4FermiVFragment*>, "invalid iterator");
+      static_assert(
+        std::is_same_v<std::remove_const_t<typename Iter::value_type>, G4FermiVFragment*>,
+        "invalid iterator");
       for (auto it = begin; it != end; ++it) {
         AddFragment(**it);
       }
@@ -102,7 +108,8 @@ class G4FermiFragmentPool
 
     void AddFragment(const G4FermiVFragment& fragment);
 
-    static G4FermiFragmentPool& Instance() {
+    static G4FermiFragmentPool& Instance()
+    {
       static G4FermiFragmentPool pool;
       return pool;
     }

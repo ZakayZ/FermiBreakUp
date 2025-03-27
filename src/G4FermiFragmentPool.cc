@@ -32,10 +32,10 @@
 //
 
 #include "G4FermiFragmentPool.hh"
-#include "G4FermiStableFragment.hh"
-#include "G4FermiUnstableFragment.hh"
 
 #include "G4FermiDataTypes.hh"
+#include "G4FermiStableFragment.hh"
+#include "G4FermiUnstableFragment.hh"
 
 #include <G4PhysicalConstants.hh>
 
@@ -51,14 +51,15 @@ std::size_t GetSlot(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumb
 }
 }  // namespace
 
-G4FermiFragmentPool::G4FermiFragmentPool() {
+G4FermiFragmentPool::G4FermiFragmentPool()
+{
   auto pool = G4FermiFragmentPool::DefaultPoolSource();
   pool.Initialize();
   Initialize(pool);
 }
 
 std::size_t G4FermiFragmentPool::Count(G4FermiAtomicMass atomicMass,
-                                      G4FermiChargeNumber chargeNumber) const
+                                       G4FermiChargeNumber chargeNumber) const
 {
   if (unlikely(static_cast<std::uint32_t>(atomicMass) < static_cast<std::uint32_t>(chargeNumber))) {
     return 0;
@@ -74,7 +75,7 @@ std::size_t G4FermiFragmentPool::Count(G4FermiAtomicMass atomicMass,
 
 G4FermiFragmentPool::IteratorRange
 G4FermiFragmentPool::GetFragments(G4FermiAtomicMass atomicMass,
-                                      G4FermiChargeNumber chargeNumber) const
+                                  G4FermiChargeNumber chargeNumber) const
 {
   if (unlikely(static_cast<std::uint32_t>(atomicMass) < static_cast<std::uint32_t>(chargeNumber))) {
     return {EmptyContainer_.begin(), EmptyContainer_.end()};
@@ -226,9 +227,9 @@ G4FermiFragmentPool::DefaultPoolSource::DefaultPoolSource()
 #undef FERMI_CONCAT
 }
 
-void G4FermiFragmentPool::DefaultPoolSource::Initialize() 
+void G4FermiFragmentPool::DefaultPoolSource::Initialize()
 {
-  for (auto fragmentPtr: *this) {
+  for (auto fragmentPtr : *this) {
     fragmentPtr->Initialize();
   }
 }

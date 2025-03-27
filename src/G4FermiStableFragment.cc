@@ -31,7 +31,7 @@
 #include "G4FermiStableFragment.hh"
 
 void G4FermiStableFragment::AppendDecayFragments(const G4LorentzVector& momentum,
-  std::vector<G4FermiParticle>& fragments) const
+                                                 std::vector<G4FermiParticle>& fragments) const
 {
   fragments.emplace_back(G4FermiParticle(GetAtomicMass(), GetChargeNumber(), momentum));
 }

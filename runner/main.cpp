@@ -8,18 +8,18 @@
 #include <iostream>
 
 void CalculateFragments(G4FermiAtomicMass mass, G4FermiChargeNumber charge,
-                        const std::string& dumpName, G4FermiFloat step = 0.2, std::size_t tests = 1e4)
+                        const std::string& dumpName, G4double step = 0.2, std::size_t tests = 1e4)
 {
   auto model = G4FermiBreakUpAN();
   model.Initialise();
 
-  std::vector<G4FermiFloat> energyNucleonValues;
+  std::vector<G4double> energyNucleonValues;
   std::vector<float> avgParts;
-  for (G4FermiFloat energyNucleon = 0.; energyNucleon <= 10.; energyNucleon += step) {
+  for (G4double energyNucleon = 0.; energyNucleon <= 10.; energyNucleon += step) {
     std::size_t partsCounter = 0;
-    auto additionalEnergy = energyNucleon * G4FermiFloat(mass);
+    auto additionalEnergy = energyNucleon * G4double(mass);
     for (std::size_t i = 0; i < tests; ++i) {
-      auto vec = G4FermiLorentzVector(
+      auto vec = G4LorentzVector(
         0, 0, 0, G4FermiNucleiProperties::GetNuclearMass(mass, charge) + additionalEnergy);
       auto particles = model.BreakItUp(G4FermiParticle(mass, charge, vec));
       partsCounter += particles.size();
@@ -39,22 +39,22 @@ void CalculateFragments(G4FermiAtomicMass mass, G4FermiChargeNumber charge,
 }
 
 void CalculateMomentum(G4FermiAtomicMass mass, G4FermiChargeNumber charge,
-                       const std::string& dumpName, G4FermiFloat energy,
-                       const G4FermiVector3& momentum, std::size_t tests = 1e4)
+                       const std::string& dumpName, G4double energy,
+                       const G4Vector3D& momentum, std::size_t tests = 1e4)
 {
   auto model = G4FermiBreakUpAN();
   model.Initialise();
 
   std::ofstream out(dumpName);
-  auto vec = G4FermiLorentzVector(
+  auto vec = G4LorentzVector(
     momentum.x(), momentum.y(), momentum.z(),
     std::sqrt(std::pow(G4FermiNucleiProperties::GetNuclearMass(mass, charge) + energy, 2)
               + momentum.mag2()));
   out << vec / mass << '\n';
-  std::vector<G4FermiFloat> xComponent, yComponent, zComponent, magnitude;
+  std::vector<G4double> xComponent, yComponent, zComponent, magnitude;
   for (std::size_t i = 0; i < tests; ++i) {
     auto particles = model.BreakItUp(G4FermiParticle(mass, charge, vec));
-    auto sum = G4FermiLorentzVector();
+    auto sum = G4LorentzVector();
     for (const auto& particle : particles) {
       sum += particle.GetMomentum();
       out << particle.GetMomentum() / particle.GetAtomicMass() << ' ';

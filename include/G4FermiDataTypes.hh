@@ -32,12 +32,13 @@
 #define G4FERMIDATATYPES_HH
 
 #include <G4LorentzVector.hh>
+#include <G4PhysicalConstants.hh>
 #include <G4String.hh>
 #include <G4Vector3D.hh>
-#include <globals.hh>
 #include <Randomize.hh>
+#include <globals.hh>
+
 #include <G4qss_misc.hh>
-#include <G4PhysicalConstants.hh>
 
 static constexpr G4int MAX_Z = 9;
 static constexpr G4int MAX_A = 17;

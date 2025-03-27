@@ -38,32 +38,38 @@ class G4FermiNucleiProperties
 {
   public:
     template<typename DataSource>
-    void Reset(const DataSource& dataSource) {
+    void Reset(const DataSource& dataSource)
+    {
       Reset(dataSource.begin(), dataSource.end());
     }
 
     template<typename Iter>
-    void Reset(Iter begin, Iter end) {
+    void Reset(Iter begin, Iter end)
+    {
       nucleiMasses_.clear();
       static_assert(
-        std::is_same_v<typename Iter::value_type, std::pair<const G4FermiNucleiData, G4double>>, "invalid iterator");
+        std::is_same_v<typename Iter::value_type, std::pair<const G4FermiNucleiData, G4double>>,
+        "invalid iterator");
       for (auto it = begin; it != end; ++it) {
         InsertNuclei(it->first.atomicMass, it->first.chargeNumber, it->second);
       }
-    }    
+    }
 
-    static G4double GetNuclearMass(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber) {
+    static G4double GetNuclearMass(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber)
+    {
       return Instance().GetNuclearMassImpl(atomicMass, chargeNumber);
     }
 
-    static G4bool IsStable(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber) {
+    static G4bool IsStable(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber)
+    {
       return Instance().IsStableImpl(atomicMass, chargeNumber);
     }
 
-    void InsertNuclei(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber,
-                      G4double mass, G4bool isStable = true);
+    void InsertNuclei(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber, G4double mass,
+                      G4bool isStable = true);
 
-    static G4FermiNucleiProperties& Instance() {
+    static G4FermiNucleiProperties& Instance()
+    {
       static G4FermiNucleiProperties properties;
       return properties;
     }
@@ -71,7 +77,8 @@ class G4FermiNucleiProperties
   private:
     G4FermiNucleiProperties();
 
-    G4double GetNuclearMassImpl(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber) const;
+    G4double GetNuclearMassImpl(G4FermiAtomicMass atomicMass,
+                                G4FermiChargeNumber chargeNumber) const;
 
     G4bool IsStableImpl(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber) const;
 

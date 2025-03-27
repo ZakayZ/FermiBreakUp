@@ -42,7 +42,8 @@
 class G4FermiBreakUpAN : public G4VFermiBreakUp
 {
   private:
-    class PossibleSplits {
+    class PossibleSplits
+    {
       private:
         using NucleiSplits = std::vector<G4FermiFragmentVector>;
 
@@ -52,9 +53,11 @@ class G4FermiBreakUpAN : public G4VFermiBreakUp
 
         PossibleSplits(const G4FermiAtomicMass maxAtomicMass);
 
-        const NucleiSplits& GetSplits(const G4FermiAtomicMass atomicMass, const G4FermiChargeNumber chargeNumber) const;
+        const NucleiSplits& GetSplits(const G4FermiAtomicMass atomicMass,
+                                      const G4FermiChargeNumber chargeNumber) const;
 
-        void InsertSplits(const G4FermiAtomicMass atomicMass, const G4FermiChargeNumber chargeNumber, NucleiSplits&& splits);
+        void InsertSplits(const G4FermiAtomicMass atomicMass,
+                          const G4FermiChargeNumber chargeNumber, NucleiSplits&& splits);
 
       private:
         std::vector<NucleiSplits> splits_;
@@ -87,6 +90,6 @@ class G4FermiBreakUpAN : public G4VFermiBreakUp
 
     G4int secID_;
     G4int verbosity_ = 0;
-  };
+};
 
 #endif  // G4FERMIBREAKUP_HH

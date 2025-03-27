@@ -33,11 +33,11 @@
 
 #include "G4HadPhaseSpaceKopylov.hh"
 
-class G4FermiPhaseDecay {
+class G4FermiPhaseDecay
+{
   public:
-    std::vector<G4LorentzVector>
-    CalculateDecay(const G4LorentzVector& totalMomentum,
-                    const std::vector<G4double>& fragmentsMass) const
+    std::vector<G4LorentzVector> CalculateDecay(const G4LorentzVector& totalMomentum,
+                                                const std::vector<G4double>& fragmentsMass) const
     {
       std::vector<G4LorentzVector> results;
       KopylovDecay().Generate(totalMomentum.m(), fragmentsMass, results);
@@ -45,7 +45,8 @@ class G4FermiPhaseDecay {
     }
 
   private:
-    static G4HadPhaseSpaceKopylov& KopylovDecay() {
+    static G4HadPhaseSpaceKopylov& KopylovDecay()
+    {
       static G4HadPhaseSpaceKopylov phaseDecay;
       return phaseDecay;
     }

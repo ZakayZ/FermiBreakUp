@@ -67,8 +67,8 @@ G4double CoulombBarrier(const G4FermiFragmentVector& split)
     chargeSum += charge;
   }
 
-  CoulombEnergy -= std::pow(static_cast<G4double>(chargeSum), 2)
-                   / std::cbrt(static_cast<G4double>(atomicMassSum));
+  CoulombEnergy -=
+    std::pow(static_cast<G4double>(chargeSum), 2) / std::cbrt(static_cast<G4double>(atomicMassSum));
   return -COEF * CoulombEnergy;
 }
 
@@ -172,7 +172,7 @@ G4double GammaFactor(std::size_t fragmentsCount)
 }  // namespace
 
 G4double G4FermiSplitter::DecayWeight(const G4FermiFragmentVector& split,
-                                          G4FermiAtomicMass atomicMass, G4double totalEnergy)
+                                      G4FermiAtomicMass atomicMass, G4double totalEnergy)
 {
   const auto kineticEnergy = KineticEnergy(split, totalEnergy);  // in MeV
 
@@ -212,13 +212,14 @@ void ThrowOnInvalidInputs(G4FermiNucleiData nucleiData)
                    "Non valid arguments A = " << nucleiData.atomicMass
                                               << " Z = " << nucleiData.chargeNumber);
 
-  FERMI_ASSERT_MSG(static_cast<std::uint32_t>(nucleiData.chargeNumber) <= static_cast<std::uint32_t>(nucleiData.atomicMass),
+  FERMI_ASSERT_MSG(static_cast<std::uint32_t>(nucleiData.chargeNumber)
+                     <= static_cast<std::uint32_t>(nucleiData.atomicMass),
                    "Non physical arguments = " << nucleiData.atomicMass
                                                << " Z = " << nucleiData.chargeNumber);
 }
 
 std::vector<G4FermiFragmentVector> PossibleSplits(const G4FermiPartition& massPartition,
-                                     const G4FermiPartition& chargePartition)
+                                                  const G4FermiPartition& chargePartition)
 {
   auto& fragmentPool = G4FermiFragmentPool::Instance();
   const auto fragmentCount = massPartition.size();
@@ -276,7 +277,8 @@ std::vector<G4FermiFragmentVector> G4FermiSplitter::GenerateSplits(G4FermiNuclei
   return splits;
 }
 
-void G4FermiSplitter::GenerateSplits(G4FermiNucleiData nucleiData, std::vector<G4FermiFragmentVector>& splits)
+void G4FermiSplitter::GenerateSplits(G4FermiNucleiData nucleiData,
+                                     std::vector<G4FermiFragmentVector>& splits)
 {
   ThrowOnInvalidInputs(nucleiData);
 
@@ -289,8 +291,7 @@ void G4FermiSplitter::GenerateSplits(G4FermiNucleiData nucleiData, std::vector<G
     // Form all possible partition by combination of A partitions and Z partitions (Z partitions
     // include null parts)
     for (auto& massPartition : G4integerPartition(nucleiData.atomicMass, fragmentCount, 1)) {
-      for (auto& chargePartition :
-           G4integerPartition(nucleiData.chargeNumber, fragmentCount, 0)) {
+      for (auto& chargePartition : G4integerPartition(nucleiData.chargeNumber, fragmentCount, 0)) {
         // Some splits are invalid, some nuclei doesn't exist
         if (auto partitionSplits = PossibleSplits(massPartition, chargePartition);
             !partitionSplits.empty()) {

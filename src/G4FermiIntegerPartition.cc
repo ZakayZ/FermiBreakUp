@@ -31,7 +31,7 @@
 #include "G4FermiIntegerPartition.hh"
 
 G4integerPartition::G4integerPartition(std::uint32_t number, std::uint32_t termsCount,
-                                                 std::uint32_t base)
+                                       std::uint32_t base)
   : number_(number), termsCount_(termsCount), base_(base)
 {}
 
@@ -70,19 +70,18 @@ G4integerPartition::Iterator G4integerPartition::Iterator::operator++(int)
   return copy;
 }
 
-G4bool G4integerPartition::Iterator::operator==(
-  const G4integerPartition::Iterator& other) const
+G4bool G4integerPartition::Iterator::operator==(const G4integerPartition::Iterator& other) const
 {
   return partition_ == other.partition_;
 }
 
-G4bool G4integerPartition::Iterator::operator!=(
-  const G4integerPartition::Iterator& other) const
+G4bool G4integerPartition::Iterator::operator!=(const G4integerPartition::Iterator& other) const
 {
   return partition_ != other.partition_;
 }
 
-G4integerPartition::Iterator::Iterator(std::uint32_t number, std::uint32_t termsCount, std::uint32_t base)
+G4integerPartition::Iterator::Iterator(std::uint32_t number, std::uint32_t termsCount,
+                                       std::uint32_t base)
   : partition_(termsCount, 0)
 {
   // No possible partitions

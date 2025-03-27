@@ -39,11 +39,10 @@
 
 G4FermiParticle::G4FermiParticle(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber,
                                  const G4LorentzVector& momentum)
-  : atomicMass_(atomicMass),
-    chargeNumber_(chargeNumber),
-    momentum_(momentum)
+  : atomicMass_(atomicMass), chargeNumber_(chargeNumber), momentum_(momentum)
 {
-  FERMI_ASSERT_MSG(static_cast<std::uint32_t>(atomicMass_) >= static_cast<std::uint32_t>(chargeNumber),
+  FERMI_ASSERT_MSG(static_cast<std::uint32_t>(atomicMass_)
+                     >= static_cast<std::uint32_t>(chargeNumber),
                    "imposible particle: A = " << atomicMass_ << ", Z = " << chargeNumber);
 
   RecalculateExcitationEnergy();
@@ -76,7 +75,8 @@ G4bool G4FermiParticle::IsStable() const
 
 void G4FermiParticle::RecalculateExcitationEnergy()
 {
-  excitationEnergy_ = momentum_.mag() - G4FermiNucleiProperties::GetNuclearMass(atomicMass_, chargeNumber_);
+  excitationEnergy_ =
+    momentum_.mag() - G4FermiNucleiProperties::GetNuclearMass(atomicMass_, chargeNumber_);
   if (excitationEnergy_ < 0.) {
     if (excitationEnergy_ < -10.0 * CLHEP::eV) {
       G4ExceptionDescription ed;

@@ -31,8 +31,8 @@
 #include "G4FermiNucleiProperties.hh"
 
 #include <G4BaryonConstructor.hh>
-#include <G4PhysicalConstants.hh>
 #include <G4NucleiProperties.hh>
+#include <G4PhysicalConstants.hh>
 
 namespace
 {
@@ -91,7 +91,8 @@ std::size_t GetSlot(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumb
 }
 }  // namespace
 
-G4FermiNucleiProperties::G4FermiNucleiProperties() {
+G4FermiNucleiProperties::G4FermiNucleiProperties()
+{
   if (G4NucleiProperties::GetNuclearMass(2, 0) <= 0.) {
     G4BaryonConstructor pCBar;
     pCBar.ConstructParticle();
@@ -111,9 +112,10 @@ G4FermiNucleiProperties::G4FermiNucleiProperties() {
 }
 
 G4double G4FermiNucleiProperties::GetNuclearMassImpl(G4FermiAtomicMass atomicMass,
-                                                         G4FermiChargeNumber chargeNumber) const
+                                                     G4FermiChargeNumber chargeNumber) const
 {
-  FERMI_ASSERT_MSG(static_cast<std::uint32_t>(atomicMass) >= static_cast<std::uint32_t>(chargeNumber),
+  FERMI_ASSERT_MSG(static_cast<std::uint32_t>(atomicMass)
+                     >= static_cast<std::uint32_t>(chargeNumber),
                    "invalid nuclei A = " << atomicMass << ", Z = " << chargeNumber);
 
   const auto slot = GetSlot(atomicMass, chargeNumber);
@@ -125,10 +127,11 @@ G4double G4FermiNucleiProperties::GetNuclearMassImpl(G4FermiAtomicMass atomicMas
 }
 
 G4bool G4FermiNucleiProperties::IsStableImpl(G4FermiAtomicMass atomicMass,
-                                           G4FermiChargeNumber chargeNumber) const
+                                             G4FermiChargeNumber chargeNumber) const
 {
   if (unlikely(atomicMass < 1_m || chargeNumber < 0_c
-                     || static_cast<std::uint32_t>(chargeNumber) > static_cast<std::uint32_t>(atomicMass)))
+               || static_cast<std::uint32_t>(chargeNumber)
+                    > static_cast<std::uint32_t>(atomicMass)))
   {
     return false;
   }
@@ -139,9 +142,8 @@ G4bool G4FermiNucleiProperties::IsStableImpl(G4FermiAtomicMass atomicMass,
 }
 
 void G4FermiNucleiProperties::InsertNuclei(G4FermiAtomicMass atomicMass,
-                                               G4FermiChargeNumber chargeNumber,
-                                               G4double mass,
-                                               G4bool isStable)
+                                           G4FermiChargeNumber chargeNumber, G4double mass,
+                                           G4bool isStable)
 {
   const auto slot = GetSlot(atomicMass, chargeNumber);
   if (slot >= nucleiMasses_.size()) {

@@ -51,13 +51,13 @@ class G4FermiUnstableFragment : public G4FermiVFragment
     std::vector<G4double> masses_;
 };
 
-#define FERMI_ADD_UNSTABLE_FRAGMENT(NAME, FRAGMENTS)                                             \
-  inline G4FermiUnstableFragment NAME(G4FermiAtomicMass atomicMass,                              \
-                                      G4FermiChargeNumber chargeNumber, G4int polarization, \
+#define FERMI_ADD_UNSTABLE_FRAGMENT(NAME, FRAGMENTS)                                         \
+  inline G4FermiUnstableFragment NAME(G4FermiAtomicMass atomicMass,                          \
+                                      G4FermiChargeNumber chargeNumber, G4int polarization,  \
                                       G4double excitationEnergy)                             \
-  {                                                                                              \
-    return G4FermiUnstableFragment(atomicMass, chargeNumber, polarization, excitationEnergy,     \
-                                   FRAGMENTS);                                                   \
+  {                                                                                          \
+    return G4FermiUnstableFragment(atomicMass, chargeNumber, polarization, excitationEnergy, \
+                                   FRAGMENTS);                                               \
   }
 
 // He5 ----> alpha + neutron

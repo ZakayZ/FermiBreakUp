@@ -30,7 +30,8 @@
 
 #include "G4FermiDataTypes.hh"
 
-G4Vector3D SampleIsotropicVector(G4double magnitude) {
+G4Vector3D SampleIsotropicVector(G4double magnitude)
+{
   const auto cos = 1.0 - 2.0 * G4RandFlat::shoot();
   const auto sin = std::sqrt(1.0 - std::pow(cos, 2));
   const auto phi = twopi * G4RandFlat::shoot();
