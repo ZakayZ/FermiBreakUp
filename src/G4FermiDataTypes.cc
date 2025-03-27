@@ -30,34 +30,33 @@
 
 #include "G4FermiDataTypes.hh"
 
-G4FermiVector3 SampleIsotropicVector(G4FermiFloat magnitude) {
+G4Vector3D SampleIsotropicVector(G4double magnitude) {
   const auto cos = 1.0 - 2.0 * G4RandFlat::shoot();
   const auto sin = std::sqrt(1.0 - std::pow(cos, 2));
   const auto phi = twopi * G4RandFlat::shoot();
 
-  return G4FermiParticleMomentum(magnitude * std::cos(phi) * sin, magnitude * std::sin(phi) * sin,
-                                 magnitude * cos);
+  return {magnitude * std::cos(phi) * sin, magnitude * std::sin(phi) * sin, magnitude * cos};
 }
 
 std::string std::to_string(G4FermiAtomicMass mass)
 {
-  return std::to_string(G4FermiAtomicMass::G4FermiValueType(mass));
+  return std::to_string(G4FermiAtomicMass::ValueType(mass));
 }
 
 std::string std::to_string(G4FermiChargeNumber charge)
 {
-  return std::to_string(G4FermiChargeNumber::G4FermiValueType(charge));
+  return std::to_string(G4FermiChargeNumber::ValueType(charge));
 }
 
 std::ostream& std::operator<<(std::ostream& out, const G4FermiAtomicMass& mass)
 {
-  out << G4FermiAtomicMass::G4FermiValueType(mass);
+  out << G4FermiAtomicMass::ValueType(mass);
   return out;
 }
 
 std::istream& std::operator>>(std::istream& in, G4FermiAtomicMass& mass)
 {
-  G4FermiAtomicMass::G4FermiValueType val;
+  G4FermiAtomicMass::ValueType val;
   in >> val;
   mass = G4FermiAtomicMass(val);
   return in;
@@ -65,13 +64,13 @@ std::istream& std::operator>>(std::istream& in, G4FermiAtomicMass& mass)
 
 std::ostream& std::operator<<(std::ostream& out, const G4FermiChargeNumber& charge)
 {
-  out << G4FermiChargeNumber::G4FermiValueType(charge);
+  out << G4FermiChargeNumber::ValueType(charge);
   return out;
 }
 
 std::istream& std::operator>>(std::istream& in, G4FermiChargeNumber& charge)
 {
-  G4FermiChargeNumber::G4FermiValueType val;
+  G4FermiChargeNumber::ValueType val;
   in >> val;
   charge = G4FermiChargeNumber(val);
   return in;

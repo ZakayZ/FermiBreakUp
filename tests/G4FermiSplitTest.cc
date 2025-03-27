@@ -41,8 +41,8 @@
 TEST(SplitTest, NoDuplicates)
 {
   std::vector<G4FermiFragmentVector> splits;  // speeds up test
-  for (G4FermiUInt a = 1; a < 18; ++a) {
-    for (G4FermiUInt z = 0; z <= a; ++z) {
+  for (std::uint32_t a = 1; a < 18; ++a) {
+    for (std::uint32_t z = 0; z <= a; ++z) {
       const auto mass = G4FermiAtomicMass(a);
       const auto charge = G4FermiChargeNumber(z);
       splits.clear();

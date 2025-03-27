@@ -45,8 +45,8 @@ namespace
 {
 std::size_t GetSlot(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber)
 {
-  const auto mass = G4FermiUInt(atomicMass);
-  const auto charge = G4FermiUInt(chargeNumber);
+  const auto mass = static_cast<std::uint32_t>(atomicMass);
+  const auto charge = static_cast<std::uint32_t>(chargeNumber);
   return (mass * (mass + 1)) / 2 + charge;
 }
 }  // namespace
@@ -60,7 +60,7 @@ G4FermiFragmentPool::G4FermiFragmentPool() {
 std::size_t G4FermiFragmentPool::Count(G4FermiAtomicMass atomicMass,
                                       G4FermiChargeNumber chargeNumber) const
 {
-  if (unlikely(G4FermiUInt(atomicMass) < G4FermiUInt(chargeNumber))) {
+  if (unlikely(static_cast<std::uint32_t>(atomicMass) < static_cast<std::uint32_t>(chargeNumber))) {
     return 0;
   }
 
@@ -76,7 +76,7 @@ G4FermiFragmentPool::IteratorRange
 G4FermiFragmentPool::GetFragments(G4FermiAtomicMass atomicMass,
                                       G4FermiChargeNumber chargeNumber) const
 {
-  if (unlikely(G4FermiUInt(atomicMass) < G4FermiUInt(chargeNumber))) {
+  if (unlikely(static_cast<std::uint32_t>(atomicMass) < static_cast<std::uint32_t>(chargeNumber))) {
     return {EmptyContainer_.begin(), EmptyContainer_.end()};
   }
 
@@ -92,7 +92,7 @@ void G4FermiFragmentPool::AddFragment(const G4FermiVFragment& fragment)
 {
   const auto slot = GetSlot(fragment.GetAtomicMass(), fragment.GetChargeNumber());
   if (slot >= fragments_.size()) {
-    fragments_.resize(slot + G4FermiUInt(fragment.GetAtomicMass()));
+    fragments_.resize(slot + static_cast<std::uint32_t>(fragment.GetAtomicMass()));
   }
   fragments_[slot].push_back(&fragment);
 }

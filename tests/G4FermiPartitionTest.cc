@@ -54,7 +54,7 @@ TEST(PartitionTests, SmallOnePadding)
   constexpr std::size_t partitionParts = 3;
 
   std::size_t partitionCounter = 0;
-  for (const auto& partition : G4FermiIntegerPartition(partitionNumber, partitionParts, 1)) {
+  for (const auto& partition : G4integerPartition(partitionNumber, partitionParts, 1)) {
     auto copy = partition;
     std::size_t weight = 1;
     while (std::prev_permutation(copy.begin(), copy.end())) {
@@ -74,7 +74,7 @@ TEST(PartitionTests, BigOnePadding)
   const std::size_t partitionParts = 7;
 
   std::size_t partitionCounter = 0;
-  for (const auto& partition : G4FermiIntegerPartition(partitionNumber, partitionParts, 1)) {
+  for (const auto& partition : G4integerPartition(partitionNumber, partitionParts, 1)) {
     auto copy = partition;
     std::size_t weight = 1;
     while (std::prev_permutation(copy.begin(), copy.end())) {
@@ -94,7 +94,7 @@ TEST(PartitionTests, SmallZeroPadding)
   constexpr std::size_t partitionParts = 3;
 
   std::size_t partitionCounter = 0;
-  for (const auto& partition : G4FermiIntegerPartition(partitionNumber, partitionParts, 0)) {
+  for (const auto& partition : G4integerPartition(partitionNumber, partitionParts, 0)) {
     auto copy = partition;
     std::size_t weight = 1;
     while (std::prev_permutation(copy.begin(), copy.end())) {
@@ -114,7 +114,7 @@ TEST(PartitionTests, BigZeroPadding)
   constexpr std::size_t partitionParts = 4;
 
   std::size_t partitionCounter = 0;
-  for (const auto& partition : G4FermiIntegerPartition(partitionNumber, partitionParts, 0)) {
+  for (const auto& partition : G4integerPartition(partitionNumber, partitionParts, 0)) {
     auto copy = partition;
     std::size_t weight = 1;
     while (std::prev_permutation(copy.begin(), copy.end())) {

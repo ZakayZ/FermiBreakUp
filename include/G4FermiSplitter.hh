@@ -37,13 +37,13 @@
 class G4FermiSplitter
 {
   public:
-    static G4FermiFloat DecayWeight(const G4FermiFragmentVector& split,
-                                    G4FermiAtomicMass atomicMass, G4FermiFloat totalEnergy);
+    static G4double DecayWeight(const G4FermiFragmentVector& split,
+                                    G4FermiAtomicMass atomicMass, G4double totalEnergy);
 
-    static G4FermiFloat SplitFactor(const G4FermiFragmentVector& split,
+    static G4double SplitFactor(const G4FermiFragmentVector& split,
                                     G4FermiAtomicMass atomicMass);
 
-    static G4FermiFloat KineticFactor(const G4FermiFragmentVector& split, G4FermiFloat totalEnergy);
+    static G4double KineticFactor(const G4FermiFragmentVector& split, G4double totalEnergy);
 
     static void GenerateSplits(G4FermiNucleiData nucleiData,
                                std::vector<G4FermiFragmentVector>& splits);

@@ -35,11 +35,11 @@
 
 class G4FermiPhaseDecay {
   public:
-    std::vector<G4FermiLorentzVector>
-    CalculateDecay(const G4FermiLorentzVector& totalMomentum,
-                    const std::vector<G4FermiFloat>& fragmentsMass) const
+    std::vector<G4LorentzVector>
+    CalculateDecay(const G4LorentzVector& totalMomentum,
+                    const std::vector<G4double>& fragmentsMass) const
     {
-      std::vector<G4FermiLorentzVector> results;
+      std::vector<G4LorentzVector> results;
       KopylovDecay().Generate(totalMomentum.m(), fragmentsMass, results);
       return results;
     }

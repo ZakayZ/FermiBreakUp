@@ -45,15 +45,15 @@ class G4FermiParticle
     G4FermiParticle& operator=(G4FermiParticle&&) = default;
 
     G4FermiParticle(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber,
-                    const G4FermiLorentzVector& momentum);
+                    const G4LorentzVector& momentum);
 
     G4FermiAtomicMass GetAtomicMass() const;
 
     G4FermiChargeNumber GetChargeNumber() const;
 
-    const G4FermiLorentzVector& GetMomentum() const;
+    const G4LorentzVector& GetMomentum() const;
 
-    G4FermiFloat GetExcitationEnergy() const;
+    G4double GetExcitationEnergy() const;
 
     G4bool IsStable() const;
 
@@ -62,9 +62,9 @@ class G4FermiParticle
 
     G4FermiAtomicMass atomicMass_;
     G4FermiChargeNumber chargeNumber_;
-    G4FermiLorentzVector momentum_;
+    G4LorentzVector momentum_;
 
-    G4FermiFloat excitationEnergy_ = 0;
+    G4double excitationEnergy_ = 0;
 };
 
 namespace std

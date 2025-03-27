@@ -38,12 +38,12 @@
 #include <iomanip>
 
 G4FermiParticle::G4FermiParticle(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber,
-                                 const G4FermiLorentzVector& momentum)
+                                 const G4LorentzVector& momentum)
   : atomicMass_(atomicMass),
     chargeNumber_(chargeNumber),
     momentum_(momentum)
 {
-  FERMI_ASSERT_MSG(G4FermiUInt(atomicMass_) >= G4FermiUInt(chargeNumber),
+  FERMI_ASSERT_MSG(static_cast<std::uint32_t>(atomicMass_) >= static_cast<std::uint32_t>(chargeNumber),
                    "imposible particle: A = " << atomicMass_ << ", Z = " << chargeNumber);
 
   RecalculateExcitationEnergy();
@@ -59,12 +59,12 @@ G4FermiChargeNumber G4FermiParticle::GetChargeNumber() const
   return chargeNumber_;
 }
 
-const G4FermiLorentzVector& G4FermiParticle::GetMomentum() const
+const G4LorentzVector& G4FermiParticle::GetMomentum() const
 {
   return momentum_;
 }
 
-G4FermiFloat G4FermiParticle::GetExcitationEnergy() const
+G4double G4FermiParticle::GetExcitationEnergy() const
 {
   return excitationEnergy_;
 }
@@ -78,10 +78,11 @@ void G4FermiParticle::RecalculateExcitationEnergy()
 {
   excitationEnergy_ = momentum_.mag() - G4FermiNucleiProperties::GetNuclearMass(atomicMass_, chargeNumber_);
   if (excitationEnergy_ < 0.) {
-    // if (excitationEnergy_ < -10 * CLHEP::eV) {
-    //   FERMI_LOG_WARN("Excitation Energy is too negative: " << excitationEnergy_ / CLHEP::MeV
-    //                                                        << " MeV for " << *this);
-    // }
+    if (excitationEnergy_ < -10.0 * CLHEP::eV) {
+      G4ExceptionDescription ed;
+      ed << "Excitation energy is too negative: " << excitationEnergy_ / CLHEP::MeV << " MeV";
+      G4Exception("G4FermiParticle::RecalculateExcitationEnergy()", "Fermi001", JustWarning, ed);
+    }
     excitationEnergy_ = 0.;
   }
 }

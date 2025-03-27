@@ -35,15 +35,15 @@
 
 G4FermiUnstableFragment::G4FermiUnstableFragment(G4FermiAtomicMass atomicMass,
                                                  G4FermiChargeNumber chargeNumber,
-                                                 G4FermiInt polarization,
-                                                 G4FermiFloat excitationEnergy,
+                                                 G4int polarization,
+                                                 G4double excitationEnergy,
                                                  std::vector<G4FermiNucleiData>&& decayData)
   : G4FermiVFragment(atomicMass, chargeNumber, polarization, excitationEnergy),
     decayData_(std::move(decayData))
 {
 }
 
-void G4FermiUnstableFragment::AppendDecayFragments(const G4FermiLorentzVector& momentum,
+void G4FermiUnstableFragment::AppendDecayFragments(const G4LorentzVector& momentum,
                                                    std::vector<G4FermiParticle>& fragments) const
 {
   G4FermiPhaseDecay phaseDecay;

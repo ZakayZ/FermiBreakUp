@@ -47,15 +47,15 @@
 #include <numeric>
 
 #ifdef G4VERBOSE
-  #define G4FERMI_VERBOSE 0
-#else
   #define G4FERMI_VERBOSE 1
+#else
+  #define G4FERMI_VERBOSE 0
 #endif
 
 #define FERMI_LOG_MSG(verbosity, level, msg)                                                  \
   do {                                                                                        \
     if (G4FERMI_VERBOSE) {                                                                    \
-      if ((verbosity) <= (level)) {                                                           \
+      if ((verbosity) >= (level)) {                                                           \
         G4cout << __FILE__ << ':' << __LINE__ << " in function \"" << __FUNCTION__ << "\"\n"  \
                 << msg << std::endl;                                                          \
       }                                                                                       \
@@ -72,13 +72,13 @@ namespace
 {
 constexpr const char* SPACES_OFFSET = "   ";
 
-std::size_t SampleWeightDistribution(const std::vector<G4FermiFloat>& weights)
+std::size_t SampleWeightDistribution(const std::vector<G4double>& weights)
 {
   const auto totalWeight = std::accumulate(weights.begin(), weights.end(), 0.);
   FERMI_ASSERT_MSG(totalWeight > 0., "Invalid weights: all values are zero");
 
   const auto targetWeight = G4RandFlat::shoot() * totalWeight;
-  G4FermiFloat cummulativeWeight = 0;
+  G4double cummulativeWeight = 0;
   for (std::size_t i = 0; i < weights.size(); ++i) {
     cummulativeWeight += weights[i];
 
@@ -90,7 +90,7 @@ std::size_t SampleWeightDistribution(const std::vector<G4FermiFloat>& weights)
   return weights.size() - 1;
 }
 
-G4FermiStr LogProducts(const std::vector<G4FermiParticle>& particles)
+G4String LogProducts(const std::vector<G4FermiParticle>& particles)
 {
   std::ostringstream out;
 
@@ -103,15 +103,15 @@ G4FermiStr LogProducts(const std::vector<G4FermiParticle>& particles)
   return std::move(out).str();
 }
 
-G4FermiLorentzVector ChangeFrameOfReference(const G4FermiLorentzVector& vec,
-                                            const G4FermiVector3& boost)
+G4LorentzVector ChangeFrameOfReference(const G4LorentzVector& vec,
+                                            const G4Vector3D& boost)
 {
   auto copy = vec;
   copy.boost(boost);
   return copy;
 }
 
-G4FermiStr LogSplit(const G4FermiFragmentVector& split)
+G4String LogSplit(const G4FermiFragmentVector& split)
 {
   std::ostringstream out;
 
@@ -126,14 +126,14 @@ G4FermiStr LogSplit(const G4FermiFragmentVector& split)
 
 std::size_t GetSlot(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber)
 {
-  const auto mass = G4FermiUInt(atomicMass);
-  const auto charge = G4FermiUInt(chargeNumber);
+  const auto mass = static_cast<std::uint32_t>(atomicMass);
+  const auto charge = static_cast<std::uint32_t>(chargeNumber);
   return (mass * (mass + 1)) / 2 + charge;
 }
 }  // namespace
 
 G4FermiBreakUpAN::PossibleSplits::PossibleSplits(const G4FermiAtomicMass maxAtomicMass) {
-  const auto maxMass = G4FermiUInt(maxAtomicMass);
+  const auto maxMass = static_cast<std::uint32_t>(maxAtomicMass);
   splits_.resize(maxMass * (maxMass + 1) / 2);
 }
 
@@ -146,7 +146,7 @@ void G4FermiBreakUpAN::PossibleSplits::InsertSplits(const G4FermiAtomicMass atom
   const auto slot = GetSlot(atomicMass, chargeNumber);
 
   if (slot >= splits_.size()) {
-    splits_.resize(slot + G4FermiUInt(atomicMass));
+    splits_.resize(slot + static_cast<std::uint32_t>(atomicMass));
   }
 
   splits_[slot] = std::move(splits);
@@ -159,7 +159,7 @@ G4FermiBreakUpAN::G4FermiBreakUpAN(G4int verbosity)
 {}
 
 std::vector<G4FermiParticle> G4FermiBreakUpAN::BreakItUp(const G4FermiParticle& particle) const
-{
+try {
   FERMI_LOG_DEBUG(verbosity_, "Breaking up particle: " << particle);
 
   if (particle.GetExcitationEnergy() < 0.) {
@@ -185,7 +185,7 @@ std::vector<G4FermiParticle> G4FermiBreakUpAN::BreakItUp(const G4FermiParticle& 
                  });
 
   if (std::all_of(weights_.begin(), weights_.end(), [](auto weight) { return weight == 0.; })) {
-    FERMI_LOG_WARN(verbosity_, "Every split has zero weight");
+    FERMI_LOG_DEBUG(verbosity_, "Every split has zero weight");
     return {particle};
   }
 
@@ -193,6 +193,11 @@ std::vector<G4FermiParticle> G4FermiBreakUpAN::BreakItUp(const G4FermiParticle& 
   FERMI_LOG_DEBUG(verbosity_, "From " << splits.size() << " splits chosen split: " << LogSplit(chosenSplit));
 
   return SplitToParticles(particle, chosenSplit);
+} catch (std::exception& e) {
+  G4ExceptionDescription ed;
+  ed << e.what();
+  G4Exception("G4FermiBreakUpAN::BreakItUp()", "Fermi002", JustWarning, ed);
+  return {particle};
 }
 
 void G4FermiBreakUpAN::Initialise()
@@ -227,8 +232,11 @@ G4bool G4FermiBreakUpAN::IsApplicable(G4int Z, G4int A, G4double /* eexc */) con
 
 void G4FermiBreakUpAN::BreakFragment(G4FragmentVector* results, G4Fragment* theNucleus)
 {
-  FERMI_ASSERT_MSG(theNucleus != nullptr, "G4Fragment is not set in FermiBreakUp");
-  FERMI_ASSERT_MSG(results != nullptr, "Missing result G4FragmentVector in FermiBreakUp");
+  if (unlikely(theNucleus == nullptr || results == nullptr)) {
+    G4ExceptionDescription ed;
+    ed << "G4Fragment or result G4FragmentVector is not set in FermiBreakUp";
+    G4Exception("G4FermiBreakUpAN::BreakFragment()", "Fermi003", FatalErrorInArgument, ed);
+  }
 
   const auto particle =
     G4FermiParticle(G4FermiAtomicMass(theNucleus->GetA_asInt()),
@@ -250,12 +258,12 @@ void G4FermiBreakUpAN::BreakFragment(G4FragmentVector* results, G4Fragment* theN
 std::vector<G4FermiParticle> G4FermiBreakUpAN::SplitToParticles(const G4FermiParticle& sourceParticle,
   const G4FermiFragmentVector& split) const
 {
-  std::vector<G4FermiFloat> splitMasses(split.size());
+  std::vector<G4double> splitMasses(split.size());
   std::transform(split.begin(), split.end(), splitMasses.begin(),
   std::mem_fn(&G4FermiVFragment::GetTotalEnergy));
 
   G4FermiPhaseDecay phaseSampler;
-  std::vector<G4FermiLorentzVector> particlesMomentum;
+  std::vector<G4LorentzVector> particlesMomentum;
   try {
     particlesMomentum = phaseSampler.CalculateDecay(sourceParticle.GetMomentum(), splitMasses);
   }

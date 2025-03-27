@@ -82,7 +82,7 @@ class G4FermiBreakUpAN : public G4VFermiBreakUp
                                                   const G4FermiFragmentVector& split) const;
 
     // improve performance, reusing allocated memory
-    mutable std::vector<G4FermiFloat> weights_;
+    mutable std::vector<G4double> weights_;
     PossibleSplits splits_;
 
     G4int secID_;

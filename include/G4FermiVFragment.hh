@@ -44,7 +44,7 @@ class G4FermiVFragment
 {
   public:
     G4FermiVFragment(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber,
-                     G4FermiInt polarization, G4FermiFloat excitationEnergy);
+                     G4int polarization, G4double excitationEnergy);
 
     G4FermiVFragment(const G4FermiVFragment&) = delete;
 
@@ -52,22 +52,22 @@ class G4FermiVFragment
 
     void Initialize();
 
-    std::vector<G4FermiParticle> GetDecayFragments(const G4FermiLorentzVector& momentum) const;
+    std::vector<G4FermiParticle> GetDecayFragments(const G4LorentzVector& momentum) const;
 
-    virtual void AppendDecayFragments(const G4FermiLorentzVector& momentum,
+    virtual void AppendDecayFragments(const G4LorentzVector& momentum,
                                       std::vector<G4FermiParticle>& particles) const = 0;
 
     G4FermiAtomicMass GetAtomicMass() const;
 
     G4FermiChargeNumber GetChargeNumber() const;
 
-    G4FermiInt GetPolarization() const;
+    G4int GetPolarization() const;
 
-    G4FermiFloat GetExcitationEnergy() const;
+    G4double GetExcitationEnergy() const;
 
-    G4FermiFloat GetMass() const;
+    G4double GetMass() const;
 
-    G4FermiFloat GetTotalEnergy() const;
+    G4double GetTotalEnergy() const;
 
     virtual ~G4FermiVFragment() = default;
 
@@ -76,10 +76,10 @@ class G4FermiVFragment
 
     G4FermiAtomicMass atomicMass_;  // A
     G4FermiChargeNumber chargeNumber_;  // Z
-    G4FermiInt polarization_;
+    G4int polarization_;
 
-    G4FermiFloat groudStateMass_;
-    G4FermiFloat excitationEnergy_;
+    G4double groudStateMass_;
+    G4double excitationEnergy_;
 };
 
 namespace std

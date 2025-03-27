@@ -38,7 +38,7 @@ class G4FermiStableFragment : public G4FermiVFragment
   public:
     using G4FermiVFragment::G4FermiVFragment;
 
-    void AppendDecayFragments(const G4FermiLorentzVector& momentum,
+    void AppendDecayFragments(const G4LorentzVector& momentum,
                               std::vector<G4FermiParticle>& fragments) const override;
 
   private:

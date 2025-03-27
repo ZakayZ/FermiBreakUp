@@ -46,13 +46,13 @@ class G4FermiNucleiProperties
     void Reset(Iter begin, Iter end) {
       nucleiMasses_.clear();
       static_assert(
-        std::is_same_v<typename Iter::value_type, std::pair<const G4FermiNucleiData, G4FermiFloat>>, "invalid iterator");
+        std::is_same_v<typename Iter::value_type, std::pair<const G4FermiNucleiData, G4double>>, "invalid iterator");
       for (auto it = begin; it != end; ++it) {
         InsertNuclei(it->first.atomicMass, it->first.chargeNumber, it->second);
       }
     }    
 
-    static G4FermiFloat GetNuclearMass(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber) {
+    static G4double GetNuclearMass(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber) {
       return Instance().GetNuclearMassImpl(atomicMass, chargeNumber);
     }
 
@@ -61,7 +61,7 @@ class G4FermiNucleiProperties
     }
 
     void InsertNuclei(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber,
-                      G4FermiFloat mass, G4bool isStable = true);
+                      G4double mass, G4bool isStable = true);
 
     static G4FermiNucleiProperties& Instance() {
       static G4FermiNucleiProperties properties;
@@ -71,13 +71,13 @@ class G4FermiNucleiProperties
   private:
     G4FermiNucleiProperties();
 
-    G4FermiFloat GetNuclearMassImpl(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber) const;
+    G4double GetNuclearMassImpl(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber) const;
 
     G4bool IsStableImpl(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber) const;
 
     struct G4FermiMassData
     {
-        G4FermiFloat mass;
+        G4double mass;
 
         G4bool isStable = false;  // is nuclei stable
 
