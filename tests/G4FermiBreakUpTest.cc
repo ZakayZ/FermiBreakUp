@@ -31,7 +31,7 @@
 #include "G4FermiBreakUpAN.hh"
 
 #include "G4FermiDataTypes.hh"
-#include "G4NucleiProperties.hh"
+#include "G4FermiNucleiProperties.hh"
 
 #include <G4PhysicalConstants.hh>
 #include <G4StateManager.hh>

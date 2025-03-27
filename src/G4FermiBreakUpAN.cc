@@ -32,7 +32,7 @@
 
 #include "G4FermiDataTypes.hh"
 #include "G4FermiFragmentPool.hh"
-#include "G4NucleiProperties.hh"
+#include "G4FermiNucleiProperties.hh"
 #include "G4FermiParticle.hh"
 #include "G4FermiPhaseDecay.hh"
 #include "G4FermiSplitter.hh"

@@ -30,7 +30,7 @@
 
 #include "G4FermiVFragment.hh"
 
-#include "G4NucleiProperties.hh"
+#include "G4FermiNucleiProperties.hh"
 
 #include <G4PhysicalConstants.hh>
 
@@ -45,7 +45,7 @@ G4FermiVFragment::G4FermiVFragment(G4FermiAtomicMass atomicMass, G4FermiChargeNu
 {}
 
 void G4FermiVFragment::Initialize() {
-  groudStateMass_ = G4NucleiProperties::GetNuclearMass(G4int(atomicMass_), G4int(chargeNumber_));
+  groudStateMass_ = G4FermiNucleiProperties::GetNuclearMass(atomicMass_, chargeNumber_);
   DoInitialize();
 }
 
