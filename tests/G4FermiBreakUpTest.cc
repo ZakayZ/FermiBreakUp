@@ -32,7 +32,7 @@
 
 #include "G4FermiDataTypes.hh"
 #include "G4FermiLogger.hh"
-#include "G4FermiNucleiProperties.hh"
+#include "G4NucleiProperties.hh"
 
 #include <G4PhysicalConstants.hh>
 #include <G4StateManager.hh>
@@ -61,16 +61,16 @@ G4FermiFloat RelTolerance(G4FermiFloat expected, G4FermiFloat eps, G4FermiFloat 
 }  // namespace
 
 float CalculateFragmentCount(
-  G4FermiAtomicMass mass, G4FermiChargeNumber charge, const G4FermiVector3& vec,
+  G4int mass, G4int charge, const G4FermiVector3& vec,
   G4FermiFloat energyPerNucleon, std::size_t tests)
 {
   auto model = G4FermiBreakUpAN();
   model.Initialise();
   const auto energy = energyPerNucleon * G4FermiFloat(mass);
   const auto totalEnergy = std::sqrt(
-    std::pow(G4FermiNucleiProperties()->GetNuclearMass(mass, charge) + energy, 2) + vec.mag2());
+    std::pow(G4NucleiProperties::GetNuclearMass(mass, charge) + energy, 2) + vec.mag2());
   const auto mom = G4FermiLorentzVector(vec, totalEnergy);
-  const auto particle = G4FermiParticle(mass, charge, mom);
+  const auto particle = G4FermiParticle(G4FermiAtomicMass(mass), G4FermiChargeNumber(charge), mom);
 
   std::size_t partsCounter = 0;
   for (std::size_t i = 0; i < tests; ++i) {
@@ -132,25 +132,6 @@ TEST(G4FermiConfigurations, CarbonDecay)
             3);
 }
 
-// TEST(G4FermiConfigurations, UnstableNuclei)
-// {
-//   G4FermiLogger::GlobalLevel = G4FermiLogLevel::ERROR;
-//   constexpr std::size_t RUNS = 1e3;
-
-//   // protons should break up
-//   for (int i = 3; i <= 16; ++i) {
-//     ASSERT_GE(CalculateFragmentCount(G4FermiAtomicMass(i), G4FermiChargeNumber(i), {0, 0, 0}, 0,
-//     RUNS), i);
-//   }
-
-//   // neutron should break up
-//   for (int i = 2; i <= 16; ++i) {
-//     ASSERT_NEAR(i,
-//                 CalculateFragmentCount(G4FermiAtomicMass(i), 0_c, {0, 0, 0}, 0, RUNS),
-//                 0.01);
-//   }
-// }
-
 TEST(G4FermiConfigurations, MomentumConservation)
 {
   G4FermiLogger::GlobalLevel = G4FermiLogLevel::WARN;
@@ -161,14 +142,14 @@ TEST(G4FermiConfigurations, MomentumConservation)
   constexpr int TRIES = 500;
   constexpr std::size_t RUNS = 1e3;
   for (int t = 0; t < TRIES; ++t) {
-    const auto mass = G4FermiAtomicMass(rand() % 16 + 1);
-    const auto charge = G4FermiChargeNumber(rand() % (int(mass) + 1));
+    const auto mass = rand() % 16 + 1;
+    const auto charge = rand() % (int(mass) + 1);
     const auto energy = G4FermiFloat((rand() % 1000) * CLHEP::MeV * G4FermiFloat(mass));
     const auto vec = SampleIsotropicVector((rand() % 1000) * CLHEP::MeV);
     const auto totalEnergy = std::sqrt(
-      std::pow(G4FermiNucleiProperties()->GetNuclearMass(mass, charge) + energy, 2) + vec.mag2());
+      std::pow(G4NucleiProperties::GetNuclearMass(mass, charge) + energy, 2) + vec.mag2());
     const auto mom = G4FermiLorentzVector(vec, totalEnergy);
-    const auto particle = G4FermiParticle(mass, charge, mom);
+    const auto particle = G4FermiParticle(G4FermiAtomicMass(mass), G4FermiChargeNumber(charge), mom);
     for (std::size_t i = 0; i < RUNS; ++i) {
       const auto particles = model.BreakItUp(particle);
 
@@ -197,24 +178,22 @@ TEST(G4FermiConfigurations, BaryonAndChargeConservation)
   int TRIES = 500;
   std::size_t RUNS = 1e3;
   for (int t = 0; t < TRIES; ++t) {
-    const auto mass = G4FermiAtomicMass(rand() % 16 + 1);
-    const auto charge = G4FermiChargeNumber(rand() % (int(mass) + 1));
+    const auto mass = rand() % 16 + 1;
+    const auto charge = rand() % (int(mass) + 1);
     const auto energy = G4FermiFloat((rand() % 1000) * CLHEP::MeV * G4FermiFloat(mass));
     const auto vec = SampleIsotropicVector((rand() % 1000) * CLHEP::MeV);
     const auto totalEnergy = std::sqrt(
-      std::pow(G4FermiNucleiProperties()->GetNuclearMass(mass, charge) + energy, 2) + vec.mag2());
+      std::pow(G4NucleiProperties::GetNuclearMass(mass, charge) + energy, 2) + vec.mag2());
     const auto mom = G4FermiLorentzVector(vec, totalEnergy);
-    const auto particle = G4FermiParticle(mass, charge, mom);
+    const auto particle = G4FermiParticle(G4FermiAtomicMass(mass), G4FermiChargeNumber(charge), mom);
     for (std::size_t i = 0; i < RUNS; ++i) {
       const auto particles = model.BreakItUp(particle);
 
-      auto fragmentsMassSum = G4FermiAtomicMass(0);
-      auto fragmentsChargeSum = G4FermiChargeNumber(0);
+      auto fragmentsMassSum = 0;
+      auto fragmentsChargeSum = 0;
       for (const auto& fragment : particles) {
-        fragmentsMassSum =
-          G4FermiAtomicMass(G4FermiUInt(fragmentsMassSum) + G4FermiUInt(fragment.GetAtomicMass()));
-        fragmentsChargeSum = G4FermiChargeNumber(G4FermiUInt(fragmentsChargeSum)
-                                                 + G4FermiUInt(fragment.GetChargeNumber()));
+        fragmentsMassSum +=  G4FermiUInt(fragment.GetAtomicMass());
+        fragmentsChargeSum += G4FermiUInt(fragment.GetChargeNumber());
       }
       ASSERT_EQ(fragmentsMassSum, mass);
       ASSERT_EQ(fragmentsChargeSum, charge);

@@ -30,7 +30,7 @@
 
 #include "G4FermiUnstableFragment.hh"
 
-#include "G4FermiNucleiProperties.hh"
+#include "G4NucleiProperties.hh"
 #include "G4FermiPhaseDecay.hh"
 
 G4FermiUnstableFragment::G4FermiUnstableFragment(G4FermiAtomicMass atomicMass,
@@ -60,9 +60,8 @@ void G4FermiUnstableFragment::AppendDecayFragments(const G4FermiLorentzVector& m
 void G4FermiUnstableFragment::DoInitialize() {
   masses_.clear();
   masses_.reserve(decayData_.size());
-  const auto& properties = G4FermiNucleiProperties::Instance();
   for (const auto& decayFragment : decayData_) {
     masses_.emplace_back(
-      properties.GetNuclearMass(decayFragment.atomicMass, decayFragment.chargeNumber));
+      G4NucleiProperties::GetNuclearMass(G4int(decayFragment.atomicMass), G4int(decayFragment.chargeNumber)));
   }
 }

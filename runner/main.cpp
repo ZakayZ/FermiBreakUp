@@ -1,6 +1,6 @@
 #include "G4FermiBreakUpAN.hh"
 #include "G4FermiLogger.hh"
-#include "G4FermiNucleiProperties.hh"
+#include "G4NucleiProperties.hh"
 
 #include <G4PhysicalConstants.hh>
 #include <G4BaryonConstructor.hh>
@@ -21,7 +21,7 @@ void CalculateFragments(G4FermiAtomicMass mass, G4FermiChargeNumber charge,
     auto additionalEnergy = energyNucleon * G4FermiFloat(mass);
     for (std::size_t i = 0; i < tests; ++i) {
       auto vec = G4FermiLorentzVector(
-        0, 0, 0, G4FermiNucleiProperties()->GetNuclearMass(mass, charge) + additionalEnergy);
+        0, 0, 0, G4NucleiProperties()->GetNuclearMass(mass, charge) + additionalEnergy);
       auto particles = model.BreakItUp(G4FermiParticle(mass, charge, vec));
       partsCounter += particles.size();
     }
@@ -49,7 +49,7 @@ void CalculateMomentum(G4FermiAtomicMass mass, G4FermiChargeNumber charge,
   std::ofstream out(dumpName);
   auto vec = G4FermiLorentzVector(
     momentum.x(), momentum.y(), momentum.z(),
-    std::sqrt(std::pow(G4FermiNucleiProperties()->GetNuclearMass(mass, charge) + energy, 2)
+    std::sqrt(std::pow(G4NucleiProperties()->GetNuclearMass(mass, charge) + energy, 2)
               + momentum.mag2()));
   out << vec / mass << '\n';
   std::vector<G4FermiFloat> xComponent, yComponent, zComponent, magnitude;

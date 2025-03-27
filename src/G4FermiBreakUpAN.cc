@@ -33,13 +33,14 @@
 #include "G4FermiDataTypes.hh"
 #include "G4FermiFragmentPool.hh"
 #include "G4FermiLogger.hh"
-#include "G4FermiNucleiProperties.hh"
+#include "G4NucleiProperties.hh"
 #include "G4FermiParticle.hh"
 #include "G4FermiPhaseDecay.hh"
 #include "G4FermiSplitter.hh"
 #include "G4FermiVFragment.hh"
 
 #include <G4PhysicalConstants.hh>
+#include <G4BaryonConstructor.hh>
 #include <G4NucleiProperties.hh>
 #include <G4PhysicsModelCatalog.hh>
 #include <globals.hh>
@@ -209,15 +210,18 @@ std::vector<G4FermiParticle> G4FermiBreakUpAN::BreakItUp(const G4FermiParticle& 
 
 void G4FermiBreakUpAN::Initialise()
 {
-  G4FermiNucleiProperties::Reset();
-  // order is important here, we use G4FermiNucleiProperties in Pool!
-  {
-    auto pool = G4FermiFragmentStorage::DefaultPoolSource();
-    pool.Initialize();
-    G4FermiFragmentPool::Reset(pool);
+  if (G4NucleiProperties::GetNuclearMass(2, 0) <= 0.) {
+    G4BaryonConstructor pCBar;
+    pCBar.ConstructParticle();
   }
 
-  // order is important here, we use G4FermiNucleiProperties in Pool!
+  {
+    auto pool = G4FermiFragmentPool::DefaultPoolSource();
+    pool.Initialize();
+    G4FermiFragmentPool::Instance().Initialize(pool);
+  }
+
+  // order is important here, we use G4FermiFragmentPool to create splits!
   splits_ = PossibleSplits();
   for (auto a = 1; a < MAX_A; ++a) {
     for (auto z = 0; z <= a; ++z) {

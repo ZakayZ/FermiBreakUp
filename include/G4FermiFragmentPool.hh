@@ -36,11 +36,7 @@
 
 #include <globals.hh>
 
-class G4FermiFragmentStorage;
-
-using G4FermiFragmentPool = G4FermiSingleton<G4FermiFragmentStorage>;
-
-class G4FermiFragmentStorage
+class G4FermiFragmentPool
 {
   private:
     using Container = std::vector<const G4FermiVFragment*>;
@@ -76,14 +72,6 @@ class G4FermiFragmentStorage
         const_iterator end_;
     };
 
-    G4FermiFragmentStorage();
-
-    template<typename DataSource>
-    G4FermiFragmentStorage(const DataSource& dataSource);
-
-    template<typename Iter>
-    G4FermiFragmentStorage(Iter begin, Iter end);
-
     std::size_t Count(G4FermiAtomicMass atomicMass,
                       G4FermiChargeNumber chargeNumber) const;
 
@@ -98,26 +86,33 @@ class G4FermiFragmentStorage
       return GetFragments(nuclei.atomicMass, nuclei.chargeNumber);
     }
 
+    template<typename DataSource>
+    void Initialize(const DataSource& dataSource) {
+      Initialize(dataSource.begin(), dataSource.end());
+    }
+
+    template<typename Iter>
+    void Initialize(Iter begin, Iter end) {
+      fragments_.clear();
+      static_assert(std::is_same_v<std::remove_const_t<typename Iter::value_type>, G4FermiVFragment*>, "invalid iterator");
+      for (auto it = begin; it != end; ++it) {
+        AddFragment(**it);
+      }
+    }
+
     void AddFragment(const G4FermiVFragment& fragment);
 
+    static G4FermiFragmentPool& Instance() {
+      static G4FermiFragmentPool pool;
+      return pool;
+    }
+
   private:
+    G4FermiFragmentPool();
+
     static inline const Container EmptyContainer_ = {};
 
     std::vector<Container> fragments_;
 };
-
-template<typename DataSource>
-G4FermiFragmentStorage::G4FermiFragmentStorage(const DataSource& dataSource)
-  : G4FermiFragmentStorage(dataSource.cbegin(), dataSource.cend())
-{}
-
-template<typename Iter>
-G4FermiFragmentStorage::G4FermiFragmentStorage(Iter begin, Iter end)
-{
-  static_assert(std::is_same_v<std::remove_const_t<typename Iter::value_type>, G4FermiVFragment*>, "invalid iterator");
-  for (auto it = begin; it != end; ++it) {
-    AddFragment(**it);
-  }
-}
 
 #endif  // G4FERMIFRAGMENTPOOL_HH

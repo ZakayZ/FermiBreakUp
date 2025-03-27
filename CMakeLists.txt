@@ -12,8 +12,6 @@ set(Util
     src/G4FermiIntegerPartition.cc
     src/G4FermiParticle.cc
     src/G4FermiLogger.cc
-
-    src/G4FermiNucleiProperties.cc
 )
 
 set(FragmentPool

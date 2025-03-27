@@ -50,18 +50,15 @@ std::size_t GetSlot(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumb
   const auto charge = G4FermiUInt(chargeNumber);
   return (mass * (mass + 1)) / 2 + charge;
 }
-
-G4FermiFragmentStorage::DefaultPoolSource InitializedPool() {
-  auto pool = G4FermiFragmentStorage::DefaultPoolSource();
-  pool.Initialize();
-  return pool;
-}
 }  // namespace
 
-G4FermiFragmentStorage::G4FermiFragmentStorage()
-  : G4FermiFragmentStorage(InitializedPool()) {}
+G4FermiFragmentPool::G4FermiFragmentPool() {
+  auto pool = G4FermiFragmentPool::DefaultPoolSource();
+  pool.Initialize();
+  Initialize(pool);
+}
 
-std::size_t G4FermiFragmentStorage::Count(G4FermiAtomicMass atomicMass,
+std::size_t G4FermiFragmentPool::Count(G4FermiAtomicMass atomicMass,
                                       G4FermiChargeNumber chargeNumber) const
 {
   if (unlikely(G4FermiUInt(atomicMass) < G4FermiUInt(chargeNumber))) {
@@ -76,8 +73,8 @@ std::size_t G4FermiFragmentStorage::Count(G4FermiAtomicMass atomicMass,
   return fragments_[slot].size();
 }
 
-G4FermiFragmentStorage::IteratorRange
-G4FermiFragmentStorage::GetFragments(G4FermiAtomicMass atomicMass,
+G4FermiFragmentPool::IteratorRange
+G4FermiFragmentPool::GetFragments(G4FermiAtomicMass atomicMass,
                                       G4FermiChargeNumber chargeNumber) const
 {
   if (unlikely(G4FermiUInt(atomicMass) < G4FermiUInt(chargeNumber))) {
@@ -92,7 +89,7 @@ G4FermiFragmentStorage::GetFragments(G4FermiAtomicMass atomicMass,
   return {fragments_[slot].begin(), fragments_[slot].end()};
 }
 
-void G4FermiFragmentStorage::AddFragment(const G4FermiVFragment& fragment)
+void G4FermiFragmentPool::AddFragment(const G4FermiVFragment& fragment)
 {
   const auto slot = GetSlot(fragment.GetAtomicMass(), fragment.GetChargeNumber());
   if (slot >= fragments_.size()) {
@@ -101,7 +98,7 @@ void G4FermiFragmentStorage::AddFragment(const G4FermiVFragment& fragment)
   fragments_[slot].push_back(&fragment);
 }
 
-G4FermiFragmentStorage::DefaultPoolSource::DefaultPoolSource()
+G4FermiFragmentPool::DefaultPoolSource::DefaultPoolSource()
 {
 #define FERMI_CONCAT(x, y) x##y
 #define FERMI_INSTANTIATE_MACRO(x, y) FERMI_CONCAT(x, y)
@@ -230,7 +227,7 @@ G4FermiFragmentStorage::DefaultPoolSource::DefaultPoolSource()
 #undef FERMI_CONCAT
 }
 
-void G4FermiFragmentStorage::DefaultPoolSource::Initialize() 
+void G4FermiFragmentPool::DefaultPoolSource::Initialize() 
 {
   for (auto fragmentPtr: *this) {
     fragmentPtr->Initialize();

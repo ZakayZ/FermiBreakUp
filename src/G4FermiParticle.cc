@@ -32,7 +32,7 @@
 
 #include "G4FermiDataTypes.hh"
 #include "G4FermiLogger.hh"
-#include "G4FermiNucleiProperties.hh"
+#include "G4NucleiProperties.hh"
 
 #include <G4PhysicalConstants.hh>
 
@@ -77,7 +77,7 @@ G4bool G4FermiParticle::IsStable() const
 
 void G4FermiParticle::RecalculateExcitationEnergy()
 {
-  excitationEnergy_ = momentum_.mag() - G4FermiNucleiProperties::Instance().GetNuclearMass(atomicMass_, chargeNumber_);
+  excitationEnergy_ = momentum_.mag() - G4NucleiProperties::GetNuclearMass(G4int(atomicMass_), G4int(chargeNumber_));
   if (excitationEnergy_ < 0.) {
     if (excitationEnergy_ < -10 * CLHEP::eV) {
       FERMI_LOG_WARN("Excitation Energy is too negative: " << excitationEnergy_ / CLHEP::MeV

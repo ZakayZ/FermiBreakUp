@@ -56,47 +56,6 @@ using G4FermiStr = G4String;
 static constexpr G4FermiInt MAX_Z = 9;
 static constexpr G4FermiInt MAX_A = 17;
 
-template<typename T>
-class G4FermiSingleton
-{
-  public:
-    G4FermiSingleton()
-    {
-      if (unlikely(instance_ == nullptr)) {
-        instance_ = std::make_unique<T>();
-      }
-    }
-
-    template<typename... Args>
-    G4FermiSingleton(Args&&... args)
-    {
-      Reset(std::forward<Args>(args)...);
-    }
-
-    G4FermiSingleton(T* ptr) { Reset(ptr); }
-
-    template<typename... Args>
-    static void Reset(Args&&... args)
-    {
-      instance_ = std::make_unique<T>(std::forward<Args>(args)...);
-    }
-
-    static void Reset(T* ptr) { instance_.reset(ptr); }
-
-    static T& Instance() { return *G4FermiSingleton(); }
-
-    T& operator*() { return *instance_; }
-
-    const T& operator*() const { return *instance_; }
-
-    T* operator->() { return instance_.get(); }
-
-    const T& operator->() const { return *instance_; }
-
-  private:
-    static inline std::unique_ptr<T> instance_;
-};
-
 G4FermiVector3 SampleIsotropicVector(G4FermiFloat magnitude);
 
 class G4FermiAtomicMass
