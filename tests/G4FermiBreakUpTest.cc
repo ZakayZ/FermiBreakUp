@@ -31,7 +31,6 @@
 #include "G4FermiBreakUpAN.hh"
 
 #include "G4FermiDataTypes.hh"
-#include "G4FermiLogger.hh"
 #include "G4NucleiProperties.hh"
 
 #include <G4PhysicalConstants.hh>
@@ -53,6 +52,8 @@
 
 namespace
 {
+constexpr G4int VERBOSE_LEVEL = 1;
+
 G4FermiFloat RelTolerance(G4FermiFloat expected, G4FermiFloat eps, G4FermiFloat abs = 1e-5)
 {
   auto relTol = eps * std::abs(expected);
@@ -64,7 +65,7 @@ float CalculateFragmentCount(
   G4int mass, G4int charge, const G4FermiVector3& vec,
   G4FermiFloat energyPerNucleon, std::size_t tests)
 {
-  auto model = G4FermiBreakUpAN();
+  auto model = G4FermiBreakUpAN(VERBOSE_LEVEL);
   model.Initialise();
   const auto energy = energyPerNucleon * G4FermiFloat(mass);
   const auto totalEnergy = std::sqrt(
@@ -83,7 +84,6 @@ float CalculateFragmentCount(
 
 TEST(G4FermiConfigurations, CarbonDecay)
 {
-  G4FermiLogger::GlobalLevel = G4FermiLogLevel::ERROR;
   constexpr std::size_t RUNS = 1e3;
 
   // Carbons shouldn't break up [0, 0.7]
@@ -134,8 +134,7 @@ TEST(G4FermiConfigurations, CarbonDecay)
 
 TEST(G4FermiConfigurations, MomentumConservation)
 {
-  G4FermiLogger::GlobalLevel = G4FermiLogLevel::WARN;
-  auto model = G4FermiBreakUpAN();
+  auto model = G4FermiBreakUpAN(VERBOSE_LEVEL);
   model.Initialise();
   constexpr int SEED = 5;
   srand(SEED);
@@ -170,8 +169,7 @@ TEST(G4FermiConfigurations, MomentumConservation)
 
 TEST(G4FermiConfigurations, BaryonAndChargeConservation)
 {
-  G4FermiLogger::GlobalLevel = G4FermiLogLevel::ERROR;
-  auto model = G4FermiBreakUpAN();
+  auto model = G4FermiBreakUpAN(VERBOSE_LEVEL);
   model.Initialise();
   int SEED = 5;
   srand(SEED);

@@ -61,7 +61,7 @@ class G4FermiBreakUpAN : public G4VFermiBreakUp
     };
 
   public:
-    G4FermiBreakUpAN();
+    G4FermiBreakUpAN(G4int verbosity = 0);
 
     void Initialise() override;
 
@@ -78,14 +78,15 @@ class G4FermiBreakUpAN : public G4VFermiBreakUp
     std::vector<G4FermiParticle> BreakItUp(const G4FermiParticle& nucleus) const;
 
   private:
-    std::vector<G4FermiParticle> SelectSplit(const G4FermiParticle& particle,
-                                             const std::vector<G4FermiFragmentVector>& splits) const;
+    std::vector<G4FermiParticle> SplitToParticles(const G4FermiParticle& sourceParticle,
+                                                  const G4FermiFragmentVector& split) const;
 
     // improve performance, reusing allocated memory
     mutable std::vector<G4FermiFloat> weights_;
     PossibleSplits splits_;
 
     G4int secID_;
-};
+    G4int verbosity_ = 0;
+  };
 
 #endif  // G4FERMIBREAKUP_HH

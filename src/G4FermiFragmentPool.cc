@@ -36,7 +36,6 @@
 #include "G4FermiUnstableFragment.hh"
 
 #include "G4FermiDataTypes.hh"
-#include "G4FermiLogger.hh"
 
 #include <G4PhysicalConstants.hh>
 

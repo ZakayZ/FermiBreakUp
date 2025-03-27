@@ -31,7 +31,6 @@
 #include "G4FermiParticle.hh"
 
 #include "G4FermiDataTypes.hh"
-#include "G4FermiLogger.hh"
 #include "G4NucleiProperties.hh"
 
 #include <G4PhysicalConstants.hh>
@@ -79,10 +78,10 @@ void G4FermiParticle::RecalculateExcitationEnergy()
 {
   excitationEnergy_ = momentum_.mag() - G4NucleiProperties::GetNuclearMass(G4int(atomicMass_), G4int(chargeNumber_));
   if (excitationEnergy_ < 0.) {
-    if (excitationEnergy_ < -10 * CLHEP::eV) {
-      FERMI_LOG_WARN("Excitation Energy is too negative: " << excitationEnergy_ / CLHEP::MeV
-                                                           << " MeV for " << *this);
-    }
+    // if (excitationEnergy_ < -10 * CLHEP::eV) {
+    //   FERMI_LOG_WARN("Excitation Energy is too negative: " << excitationEnergy_ / CLHEP::MeV
+    //                                                        << " MeV for " << *this);
+    // }
     excitationEnergy_ = 0.;
   }
 }

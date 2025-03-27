@@ -1,5 +1,4 @@
 #include "G4FermiBreakUpAN.hh"
-#include "G4FermiLogger.hh"
 #include "G4NucleiProperties.hh"
 
 #include <G4PhysicalConstants.hh>

@@ -33,7 +33,6 @@
 #include "G4FermiDataTypes.hh"
 #include "G4FermiFragmentPool.hh"
 #include "G4FermiIntegerPartition.hh"
-#include "G4FermiLogger.hh"
 #include "G4FermiVFragment.hh"
 
 #include <G4PhysicalConstants.hh>
