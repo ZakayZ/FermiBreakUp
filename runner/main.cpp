@@ -1,8 +1,8 @@
 #include "G4FermiBreakUpAN.hh"
 #include "G4FermiNucleiProperties.hh"
 
-#include <G4PhysicalConstants.hh>
 #include <G4BaryonConstructor.hh>
+#include <G4PhysicalConstants.hh>
 
 #include <fstream>
 #include <iostream>
@@ -39,8 +39,8 @@ void CalculateFragments(G4FermiAtomicMass mass, G4FermiChargeNumber charge,
 }
 
 void CalculateMomentum(G4FermiAtomicMass mass, G4FermiChargeNumber charge,
-                       const std::string& dumpName, G4double energy,
-                       const G4Vector3D& momentum, std::size_t tests = 1e4)
+                       const std::string& dumpName, G4double energy, const G4Vector3D& momentum,
+                       std::size_t tests = 1e4)
 {
   auto model = G4FermiBreakUpAN();
   model.Initialise();

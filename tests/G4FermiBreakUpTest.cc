@@ -29,21 +29,20 @@
 //
 
 #include "G4FermiBreakUpAN.hh"
-
 #include "G4FermiDataTypes.hh"
 #include "G4FermiNucleiProperties.hh"
 
-#include <G4PhysicalConstants.hh>
-#include <G4StateManager.hh>
-#include <G4ParticleTypes.hh>
-#include <G4ParticleTable.hh>
-#include <G4BosonConstructor.hh>
-#include <G4LeptonConstructor.hh>
-#include <G4MesonConstructor.hh>
 #include <G4BaryonConstructor.hh>
+#include <G4BosonConstructor.hh>
 #include <G4IonConstructor.hh>
 #include <G4IonTable.hh>
+#include <G4LeptonConstructor.hh>
+#include <G4MesonConstructor.hh>
+#include <G4ParticleTable.hh>
+#include <G4ParticleTypes.hh>
+#include <G4PhysicalConstants.hh>
 #include <G4ProcessManager.hh>
+#include <G4StateManager.hh>
 #include <globals.hh>
 #include <gtest/gtest.h>
 
@@ -61,15 +60,14 @@ G4double RelTolerance(G4double expected, G4double eps, G4double abs = 1e-5)
 }
 }  // namespace
 
-float CalculateFragmentCount(
-  G4int mass, G4int charge, const G4Vector3D& vec,
-  G4double energyPerNucleon, std::size_t tests)
+float CalculateFragmentCount(G4int mass, G4int charge, const G4Vector3D& vec,
+                             G4double energyPerNucleon, std::size_t tests)
 {
   auto model = G4FermiBreakUpAN(VERBOSE_LEVEL);
   model.Initialise();
   const auto energy = energyPerNucleon * G4double(mass);
-  const auto totalEnergy = std::sqrt(
-    std::pow(G4NucleiProperties::GetNuclearMass(mass, charge) + energy, 2) + vec.mag2());
+  const auto totalEnergy =
+    std::sqrt(std::pow(G4NucleiProperties::GetNuclearMass(mass, charge) + energy, 2) + vec.mag2());
   const auto mom = G4LorentzVector(vec, totalEnergy);
   const auto particle = G4FermiParticle(G4FermiAtomicMass(mass), G4FermiChargeNumber(charge), mom);
 
@@ -87,49 +85,27 @@ TEST(G4FermiConfigurations, CarbonDecay)
   constexpr std::size_t RUNS = 1e3;
 
   // Carbons shouldn't break up [0, 0.7]
-  ASSERT_NEAR(1,
-              CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 0 * CLHEP::MeV, RUNS),
-              0.01);
-  ASSERT_NEAR(1,
-              CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 0.25 * CLHEP::MeV, RUNS),
-              0.01);
-  ASSERT_NEAR(1,
-              CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 0.5 * CLHEP::MeV, RUNS),
-              0.01);
-  ASSERT_NEAR(1,
-              CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 0.7 * CLHEP::MeV, RUNS),
-              0.01);
+  ASSERT_NEAR(1, CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 0 * CLHEP::MeV, RUNS), 0.01);
+  ASSERT_NEAR(1, CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 0.25 * CLHEP::MeV, RUNS), 0.01);
+  ASSERT_NEAR(1, CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 0.5 * CLHEP::MeV, RUNS), 0.01);
+  ASSERT_NEAR(1, CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 0.7 * CLHEP::MeV, RUNS), 0.01);
 
   // Carbons should break into 3 parts [1, 1.4]
-  ASSERT_NEAR(3,
-              CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 1 * CLHEP::MeV, RUNS),
-              0.01);
-  ASSERT_NEAR(3,
-              CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 1.25 * CLHEP::MeV, RUNS),
-              0.01);
-  ASSERT_NEAR(3,
-              CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 1.4 * CLHEP::MeV, RUNS),
-              0.01);
+  ASSERT_NEAR(3, CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 1 * CLHEP::MeV, RUNS), 0.01);
+  ASSERT_NEAR(3, CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 1.25 * CLHEP::MeV, RUNS), 0.01);
+  ASSERT_NEAR(3, CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 1.4 * CLHEP::MeV, RUNS), 0.01);
 
   // Carbons should break into less than 3 parts [1.5, 3.5]
-  ASSERT_LE(CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 1.5 * CLHEP::MeV, RUNS),
-            3);
-  ASSERT_LE(CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 2 * CLHEP::MeV, RUNS),
-            3);
-  ASSERT_LE(CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 3 * CLHEP::MeV, RUNS),
-            3);
-  ASSERT_LE(CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 3.5 * CLHEP::MeV, RUNS),
-            3);
+  ASSERT_LE(CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 1.5 * CLHEP::MeV, RUNS), 3);
+  ASSERT_LE(CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 2 * CLHEP::MeV, RUNS), 3);
+  ASSERT_LE(CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 3 * CLHEP::MeV, RUNS), 3);
+  ASSERT_LE(CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 3.5 * CLHEP::MeV, RUNS), 3);
 
   // Carbons should break into more than 3 parts [5, ...]
-  ASSERT_GE(CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 5 * CLHEP::MeV, RUNS),
-            3);
-  ASSERT_GE(CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 7 * CLHEP::MeV, RUNS),
-            3);
-  ASSERT_GE(CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 9 * CLHEP::MeV, RUNS),
-            3);
-  ASSERT_GE(CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 20 * CLHEP::MeV, RUNS),
-            3);
+  ASSERT_GE(CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 5 * CLHEP::MeV, RUNS), 3);
+  ASSERT_GE(CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 7 * CLHEP::MeV, RUNS), 3);
+  ASSERT_GE(CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 9 * CLHEP::MeV, RUNS), 3);
+  ASSERT_GE(CalculateFragmentCount(12_m, 6_c, {0, 0, 0}, 20 * CLHEP::MeV, RUNS), 3);
 }
 
 TEST(G4FermiConfigurations, MomentumConservation)
@@ -148,13 +124,13 @@ TEST(G4FermiConfigurations, MomentumConservation)
     const auto totalEnergy = std::sqrt(
       std::pow(G4NucleiProperties::GetNuclearMass(mass, charge) + energy, 2) + vec.mag2());
     const auto mom = G4LorentzVector(vec, totalEnergy);
-    const auto particle = G4FermiParticle(G4FermiAtomicMass(mass), G4FermiChargeNumber(charge), mom);
+    const auto particle =
+      G4FermiParticle(G4FermiAtomicMass(mass), G4FermiChargeNumber(charge), mom);
     for (std::size_t i = 0; i < RUNS; ++i) {
       const auto particles = model.BreakItUp(particle);
 
-      auto sum =
-        std::accumulate(particles.begin(), particles.end(), G4LorentzVector(0, 0, 0, 0),
-                        [](const auto& a, const auto& b) { return a + b.GetMomentum(); });
+      auto sum = std::accumulate(particles.begin(), particles.end(), G4LorentzVector(0, 0, 0, 0),
+                                 [](const auto& a, const auto& b) { return a + b.GetMomentum(); });
 
       ASSERT_NEAR(sum.m2(), mom.m2(), RelTolerance(mom.m2(), 1e-5))
         << "A = " << mass << " Z = " << charge << " #fragments = " << particles.size();
@@ -183,14 +159,15 @@ TEST(G4FermiConfigurations, BaryonAndChargeConservation)
     const auto totalEnergy = std::sqrt(
       std::pow(G4NucleiProperties::GetNuclearMass(mass, charge) + energy, 2) + vec.mag2());
     const auto mom = G4LorentzVector(vec, totalEnergy);
-    const auto particle = G4FermiParticle(G4FermiAtomicMass(mass), G4FermiChargeNumber(charge), mom);
+    const auto particle =
+      G4FermiParticle(G4FermiAtomicMass(mass), G4FermiChargeNumber(charge), mom);
     for (std::size_t i = 0; i < RUNS; ++i) {
       const auto particles = model.BreakItUp(particle);
 
       auto fragmentsMassSum = 0;
       auto fragmentsChargeSum = 0;
       for (const auto& fragment : particles) {
-        fragmentsMassSum +=  static_cast<std::uint32_t>(fragment.GetAtomicMass());
+        fragmentsMassSum += static_cast<std::uint32_t>(fragment.GetAtomicMass());
         fragmentsChargeSum += static_cast<std::uint32_t>(fragment.GetChargeNumber());
       }
       ASSERT_EQ(fragmentsMassSum, mass);
