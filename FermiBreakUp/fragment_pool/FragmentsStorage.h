@@ -5,8 +5,10 @@
 #ifndef FERMIBREAKUP_FRAGMENT_POOL_FRAGMENTSSTORAGE_H
 #define FERMIBREAKUP_FRAGMENT_POOL_FRAGMENTSSTORAGE_H
 
+#include <any>
 #include <vector>
 
+#include "FermiBreakUp/fragment_pool/data_source/DefaultPoolSource.h"
 #include "FermiBreakUp/fragment_pool/fragments/Fragment.h"
 #include "FermiBreakUp/util/DataTypes.h"
 
@@ -37,16 +39,12 @@ namespace fbu {
     FragmentsStorage();
 
     template <typename DataSource>
-    FragmentsStorage(const DataSource& dataSource)
-      : FragmentsStorage(dataSource.begin(), dataSource.end())
+    FragmentsStorage(DataSource&& dataSource)
+      : data_(std::make_shared<DataSource>(std::move(dataSource)))
+      , fragments_()
     {
-    }
-
-    template <typename Iter>
-    FragmentsStorage(Iter begin, Iter end) {
-      static_assert(std::is_same_v<typename Iter::value_type, const Fragment*>, "invalid iterator");
-      for (auto it = begin; it != end; ++it) {
-        AddFragment(**it);
+      for (const auto& ptr: *std::any_cast<std::shared_ptr<DataSource>>(data_)) {
+        AddFragment(*ptr);
       }
     }
 
@@ -58,11 +56,12 @@ namespace fbu {
 
     IteratorRange GetFragments(NucleiData nuclei) const;
 
+  private:
     void AddFragment(const Fragment& fragment);
 
-  private:
-    static inline const Container EmptyContainer_ = {};
+    static inline const Container EMPTY_CONTAINER_ = {};
 
+    const std::any data_;
     std::vector<Container> fragments_;
   };
 } // namespace fbu

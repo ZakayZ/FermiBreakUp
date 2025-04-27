@@ -23,9 +23,11 @@ namespace fbu {
 
     template <typename Iter>
     FermiNucleiProperties(Iter begin, Iter end) {
-      static_assert(std::is_same_v<typename Iter::value_type, std::pair<const NucleiData, FermiFloat>>, "invalid iterator");
+      static_assert(
+        std::is_same_v<typename Iter::value_type, std::pair<const NucleiData, FermiFloat>>,
+        "invalid iterator");
       for (auto it = begin; it != end; ++it) {
-        AddStableNuclei(it->first, it->second);
+        AddNuclei(it->first, it->second);
       }
     }
 
@@ -33,17 +35,15 @@ namespace fbu {
 
     bool IsStable(AtomicMass atomicMass, ChargeNumber chargeNumber) const override;
 
-    void AddStableNuclei(AtomicMass atomicMass, ChargeNumber chargeNumber, FermiFloat mass);
+    void AddNuclei(AtomicMass atomicMass, ChargeNumber chargeNumber, FermiFloat mass, bool isStable = true);
 
-    void AddStableNuclei(NucleiData nucleiData, FermiFloat mass);
-
-    ~FermiNucleiProperties() = default;
+    void AddNuclei(NucleiData nucleiData, FermiFloat mass, bool isStable = true);
 
   private:
     struct MassData {
       FermiFloat mass;
 
-      bool isStable = false; // value was added via AddMass, it is considered stable
+      bool isStable = false; // is nuclei considered to be stable
 
       bool isCached = false; // value has been calculated earlier
     };

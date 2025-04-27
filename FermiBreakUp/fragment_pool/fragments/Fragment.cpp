@@ -22,6 +22,7 @@ Fragment::Fragment(
   , chargeNumber_(chargeNumber)
   , polarization_(polarization)
   , excitationEnergy_(excitationEnergy)
+  , mass_(NucleiProperties()->GetNuclearMass(atomicMass_, chargeNumber_))
 {
 }
 
@@ -48,7 +49,7 @@ FermiFloat Fragment::GetExcitationEnergy() const {
 }
 
 FermiFloat Fragment::GetMass() const {
-  return NucleiProperties()->GetNuclearMass(atomicMass_, chargeNumber_);
+  return mass_;
 }
 
 FermiFloat Fragment::GetTotalEnergy() const {

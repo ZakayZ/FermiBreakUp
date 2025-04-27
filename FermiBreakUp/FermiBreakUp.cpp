@@ -110,7 +110,7 @@ std::vector<Particle> FermiBreakUp::SelectSplit(const Particle& particle, const 
     });
 
   if (std::all_of(weights_.begin(), weights_.end(), [](auto weight) { return weight == 0.; })) {
-    FERMI_LOG_WARN("Every split has zero weight");
+    FERMI_LOG_DEBUG("Every split has zero weight");
     return {particle};
   }
 

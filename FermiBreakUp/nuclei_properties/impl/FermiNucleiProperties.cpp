@@ -102,7 +102,7 @@ bool FermiNucleiProperties::IsStable(AtomicMass atomicMass, ChargeNumber chargeN
   return slot < nucleiMasses_.size() && nucleiMasses_[slot].isStable;
 }
 
-void FermiNucleiProperties::AddStableNuclei(AtomicMass atomicMass, ChargeNumber chargeNumber, FermiFloat mass) {
+void FermiNucleiProperties::AddNuclei(AtomicMass atomicMass, ChargeNumber chargeNumber, FermiFloat mass, bool isStable) {
   FERMI_ASSERT_MSG(FermiUInt(atomicMass) >= FermiUInt(chargeNumber),
              "invalid particle: A = " << atomicMass << ", Z = " << chargeNumber);
 
@@ -113,11 +113,11 @@ void FermiNucleiProperties::AddStableNuclei(AtomicMass atomicMass, ChargeNumber 
 
   nucleiMasses_[slot] = MassData{
     mass, // mass
-    true, // isStable
+    isStable, // isStable
     true, // isCached
   };
 }
 
-void FermiNucleiProperties::AddStableNuclei(NucleiData nucleiData, FermiFloat mass) {
-  return AddStableNuclei(nucleiData.atomicMass, nucleiData.chargeNumber, mass);
+void FermiNucleiProperties::AddNuclei(NucleiData nucleiData, FermiFloat mass, bool isStable) {
+  return AddNuclei(nucleiData.atomicMass, nucleiData.chargeNumber, mass, isStable);
 }

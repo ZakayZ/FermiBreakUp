@@ -4,6 +4,7 @@
 
 #include <CLHEP/Units/PhysicalConstants.h>
 
+#include "FermiBreakUp/fragment_pool/fragments/Fragment.h"
 #include "FermiBreakUp/fragment_pool/fragments/StableFragment.h"
 #include "FermiBreakUp/fragment_pool/fragments/UnstableFragment.h"
 
@@ -15,9 +16,9 @@ using namespace fbu;
 DefaultPoolSource::DefaultPoolSource() {
   #define INSTANTIATE_MACRO(x, y) __CONCAT(x, y)
 
-  #define ADD_FRAGMENT_IMPL(NAME, VALUE) \
-    static const auto NAME = VALUE;      \
-    push_back(&NAME);
+  #define ADD_FRAGMENT_IMPL(NAME, VALUE)                                      \
+    auto NAME = VALUE;                                                        \
+    push_back(std::unique_ptr<Fragment>(new decltype(NAME)(std::move(NAME))));
 
   // automatic unique names are added
   #define ADD_FRAGMENT(VALUE) ADD_FRAGMENT_IMPL(INSTANTIATE_MACRO(Fragment, __COUNTER__), VALUE)

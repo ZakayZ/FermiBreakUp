@@ -2,7 +2,7 @@
 // Created by Artem Novikov on 30.01.2024.
 //
 
-#include "FermiBreakUp/fragment_pool/data_source/DefaultPoolSource.h"
+#include "FermiBreakUp/util/DataTypes.h"
 #include "FermiBreakUp/util/Logger.h"
 
 #include "FragmentsStorage.h"
@@ -41,12 +41,12 @@ size_t FragmentsStorage::Count(NucleiData nuclei) const {
 
 FragmentsStorage::IteratorRange FragmentsStorage::GetFragments(AtomicMass atomicMass, ChargeNumber chargeNumber) const {
   if (FERMI_UNLIKELY(FermiUInt(atomicMass) < FermiUInt(chargeNumber))) {
-    return {EmptyContainer_.begin(), EmptyContainer_.end()};
+    return {EMPTY_CONTAINER_.begin(), EMPTY_CONTAINER_.end()};
   }
 
   const auto slot = GetSlot(atomicMass, chargeNumber);
   if (slot >= fragments_.size()) {
-    return {EmptyContainer_.begin(), EmptyContainer_.end()};
+    return {EMPTY_CONTAINER_.begin(), EMPTY_CONTAINER_.end()};
   }
 
   return {fragments_[slot].begin(), fragments_[slot].end()};
@@ -59,7 +59,7 @@ FragmentsStorage::IteratorRange FragmentsStorage::GetFragments(NucleiData nuclei
 void FragmentsStorage::AddFragment(const Fragment& fragment) {
   const auto slot = GetSlot(fragment.GetAtomicMass(), fragment.GetChargeNumber());
   if (slot >= fragments_.size()) {
-    fragments_.resize(slot + 1);
+    fragments_.resize(slot + FermiUInt(fragment.GetAtomicMass()));
   }
   fragments_[slot].push_back(&fragment);
 }
